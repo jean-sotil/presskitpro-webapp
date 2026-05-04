@@ -1,0 +1,286 @@
+{
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/payload.config.ts": {
+    "mtime": 1777494174.9146385,
+    "hash": "27cc5ee1573341941585cb93a5af7902"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/postcss.config.mjs": {
+    "mtime": 1777485963.42061,
+    "hash": "d3fd1d29b05a09ff76b595a70e1e7d50"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/next-env.d.ts": {
+    "mtime": 1777490498.3977637,
+    "hash": "ba64ff7d54714a8f64db89b1003207d8"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/tailwind.config.ts": {
+    "mtime": 1777485962.4132757,
+    "hash": "5a503c825a089204c149d4b79d5db45c"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/payload-types.ts": {
+    "mtime": 1777928092.7804997,
+    "hash": "94ae09e221253f25e285a2b0fc533727"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/next.config.ts": {
+    "mtime": 1777485960.9078345,
+    "hash": "2ad0a6451d4869b045f6bdee86b80119"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/layout.tsx": {
+    "mtime": 1777485978.1241078,
+    "hash": "23f84f0740bc5296846df7f74c0f74cc"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/page.tsx": {
+    "mtime": 1777492555.1592119,
+    "hash": "a0662bc770e9587b8e231c6b7689a75f"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/providers.tsx": {
+    "mtime": 1777485975.7139823,
+    "hash": "00011bd25547f4c1ba56466b7a3e332b"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/api/storage/sign-upload/route.ts": {
+    "mtime": 1777489618.0991597,
+    "hash": "a352a9469aa81bbdb66df5827fb5b948"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/api/webhooks/supabase-auth/route.ts": {
+    "mtime": 1777489611.047335,
+    "hash": "8cd5131c4ed82d490097066cac5fc859"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/api/media/route.ts": {
+    "mtime": 1777489625.529748,
+    "hash": "d30d37bbbd06077c632ed5c08e4b6e08"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/spike/upload-widget.tsx": {
+    "mtime": 1777489650.785511,
+    "hash": "b64cd4a0eb5de99248a8b60793484780"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/spike/page.tsx": {
+    "mtime": 1777489640.8277912,
+    "hash": "f2b38dd665a3563c737c4961b16827a1"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/(payload)/layout.tsx": {
+    "mtime": 1777486056.7040153,
+    "hash": "707799dd76333e8f8565e5840104b337"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/(payload)/admin/importMap.js": {
+    "mtime": 1777495060.1617684,
+    "hash": "c206a19b27161e259f6c15fa58894367"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/(payload)/admin/[[...segments]]/page.tsx": {
+    "mtime": 1777493039.9513242,
+    "hash": "2182987e279418838dc862147826714e"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/(payload)/admin/[[...segments]]/not-found.tsx": {
+    "mtime": 1777493038.6718137,
+    "hash": "16c573a7b18f3dce0aa049ea40c14185"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/(payload)/api/graphql-playground/route.ts": {
+    "mtime": 1777486065.662658,
+    "hash": "a793783419ae336f1f5bf3d578929f4c"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/(payload)/api/[...slug]/route.ts": {
+    "mtime": 1777486063.3067105,
+    "hash": "fb7072bc678186bc22a4a732c7391b54"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/app/(payload)/api/graphql/route.ts": {
+    "mtime": 1777486064.4419932,
+    "hash": "6c78ade7295ec629b85a240c9abcbc5c"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/payload/collections/Profiles.ts": {
+    "mtime": 1777489568.6310956,
+    "hash": "fa2b044d0400e87dd65e1790bcc2be1e"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/payload/collections/Admins.ts": {
+    "mtime": 1777489556.8410263,
+    "hash": "5b8026f4a0bb04422029a7e1d83e72ca"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/payload/collections/Users.ts": {
+    "mtime": 1777489563.3234787,
+    "hash": "7432c96b5ca7a3338d53d86f94d09782"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/payload/collections/Media.ts": {
+    "mtime": 1777489575.519398,
+    "hash": "8a6ea1183c66b50afcbf05287345fd03"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/supabase/migrations/20260429000001_spike_storage_and_auth_webhook.sql": {
+    "mtime": 1777489669.6902966,
+    "hash": "9a3f19b0a094bf44c43f3d712ebf24e2"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/lib/payload.ts": {
+    "mtime": 1777489591.707311,
+    "hash": "1720f243a0e69cd24f12a4997430fd1b"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/lib/supabase/admin.ts": {
+    "mtime": 1777489594.2322571,
+    "hash": "6fdf368edb63c25ce3e671feeff852c7"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/lib/supabase/browser.ts": {
+    "mtime": 1777493384.5077198,
+    "hash": "6237820d7f57d7d4046a63f1f30b6276"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/i18n/request.ts": {
+    "mtime": 1777485991.2245321,
+    "hash": "2091522012a7a45a5261efbadd78666e"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/README.md": {
+    "mtime": 1777923523.4050224,
+    "hash": "a764ac8a4113c537fc2135b6c5cdd916"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/presskit-pro-prd.md": {
+    "mtime": 1777484342.5172925,
+    "hash": "c4334f48b19a6fc08adab36cbf034fdc"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-22-pricing-page.md": {
+    "mtime": 1777484845.1374483,
+    "hash": "5c0aabc2cd004c7eb6a1ce55d6d4ad32"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-12-editor-section-photo-gallery.md": {
+    "mtime": 1777484735.7462983,
+    "hash": "4f794345b40c9641474b7c51e594c467"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-32-slug-reclamation-policy.md": {
+    "mtime": 1777484985.4558108,
+    "hash": "45d4f81068ebab00bc9e6c715b713eee"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-11-editor-section-bio-services.md": {
+    "mtime": 1777484727.825632,
+    "hash": "e614459ce42185b8e319830d256e47c5"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-10-editor-section-hero.md": {
+    "mtime": 1777484719.1278746,
+    "hash": "a42c85a6cb1038542d6cfe244496af23"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-16-editor-section-soundcloud-oembed.md": {
+    "mtime": 1777484780.472574,
+    "hash": "976768a9e9fdc398e2d9c4c68929ee1b"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-08-payload-collections.md": {
+    "mtime": 1777484717.1090891,
+    "hash": "61ae6535a81873dfaf9a4d67fe2d8ba5"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-20-seo-foundation.md": {
+    "mtime": 1777484826.1989093,
+    "hash": "ff0be90274be6127f8dc3dde683695fd"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-19-public-profile-page.md": {
+    "mtime": 1777484816.151637,
+    "hash": "0c847316f89c81e5cd33fbeccff1baa0"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-34-v2-backlog.md": {
+    "mtime": 1777485010.0217261,
+    "hash": "25dd9e7062230f4d852a051ec4537cfb"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-30-press-kit-health-check-job.md": {
+    "mtime": 1777484961.0969431,
+    "hash": "581ee15785fbe78edf9ae2407089d2e6"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-33-lgpd-data-export-delete.md": {
+    "mtime": 1777484996.524115,
+    "hash": "dc0c523f19e3618f8b29530cddce7ddb"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-24-analytics-pipeline.md": {
+    "mtime": 1777484870.7062962,
+    "hash": "23ae8b6c12a0d3bfdfa1cbad26d7d4f6"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-14-editor-section-contact.md": {
+    "mtime": 1777484756.9424818,
+    "hash": "4c8c2fa96c4ece80571fb6ea54aa7a1a"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-01-project-setup.plan.md": {
+    "mtime": 1777485878.7657294,
+    "hash": "3aa821836f3ee043f5f663cdfa7993c8"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-09-profile-editor-shell.md": {
+    "mtime": 1777484718.11885,
+    "hash": "10f2d35a86dd706ee78e3b0b8f372e63"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-25-accessibility-baseline.md": {
+    "mtime": 1777484905.5610213,
+    "hash": "5470801ac108e81c65c15966b0cced35"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-13-editor-section-social-links.md": {
+    "mtime": 1777484748.7604797,
+    "hash": "1ea9f516aeccead6839e988cc2765717"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/README.md": {
+    "mtime": 1777484589.2631018,
+    "hash": "26b0979f7058dea3638b742580ecfa60"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-31-billing-annual-and-agency.md": {
+    "mtime": 1777484975.024061,
+    "hash": "78222e4eef6df8dcf9a4067444ef605a"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-21-marketing-landing.md": {
+    "mtime": 1777484835.908116,
+    "hash": "b1749c2083f95e44a426df54a6f75857"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-15-editor-section-press-kit-link.md": {
+    "mtime": 1777484769.2061906,
+    "hash": "eaf6467de86221e194b2bd5770f1fe2c"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-26-performance-budget.md": {
+    "mtime": 1777484915.5633373,
+    "hash": "c0a1a8d78e86dc208d98ce4cddc48c76"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-27-security-rls-and-rate-limits.md": {
+    "mtime": 1777484928.079753,
+    "hash": "098e960f158c709dddafd0098cba1996"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-18-theme-tab-and-contrast-gate.md": {
+    "mtime": 1777484798.6644015,
+    "hash": "4d5dd0ff62bb62cbc1178beca2bf2421"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-04-ci-cd-and-quality-gates.md": {
+    "mtime": 1777484646.4493449,
+    "hash": "70e5529d20ad31379f9ca524aa2209be"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-29-i18n-next-intl.md": {
+    "mtime": 1777484949.8455744,
+    "hash": "d9ac69af0588ee7e4454fda34661975b"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-07-slug-rules-and-reservations.md": {
+    "mtime": 1777484683.9225318,
+    "hash": "6913375b0cc2adc6231d572e498d4f8d"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-02-supabase-payload-spike.md": {
+    "mtime": 1777489719.6409905,
+    "hash": "fd96eadebaafb9171afb783cf10f09dd"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-06-onboarding-wizard.md": {
+    "mtime": 1777484666.8835866,
+    "hash": "f42c879ede51d4010a3eff37a419c950"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-01-project-setup.md": {
+    "mtime": 1777494198.2394931,
+    "hash": "6ee02a1e909404c5871e02edcb5f5371"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-28-observability-sentry-posthog.md": {
+    "mtime": 1777484937.7257838,
+    "hash": "066afa86d93437975f20a84badd1511a"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-05-auth-supabase.md": {
+    "mtime": 1777484656.7483869,
+    "hash": "1e59a1278f37200a603d108548c09ab1"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-23-stripe-trial-to-paid.md": {
+    "mtime": 1777484859.0484734,
+    "hash": "867d3f3fc336abee88e7d7ad23c9f87e"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/tasks/task-17-editor-section-instagram-oembed.md": {
+    "mtime": 1777484787.551907,
+    "hash": "84883196429b624053644e8309198e78"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/runbooks/migrations.md": {
+    "mtime": 1777923546.8130965,
+    "hash": "2be27f038280cf81fe34851657fde5cf"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/runbooks/dev-hosted-supabase.md": {
+    "mtime": 1777923557.8316095,
+    "hash": "4c94cb272502b5ae084d20cdf468214f"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/runbooks/spike-task-02.md": {
+    "mtime": 1777923552.6968024,
+    "hash": "36fb0976944a9d013158046da3a15bd3"
+  },
+  "/Users/jeanpaul/Documents/FreeLancer/presskitpro-webapp/docs/decisions/0001-payload-supabase-split.md": {
+    "mtime": 1777489538.1192422,
+    "hash": "c6fa81087bc3e3d0f16ab09ef3291ca8"
+  }
+}
