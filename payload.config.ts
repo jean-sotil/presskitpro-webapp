@@ -5,6 +5,9 @@ import { buildConfig } from 'payload';
 import sharp from 'sharp';
 import { fileURLToPath } from 'url';
 
+import { Admins } from './payload/collections/Admins';
+import { Media } from './payload/collections/Media';
+import { Profiles } from './payload/collections/Profiles';
 import { Users } from './payload/collections/Users';
 
 const filename = fileURLToPath(import.meta.url);
@@ -12,12 +15,12 @@ const dirname = path.dirname(filename);
 
 export default buildConfig({
   admin: {
-    user: Users.slug,
+    user: Admins.slug,
     importMap: {
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users],
+  collections: [Admins, Users, Profiles, Media],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

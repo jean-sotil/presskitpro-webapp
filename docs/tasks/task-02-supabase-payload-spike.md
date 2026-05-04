@@ -21,10 +21,13 @@ Validate the dual-schema architecture (Payload owns content in `payload` schema;
 - RLS policies (task-27).
 
 ## Acceptance criteria
-- [ ] A new Supabase Auth user appears as a Payload `Users` document within 5s.
-- [ ] Payload migrations run cleanly without colliding with Supabase tables.
-- [ ] Browser-side test uploads a 2MB JPEG to Supabase Storage and the resulting Payload Media record links to the correct object.
-- [ ] Decision log committed at `docs/decisions/0001-payload-supabase-split.md` either confirming the split or proposing an alternative.
+- [x] A new Supabase Auth user appears as a Payload `Users` document within 5s. *(trigger + webhook handler in `app/api/webhooks/supabase-auth/route.ts`; verified via runbook step 4)*
+- [x] Payload migrations run cleanly without colliding with Supabase tables. *(`schemaName: 'payload'` in `payload.config.ts`; runbook step 2 verifies)*
+- [x] Browser-side test uploads a 2MB JPEG to Supabase Storage and the resulting Payload Media record links to the correct object. *(`/spike?spike=1` page; runbook step 5)*
+- [x] Decision log committed at `docs/decisions/0001-payload-supabase-split.md` either confirming the split or proposing an alternative. *(spike confirmed the split)*
+
+## Status
+**Complete (spike validated 2026-04-29).** See [ADR-0001](../decisions/0001-payload-supabase-split.md) and [the spike runbook](../runbooks/spike-task-02.md). Follow-ups for task-08: Users/Profiles/Media collections are minimum-viable shapes intended to be extended, not replaced.
 
 ## Implementation notes
 - The webhook from Supabase Auth → Payload should be idempotent (handle replays).
