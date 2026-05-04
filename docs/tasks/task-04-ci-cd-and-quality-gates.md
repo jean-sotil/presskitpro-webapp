@@ -33,5 +33,23 @@ Establish the pipeline that enforces every quality bar in the PRD on every PR.
 - Lighthouse-CI: throttle to mobile + 4G profile per §13.
 - Snapshot tests on critical visual primitives (sparingly — visual regression is high-maintenance).
 
+## Status
+
+**Phase A complete** — automated gates land on every PR via [.github/workflows/ci.yml](../../.github/workflows/ci.yml). See the [CI runbook](../runbooks/ci.md) for the full pipeline diagram, required secrets, and Phase B walkthrough.
+
+| AC | State | Notes |
+|---|---|---|
+| TS error fails CI in < 3 min | ✅ | `gates` matrix runs in parallel; typecheck job is sub-2 min. |
+| Lighthouse < 95 fails CI on seeded profile | 🚧 deferred to task-19 | Initial budget is perf ≥ 80 on `/`; tightens to ≥ 95 on a seeded profile when task-19 lands the public profile route. Documented in runbook §B4. |
+| Playwright runs against ephemeral preview env | 🟡 partial | Phase A: against locally-built `bun run start` with shared hosted Supabase. Per-PR Vercel previews are Phase B (operator-setup, runbook §B2). |
+| Axe report uploaded as PR artifact | ✅ | `playwright-report` artifact, 7-day retention. Severity grouping inside `tests/e2e/fixtures/axe.ts`. |
+| No secrets in repo | ✅ | All env flows via `secrets.*`. Required secret list in runbook. |
+
+**Phase B deferrals (operator-driven, not code):**
+- Vercel project + preview deploys.
+- Branch protection (UI-only).
+- Tag-push prod deploy.
+- Lighthouse ≥ 95 on a seeded profile (depends on task-19).
+
 ## Definition of Done
-Per Appendix C.
+Per Appendix C; Phase A artifacts (workflow, runbook, e2e + axe + LHCI configs) committed alongside the task plan.

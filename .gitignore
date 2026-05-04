@@ -45,3 +45,8 @@ pnpm-debug.log*
 # obsidian (notes editor — local workspace state, not project source)
 .obsidian/
 *.canvas
+
+# playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
