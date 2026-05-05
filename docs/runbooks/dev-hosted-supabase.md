@@ -131,6 +131,43 @@ supabase migration up
 pnpm payload migrate
 ```
 
+## Custom SMTP (Resend) — required for any meaningful auth testing
+
+Supabase's free tier shared SMTP is throttled to ~4 emails/hour per project — you'll hit the limit in about three login attempts. Resend's free tier (3,000/month) is more than enough for dev and production.
+
+### One-time setup
+
+1. **resend.com/signup** — use the email you want magic links delivered to.
+2. **API Keys → Create API Key** → name `presskitpro-dev` → permissions **Full access** → **Create**. Copy the `re_…` key immediately (shown once).
+3. Supabase dashboard → **Project Settings → Authentication → SMTP Settings** → toggle **Enable Custom SMTP** ON. Fill:
+
+   | Field | Value |
+   |---|---|
+   | Host | `smtp.resend.com` |
+   | Port | `465` |
+   | Username | `resend` |
+   | Password | the `re_…` key |
+   | Sender email | `onboarding@resend.dev` |
+   | Sender name | `PressKit Pro` |
+
+   Save. Supabase verifies the connection — green checkmark expected.
+
+### Resend free-tier caveat
+
+While your Resend account is **unverified** (no custom domain registered), you can only send to the **email address you signed up with**. Trying to send to any other recipient returns a 403.
+
+To unlock arbitrary recipients (required for production and any multi-user testing): Resend → **Domains → Add Domain** → add 3 DNS records (SPF, DKIM, return-path) → wait ~10 min for verification.
+
+### Bypass email entirely with the dev script
+
+When you don't want to round-trip through email at all (e.g., scripted test logins, Resend rate trouble), use:
+
+```bash
+bun run dev:magic-link <email> [--next=/dashboard]
+```
+
+It uses the service-role key to call Supabase's admin `generateLink()` and prints a magic-link URL. Open it in the browser → land on `/dashboard`. No email sent. Service-role key required in `.env`; never run this in production CI.
+
 ## Auth flow (task-05)
 
 The magic-link round-trip needs three things lined up:
