@@ -8,7 +8,7 @@
  *
  * Per task-03 AC: "verifies every preset combination passes WCAG AA."
  */
-import { accentPresets, autoText, bgPresets } from '../lib/design/tokens';
+import { accentPresets, autoText, bgPresets, defaultTokens } from '../lib/design/tokens';
 import { contrastRatio, passesAA } from '../lib/design/contrast';
 
 type Failure = {
@@ -30,6 +30,18 @@ function check(): Failure[] {
         pair: `text (${text.hex})`,
         required: 4.5,
         actual: contrastRatio(bg.hex, text.hex),
+      });
+    }
+
+    // text-muted only needs to be verified against the default-theme bg
+    // (each bg preset auto-derives its own muted via task-18; for now we
+    // gate the default-theme dark stack so axe never fires on dashboard copy).
+    if (bg.id === 'editorial-night' && !passesAA(bg.hex, defaultTokens.textMuted.hex, 4.5)) {
+      failures.push({
+        bg: bg.id,
+        pair: `text-muted (${defaultTokens.textMuted.hex})`,
+        required: 4.5,
+        actual: contrastRatio(bg.hex, defaultTokens.textMuted.hex),
       });
     }
 

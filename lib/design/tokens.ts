@@ -77,7 +77,7 @@ export const defaultTokens = {
   surface:          { oklch: '0.155 0 0', hex: '#141414' },
   border:           { oklch: '0.218 0 0', hex: '#1f1f1f' },
   text:             { oklch: '0.938 0.009 88', hex: '#f0ede6' },
-  textMuted:        { oklch: '0.515 0.008 75', hex: '#7a7670' },
+  textMuted:        { oklch: '0.620 0.010 78', hex: '#898581' },
   accent:           accentPresets[0],
   accentContrast:   { oklch: '0.094 0 0', hex: '#0a0a0a' },
   grainOpacity:     0.04,

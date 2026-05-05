@@ -24,7 +24,7 @@ CSS vars on `:root` (see [`app/globals.css`](../app/globals.css)). Triplets are 
 | `--surface` | `0.155 0 0` (`#141414`) | Cards, embeds |
 | `--border` | `0.218 0 0` (`#1f1f1f`) | Hairlines |
 | `--text` | `0.938 0.009 88` (`#edeae4`) | Body copy |
-| `--text-muted` | `0.515 0.008 75` (`#7a7670`) | Secondary copy |
+| `--text-muted` | `0.620 0.010 78` (`#898581`) | Secondary copy |
 | `--accent` | `0.550 0.190 142` (`#018a00`) | CTAs, hover, focus, links |
 | `--accent-contrast` | `0.094 0 0` | Text-on-accent |
 
