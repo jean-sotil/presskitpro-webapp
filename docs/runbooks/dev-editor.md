@@ -51,6 +51,17 @@ EDITOR_E2E_COOKIE='<cookie>' EDITOR_E2E_PROFILE_ID=<id> \
 
 To force compression: drop a > 2MB JPEG. The dev tools Network tab shows the PUT body is much smaller than the original (Canvas-resized to 2400px / quality 0.82).
 
+## Test the bio + services editors (task-11)
+
+1. Open the editor; click the **Sobre** rail item.
+2. The empty-state prompts ("Como você descreve sua música?", etc.) appear when the bio is empty.
+3. Type some text and try the toolbar: H2 / H3 headings, bold, italic, ordered + unordered lists, link.
+4. **Paste sanitization:** copy a fragment from Google Docs or a styled webpage and paste into the editor. The output should NOT carry inline styles, classes, or fonts. Verify with React DevTools — the Lexical state JSON has plain `paragraph` / `heading` / `list` nodes only.
+5. Switch to **Serviços**; click "+ Adicionar serviço". Empty title shows `Título é obrigatório.`
+6. Add 8 items — the add button disables and the "Máximo 8 serviços" helper appears.
+7. Drag-reorder a row by its `⋮⋮` handle; the preview reflects the new order.
+8. Both editors flush via autosave (5s) into `/api/profiles/[id]/content`.
+
 ## Mock autosave failures for QA
 
 The PATCH route returns 400 / 404 for invalid bodies / access denials. To force an error UI without changing code, point the PATCH at a non-existent id via the browser devtools (Network → "Override response"). The `SaveStatus` component should flip to the error state with a "tentar de novo" button.

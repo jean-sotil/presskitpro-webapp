@@ -6,8 +6,10 @@ import { SECTIONS } from '@/lib/editor/sections';
 
 import type { MutationScope } from '@/app/dashboard/profile/[id]/EditorClient';
 
+import { AboutEditCard } from './sections/AboutEditCard';
 import { HeroEditCard } from './sections/HeroEditCard';
 import { PlaceholderEditCard } from './sections/PlaceholderEditCard';
+import { ServicesEditCard } from './sections/ServicesEditCard';
 
 export interface EditorPaneProps {
   active: SectionKey;
@@ -38,6 +40,10 @@ export function EditorPane({
           onMutate={onMutate}
         />
       );
+    case 'about':
+      return <AboutEditCard bundle={bundle} onMutate={onMutate} />;
+    case 'services':
+      return <ServicesEditCard bundle={bundle} onMutate={onMutate} />;
     default:
       return <PlaceholderEditCard meta={meta} />;
   }

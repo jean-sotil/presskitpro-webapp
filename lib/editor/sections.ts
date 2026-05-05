@@ -17,8 +17,8 @@ export type SectionMeta = {
  */
 export const SECTIONS: Record<SectionKey, SectionMeta> = {
   hero: { key: 'hero', label: 'Hero', editorComesIn: 10, hasEditor: true },
-  about: { key: 'about', label: 'Sobre', editorComesIn: 11, hasEditor: false },
-  services: { key: 'services', label: 'Serviços', editorComesIn: 11, hasEditor: false },
+  about: { key: 'about', label: 'Sobre', editorComesIn: 11, hasEditor: true },
+  services: { key: 'services', label: 'Serviços', editorComesIn: 11, hasEditor: true },
   featuredTrack: { key: 'featuredTrack', label: 'Faixa em destaque', editorComesIn: 16, hasEditor: false },
   instagramFeed: { key: 'instagramFeed', label: 'Instagram', editorComesIn: 17, hasEditor: false },
   photoGallery: { key: 'photoGallery', label: 'Galeria', editorComesIn: 12, hasEditor: false },
