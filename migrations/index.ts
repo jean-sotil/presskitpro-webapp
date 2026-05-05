@@ -2,6 +2,7 @@ import * as migration_20260505_015050 from './20260505_015050';
 import * as migration_20260505_070813_task_08_collections from './20260505_070813_task_08_collections';
 import * as migration_20260505_090038_task_06_wizard from './20260505_090038_task_06_wizard';
 import * as migration_20260505_104511_task_10_hero_cta from './20260505_104511_task_10_hero_cta';
+import * as migration_20260505_112853_task_12_gallery from './20260505_112853_task_12_gallery';
 
 export const migrations = [
   {
@@ -22,6 +23,11 @@ export const migrations = [
   {
     up: migration_20260505_104511_task_10_hero_cta.up,
     down: migration_20260505_104511_task_10_hero_cta.down,
-    name: '20260505_104511_task_10_hero_cta'
+    name: '20260505_104511_task_10_hero_cta',
+  },
+  {
+    up: migration_20260505_112853_task_12_gallery.up,
+    down: migration_20260505_112853_task_12_gallery.down,
+    name: '20260505_112853_task_12_gallery'
   },
 ];

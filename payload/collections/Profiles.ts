@@ -107,6 +107,19 @@ export const Profiles: CollectionConfig = {
       admin: { description: 'Optional artist logo / monogram.' },
     },
 
+    // ----- Photo gallery (PRD §6.3) -----
+    {
+      name: 'gallery',
+      type: 'relationship',
+      relationTo: 'media',
+      hasMany: true,
+      maxRows: 50,
+      admin: {
+        description:
+          'Gallery photos (drag-reorder in the editor). Max 50 (soft warn at 24).',
+      },
+    },
+
     // ----- Press kit (PRD §7) -----
     {
       name: 'pressKitUrl',

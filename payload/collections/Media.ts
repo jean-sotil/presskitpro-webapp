@@ -58,10 +58,28 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      required: true,
+      // Required UNLESS `decorative` is explicitly true. Validate hook
+      // enforces the WCAG-correct posture: decorative photos render with
+      // `alt=""` (handled at render time), all other photos must have
+      // human-readable alt copy.
+      validate: ((value: unknown, opts: { siblingData?: { decorative?: boolean } }) => {
+        const decorative = opts?.siblingData?.decorative;
+        if (decorative === true) return true;
+        if (typeof value === 'string' && value.trim().length > 0) return true;
+        return 'Texto alternativo obrigatório (ou marque a imagem como decorativa).';
+      }) as never,
       admin: {
         description:
-          'Required for a11y. Mark explicitly empty (string with one space) only for decorative images — task-12 enforces the explicit decorative toggle.',
+          'Required for a11y unless `decorative` is true (in which case the public render emits alt="").',
+      },
+    },
+    {
+      name: 'decorative',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description:
+          'Mark for purely-decorative images (textures, abstract bg). Public render emits alt="" (WCAG-correct).',
       },
     },
     {

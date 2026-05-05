@@ -62,6 +62,17 @@ To force compression: drop a > 2MB JPEG. The dev tools Network tab shows the PUT
 7. Drag-reorder a row by its `⋮⋮` handle; the preview reflects the new order.
 8. Both editors flush via autosave (5s) into `/api/profiles/[id]/content`.
 
+## Test the photo gallery editor (task-12)
+
+1. Open the editor; click **Galeria** in the rail.
+2. Drop 3+ JPEGs onto the dropzone (or click to pick). The upload queue shows phase progress per file: `Comprimindo... → Enviando... → Salvando... → Pronto`.
+3. Each finished photo lands in the grid. Edit alt text per photo; toggle "Decorativa" for a couple.
+4. Decorative photos render with `alt=""` on the public side — verify in DevTools by inspecting the `<img>` tag.
+5. Drag-reorder via the `⋮⋮` handle. The preview reflects the new order.
+6. Multi-select via the checkboxes (top-left of each card) → "Excluir selecionadas" → confirm → both Storage objects + Payload Media rows go.
+7. Soft-cap kicks in above 24 photos (warning); hard-cap at 50 (dropzone disabled).
+8. To verify AVIF conversion: open DevTools Network tab and watch the PUT request — file extension should be `.avif` on modern browsers (Safari 15 falls back to `.jpg`).
+
 ## Mock autosave failures for QA
 
 The PATCH route returns 400 / 404 for invalid bodies / access denials. To force an error UI without changing code, point the PATCH at a non-existent id via the browser devtools (Network → "Override response"). The `SaveStatus` component should flip to the error state with a "tentar de novo" button.

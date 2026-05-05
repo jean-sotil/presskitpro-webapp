@@ -246,6 +246,10 @@ export interface Profile {
    */
   logo?: (number | null) | Media;
   /**
+   * Gallery photos (drag-reorder in the editor). Max 50 (soft warn at 24).
+   */
+  gallery?: (number | Media)[] | null;
+  /**
    * External press-kit URL (Google Drive, Dropbox, etc.). Provider + health are derived/checked automatically.
    */
   pressKitUrl?: string | null;
@@ -290,9 +294,13 @@ export interface Media {
   width?: number | null;
   height?: number | null;
   /**
-   * Required for a11y. Mark explicitly empty (string with one space) only for decorative images — task-12 enforces the explicit decorative toggle.
+   * Required for a11y unless `decorative` is true (in which case the public render emits alt="").
    */
-  alt: string;
+  alt?: string | null;
+  /**
+   * Mark for purely-decorative images (textures, abstract bg). Public render emits alt="" (WCAG-correct).
+   */
+  decorative?: boolean | null;
   owner: number | User;
   updatedAt: string;
   createdAt: string;
@@ -647,6 +655,7 @@ export interface ProfilesSelect<T extends boolean = true> {
   status?: T;
   portrait?: T;
   logo?: T;
+  gallery?: T;
   pressKitUrl?: T;
   pressKitProvider?: T;
   pressKitLastCheckedAt?: T;
@@ -691,6 +700,7 @@ export interface MediaSelect<T extends boolean = true> {
   width?: T;
   height?: T;
   alt?: T;
+  decorative?: T;
   owner?: T;
   updatedAt?: T;
   createdAt?: T;

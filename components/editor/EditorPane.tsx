@@ -8,6 +8,7 @@ import type { MutationScope } from '@/app/dashboard/profile/[id]/EditorClient';
 
 import { AboutEditCard } from './sections/AboutEditCard';
 import { HeroEditCard } from './sections/HeroEditCard';
+import { PhotoGalleryEditCard } from './sections/PhotoGalleryEditCard';
 import { PlaceholderEditCard } from './sections/PlaceholderEditCard';
 import { ServicesEditCard } from './sections/ServicesEditCard';
 
@@ -44,6 +45,14 @@ export function EditorPane({
       return <AboutEditCard bundle={bundle} onMutate={onMutate} />;
     case 'services':
       return <ServicesEditCard bundle={bundle} onMutate={onMutate} />;
+    case 'photoGallery':
+      return (
+        <PhotoGalleryEditCard
+          bundle={bundle}
+          supabaseUserId={supabaseUserId}
+          onMutate={onMutate}
+        />
+      );
     default:
       return <PlaceholderEditCard meta={meta} />;
   }
