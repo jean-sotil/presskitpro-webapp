@@ -136,6 +136,26 @@ To temporarily disable the captcha for debugging, blank `NEXT_PUBLIC_TURNSTILE_S
 - The CTA renders with `target="_blank" rel="noopener noreferrer"` and a provider badge ("Hospedado no Dropbox", etc.) when the provider is recognized.
 - Click fires `track('press_kit_click', { provider, profileSlug })`. The PostHog sink ships in task-24; until then the event logs to `console.debug`.
 
+## Test the featured-track editor (task-16)
+
+1. Open the editor; click **Faixa em destaque** in the rail.
+2. Paste any public SoundCloud track or playlist URL (e.g. `https://soundcloud.com/forss/flickermood` is a known-public test).
+3. Click **Salvar**. The route fetches `https://soundcloud.com/oembed?url=...&format=json`, runs the response `html` through `extractSafeIframe` (rebuilds the iframe with our own attrs — never passes the upstream string through), and persists the result on `FeaturedTracks.oembedHtml` + `fetchedAt`.
+4. The "Pré-visualização" panel renders the embedded player. The right-side preview pane mounts the same iframe via `<LazyIframe>` (IntersectionObserver-deferred — only mounts when the section is in/near the viewport).
+5. Click **Atualizar embed** to force a re-fetch (sends `force: true`). Useful when SoundCloud's cached HTML drifts.
+6. Click **Remover** to clear the row entirely (DELETE on the same route).
+
+### Known good test URLs
+
+- `https://soundcloud.com/forss/flickermood` — short instrumental, no login required.
+- `https://soundcloud.com/odesza/sun-models-feat-madelyn-grant` — playlist-friendly.
+
+### Common errors
+
+- **`Não encontramos essa faixa (404)`** — the SoundCloud URL is private, deleted, or the user pasted a non-soundcloud.com URL.
+- **`Apenas links do soundcloud.com são aceitos`** — host check in `fetchSoundcloudOembed` rejected the URL before any network call.
+- **`Resposta do SoundCloud não pôde ser processada com segurança`** — the upstream `html` field is missing or its iframe `src` doesn't match `https://w.soundcloud.com`. We refuse to render it.
+
 ## Mock autosave failures for QA
 
 The PATCH route returns 400 / 404 for invalid bodies / access denials. To force an error UI without changing code, point the PATCH at a non-existent id via the browser devtools (Network → "Override response"). The `SaveStatus` component should flip to the error state with a "tentar de novo" button.

@@ -8,6 +8,7 @@ import type { MutationScope } from '@/app/dashboard/profile/[id]/EditorClient';
 
 import { AboutEditCard } from './sections/AboutEditCard';
 import { ContactEditCard } from './sections/ContactEditCard';
+import { FeaturedTrackEditCard } from './sections/FeaturedTrackEditCard';
 import { HeroEditCard } from './sections/HeroEditCard';
 import { PhotoGalleryEditCard } from './sections/PhotoGalleryEditCard';
 import { PlaceholderEditCard } from './sections/PlaceholderEditCard';
@@ -62,6 +63,8 @@ export function EditorPane({
       return <ContactEditCard bundle={bundle} onMutate={onMutate} />;
     case 'pressKitLink':
       return <PressKitEditCard bundle={bundle} onMutate={onMutate} />;
+    case 'featuredTrack':
+      return <FeaturedTrackEditCard bundle={bundle} />;
     default:
       return <PlaceholderEditCard meta={meta} />;
   }

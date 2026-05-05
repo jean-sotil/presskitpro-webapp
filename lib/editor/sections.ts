@@ -19,7 +19,7 @@ export const SECTIONS: Record<SectionKey, SectionMeta> = {
   hero: { key: 'hero', label: 'Hero', editorComesIn: 10, hasEditor: true },
   about: { key: 'about', label: 'Sobre', editorComesIn: 11, hasEditor: true },
   services: { key: 'services', label: 'Serviços', editorComesIn: 11, hasEditor: true },
-  featuredTrack: { key: 'featuredTrack', label: 'Faixa em destaque', editorComesIn: 16, hasEditor: false },
+  featuredTrack: { key: 'featuredTrack', label: 'Faixa em destaque', editorComesIn: 16, hasEditor: true },
   instagramFeed: { key: 'instagramFeed', label: 'Instagram', editorComesIn: 17, hasEditor: false },
   photoGallery: { key: 'photoGallery', label: 'Galeria', editorComesIn: 12, hasEditor: true },
   pressKitLink: { key: 'pressKitLink', label: 'Press kit', editorComesIn: 15, hasEditor: true },
