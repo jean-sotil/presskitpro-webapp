@@ -178,6 +178,18 @@
   },
   "active": "ef44747c2cad8fc5",
   "lastOpenFiles": [
+    "tests/e2e/editor-social-links.spec.ts",
+    "components/editor/sections/SocialLinksEditCard.test.tsx",
+    "components/editor/sections/SocialLinksEditCard.tsx",
+    "components/profile/sections/SocialLinksRender.test.tsx",
+    "components/profile/sections/SocialLinksRender.tsx",
+    "app/api/profiles/[id]/social-links/route.ts",
+    "app/api/profiles/[id]/social-links",
+    "lib/editor/social-links-reconcile.test.ts",
+    "lib/editor/social-links-reconcile.ts",
+    "lib/editor/social-link-validate.test.ts",
+    "lib/editor/social-link-validate.ts",
+    "docs/tasks/task-13-editor-section-social-links.plan.md",
     "tests/e2e/editor-gallery.spec.ts",
     "components/editor/sections/PhotoGalleryEditCard.test.tsx",
     "components/editor/sections/PhotoGalleryEditCard.tsx",
@@ -212,18 +224,6 @@
     "node_modules/payload/node_modules/undici/docs/docs/best-practices/client-certificate.md",
     "node_modules/payload/node_modules/undici/docs/docs/api/GlobalInstallation.md",
     "node_modules/payload/node_modules/undici/docs/docs/api/api-lifecycle.md",
-    "node_modules/payload/node_modules/undici/docs/docs/api/WebSocket.md",
-    "node_modules/payload/node_modules/undici/docs/docs/api/Socks5ProxyAgent.md",
-    "node_modules/@payloadcms/richtext-lexical/dist/lexical/ui/icons/Remove/index.svg",
-    "node_modules/@payloadcms/richtext-lexical/dist/lexical/ui/icons/Edit/index.svg",
-    "node_modules/@payloadcms/richtext-lexical/dist/lexical/ui/icons/DraggableBlock/light.svg",
-    "node_modules/@payloadcms/richtext-lexical/dist/lexical/ui/icons/DraggableBlock/index.svg",
-    "node_modules/@payloadcms/richtext-lexical/dist/lexical/ui/icons/Caret/index.svg",
-    "node_modules/@payloadcms/richtext-lexical/dist/lexical/ui/icons/Add/light.svg",
-    "node_modules/@payloadcms/richtext-lexical/dist/lexical/ui/icons/Add/index.svg",
-    "test-results/auth-Auth-smoke-signup-page-renders-and-is-axe-clean-chromium/test-failed-1.png",
-    "test-results/auth-Auth-smoke-login-page-2a109-an-and-shows-the-email-form-chromium/test-failed-1.png",
-    "test-results/smoke-Smoke-smoke-home-pag-25bd6-ical-serious-axe-violations-chromium/test-failed-1.png",
-    "Untitled.canvas"
+    "node_modules/payload/node_modules/undici/docs/docs/api/WebSocket.md"
   ]
 }
