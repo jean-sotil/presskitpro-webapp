@@ -14,6 +14,7 @@ const PATCHABLE_FIELDS = new Set([
   'localesAvailable',
   'portrait',
   'logo',
+  'gallery',
 ]);
 
 export async function PATCH(

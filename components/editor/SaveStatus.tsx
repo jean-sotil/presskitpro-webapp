@@ -17,8 +17,15 @@ export interface SaveStatusProps {
 const TICK_MS = 30_000;
 
 export function SaveStatus({ state }: SaveStatusProps) {
-  // Force a re-render every 30s so the relative-time string stays fresh.
+  // `formatRelative` calls `Date.now()`, so it can't run during SSR
+  // without producing a hydration mismatch (server time != hydration
+  // time). Gate the relative string on a mount flag, then re-render
+  // every 30s to keep it fresh.
+  const [mounted, setMounted] = useState(false);
   const [, setTick] = useState(0);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   useEffect(() => {
     if (state.kind !== 'idle' || state.lastSavedAt === null) return;
     const id = setInterval(() => setTick((t) => t + 1), TICK_MS);
@@ -67,7 +74,7 @@ export function SaveStatus({ state }: SaveStatusProps) {
       aria-live="polite"
       className="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-text-muted"
     >
-      Salvo · {formatRelative(state.lastSavedAt)}
+      Salvo{mounted ? ` · ${formatRelative(state.lastSavedAt)}` : ''}
     </span>
   );
 }

@@ -14,7 +14,8 @@ import {
   rectSortingStrategy,
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
-import { useCallback, useEffect, useState, useTransition } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 
 import { Button } from '@/components/ui/Button';
 import { PublishDialog } from '@/components/editor/PublishDialog';
@@ -77,7 +78,32 @@ export function PhotoGalleryEditCard({
   supabaseUserId,
   onMutate,
 }: PhotoGalleryEditCardProps) {
-  const items = normalizeGallery(bundle.profile.gallery);
+  const qc = useQueryClient();
+  const profileId = bundle.profile.id;
+  const items = useMemo(
+    () => normalizeGallery(bundle.profile.gallery),
+    [bundle.profile.gallery],
+  );
+
+  const patchGalleryItemInCache = useCallback(
+    (id: number, patch: Partial<GalleryEditItem>) => {
+      qc.setQueryData<EditorBundle>(['editor', profileId], (prev) => {
+        if (!prev) return prev;
+        const raw = prev.profile.gallery as Array<RawGalleryEntry> | undefined;
+        if (!Array.isArray(raw)) return prev;
+        const nextGallery = raw.map((entry) => {
+          if (typeof entry === 'number') return entry;
+          if (entry.id === id) return { ...entry, ...patch };
+          return entry;
+        });
+        return {
+          ...prev,
+          profile: { ...prev.profile, gallery: nextGallery },
+        };
+      });
+    },
+    [qc, profileId],
+  );
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -279,14 +305,14 @@ export function PhotoGalleryEditCard({
                   selected={selected.has(item.id)}
                   altPending={altPending.has(item.id)}
                   onAltChange={(value) => {
-                    onMutate('profile', { __optimistic_only__: true });
-                    // Optimistic preview — patch the bundle directly.
-                    item.alt = value;
+                    patchGalleryItemInCache(item.id, { alt: value });
                     patchAlt(item.id, value);
                   }}
                   onDecorativeToggle={(value) => {
-                    item.decorative = value;
-                    if (value) item.alt = '';
+                    patchGalleryItemInCache(item.id, {
+                      decorative: value,
+                      ...(value ? { alt: '' } : {}),
+                    });
                     patchDecorative(item.id, value);
                   }}
                   onSelectToggle={(value) =>

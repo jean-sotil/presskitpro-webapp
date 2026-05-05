@@ -1,9 +1,16 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 
 import { PhotoGalleryEditCard } from './PhotoGalleryEditCard';
+
+function withQueryClient(ui: ReactNode) {
+  const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  return <QueryClientProvider client={qc}>{ui}</QueryClientProvider>;
+}
 
 beforeEach(() => {
   vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', 'https://abc.supabase.co');
@@ -39,11 +46,13 @@ function makeBundle(items: Array<Partial<{ id: number; bucket: string; path: str
 describe('PhotoGalleryEditCard', () => {
   it('shows the empty-state when no items', () => {
     render(
-      <PhotoGalleryEditCard
-        bundle={makeBundle()}
-        supabaseUserId="sb-1"
-        onMutate={vi.fn()}
-      />,
+      withQueryClient(
+        <PhotoGalleryEditCard
+          bundle={makeBundle()}
+          supabaseUserId="sb-1"
+          onMutate={vi.fn()}
+        />,
+      ),
     );
     expect(screen.getByText(/arraste ou clique/i)).toBeInTheDocument();
     expect(screen.queryByRole('alert')).toBeNull();
@@ -51,15 +60,17 @@ describe('PhotoGalleryEditCard', () => {
 
   it('lists the missing-alt indices in a role="alert" banner', () => {
     render(
-      <PhotoGalleryEditCard
-        bundle={makeBundle([
-          { id: 1, alt: 'OK', decorative: false },
-          { id: 2, alt: '', decorative: false },
-          { id: 3, alt: '', decorative: false },
-        ])}
-        supabaseUserId="sb-1"
-        onMutate={vi.fn()}
-      />,
+      withQueryClient(
+        <PhotoGalleryEditCard
+          bundle={makeBundle([
+            { id: 1, alt: 'OK', decorative: false },
+            { id: 2, alt: '', decorative: false },
+            { id: 3, alt: '', decorative: false },
+          ])}
+          supabaseUserId="sb-1"
+          onMutate={vi.fn()}
+        />,
+      ),
     );
     const alert = screen.getAllByRole('alert')[0]!;
     expect(alert).toHaveTextContent(/sem texto alternativo/i);
@@ -74,11 +85,13 @@ describe('PhotoGalleryEditCard', () => {
       decorative: false,
     }));
     render(
-      <PhotoGalleryEditCard
-        bundle={makeBundle(items)}
-        supabaseUserId="sb-1"
-        onMutate={vi.fn()}
-      />,
+      withQueryClient(
+        <PhotoGalleryEditCard
+          bundle={makeBundle(items)}
+          supabaseUserId="sb-1"
+          onMutate={vi.fn()}
+        />,
+      ),
     );
     expect(screen.getByText(/25 fotos/i)).toBeInTheDocument();
     expect(screen.getByText(/galeria pode ficar pesada/i)).toBeInTheDocument();
@@ -91,25 +104,29 @@ describe('PhotoGalleryEditCard', () => {
       decorative: false,
     }));
     render(
-      <PhotoGalleryEditCard
-        bundle={makeBundle(items)}
-        supabaseUserId="sb-1"
-        onMutate={vi.fn()}
-      />,
+      withQueryClient(
+        <PhotoGalleryEditCard
+          bundle={makeBundle(items)}
+          supabaseUserId="sb-1"
+          onMutate={vi.fn()}
+        />,
+      ),
     );
     expect(screen.getByText(/limite atingido/i)).toBeInTheDocument();
   });
 
   it('reveals bulk delete bar when items are selected', () => {
     render(
-      <PhotoGalleryEditCard
-        bundle={makeBundle([
-          { id: 1, alt: 'a', decorative: false },
-          { id: 2, alt: 'b', decorative: false },
-        ])}
-        supabaseUserId="sb-1"
-        onMutate={vi.fn()}
-      />,
+      withQueryClient(
+        <PhotoGalleryEditCard
+          bundle={makeBundle([
+            { id: 1, alt: 'a', decorative: false },
+            { id: 2, alt: 'b', decorative: false },
+          ])}
+          supabaseUserId="sb-1"
+          onMutate={vi.fn()}
+        />,
+      ),
     );
     expect(screen.queryByRole('button', { name: /excluir selecionadas/i })).toBeNull();
     fireEvent.click(screen.getByLabelText(/selecionar imagem 1/i));
