@@ -140,6 +140,8 @@ export const Profiles: CollectionConfig = {
         { label: 'Dropbox', value: 'dropbox' },
         { label: 'OneDrive', value: 'onedrive' },
         { label: 'WeTransfer', value: 'wetransfer' },
+        { label: 'Notion', value: 'notion' },
+        { label: 'MediaFire', value: 'mediafire' },
         { label: 'Other', value: 'other' },
       ],
       admin: {

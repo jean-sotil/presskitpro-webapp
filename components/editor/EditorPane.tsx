@@ -11,6 +11,7 @@ import { ContactEditCard } from './sections/ContactEditCard';
 import { HeroEditCard } from './sections/HeroEditCard';
 import { PhotoGalleryEditCard } from './sections/PhotoGalleryEditCard';
 import { PlaceholderEditCard } from './sections/PlaceholderEditCard';
+import { PressKitEditCard } from './sections/PressKitEditCard';
 import { ServicesEditCard } from './sections/ServicesEditCard';
 import { SocialLinksEditCard } from './sections/SocialLinksEditCard';
 
@@ -59,6 +60,8 @@ export function EditorPane({
       return <SocialLinksEditCard bundle={bundle} onMutate={onMutate} />;
     case 'contact':
       return <ContactEditCard bundle={bundle} onMutate={onMutate} />;
+    case 'pressKitLink':
+      return <PressKitEditCard bundle={bundle} onMutate={onMutate} />;
     default:
       return <PlaceholderEditCard meta={meta} />;
   }

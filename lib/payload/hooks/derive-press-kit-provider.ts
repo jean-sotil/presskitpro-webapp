@@ -6,6 +6,8 @@ export type PressKitProvider =
   | 'dropbox'
   | 'onedrive'
   | 'wetransfer'
+  | 'notion'
+  | 'mediafire'
   | 'other';
 
 export function derivePressKitProvider(url: unknown): PressKitProvider {
@@ -20,6 +22,9 @@ export function derivePressKitProvider(url: unknown): PressKitProvider {
   if (host.endsWith('dropbox.com')) return 'dropbox';
   if (host.endsWith('onedrive.live.com') || host === '1drv.ms') return 'onedrive';
   if (host.endsWith('wetransfer.com')) return 'wetransfer';
+  // notion.so for personal pages, *.notion.site for team-published pages.
+  if (host.endsWith('notion.so') || host.endsWith('notion.site')) return 'notion';
+  if (host.endsWith('mediafire.com')) return 'mediafire';
   return 'other';
 }
 

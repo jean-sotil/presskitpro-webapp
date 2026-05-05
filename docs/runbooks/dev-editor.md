@@ -117,6 +117,25 @@ Once you've set `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, and `R
 
 To temporarily disable the captcha for debugging, blank `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (form bypasses the gate) **and** `TURNSTILE_SECRET_KEY` (route reverts to no-op). Both, or neither — never one.
 
+## Test the press-kit editor (task-15)
+
+1. Open the editor; click **Press kit** in the rail.
+2. Paste a publicly-viewable URL (Google Drive, Dropbox, Notion, etc.) and click **Validar**.
+3. On success the green check shows the recognized provider chip ("Link válido — Google Drive"). The autosave fires immediately and a `PATCH /api/profiles/<id>` lands with `{ pressKitUrl: "..." }`. Server-side, the `derivePressKitProvider` beforeChange hook re-derives `pressKitProvider` (so even if the editor is bypassed, the provider stays in sync with the URL).
+4. Try a 404 URL (e.g. `https://example.com/missing`) — `Validar` flips the input `aria-invalid` and shows "Não encontramos esse arquivo (HTTP 404)". `onMutate` is **not** called → nothing persists.
+5. **Drive restrictive-access quirk:** paste a Drive link whose page renders the "Access denied" title. The widget still saves (the file might be public for some collaborators), but a "Pode estar restrito a usuários do workspace" warning appears. Verify by opening the link in an incognito window.
+
+### How the validation route works
+
+- The editor calls `POST /api/press-kit-validate` with `{ url }`.
+- The route runs `validatePressKitUrl()`: `HEAD` with an 8s timeout, falls back to a `Range: bytes=0-0` GET if the host returns 405, and probes the body for the Drive "Access denied" title when `provider === 'google-drive'`.
+- The PATCH route (`/api/profiles/<id>`) does **not** re-validate — that would block autosave on every keystroke. Drift gets caught by the daily health-check cron in task-30.
+
+### Public render behavior
+
+- The CTA renders with `target="_blank" rel="noopener noreferrer"` and a provider badge ("Hospedado no Dropbox", etc.) when the provider is recognized.
+- Click fires `track('press_kit_click', { provider, profileSlug })`. The PostHog sink ships in task-24; until then the event logs to `console.debug`.
+
 ## Mock autosave failures for QA
 
 The PATCH route returns 400 / 404 for invalid bodies / access denials. To force an error UI without changing code, point the PATCH at a non-existent id via the browser devtools (Network → "Override response"). The `SaveStatus` component should flip to the error state with a "tentar de novo" button.

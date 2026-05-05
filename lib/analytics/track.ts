@@ -12,7 +12,8 @@ export type AnalyticsEvent =
   | 'onboarding_completed'
   | 'wizard_cancelled'
   | 'profile_published'
-  | 'profile_unpublished';
+  | 'profile_unpublished'
+  | 'press_kit_click';
 
 export type AnalyticsSink = (
   event: AnalyticsEvent,

@@ -9,6 +9,9 @@ describe('derivePressKitProvider', () => {
     ['https://onedrive.live.com/?cid=xyz', 'onedrive'],
     ['https://1drv.ms/u/s!Abc', 'onedrive'],
     ['https://wetransfer.com/downloads/abc', 'wetransfer'],
+    ['https://www.notion.so/My-Press-Kit-abc123', 'notion'],
+    ['https://acme.notion.site/Press-Kit-abc', 'notion'],
+    ['https://www.mediafire.com/file/abc/kit.zip', 'mediafire'],
     ['https://example.com/my-press-kit', 'other'],
   ] as const)('derives %s -> %s', (url, expected) => {
     expect(derivePressKitProvider(url)).toBe(expected);

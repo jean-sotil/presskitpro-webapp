@@ -256,7 +256,9 @@ export interface Profile {
   /**
    * Derived from `pressKitUrl` by beforeChange hook.
    */
-  pressKitProvider?: ('unknown' | 'google-drive' | 'dropbox' | 'onedrive' | 'wetransfer' | 'other') | null;
+  pressKitProvider?:
+    | ('unknown' | 'google-drive' | 'dropbox' | 'onedrive' | 'wetransfer' | 'notion' | 'mediafire' | 'other')
+    | null;
   /**
    * Updated by the daily health-check cron (task-30).
    */
