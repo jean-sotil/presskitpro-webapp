@@ -10,6 +10,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': dirname,
+      // Next.js's `server-only` is a build-time guard; under Vitest we stub it
+      // so server-only modules can be unit-tested directly.
+      'server-only': path.resolve(dirname, 'tests/stubs/server-only.ts'),
     },
   },
   test: {

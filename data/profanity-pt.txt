@@ -1,0 +1,34 @@
+# PT-BR profanity baseline for slug validation.
+# Same matching rules as profanity-en.txt.
+# Curated for the Brazilian DJ market (PRD §3 — primary audience).
+porra
+caralho
+buceta
+boceta
+piroca
+pinto
+bunda
+puta
+puto
+viado
+viadinho
+boquete
+piranha
+pqp
+fdp
+arrombado
+arrombada
+cu
+cuzao
+foder
+fodase
+otario
+otaria
+rachadinha
+xota
+xoxota
+peido
+mijo
+nazista
+estupro
+suicidio

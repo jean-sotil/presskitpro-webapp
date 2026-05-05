@@ -33,6 +33,15 @@ pnpm seed
 > `pnpm payload migrate`) still works for anyone who needs it — see
 > [spike-task-02.md](./spike-task-02.md). Not the recommended path.
 
+## Migrations to date
+
+| File | Adds |
+|---|---|
+| `20260429000001_spike_storage_and_auth_webhook.sql` | task-02 spike: storage buckets + auth.users → webhook trigger |
+| `20260504000001_slug_reservations_and_redirects.sql` | task-07: `slug_reservations` + `slug_redirects` + 29 reserved-word seed (PRD §5) + `pg_cron` sweep job (`slug-sweep-expired`, every 5 min) |
+
+The `pg_cron` job lives in the `cron.job` table — verify with `select jobname, schedule from cron.job;` (requires service-role / superuser). Re-running the migration is idempotent: `cron.schedule` replaces by jobname, and the seed uses `ON CONFLICT DO NOTHING`.
+
 ## Daily dev cycle
 
 - Schema change in `payload/collections/*`: `pnpm payload migrate:create <name>` → review SQL → commit.

@@ -1,0 +1,31 @@
+# EN profanity baseline for slug validation.
+# One word per line. Lines starting with # are comments.
+# Match is word-boundary, case-insensitive, against the (lowercased) slug.
+# Curated to avoid false positives on real DJ names like "scunthorpe", "massive".
+# Add to this list as PT support and operator review evolve (task-32 / task-33).
+fuck
+shit
+bitch
+asshole
+bastard
+cunt
+dick
+whore
+slut
+faggot
+nigger
+nigga
+retard
+chink
+spic
+kike
+tranny
+pussy
+cock
+twat
+wank
+pedo
+nazi
+hitler
+rape
+suicide
