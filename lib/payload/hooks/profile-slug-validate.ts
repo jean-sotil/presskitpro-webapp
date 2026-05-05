@@ -1,4 +1,4 @@
-import { validateSlugFormat } from '../../slug/validator';
+import { validateSlugFormat } from '../../slug/format';
 
 /**
  * Wraps `validateSlugFormat` for Payload's field-level `validate` signature

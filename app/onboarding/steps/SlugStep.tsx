@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/Button';
 import { advanceStep } from '../actions';
-import { validateSlugFormat } from '@/lib/slug/validator';
+import { validateSlugFormat } from '@/lib/slug/format';
 
 type CheckResult =
   | { available: true }
@@ -47,7 +47,10 @@ export function SlugStep({ initialSlug, debounceMs = 300 }: SlugStepProps) {
         const res = await fetch(
           `/api/slug/check?slug=${encodeURIComponent(slug)}`,
         );
-        if (!res.ok) throw new Error(`status ${res.status}`);
+        if (!res.ok) {
+          const text = await res.text().catch(() => '');
+          throw new Error(`HTTP ${res.status}${text ? ` — ${text.slice(0, 200)}` : ''}`);
+        }
         const body = (await res.json()) as CheckResult;
         if (body.available) {
           setStatus({ kind: 'available' });
@@ -55,6 +58,9 @@ export function SlugStep({ initialSlug, debounceMs = 300 }: SlugStepProps) {
           setStatus({ kind: 'unavailable', reason: body.reason });
         }
       } catch (err) {
+        // Surface the underlying error in dev so we can debug; production
+        // shows the generic "Erro de rede" copy.
+        console.error('[slug-check]', err);
         setStatus({
           kind: 'error',
           message: err instanceof Error ? err.message : 'check failed',
@@ -118,7 +124,11 @@ export function SlugStep({ initialSlug, debounceMs = 300 }: SlugStepProps) {
           <span className="text-text-muted">{labelFor(status.reason)}</span>
         )}
         {status.kind === 'error' && (
-          <span className="text-text-muted">Erro de rede. Tenta de novo.</span>
+          <span className="text-text-muted">
+            {process.env.NODE_ENV === 'production'
+              ? 'Erro de rede. Tenta de novo.'
+              : `Erro: ${status.message}`}
+          </span>
         )}
       </p>
       <div className="mt-4">

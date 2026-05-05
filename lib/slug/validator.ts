@@ -1,39 +1,25 @@
 /**
- * Slug validation.
+ * Server-only slug validation.
  *
- * Two pure functions consumed by `/api/slug/check` and the wizard:
- *   - `validateSlugFormat` — grammar (PRD Appendix A): lowercase + digits +
- *     hyphens, no leading/trailing hyphen, no consecutive hyphens, length 2–30.
- *   - `containsProfanity` — substring match (word-boundary) against bundled
- *     EN + PT lists at `data/profanity-{en,pt}.txt`.
+ * The pure format check moved to `./format.ts` so client components
+ * (e.g. the wizard's SlugStep) can import it without dragging the
+ * `server-only` guard or the profanity-list `fs.readFileSync` into the
+ * browser bundle. Server callers (API routes, Payload hooks) keep
+ * importing from this module so they get format + profanity in one
+ * import.
  *
- * Lists are loaded lazily on first call and cached for the process lifetime.
+ * Profanity lists ship at `data/profanity-{en,pt}.txt`; lazy-loaded and
+ * cached for the process lifetime.
  */
 import 'server-only';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-export type ValidationReason =
-  | 'too-short'
-  | 'too-long'
-  | 'invalid-chars';
-
-export type ValidationResult =
-  | { ok: true }
-  | { ok: false; reason: ValidationReason };
-
-const MIN_LEN = 2;
-const MAX_LEN = 30;
-// Allowed: lowercase + digits + single hyphens, never at the edges, never doubled.
-const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,28}[a-z0-9])?$/;
-
-export function validateSlugFormat(input: string): ValidationResult {
-  if (input.length < MIN_LEN) return { ok: false, reason: 'too-short' };
-  if (input.length > MAX_LEN) return { ok: false, reason: 'too-long' };
-  if (!SLUG_RE.test(input)) return { ok: false, reason: 'invalid-chars' };
-  if (input.includes('--')) return { ok: false, reason: 'invalid-chars' };
-  return { ok: true };
-}
+export {
+  type ValidationReason,
+  type ValidationResult,
+  validateSlugFormat,
+} from './format';
 
 // ---------- profanity ----------------------------------------------------
 

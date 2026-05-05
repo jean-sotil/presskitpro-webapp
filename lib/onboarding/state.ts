@@ -1,4 +1,4 @@
-import { validateSlugFormat } from '../slug/validator';
+import { validateSlugFormat } from '../slug/format';
 
 /**
  * Pure functions for the onboarding wizard. No DB, no Next, no Payload —

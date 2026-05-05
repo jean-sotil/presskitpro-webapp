@@ -49,6 +49,27 @@ The `pg_cron` job lives in the `cron.job` table — verify with `select jobname,
 - Schema change in `payload/collections/*`: `pnpm payload migrate:create <name>` → review SQL → commit.
 - Schema change in `public` (analytics, slug_reservations, etc.): `supabase migration new <name>` → write SQL → commit.
 
+## Orphaned auth.users after a `payload` schema reset
+
+Dropping `payload.*` (the recovery from dev-mode auto-push drift, below) nukes `payload.users` along with everything else. Existing Supabase Auth sessions stay valid (Supabase doesn't know or care about Payload), so users *appear* logged in but every Payload-side action — onboarding, editor, REST routes — surfaces `mirror-pending` because no row matches their `supabaseUserId`.
+
+The auth-sync webhook (task-02) only fires on `auth.users` INSERT / UPDATE, so it doesn't retroactively backfill. Two ways to recover:
+
+1. **Backfill SQL (preferred for dev).** Inserts a Payload mirror row for every auth.users that's missing one:
+
+   ```sql
+   insert into payload.users (supabase_user_id, email, role, plan, created_at, updated_at)
+   select au.id, au.email, 'user', 'free', now(), now()
+   from auth.users au
+   left join payload.users pu on pu.supabase_user_id = au.id
+   where pu.id is null
+   on conflict do nothing;
+   ```
+
+2. **Re-fire the webhook** for an existing user: `update auth.users set updated_at = now() where id = '<id>'`. Useful when you specifically want to test the webhook path.
+
+CI doesn't see this — fresh DBs come up via `pnpm payload migrate` + `pnpm seed` with synthetic users that the seed creates directly.
+
 ## Dev-mode auto-push drift
 
 If `pnpm payload migrate` prompts:

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { Section } from '@/components/ui/Section';
@@ -15,12 +16,8 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // The layout has already gated for an authenticated user.
   if (!user) redirect('/login?next=/dashboard');
 
-  // Onboarding gate: anyone without a finished wizard goes to /onboarding.
-  // Idempotent against the wizard's own dashboard-redirect on completion —
-  // once `completedAt` is set, we fall through.
   const p = await payload();
   const userResult = await p.find({
     collection: 'users',
@@ -36,6 +33,16 @@ export default async function DashboardPage() {
     redirect('/onboarding');
   }
 
+  const profilesResult = userDoc
+    ? await p.find({
+        collection: 'profiles',
+        where: { owner: { equals: userDoc.id } },
+        sort: '-updatedAt',
+        limit: 20,
+        depth: 0,
+      })
+    : { docs: [] as Array<{ id: number | string; slug: string; status: string; updatedAt?: string }> };
+
   return (
     <main>
       <Section>
@@ -43,14 +50,44 @@ export default async function DashboardPage() {
         <h1 className="mt-4 font-display text-5xl uppercase tracking-tight">
           Olá, {user.email}
         </h1>
-        <p className="mt-4 max-w-prose text-text-muted">
-          Esta é uma página temporária. O editor real chega na task-09.
-        </p>
 
-        <form action="/auth/logout" method="post" className="mt-8">
+        {profilesResult.docs.length === 0 ? (
+          <p className="mt-6 max-w-prose text-text-muted">
+            Você ainda não tem perfis. <Link href="/onboarding" className="underline">Comece o onboarding →</Link>
+          </p>
+        ) : (
+          <ul className="mt-8 grid gap-4 md:grid-cols-2">
+            {profilesResult.docs.map((doc) => {
+              const profile = doc as {
+                id: number | string;
+                slug: string;
+                status: 'draft' | 'published' | 'unpublished';
+                updatedAt?: string;
+              };
+              return (
+                <li key={String(profile.id)} className="border border-border bg-surface p-6">
+                  <p className="font-display text-xs uppercase tracking-widest text-text-muted">
+                    {profile.status}
+                  </p>
+                  <p className="mt-2 font-display text-2xl uppercase tracking-tight">
+                    presskit.pro/{profile.slug}
+                  </p>
+                  <Link
+                    href={`/dashboard/profile/${profile.id}`}
+                    className="mt-6 inline-flex h-10 items-center border border-border bg-transparent px-5 text-xs uppercase tracking-wider text-text hover:bg-bg focus-visible:outline-offset-2"
+                  >
+                    Abrir editor
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+
+        <form action="/auth/logout" method="post" className="mt-12">
           <button
             type="submit"
-            className="border border-border bg-transparent px-5 py-2 text-sm uppercase tracking-wider text-text hover:bg-surface focus-visible:outline-offset-2"
+            className="text-xs uppercase tracking-wider text-text-muted underline underline-offset-4 hover:text-text"
           >
             Sair
           </button>

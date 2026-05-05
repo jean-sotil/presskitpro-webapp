@@ -46,7 +46,11 @@ describe('MediaStep', () => {
     (globalThis.fetch as ReturnType<typeof vi.fn>)
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ token: 'https://signed.example/upload', path: 'sb-1/abc.jpg' }),
+        json: async () => ({
+          signedUrl: 'https://signed.example/upload?token=abc',
+          token: 'abc',
+          path: 'sb-1/abc.jpg',
+        }),
       })
       .mockResolvedValueOnce({ ok: true })
       .mockResolvedValueOnce({ ok: true, json: async () => ({ id: 17 }) });
@@ -66,7 +70,7 @@ describe('MediaStep', () => {
     await waitFor(() =>
       expect(globalThis.fetch).toHaveBeenNthCalledWith(
         2,
-        'https://signed.example/upload',
+        'https://signed.example/upload?token=abc',
         expect.objectContaining({ method: 'PUT' }),
       ),
     );

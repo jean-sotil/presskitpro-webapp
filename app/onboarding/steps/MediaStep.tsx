@@ -70,13 +70,20 @@ export function MediaStep({
         }),
       });
       if (!signRes.ok) throw new Error('upload-sign-failed');
-      const { token, path } = (await signRes.json()) as {
+      const { signedUrl, path } = (await signRes.json()) as {
+        signedUrl: string;
         token: string;
         path: string;
       };
 
-      // 2. Direct PUT to Supabase Storage.
-      const putRes = await fetch(token, { method: 'PUT', body: file });
+      // 2. Direct PUT to Supabase Storage. The `signedUrl` is the full
+      // URL with the JWT in the query string; the separate `token` field
+      // is for the SDK's `uploadToSignedUrl(path, token, file)` API.
+      const putRes = await fetch(signedUrl, {
+        method: 'PUT',
+        headers: { 'content-type': file.type },
+        body: file,
+      });
       if (!putRes.ok) throw new Error('upload-put-failed');
 
       // 3. Register Media metadata in Payload.
