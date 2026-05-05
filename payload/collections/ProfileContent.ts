@@ -58,6 +58,27 @@ export const ProfileContent: CollectionConfig = {
         { name: 'description', type: 'textarea', maxLength: 240 },
       ],
     },
+    // ----- Hero CTA (task-10) -----
+    {
+      name: 'ctaLabel',
+      type: 'text',
+      localized: true,
+      maxLength: 40,
+      admin: {
+        description:
+          'Hero call-to-action label. Editor presets: "Contato para shows" / "Book now" / custom.',
+      },
+    },
+    {
+      name: 'ctaUrl',
+      type: 'text',
+      maxLength: 500,
+      admin: {
+        description:
+          'CTA destination — e.g. mailto:press@x.com, tel:+5511..., https://wa.me/55..., or any https:// URL. Same value across locales.',
+      },
+    },
+
     {
       name: 'metaTitle',
       type: 'text',

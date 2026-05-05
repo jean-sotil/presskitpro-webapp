@@ -88,6 +88,20 @@ Two ways to clear it:
 
 2. **Mark migrations as applied** if your DB schema *already* matches the migration files (e.g. you've been auto-pushing the same shape). Insert rows into `payload.payload_migrations` for each applied filename. Verify schema parity first by diffing `payload.*` against the migration's `up()` SQL.
 
+   **Recurring case:** `pnpm dev` is running, you edit `payload/collections/*.ts` to add a field, dev-mode auto-push creates the column. Later you run `pnpm payload migrate:create` + `migrate` and the migration's `ADD COLUMN` collides with `column "..." already exists`. The schema is correct; only `payload_migrations` is missing a row. Confirm the column exists (`\d payload.<table>`) then mark the migration applied:
+
+   ```sql
+   insert into payload.payload_migrations (name, batch, created_at, updated_at)
+   values (
+     '<migration-filename-without-.ts>',
+     coalesce((select max(batch) from payload.payload_migrations), 0) + 1,
+     now(),
+     now()
+   );
+   ```
+
+   **Prevention:** stop `pnpm dev` before editing any collection file. Run `migrate:create` + `migrate` first, then restart dev. Or set `db: postgresAdapter({ ..., push: false })` to disable dev-push — adds friction during schema iteration but eliminates this whole class of drift.
+
 In CI, schemas are always created via `pnpm payload migrate` against an ephemeral DB, so this prompt never fires.
 
 ## Conflict prevention rules

@@ -328,6 +328,14 @@ export interface ProfileContent {
       }[]
     | null;
   /**
+   * Hero call-to-action label. Editor presets: "Contato para shows" / "Book now" / custom.
+   */
+  ctaLabel?: string | null;
+  /**
+   * CTA destination — e.g. mailto:press@x.com, tel:+5511..., https://wa.me/55..., or any https:// URL. Same value across locales.
+   */
+  ctaUrl?: string | null;
+  /**
    * SEO <title>. Falls back to display name + tagline if empty.
    */
   metaTitle?: string | null;
@@ -663,6 +671,8 @@ export interface ProfileContentSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  ctaLabel?: T;
+  ctaUrl?: T;
   metaTitle?: T;
   metaDescription?: T;
   ogImage?: T;

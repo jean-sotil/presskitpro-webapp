@@ -24,6 +24,17 @@ import { sectionLabels } from '@/lib/editor/sections';
 
 const AUTOSAVE_MS = 5_000;
 
+/** Which collection a mutation targets. Each scope has its own dirty
+ *  buffer + REST route; the autosave flushes all dirty buffers in
+ *  parallel. */
+export type MutationScope = 'profile' | 'content' | 'theme';
+
+const ROUTE_FOR: Record<MutationScope, (id: number | string) => string> = {
+  profile: (id) => `/api/profiles/${id}`,
+  content: (id) => `/api/profiles/${id}/content`,
+  theme: (id) => `/api/profiles/${id}/theme`,
+};
+
 export function EditorClient({ initialBundle }: { initialBundle: EditorBundle }) {
   const router = useRouter();
   const qc = useQueryClient();
@@ -32,7 +43,6 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     [initialBundle.profile.id],
   );
 
-  // ----- Bundle as TanStack cache value (optimistic source of truth) -----
   const { data: bundle = initialBundle } = useQuery({
     queryKey,
     queryFn: async () => {
@@ -44,7 +54,6 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     staleTime: 30_000,
   });
 
-  // ----- Section + active selection -----
   const sectionOrder = useMemo<SectionKey[]>(() => {
     const persisted = (bundle.theme?.sectionOrder as Array<{ key: string }> | undefined)?.map(
       (entry) => entry.key as SectionKey,
@@ -53,7 +62,6 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
   }, [bundle.theme]);
   const [active, setActive] = useState<SectionKey>(sectionOrder[0]!);
 
-  // ----- Save status -----
   const [saveState, setSaveState] = useState<SaveStatusState>({
     kind: 'idle',
     lastSavedAt: bundle.profile.updatedAt
@@ -61,67 +69,77 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
       : null,
   });
 
-  // ----- Patch mutation (debounced via autosave) -----
-  const patch = useMutation({
-    mutationFn: async (data: Record<string, unknown>) => {
-      const res = await fetch(`/api/profiles/${bundle.profile.id}`, {
-        method: 'PATCH',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error((body as { error?: string }).error ?? `status ${res.status}`);
-      }
-      return (await res.json()) as { id: number; updatedAt?: string };
-    },
-    onMutate: () => setSaveState({ kind: 'pending' }),
-    onSuccess: (doc) => {
-      setSaveState({ kind: 'idle', lastSavedAt: Date.now() });
-      qc.setQueryData<EditorBundle>(queryKey, (prev) =>
-        prev ? { ...prev, profile: { ...prev.profile, ...doc } } : prev,
+  // ----- Triple-buffered dirty state ------------------------------------
+  const dirtyProfile = useRef<Record<string, unknown>>({});
+  const dirtyContent = useRef<Record<string, unknown>>({});
+  const dirtyTheme = useRef<Record<string, unknown>>({});
+
+  function patchScope(
+    scope: MutationScope,
+    data: Record<string, unknown>,
+  ): Promise<Response> {
+    return fetch(ROUTE_FOR[scope](bundle.profile.id), {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  }
+
+  async function triggerSave() {
+    const buffers: Array<[MutationScope, Record<string, unknown>]> = [];
+    if (Object.keys(dirtyProfile.current).length) {
+      buffers.push(['profile', dirtyProfile.current]);
+      dirtyProfile.current = {};
+    }
+    if (Object.keys(dirtyContent.current).length) {
+      buffers.push(['content', dirtyContent.current]);
+      dirtyContent.current = {};
+    }
+    if (Object.keys(dirtyTheme.current).length) {
+      buffers.push(['theme', dirtyTheme.current]);
+      dirtyTheme.current = {};
+    }
+    if (buffers.length === 0) return;
+
+    setSaveState({ kind: 'pending' });
+    try {
+      const responses = await Promise.all(
+        buffers.map(([scope, data]) => patchScope(scope, data)),
       );
-    },
-    onError: (err: Error) => {
-      // Refetch the canonical bundle on error so the optimistic edit doesn't
-      // strand the user staring at unsaved data.
+      const failed = responses.find((r) => !r.ok);
+      if (failed) {
+        const body = (await failed.json().catch(() => ({}))) as { error?: string };
+        throw new Error(body.error ?? `status ${failed.status}`);
+      }
+      setSaveState({ kind: 'idle', lastSavedAt: Date.now() });
+      // Invalidate to pull canonical server state into the cache (cheap;
+      // bundle endpoint is < 100ms typical).
+      qc.invalidateQueries({ queryKey });
+    } catch (err) {
       qc.invalidateQueries({ queryKey });
       setSaveState({
         kind: 'error',
-        message: err.message,
-        onRetry: () => triggerSave(),
+        message: err instanceof Error ? err.message : 'save failed',
+        onRetry: () => {
+          void triggerSave();
+        },
       });
-    },
-  });
-
-  // The set of fields the user edited since the last save. Sent as a single
-  // diff when the autosave fires.
-  const dirtyRef = useRef<Record<string, unknown>>({});
-
-  function triggerSave() {
-    const data = dirtyRef.current;
-    if (Object.keys(data).length === 0) return;
-    dirtyRef.current = {};
-    patch.mutate(data);
+    }
   }
 
-  // Stable autosave (created once).
   const autosaveRef = useRef(
-    createAutosave({ debounceMs: AUTOSAVE_MS, flush: triggerSave }),
+    createAutosave({ debounceMs: AUTOSAVE_MS, flush: () => void triggerSave() }),
   );
-  // triggerSave closes over latest patch / dirtyRef via this ref.
   useEffect(() => {
     autosaveRef.current = createAutosave({
       debounceMs: AUTOSAVE_MS,
-      flush: triggerSave,
+      flush: () => void triggerSave(),
     });
-    // Capture for cleanup so the closed-over autosave can still cancel.
     const captured = autosaveRef.current;
     return () => captured.cancel();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Flush any pending edit when the tab is hidden (PRD AC).
   useEffect(() => {
     const handler = () => {
       if (document.visibilityState === 'hidden') {
@@ -132,37 +150,37 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     return () => document.removeEventListener('visibilitychange', handler);
   }, []);
 
-  // ----- Optimistic edit handlers -----
-  function applyOptimistic(patchData: Partial<EditorBundle['profile']>) {
-    qc.setQueryData<EditorBundle>(queryKey, (prev) =>
-      prev ? { ...prev, profile: { ...prev.profile, ...patchData } } : prev,
-    );
-  }
-
-  function applyContentOptimistic(patchData: Record<string, unknown>) {
+  // ----- Optimistic + dirty-buffer update -------------------------------
+  /**
+   * The single mutation entry point used by every EditCard. Updates the
+   * TanStack cache for instant preview re-render, appends to the right
+   * dirty buffer, and schedules the autosave.
+   */
+  function applyMutation(scope: MutationScope, patch: Record<string, unknown>) {
     qc.setQueryData<EditorBundle>(queryKey, (prev) => {
       if (!prev) return prev;
-      const baseContent =
-        prev.content ?? { id: -1, profile: prev.profile.id };
-      return { ...prev, content: { ...baseContent, ...patchData } };
+      if (scope === 'profile') {
+        return { ...prev, profile: { ...prev.profile, ...patch } };
+      }
+      if (scope === 'content') {
+        const baseContent = prev.content ?? { id: -1, profile: prev.profile.id };
+        return { ...prev, content: { ...baseContent, ...patch } };
+      }
+      // theme
+      const baseTheme = prev.theme ?? { id: -1, profile: prev.profile.id };
+      return { ...prev, theme: { ...baseTheme, ...patch } };
     });
-  }
-
-  function onSlugChange(value: string) {
-    applyOptimistic({ slug: value });
-    dirtyRef.current.slug = value;
+    const buffer =
+      scope === 'profile'
+        ? dirtyProfile
+        : scope === 'content'
+        ? dirtyContent
+        : dirtyTheme;
+    buffer.current = { ...buffer.current, ...patch };
     autosaveRef.current.schedule();
   }
 
-  function onTaglineChange(value: string) {
-    // Tagline lives on ProfileContent, but the shell mutation only patches
-    // Profiles. Until task-11 wires the content-mutation route, the
-    // optimistic preview updates while the server-side edit waits — the
-    // chassis test still validates the optimistic flow.
-    applyContentOptimistic({ tagline: value });
-  }
-
-  // ----- Publish/unpublish -----
+  // ----- Publish/unpublish ---------------------------------------------
   const [dialogIntent, setDialogIntent] = useState<'publish' | 'unpublish' | null>(null);
   const publish = useMutation({
     mutationFn: async (intent: 'publish' | 'unpublish') => {
@@ -187,7 +205,6 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
   });
 
   const labels = sectionLabels();
-  const tagline = (bundle.content?.tagline as string | undefined) ?? '';
 
   const headerBar = (
     <header className="flex flex-wrap items-center justify-between gap-4 border-b border-border bg-bg px-6 py-4 md:px-12">
@@ -225,29 +242,17 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
         active={active}
         labels={labels}
         onSelect={setActive}
-        onReorder={(_next) => {
-          // Reorder lands in `Themes.sectionOrder`. The Themes-mutation
-          // route is task-18 territory; the shell wires the optimistic
-          // update only so the preview reflects the new order.
-          qc.setQueryData<EditorBundle>(queryKey, (prev) =>
-            prev
-              ? {
-                  ...prev,
-                  theme: {
-                    ...(prev.theme ?? { id: -1, profile: prev.profile.id }),
-                    sectionOrder: _next.map((key) => ({ key })),
-                  },
-                }
-              : prev,
-          );
+        onReorder={(next) => {
+          applyMutation('theme', {
+            sectionOrder: next.map((key) => ({ key })),
+          });
         }}
       />
       <EditorPane
         active={active}
-        slug={bundle.profile.slug}
-        onSlugChange={onSlugChange}
-        tagline={tagline}
-        onTaglineChange={onTaglineChange}
+        bundle={bundle}
+        supabaseUserId={(bundle.profile.owner as unknown as { supabaseUserId?: string })?.supabaseUserId ?? ''}
+        onMutate={applyMutation}
       />
     </div>
   );

@@ -39,6 +39,18 @@ EDITOR_E2E_COOKIE='<cookie>' EDITOR_E2E_PROFILE_ID=<id> \
   pnpm test:e2e --grep "@full"
 ```
 
+## Test the hero editor (task-10)
+
+1. Open the editor against a re-assigned demo profile (above).
+2. Click the **Hero** rail item (it's first by default).
+3. Upload a JPEG portrait → confirm it appears in the preview and the SaveStatus flips `Salvando... → Salvo · há Xs`.
+4. Type alt text — without it, the inline `role="alert"` shows "Texto alternativo é obrigatório".
+5. Switch hero styles — the preview re-lays-out (full-bleed, split, centered-logo) without re-uploading.
+6. Pick a CTA preset ("Book now"); the label persists. Switch to "Personalizado" and type your own.
+7. Paste a CTA URL (try `https://wa.me/5511999999999`, `mailto:press@x.com`, or a plain `https://...`). Invalid schemes (`javascript:`, `ftp://`) surface an inline error.
+
+To force compression: drop a > 2MB JPEG. The dev tools Network tab shows the PUT body is much smaller than the original (Canvas-resized to 2400px / quality 0.82).
+
 ## Mock autosave failures for QA
 
 The PATCH route returns 400 / 404 for invalid bodies / access denials. To force an error UI without changing code, point the PATCH at a non-existent id via the browser devtools (Network → "Override response"). The `SaveStatus` component should flip to the error state with a "tentar de novo" button.

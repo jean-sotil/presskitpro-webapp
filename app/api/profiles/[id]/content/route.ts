@@ -1,0 +1,80 @@
+import { NextResponse } from 'next/server';
+import { headers } from 'next/headers';
+
+import { resolvePayloadUserLive } from '@/lib/auth/payload-user-from-request';
+import { assertOwnsProfile, upsertProfileChild } from '@/lib/editor/upsert-child';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+const ALLOWED_LOCALES = new Set(['pt-BR', 'en']);
+
+const PATCHABLE = new Set([
+  'tagline',
+  'bio',
+  'services',
+  'ctaLabel',
+  'ctaUrl',
+  'metaTitle',
+  'metaDescription',
+  'ogImage',
+]);
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
+  const profileId = Number.parseInt(id, 10);
+  if (!Number.isInteger(profileId) || profileId <= 0) {
+    return NextResponse.json({ error: 'invalid id' }, { status: 400 });
+  }
+
+  const url = new URL(req.url);
+  const locale = url.searchParams.get('locale') ?? 'pt-BR';
+  if (!ALLOWED_LOCALES.has(locale)) {
+    return NextResponse.json({ error: 'invalid locale' }, { status: 400 });
+  }
+
+  const user = await resolvePayloadUserLive(await headers());
+  if (!user) {
+    return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
+  }
+
+  // Pre-check ownership so upserts can't silently create a shadow row
+  // for a profile the user doesn't own.
+  if (!(await assertOwnsProfile({ profileId, user }))) {
+    return NextResponse.json({ error: 'not found' }, { status: 404 });
+  }
+
+  let body: Record<string, unknown>;
+  try {
+    body = (await req.json()) as Record<string, unknown>;
+  } catch {
+    return NextResponse.json({ error: 'invalid json' }, { status: 400 });
+  }
+
+  const data: Record<string, unknown> = {};
+  for (const key of Object.keys(body)) {
+    if (PATCHABLE.has(key)) data[key] = body[key];
+  }
+  if (Object.keys(data).length === 0) {
+    return NextResponse.json({ error: 'no patchable fields' }, { status: 400 });
+  }
+
+  try {
+    const updated = await upsertProfileChild({
+      collection: 'profile-content',
+      profileId,
+      data,
+      user,
+      locale,
+    });
+    return NextResponse.json(updated);
+  } catch (err) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'update failed' },
+      { status: 400 },
+    );
+  }
+}
