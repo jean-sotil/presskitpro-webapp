@@ -39,6 +39,8 @@ pnpm seed
 |---|---|
 | `20260429000001_spike_storage_and_auth_webhook.sql` | task-02 spike: storage buckets + auth.users → webhook trigger |
 | `20260504000001_slug_reservations_and_redirects.sql` | task-07: `slug_reservations` + `slug_redirects` + 29 reserved-word seed (PRD §5) + `pg_cron` sweep job (`slug-sweep-expired`, every 5 min) |
+| `migrations/20260505_015050.ts` (Payload) | task-08 baseline: `payload.{admins,users,profiles,media}` + Payload internals (`payload_migrations`, `payload_locked_documents*`, `payload_preferences*`) |
+| `migrations/20260505_070813_task_08_collections.ts` (Payload) | task-08 collections: `profile_content` (+ `_locales` + `_services`), `social_links`, `featured_tracks`, `themes` (+ `_section_order`), `instagram_connections`. Adds press-kit + locale columns to `profiles`; adds Payload-managed auth columns to `users` (sessions, salt/hash, lock fields — present even though local strategy is disabled because `enableFields: true` keeps the schema stable). |
 
 The `pg_cron` job lives in the `cron.job` table — verify with `select jobname, schedule from cron.job;` (requires service-role / superuser). Re-running the migration is idempotent: `cron.schedule` replaces by jobname, and the seed uses `ON CONFLICT DO NOTHING`.
 
@@ -46,6 +48,26 @@ The `pg_cron` job lives in the `cron.job` table — verify with `select jobname,
 
 - Schema change in `payload/collections/*`: `pnpm payload migrate:create <name>` → review SQL → commit.
 - Schema change in `public` (analytics, slug_reservations, etc.): `supabase migration new <name>` → write SQL → commit.
+
+## Dev-mode auto-push drift
+
+If `pnpm payload migrate` prompts:
+
+> "It looks like you've run Payload in dev mode, meaning you've dynamically pushed changes to your database. If you'd like to run migrations, data loss will occur. Would you like to proceed?"
+
+— it means the `payload` schema in your dev DB was bootstrapped by Payload's dev-mode auto-push (the default `pnpm dev` behavior) rather than by `payload migrate`. Payload tracks applied migrations in `payload.payload_migrations`; if that table is empty (or out of sync with files in `migrations/`), running `migrate` will try to drop and recreate tables to align with file order — losing anything you put through the admin UI.
+
+Two ways to clear it:
+
+1. **Fresh dev DB (preferred for local).** Reset the `payload` schema and re-apply from scratch:
+   ```sql
+   drop schema if exists payload cascade;
+   ```
+   Then `pnpm payload migrate` runs all migration files in order.
+
+2. **Mark migrations as applied** if your DB schema *already* matches the migration files (e.g. you've been auto-pushing the same shape). Insert rows into `payload.payload_migrations` for each applied filename. Verify schema parity first by diffing `payload.*` against the migration's `up()` SQL.
+
+In CI, schemas are always created via `pnpm payload migrate` against an ephemeral DB, so this prompt never fires.
 
 ## Conflict prevention rules
 
@@ -64,3 +86,13 @@ The `pg_cron` job lives in the `cron.job` table — verify with `select jobname,
 - Supabase nightly snapshots cover **all** schemas (Supabase platform feature).
 - A snapshot restore brings back `payload.*` automatically.
 - After restore, run `pnpm payload migrate` to ensure Payload's migration table state matches the deployed code.
+
+## Encryption keys
+
+`InstagramConnections.accessToken` is encrypted at rest using AES-256-GCM with `INSTAGRAM_TOKEN_ENCRYPTION_KEY` (see `.env.example`). The key is **per-environment** — staging and prod must each have their own. Generate with:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+```
+
+Rotation: mint a new key, decrypt every stored token with the old key, re-encrypt under the new key in a single transaction. The current ciphertext format is `iv.tag.body`; future versions will prefix `v2:` so a rotation script can branch on the prefix and decrypt either side.

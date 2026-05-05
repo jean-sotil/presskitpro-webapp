@@ -64,13 +64,19 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     admins: AdminAuthOperations;
+    users: UserAuthOperations;
   };
   blocks: {};
   collections: {
     admins: Admin;
     users: User;
     profiles: Profile;
+    'profile-content': ProfileContent;
     media: Media;
+    'social-links': SocialLink;
+    'featured-tracks': FeaturedTrack;
+    themes: Theme;
+    'instagram-connections': InstagramConnection;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -81,7 +87,12 @@ export interface Config {
     admins: AdminsSelect<false> | AdminsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     profiles: ProfilesSelect<false> | ProfilesSelect<true>;
+    'profile-content': ProfileContentSelect<false> | ProfileContentSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
+    'featured-tracks': FeaturedTracksSelect<false> | FeaturedTracksSelect<true>;
+    themes: ThemesSelect<false> | ThemesSelect<true>;
+    'instagram-connections': InstagramConnectionsSelect<false> | InstagramConnectionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -90,20 +101,38 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('pt-BR' | 'en') | ('pt-BR' | 'en')[];
   globals: {};
   globalsSelect: {};
-  locale: null;
+  locale: 'pt-BR' | 'en';
   widgets: {
     collections: CollectionsWidget;
   };
-  user: Admin;
+  user: Admin | User;
   jobs: {
     tasks: unknown;
     workflows: unknown;
   };
 }
 export interface AdminAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface UserAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -161,7 +190,6 @@ export interface User {
    * UUID from Supabase auth.users. Authoritative identity key.
    */
   supabaseUserId: string;
-  email: string;
   displayName?: string | null;
   role: 'user' | 'admin';
   plan: 'free' | 'pro';
@@ -171,21 +199,95 @@ export interface User {
   trialEndsAt?: string | null;
   updatedAt: string;
   createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
- * MVP shape — task-08 will extend with localized content, social links, themes, etc. The relation to Users is the load-bearing piece for the spike.
- *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "profiles".
  */
 export interface Profile {
   id: number;
   owner: number | User;
-  /**
-   * Final validation rules land in task-07. For the spike: required + unique only.
-   */
   slug: string;
   status: 'draft' | 'published' | 'unpublished';
+  /**
+   * External press-kit URL (Google Drive, Dropbox, etc.). Provider + health are derived/checked automatically.
+   */
+  pressKitUrl?: string | null;
+  /**
+   * Derived from `pressKitUrl` by beforeChange hook.
+   */
+  pressKitProvider?: ('unknown' | 'google-drive' | 'dropbox' | 'onedrive' | 'wetransfer' | 'other') | null;
+  /**
+   * Updated by the daily health-check cron (task-30).
+   */
+  pressKitLastCheckedAt?: string | null;
+  /**
+   * Set by the daily cron (task-30).
+   */
+  pressKitHealthStatus?: ('unknown' | 'healthy' | 'warning' | 'broken') | null;
+  defaultLocale: 'pt-BR' | 'en';
+  /**
+   * Locales with published content. The public profile uses this to gate the locale toggle (task-19).
+   */
+  localesAvailable?: ('pt-BR' | 'en')[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "profile-content".
+ */
+export interface ProfileContent {
+  id: number;
+  profile: number | Profile;
+  tagline?: string | null;
+  bio?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  services?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * SEO <title>. Falls back to display name + tagline if empty.
+   */
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  /**
+   * Open Graph image. Falls back to hero portrait if empty.
+   */
+  ogImage?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -214,6 +316,133 @@ export interface Media {
    */
   alt: string;
   owner: number | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links".
+ */
+export interface SocialLink {
+  id: number;
+  profile: number | Profile;
+  platform:
+    | 'instagram'
+    | 'tiktok'
+    | 'soundcloud'
+    | 'spotify'
+    | 'youtube'
+    | 'twitter'
+    | 'bandcamp'
+    | 'mixcloud'
+    | 'apple-music'
+    | 'beatport'
+    | 'whatsapp'
+    | 'email'
+    | 'website';
+  url: string;
+  /**
+   * Lower = earlier on the public profile.
+   */
+  displayOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "featured-tracks".
+ */
+export interface FeaturedTrack {
+  id: number;
+  profile: number | Profile;
+  /**
+   * Other providers (Spotify, Bandcamp) land in v2.
+   */
+  provider: 'soundcloud';
+  url: string;
+  /**
+   * Cached oEmbed HTML. Refreshed when stale (task-16).
+   */
+  oembedHtml?: string | null;
+  /**
+   * When the oEmbed cache was last refreshed.
+   */
+  fetchedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "themes".
+ */
+export interface Theme {
+  id: number;
+  profile: number | Profile;
+  /**
+   * Set when user picked a curated preset (e.g. 'editorial-night'). Empty when overriding via custom hex.
+   */
+  colorPresetId?: string | null;
+  /**
+   * Hex value, present when overriding the preset bg.
+   */
+  bg?: string | null;
+  /**
+   * Hex value, present when overriding the preset accent.
+   */
+  accent?: string | null;
+  /**
+   * Hex value; auto-derived if empty.
+   */
+  text?: string | null;
+  fontPairId:
+    | 'editorial-nightlife'
+    | 'magazine'
+    | 'brutalist'
+    | 'refined'
+    | 'industrial'
+    | 'soft-pop'
+    | 'retro-future'
+    | 'classic-press';
+  heroStyle: 'full-bleed-portrait' | 'split-portrait-text' | 'centered-logo';
+  galleryLayout: 'mosaic' | 'uniform-grid' | 'carousel';
+  /**
+   * Order of editor-managed sections on the public profile.
+   */
+  sectionOrder?:
+    | {
+        key: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Updated by the editor when the contrast gate passes. Profile publish is blocked if null or stale.
+   */
+  contrastValidatedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * IG access tokens are encrypted at rest. Never paste tokens into the admin UI directly — use the editor flow (task-17).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "instagram-connections".
+ */
+export interface InstagramConnection {
+  id: number;
+  profile: number | Profile;
+  /**
+   * Instagram user id from the Graph API.
+   */
+  igUserId: string;
+  /**
+   * Encrypted at rest. Decryption happens in afterRead for admin/server use only.
+   */
+  accessToken: string;
+  tokenExpiresAt: string;
+  /**
+   * When the IG feed cache was last refreshed.
+   */
+  lastSyncedAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -254,14 +483,39 @@ export interface PayloadLockedDocument {
         value: number | Profile;
       } | null)
     | ({
+        relationTo: 'profile-content';
+        value: number | ProfileContent;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'social-links';
+        value: number | SocialLink;
+      } | null)
+    | ({
+        relationTo: 'featured-tracks';
+        value: number | FeaturedTrack;
+      } | null)
+    | ({
+        relationTo: 'themes';
+        value: number | Theme;
+      } | null)
+    | ({
+        relationTo: 'instagram-connections';
+        value: number | InstagramConnection;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'admins';
-    value: number | Admin;
-  };
+  user:
+    | {
+        relationTo: 'admins';
+        value: number | Admin;
+      }
+    | {
+        relationTo: 'users';
+        value: number | User;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -271,10 +525,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: number;
-  user: {
-    relationTo: 'admins';
-    value: number | Admin;
-  };
+  user:
+    | {
+        relationTo: 'admins';
+        value: number | Admin;
+      }
+    | {
+        relationTo: 'users';
+        value: number | User;
+      };
   key?: string | null;
   value?:
     | {
@@ -328,13 +587,26 @@ export interface AdminsSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   supabaseUserId?: T;
-  email?: T;
   displayName?: T;
   role?: T;
   plan?: T;
   trialEndsAt?: T;
   updatedAt?: T;
   createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -344,6 +616,33 @@ export interface ProfilesSelect<T extends boolean = true> {
   owner?: T;
   slug?: T;
   status?: T;
+  pressKitUrl?: T;
+  pressKitProvider?: T;
+  pressKitLastCheckedAt?: T;
+  pressKitHealthStatus?: T;
+  defaultLocale?: T;
+  localesAvailable?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "profile-content_select".
+ */
+export interface ProfileContentSelect<T extends boolean = true> {
+  profile?: T;
+  tagline?: T;
+  bio?: T;
+  services?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  metaTitle?: T;
+  metaDescription?: T;
+  ogImage?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -360,6 +659,67 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   alt?: T;
   owner?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links_select".
+ */
+export interface SocialLinksSelect<T extends boolean = true> {
+  profile?: T;
+  platform?: T;
+  url?: T;
+  displayOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "featured-tracks_select".
+ */
+export interface FeaturedTracksSelect<T extends boolean = true> {
+  profile?: T;
+  provider?: T;
+  url?: T;
+  oembedHtml?: T;
+  fetchedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "themes_select".
+ */
+export interface ThemesSelect<T extends boolean = true> {
+  profile?: T;
+  colorPresetId?: T;
+  bg?: T;
+  accent?: T;
+  text?: T;
+  fontPairId?: T;
+  heroStyle?: T;
+  galleryLayout?: T;
+  sectionOrder?:
+    | T
+    | {
+        key?: T;
+        id?: T;
+      };
+  contrastValidatedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "instagram-connections_select".
+ */
+export interface InstagramConnectionsSelect<T extends boolean = true> {
+  profile?: T;
+  igUserId?: T;
+  accessToken?: T;
+  tokenExpiresAt?: T;
+  lastSyncedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

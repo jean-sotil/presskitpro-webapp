@@ -24,9 +24,10 @@
     "dev:magic-link": "bun scripts/dev-magic-link.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "payload": "cross-env NODE_OPTIONS='--no-deprecation --conditions=react-server' payload",
     "generate:types": "pnpm payload generate:types",
-    "generate:importmap": "pnpm payload generate:importmap"
+    "generate:importmap": "pnpm payload generate:importmap",
+    "seed": "cross-env NODE_OPTIONS='--no-deprecation --conditions=react-server' tsx --env-file=.env scripts/seed.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.0.0",
@@ -42,6 +43,7 @@
     "payload": "^3.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "server-only": "^0.0.1",
     "sharp": "^0.33.5",
     "supabase": "^2.95.6",
     "tailwind-merge": "^3.5.0"

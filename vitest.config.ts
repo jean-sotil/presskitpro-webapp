@@ -13,6 +13,9 @@ export default defineConfig({
       // Next.js's `server-only` is a build-time guard; under Vitest we stub it
       // so server-only modules can be unit-tested directly.
       'server-only': path.resolve(dirname, 'tests/stubs/server-only.ts'),
+      // Payload config alias mirrored from tsconfig — vitest doesn't read
+      // tsconfig paths automatically. Stubbed because tests inject Payload.
+      '@payload-config': path.resolve(dirname, 'tests/stubs/payload-config.ts'),
     },
   },
   test: {

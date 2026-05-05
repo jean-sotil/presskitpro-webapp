@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload';
 
+import { ownsProfile } from '../../lib/payload/access/predicates';
+
 export const Media: CollectionConfig = {
   slug: 'media',
   admin: {
@@ -9,10 +11,13 @@ export const Media: CollectionConfig = {
     defaultColumns: ['alt', 'bucket', 'path', 'mimeType', 'size'],
   },
   access: {
-    read: ({ req }) => Boolean(req.user),
+    read: ownsProfile,
+    update: ownsProfile,
+    delete: ownsProfile,
+    // Create rule: any authenticated user can register a media row, but the
+    // afterChange path will reject if `owner` doesn't match req.user.id.
+    // For now, default to self-as-owner (the editor will set this explicitly).
     create: ({ req }) => Boolean(req.user),
-    update: ({ req }) => Boolean(req.user),
-    delete: ({ req }) => Boolean(req.user),
   },
   fields: [
     {
