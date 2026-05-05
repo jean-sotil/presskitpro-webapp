@@ -21,6 +21,7 @@
     "contrast:check": "tsx scripts/contrast-check.ts",
     "lighthouse": "lhci autorun",
     "generate:grain": "tsx scripts/generate-grain.ts",
+    "dev:magic-link": "bun scripts/dev-magic-link.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",

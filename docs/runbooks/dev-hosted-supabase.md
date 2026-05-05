@@ -131,6 +131,31 @@ supabase migration up
 pnpm payload migrate
 ```
 
+## Auth flow (task-05)
+
+The magic-link round-trip needs three things lined up:
+
+1. **`.env`** has `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` (browser uses anon key to call `signInWithOtp`).
+2. **Supabase dashboard → Authentication → URL Configuration:**
+   - **Site URL:** your `cloudflared` tunnel URL (changes per session unless you use a named tunnel).
+   - **Redirect URLs:** add `http://localhost:3000/auth/callback` AND your tunnel URL + `/auth/callback`. Both — local origin is what the browser sees, but the tunnel URL is what Supabase expects to send mails to.
+3. **No real email** wanted in dev? Disable email confirmations under Authentication → Sign In / Providers → Email; the magic link will still arrive and clicking it logs you straight in.
+
+End-to-end check:
+
+```bash
+bun run dev                                    # in terminal 1
+cloudflared tunnel --url http://localhost:3000  # in terminal 2
+
+# Then in your browser:
+#   http://localhost:3000/login → enter email → check inbox → click link
+#   You land on /dashboard with "Olá, <your-email>" rendered.
+```
+
+If the link 404s with a Supabase error, the Site URL / Redirect URL pair in the dashboard is out of sync with what you submitted from the form. Fix the dashboard, request a fresh link.
+
+For the Phase B Google OAuth flow: enable Google in Supabase → Authentication → Providers, add a Google Cloud OAuth client ID/secret, register `https://<ref>.supabase.co/auth/v1/callback` in Google Cloud, and the existing `<LoginForm />` will render a Google button when the provider is enabled (added in a follow-up commit when you've completed the dashboard side).
+
 ## Notes / gotchas
 
 - **Never commit a `.env` with the service-role key.** It bypasses RLS.
