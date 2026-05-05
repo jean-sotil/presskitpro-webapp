@@ -24,7 +24,7 @@ export const SECTIONS: Record<SectionKey, SectionMeta> = {
   photoGallery: { key: 'photoGallery', label: 'Galeria', editorComesIn: 12, hasEditor: true },
   pressKitLink: { key: 'pressKitLink', label: 'Press kit', editorComesIn: 15, hasEditor: false },
   socialLinks: { key: 'socialLinks', label: 'Redes sociais', editorComesIn: 13, hasEditor: true },
-  contact: { key: 'contact', label: 'Contato', editorComesIn: 14, hasEditor: false },
+  contact: { key: 'contact', label: 'Contato', editorComesIn: 14, hasEditor: true },
 };
 
 export function sectionLabels(): Record<SectionKey, string> {

@@ -7,6 +7,7 @@ import { SECTIONS } from '@/lib/editor/sections';
 import type { MutationScope } from '@/app/dashboard/profile/[id]/EditorClient';
 
 import { AboutEditCard } from './sections/AboutEditCard';
+import { ContactEditCard } from './sections/ContactEditCard';
 import { HeroEditCard } from './sections/HeroEditCard';
 import { PhotoGalleryEditCard } from './sections/PhotoGalleryEditCard';
 import { PlaceholderEditCard } from './sections/PlaceholderEditCard';
@@ -56,6 +57,8 @@ export function EditorPane({
       );
     case 'socialLinks':
       return <SocialLinksEditCard bundle={bundle} onMutate={onMutate} />;
+    case 'contact':
+      return <ContactEditCard bundle={bundle} onMutate={onMutate} />;
     default:
       return <PlaceholderEditCard meta={meta} />;
   }

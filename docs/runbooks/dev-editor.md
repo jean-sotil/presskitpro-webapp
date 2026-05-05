@@ -88,6 +88,35 @@ To force compression: drop a > 2MB JPEG. The dev tools Network tab shows the PUT
 7. Save flush goes to `PUT /api/profiles/[id]/social-links`. Defense-in-depth: the route re-runs `parseAndCanonicalize` server-side and stores the canonical URL even if a client somehow bypasses validation.
 8. Refresh — `displayOrder` (rewritten from array index server-side) restores the same order.
 
+## Test the contact editor (task-14)
+
+1. Open the editor; click **Contato** in the rail.
+2. Type a WhatsApp number in any of these forms — all canonicalize on blur to `https://wa.me/<digits>`:
+   - `+55 11 99999-9999`
+   - `5511999999999`
+   - `https://wa.me/5511999999999`
+3. Type an email — canonicalizes to the bare address (display) but is stored that way; the public render adds `mailto:` back.
+4. Toggle **Ativar formulário na página pública**. The "Destino das mensagens" input appears with the contact email as placeholder/default.
+5. Open the public preview — buttons + form render. Submit a valid message → 200; check the dev server logs for `[contact-form] RESEND_API_KEY unset — message NOT delivered:` (the placeholder log line).
+6. Submit 6× rapidly from the same IP → the 6th hits 429 with a `Retry-After` header. The form surfaces "Muitas tentativas. Tente novamente em Xs."
+7. Honeypot smoke test: in DevTools, set the hidden `<input>` value to `"bot"` and submit → server returns 200 silently and **no email log appears**.
+
+### Live Turnstile + Resend smoke
+
+Once you've set `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, and `RESEND_API_KEY` in `.env`:
+
+1. Restart `pnpm dev` so Next.js picks up the new public env var (it's inlined at build time).
+2. Open the public profile in a browser. The Turnstile widget renders below the message textarea; the **Enviar mensagem** button is disabled until the widget reports a token.
+3. Submit a valid message — should produce a real email in the `contactFormDestination` mailbox within seconds (Resend's dashboard also shows the delivery).
+4. Submit a second time without solving a fresh challenge → server returns 400 `error: 'captcha'` (Cloudflare consumes the token on `siteverify`). The form auto-resets the widget on each error.
+5. Verify rate-limit: 6× rapid submits from the same IP → 6th hits 429 with `Retry-After`.
+
+**If Turnstile shows "Invalid hostname":** add the host to the site's allow-list in the Cloudflare dashboard — see `.env.example` for the list (`localhost`, `presskit.pro`, `*.vercel.app`).
+
+**If you get 400 `error: 'captcha'` on every submit:** confirm `TURNSTILE_SECRET_KEY` matches the secret for the site whose `NEXT_PUBLIC_TURNSTILE_SITE_KEY` you're using. They're a paired credential.
+
+To temporarily disable the captcha for debugging, blank `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (form bypasses the gate) **and** `TURNSTILE_SECRET_KEY` (route reverts to no-op). Both, or neither — never one.
+
 ## Mock autosave failures for QA
 
 The PATCH route returns 400 / 404 for invalid bodies / access denials. To force an error UI without changing code, point the PATCH at a non-existent id via the browser devtools (Network → "Override response"). The `SaveStatus` component should flip to the error state with a "tentar de novo" button.

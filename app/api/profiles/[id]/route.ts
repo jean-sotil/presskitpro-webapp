@@ -15,6 +15,10 @@ const PATCHABLE_FIELDS = new Set([
   'portrait',
   'logo',
   'gallery',
+  'contactWhatsapp',
+  'contactEmail',
+  'contactFormEnabled',
+  'contactFormDestination',
 ]);
 
 export async function PATCH(

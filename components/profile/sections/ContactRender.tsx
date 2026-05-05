@@ -1,24 +1,64 @@
 import type { EditorBundle } from '@/lib/editor/bundle';
 
+import { ContactForm } from './ContactForm';
+
+type ProfileWithContact = EditorBundle['profile'] & {
+  contactWhatsapp?: string;
+  contactEmail?: string;
+  contactFormEnabled?: boolean;
+};
+
 export function ContactRender({ bundle }: { bundle: EditorBundle }) {
-  // Contact form / WhatsApp / email derive from SocialLinks in v1.
-  const contact = bundle.socialLinks.find(
-    (link) => link.platform === 'email' || link.platform === 'whatsapp',
-  );
-  if (!contact) return null;
-  const url = contact.url as string;
-  const platform = contact.platform as string;
+  const profile = bundle.profile as ProfileWithContact;
+  const whatsapp = profile.contactWhatsapp?.trim() ?? '';
+  const email = profile.contactEmail?.trim() ?? '';
+  const formEnabled = Boolean(profile.contactFormEnabled);
+  const profileId = Number(profile.id);
+
+  if (!whatsapp && !email && !formEnabled) return null;
+
   return (
-    <section className="px-6 py-16 md:px-12">
+    <section className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">Contato</h2>
-      <p className="mt-4">
-        <a
-          href={platform === 'email' && !url.startsWith('mailto:') ? `mailto:${url}` : url}
-          className="inline-flex h-12 items-center border border-accent bg-accent px-6 text-sm uppercase tracking-wider text-accent-contrast"
-        >
-          {platform === 'whatsapp' ? 'Chamar no WhatsApp' : 'Enviar e-mail'}
-        </a>
-      </p>
+      {whatsapp || email ? (
+        <ul className="mt-6 flex flex-wrap gap-3">
+          {whatsapp ? (
+            <li>
+              <a
+                href={whatsappHref(whatsapp)}
+                className="inline-flex h-12 items-center border border-accent bg-accent px-6 text-sm uppercase tracking-wider text-accent-contrast"
+              >
+                Chamar no WhatsApp
+              </a>
+            </li>
+          ) : null}
+          {email ? (
+            <li>
+              <a
+                href={emailHref(email)}
+                className="inline-flex h-12 items-center border border-border px-6 text-sm uppercase tracking-wider text-text"
+              >
+                Enviar e-mail
+              </a>
+            </li>
+          ) : null}
+        </ul>
+      ) : null}
+      {formEnabled && profileId > 0 ? (
+        <div className="mt-10 max-w-xl">
+          <ContactForm profileId={profileId} />
+        </div>
+      ) : null}
     </section>
   );
+}
+
+function whatsappHref(value: string): string {
+  if (value.startsWith('http')) return value;
+  const digits = value.replace(/\D/g, '');
+  return `https://wa.me/${digits}`;
+}
+
+function emailHref(value: string): string {
+  return value.startsWith('mailto:') ? value : `mailto:${value}`;
 }

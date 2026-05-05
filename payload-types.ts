@@ -265,6 +265,22 @@ export interface Profile {
    * Set by the daily cron (task-30).
    */
   pressKitHealthStatus?: ('unknown' | 'healthy' | 'warning' | 'broken') | null;
+  /**
+   * Public WhatsApp contact (E.164, e.g. +5511999999999). Editor canonicalizes; the public profile renders a wa.me link.
+   */
+  contactWhatsapp?: string | null;
+  /**
+   * Public contact email. Defaults the contact-form destination if left empty there.
+   */
+  contactEmail?: string | null;
+  /**
+   * Show the contact form on the public profile. When off, only the WhatsApp / email buttons render.
+   */
+  contactFormEnabled?: boolean | null;
+  /**
+   * Destination email for form submissions. Falls back to `contactEmail` when empty.
+   */
+  contactFormDestination?: string | null;
   defaultLocale: 'pt-BR' | 'en';
   /**
    * Locales with published content. The public profile uses this to gate the locale toggle (task-19).
@@ -660,6 +676,10 @@ export interface ProfilesSelect<T extends boolean = true> {
   pressKitProvider?: T;
   pressKitLastCheckedAt?: T;
   pressKitHealthStatus?: T;
+  contactWhatsapp?: T;
+  contactEmail?: T;
+  contactFormEnabled?: T;
+  contactFormDestination?: T;
   defaultLocale?: T;
   localesAvailable?: T;
   updatedAt?: T;

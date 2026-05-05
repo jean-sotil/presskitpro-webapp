@@ -54,6 +54,14 @@ describe('ProfileRenderer', () => {
       <ProfileRenderer
         mode="preview"
         bundle={makeBundle({
+          profile: {
+            id: 1,
+            owner: 1,
+            slug: 'mariana-luz',
+            status: 'draft',
+            defaultLocale: 'pt-BR',
+            contactEmail: 'press@x.com',
+          },
           theme: {
             id: 2,
             profile: 1,
@@ -63,9 +71,6 @@ describe('ProfileRenderer', () => {
             ],
           },
           content: { id: 9, profile: 1, tagline: 'House' },
-          socialLinks: [
-            { id: 1, profile: 1, platform: 'email', url: 'press@x.com' },
-          ],
         })}
       />,
     );

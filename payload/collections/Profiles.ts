@@ -171,6 +171,44 @@ export const Profiles: CollectionConfig = {
       },
     },
 
+    // ----- Contact (PRD §6.3, task-14) -----
+    {
+      name: 'contactWhatsapp',
+      type: 'text',
+      maxLength: 50,
+      admin: {
+        description:
+          'Public WhatsApp contact (E.164, e.g. +5511999999999). Editor canonicalizes; the public profile renders a wa.me link.',
+      },
+    },
+    {
+      name: 'contactEmail',
+      type: 'text',
+      maxLength: 200,
+      admin: {
+        description:
+          'Public contact email. Defaults the contact-form destination if left empty there.',
+      },
+    },
+    {
+      name: 'contactFormEnabled',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description:
+          'Show the contact form on the public profile. When off, only the WhatsApp / email buttons render.',
+      },
+    },
+    {
+      name: 'contactFormDestination',
+      type: 'text',
+      maxLength: 200,
+      admin: {
+        description:
+          'Destination email for form submissions. Falls back to `contactEmail` when empty.',
+      },
+    },
+
     // ----- Localization metadata (PRD §10) -----
     {
       name: 'defaultLocale',
