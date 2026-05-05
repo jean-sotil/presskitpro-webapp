@@ -83,6 +83,20 @@ export const Users: CollectionConfig = {
         description: 'Set on first profile creation; consumed by the trial-expiration cron (task-23).',
       },
     },
+
+    // ----- Onboarding wizard state (task-06) -----
+    // Cleared (set to null/empty) on wizard completion. Shape:
+    //   { step: 1..5, slug?, taglinePtBR?, services?: string[], customServices?: string[],
+    //     socialPlatform?, socialUrl?, portraitId?, logoId?, completedAt? }
+    {
+      name: 'onboardingProgress',
+      type: 'json',
+      admin: {
+        readOnly: true,
+        description:
+          'Wizard progress. Owned by the wizard server actions; do not edit directly from admin.',
+      },
+    },
   ],
   timestamps: true,
 };

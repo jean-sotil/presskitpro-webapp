@@ -26,6 +26,17 @@ describe('decideRedirect', () => {
     });
   });
 
+  it('redirects anon → /login?next=… for /onboarding/*', () => {
+    expect(decideRedirect({ pathname: '/onboarding', hasSession: false })).toEqual({
+      kind: 'redirect',
+      to: '/login?next=%2Fonboarding',
+    });
+    expect(decideRedirect({ pathname: '/onboarding/3', hasSession: false })).toEqual({
+      kind: 'redirect',
+      to: '/login?next=%2Fonboarding%2F3',
+    });
+  });
+
   it('allows signed-in users to reach /dashboard and /admin', () => {
     expect(decideRedirect({ pathname: '/dashboard', hasSession: true })).toEqual({ kind: 'allow' });
     expect(decideRedirect({ pathname: '/admin', hasSession: true })).toEqual({ kind: 'allow' });

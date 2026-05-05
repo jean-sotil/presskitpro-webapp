@@ -197,6 +197,18 @@ export interface User {
    * Set on first profile creation; consumed by the trial-expiration cron (task-23).
    */
   trialEndsAt?: string | null;
+  /**
+   * Wizard progress. Owned by the wizard server actions; do not edit directly from admin.
+   */
+  onboardingProgress?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -226,6 +238,14 @@ export interface Profile {
   slug: string;
   status: 'draft' | 'published' | 'unpublished';
   /**
+   * Hero portrait. Renders on the public profile.
+   */
+  portrait?: (number | null) | Media;
+  /**
+   * Optional artist logo / monogram.
+   */
+  logo?: (number | null) | Media;
+  /**
    * External press-kit URL (Google Drive, Dropbox, etc.). Provider + health are derived/checked automatically.
    */
   pressKitUrl?: string | null;
@@ -246,6 +266,34 @@ export interface Profile {
    * Locales with published content. The public profile uses this to gate the locale toggle (task-19).
    */
   localesAvailable?: ('pt-BR' | 'en')[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Reference-only metadata for files stored in Supabase Storage. Payload does NOT manage the underlying file (no `upload: true`). See ADR 0001.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  bucket: 'avatars' | 'gallery';
+  /**
+   * Path within the bucket. Combined with bucket → public URL at render time.
+   */
+  path: string;
+  mimeType: string;
+  /**
+   * Bytes.
+   */
+  size: number;
+  width?: number | null;
+  height?: number | null;
+  /**
+   * Required for a11y. Mark explicitly empty (string with one space) only for decorative images — task-12 enforces the explicit decorative toggle.
+   */
+  alt: string;
+  owner: number | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -288,34 +336,6 @@ export interface ProfileContent {
    * Open Graph image. Falls back to hero portrait if empty.
    */
   ogImage?: (number | null) | Media;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * Reference-only metadata for files stored in Supabase Storage. Payload does NOT manage the underlying file (no `upload: true`). See ADR 0001.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  bucket: 'avatars' | 'gallery';
-  /**
-   * Path within the bucket. Combined with bucket → public URL at render time.
-   */
-  path: string;
-  mimeType: string;
-  /**
-   * Bytes.
-   */
-  size: number;
-  width?: number | null;
-  height?: number | null;
-  /**
-   * Required for a11y. Mark explicitly empty (string with one space) only for decorative images — task-12 enforces the explicit decorative toggle.
-   */
-  alt: string;
-  owner: number | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -591,6 +611,7 @@ export interface UsersSelect<T extends boolean = true> {
   role?: T;
   plan?: T;
   trialEndsAt?: T;
+  onboardingProgress?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -616,6 +637,8 @@ export interface ProfilesSelect<T extends boolean = true> {
   owner?: T;
   slug?: T;
   status?: T;
+  portrait?: T;
+  logo?: T;
   pressKitUrl?: T;
   pressKitProvider?: T;
   pressKitLastCheckedAt?: T;

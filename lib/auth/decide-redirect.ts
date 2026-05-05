@@ -13,7 +13,7 @@ export type RedirectDecision =
   | { kind: 'allow' }
   | { kind: 'redirect'; to: string };
 
-const PROTECTED_PREFIXES = ['/dashboard', '/admin'];
+const PROTECTED_PREFIXES = ['/dashboard', '/admin', '/onboarding'];
 const AUTH_PAGES = new Set(['/login', '/signup']);
 
 function isProtected(pathname: string) {

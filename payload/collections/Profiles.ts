@@ -91,6 +91,22 @@ export const Profiles: CollectionConfig = {
       ],
     },
 
+    // ----- Hero media (PRD §6.3) -----
+    // Optional: the wizard (task-06) lets users skip uploads; the editor
+    // (task-09 / task-10 hero section) is where they refine.
+    {
+      name: 'portrait',
+      type: 'relationship',
+      relationTo: 'media',
+      admin: { description: 'Hero portrait. Renders on the public profile.' },
+    },
+    {
+      name: 'logo',
+      type: 'relationship',
+      relationTo: 'media',
+      admin: { description: 'Optional artist logo / monogram.' },
+    },
+
     // ----- Press kit (PRD §7) -----
     {
       name: 'pressKitUrl',
