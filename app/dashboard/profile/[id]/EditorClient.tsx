@@ -27,12 +27,20 @@ const AUTOSAVE_MS = 5_000;
 /** Which collection a mutation targets. Each scope has its own dirty
  *  buffer + REST route; the autosave flushes all dirty buffers in
  *  parallel. */
-export type MutationScope = 'profile' | 'content' | 'theme';
+export type MutationScope = 'profile' | 'content' | 'theme' | 'socialLinks';
 
 const ROUTE_FOR: Record<MutationScope, (id: number | string) => string> = {
   profile: (id) => `/api/profiles/${id}`,
   content: (id) => `/api/profiles/${id}/content`,
   theme: (id) => `/api/profiles/${id}/theme`,
+  socialLinks: (id) => `/api/profiles/${id}/social-links`,
+};
+
+const METHOD_FOR: Record<MutationScope, 'PATCH' | 'PUT'> = {
+  profile: 'PATCH',
+  content: 'PATCH',
+  theme: 'PATCH',
+  socialLinks: 'PUT',
 };
 
 export function EditorClient({ initialBundle }: { initialBundle: EditorBundle }) {
@@ -69,17 +77,18 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
       : null,
   });
 
-  // ----- Triple-buffered dirty state ------------------------------------
+  // ----- Per-scope dirty buffers ----------------------------------------
   const dirtyProfile = useRef<Record<string, unknown>>({});
   const dirtyContent = useRef<Record<string, unknown>>({});
   const dirtyTheme = useRef<Record<string, unknown>>({});
+  const dirtySocialLinks = useRef<Record<string, unknown>>({});
 
   function patchScope(
     scope: MutationScope,
     data: Record<string, unknown>,
   ): Promise<Response> {
     return fetch(ROUTE_FOR[scope](bundle.profile.id), {
-      method: 'PATCH',
+      method: METHOD_FOR[scope],
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(data),
     });
@@ -98,6 +107,10 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     if (Object.keys(dirtyTheme.current).length) {
       buffers.push(['theme', dirtyTheme.current]);
       dirtyTheme.current = {};
+    }
+    if (Object.keys(dirtySocialLinks.current).length) {
+      buffers.push(['socialLinks', dirtySocialLinks.current]);
+      dirtySocialLinks.current = {};
     }
     if (buffers.length === 0) return;
 
@@ -166,16 +179,23 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
         const baseContent = prev.content ?? { id: -1, profile: prev.profile.id };
         return { ...prev, content: { ...baseContent, ...patch } };
       }
-      // theme
-      const baseTheme = prev.theme ?? { id: -1, profile: prev.profile.id };
-      return { ...prev, theme: { ...baseTheme, ...patch } };
+      if (scope === 'theme') {
+        const baseTheme = prev.theme ?? { id: -1, profile: prev.profile.id };
+        return { ...prev, theme: { ...baseTheme, ...patch } };
+      }
+      // socialLinks: a sibling array on the bundle, not a child collection.
+      // The patch shape is `{ links: [...] }`; mirror it onto bundle.socialLinks.
+      const incoming = (patch.links as EditorBundle['socialLinks'] | undefined) ?? [];
+      return { ...prev, socialLinks: incoming };
     });
     const buffer =
       scope === 'profile'
         ? dirtyProfile
         : scope === 'content'
         ? dirtyContent
-        : dirtyTheme;
+        : scope === 'theme'
+        ? dirtyTheme
+        : dirtySocialLinks;
     buffer.current = { ...buffer.current, ...patch };
     autosaveRef.current.schedule();
   }

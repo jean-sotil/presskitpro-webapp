@@ -73,6 +73,21 @@ To force compression: drop a > 2MB JPEG. The dev tools Network tab shows the PUT
 7. Soft-cap kicks in above 24 photos (warning); hard-cap at 50 (dropzone disabled).
 8. To verify AVIF conversion: open DevTools Network tab and watch the PUT request — file extension should be `.avif` on modern browsers (Safari 15 falls back to `.jpg`).
 
+## Test the social-links editor (task-13)
+
+1. Open the editor; click **Redes sociais** in the rail.
+2. Click "+ Adicionar link". A new row appears with the first available platform pre-selected.
+3. Switch the platform `<select>` (Instagram → WhatsApp). Try each input shape:
+   - `@dj_x` (handles) — auto-canonicalized client-side.
+   - Full URL with query (`https://instagram.com/dj_x?utm=foo`) — query stripped, host normalized.
+   - `+55 11 99999-9999` for WhatsApp — non-digits stripped, `wa.me/<digits>` produced.
+   - `dj@example.com` for E-mail — re-saved as `mailto:dj@example.com`.
+4. Type a bad value (`not-a-url`, or a WhatsApp number missing the country code). The row's input gets `aria-invalid="true"` and a "Como encontrar a URL do {platform}" helper link appears. The top of the card shows a `role="alert"` banner.
+5. Drag-reorder a row by its `⋮⋮` handle; the preview reflects the new order.
+6. Add 10 rows — "+ Adicionar link" disables and the "Máximo 10 links" helper appears.
+7. Save flush goes to `PUT /api/profiles/[id]/social-links`. Defense-in-depth: the route re-runs `parseAndCanonicalize` server-side and stores the canonical URL even if a client somehow bypasses validation.
+8. Refresh — `displayOrder` (rewritten from array index server-side) restores the same order.
+
 ## Mock autosave failures for QA
 
 The PATCH route returns 400 / 404 for invalid bodies / access denials. To force an error UI without changing code, point the PATCH at a non-existent id via the browser devtools (Network → "Override response"). The `SaveStatus` component should flip to the error state with a "tentar de novo" button.

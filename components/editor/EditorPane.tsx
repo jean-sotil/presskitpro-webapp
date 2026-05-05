@@ -11,6 +11,7 @@ import { HeroEditCard } from './sections/HeroEditCard';
 import { PhotoGalleryEditCard } from './sections/PhotoGalleryEditCard';
 import { PlaceholderEditCard } from './sections/PlaceholderEditCard';
 import { ServicesEditCard } from './sections/ServicesEditCard';
+import { SocialLinksEditCard } from './sections/SocialLinksEditCard';
 
 export interface EditorPaneProps {
   active: SectionKey;
@@ -53,6 +54,8 @@ export function EditorPane({
           onMutate={onMutate}
         />
       );
+    case 'socialLinks':
+      return <SocialLinksEditCard bundle={bundle} onMutate={onMutate} />;
     default:
       return <PlaceholderEditCard meta={meta} />;
   }
