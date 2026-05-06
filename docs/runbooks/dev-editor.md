@@ -217,6 +217,16 @@ Click **Publicar** → 422 lands → toast shows. Re-validate on the Tema tab to
 
 Today, paused / trial-expired profiles 404 just like missing ones. The branded paused page lands when billing fields exist (task-31).
 
+## Test the SEO foundation (task-20)
+
+1. **Robots:** open `http://localhost:3000/robots.txt`. Expect `User-Agent: *`, `Allow: /`, and `Disallow:` lines for `/dashboard/`, `/api/`, `/admin/`, `/onboarding/`, `/login`, `/signup`, `/auth/`, `/dev/`, `/spike`. The `Sitemap:` line should point at `<NEXT_PUBLIC_APP_URL>/sitemap.xml`.
+2. **Sitemap:** open `http://localhost:3000/sitemap.xml`. Each published profile gets a `<url>` with the canonical `https://<host>/<slug>`, `<lastmod>` reflecting the row's `updatedAt`, weekly `<changefreq>`, priority 0.7. Drafts are absent.
+3. **JSON-LD:** on a published profile page, view source and search for `<script type="application/ld+json">`. The body parses to a `MusicGroup` object with `name`, `url`, optional `description`, optional `image`, and a `sameAs` array of social/featured-track/press-kit URLs.
+4. **Rich Results Test:** copy the public URL and paste it into <https://search.google.com/test/rich-results>. The MusicGroup should pass with no errors.
+5. **Canonical:** view source on the page; the `<link rel="canonical" href="https://.../<slug>">` tag should never carry a locale segment.
+6. **hreflang alternates:** the `<head>` contains one `<link rel="alternate" hreflang="...">` per locale in `Profiles.localesAvailable`, plus `x-default`. All point at the same canonical URL — same-URL hreflang is valid per Google's docs.
+7. **Sitemap revalidation:** publish or unpublish a profile; the next request to `/sitemap.xml` reflects the change. The Profiles `afterChange` hook fires `revalidatePath('/sitemap.xml')` whenever the publication state shifts.
+
 ## Mock autosave failures for QA
 
 The PATCH route returns 400 / 404 for invalid bodies / access denials. To force an error UI without changing code, point the PATCH at a non-existent id via the browser devtools (Network → "Override response"). The `SaveStatus` component should flip to the error state with a "tentar de novo" button.

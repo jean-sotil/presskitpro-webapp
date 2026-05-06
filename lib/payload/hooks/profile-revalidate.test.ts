@@ -17,7 +17,8 @@ describe('handleProfileRevalidate', () => {
       deps,
     );
     expect(deps.revalidatePath).toHaveBeenCalledWith('/mariana');
-    expect(deps.revalidatePath).toHaveBeenCalledTimes(1);
+    // status flipped (undefined → 'published') so the sitemap is also bumped.
+    expect(deps.revalidatePath).toHaveBeenCalledWith('/sitemap.xml');
   });
 
   it('does NOT revalidate when status is draft', () => {
@@ -29,7 +30,9 @@ describe('handleProfileRevalidate', () => {
       },
       deps,
     );
-    expect(deps.revalidatePath).not.toHaveBeenCalled();
+    // status went from undefined to 'draft' — counts as a flip → sitemap bumps,
+    // but no slug bust (the slug was never live).
+    expect(deps.revalidatePath).not.toHaveBeenCalledWith('/mariana');
   });
 
   it('revalidates BOTH the old and new slug when slug changes on a published doc', () => {
@@ -44,7 +47,8 @@ describe('handleProfileRevalidate', () => {
     );
     expect(deps.revalidatePath).toHaveBeenCalledWith('/mariana');
     expect(deps.revalidatePath).toHaveBeenCalledWith('/mariana-2');
-    expect(deps.revalidatePath).toHaveBeenCalledTimes(2);
+    // Slug rotated → sitemap bumped too.
+    expect(deps.revalidatePath).toHaveBeenCalledWith('/sitemap.xml');
   });
 
   it('revalidates the old slug when transitioning published -> unpublished (so the public page invalidates)', () => {

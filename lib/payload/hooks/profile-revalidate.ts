@@ -59,4 +59,10 @@ export function handleProfileRevalidate(args: Args, deps: Deps = {}): void {
   if (newStatus === 'published' && newSlug) {
     safe(`/${newSlug}`);
   }
+  // Bump the sitemap whenever publication state changes (task-20).
+  // Cheap to over-invalidate; a no-op when no profile actually appeared
+  // or disappeared from the published set.
+  if (newStatus !== oldStatus || (newStatus === 'published' && newSlug !== oldSlug)) {
+    safe('/sitemap.xml');
+  }
 }
