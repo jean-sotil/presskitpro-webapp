@@ -1,5 +1,7 @@
 import type { EditorBundle } from '@/lib/editor/bundle';
 
+import { TrackedSocialLink } from './TrackedSocialLink';
+
 const PLATFORM_LABELS: Record<string, string> = {
   instagram: 'Instagram',
   tiktok: 'TikTok',
@@ -29,6 +31,7 @@ export function SocialLinksRender({ bundle }: { bundle: EditorBundle }) {
   const links = [...raw].sort(
     (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
   );
+  const profileSlug = bundle.profile.slug;
   return (
     <section className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">
@@ -42,15 +45,16 @@ export function SocialLinksRender({ bundle }: { bundle: EditorBundle }) {
             link.platform !== 'email' && link.platform !== 'whatsapp';
           return (
             <li key={String(link.id)}>
-              <a
+              <TrackedSocialLink
                 href={href}
-                {...(external
-                  ? { target: '_blank', rel: 'noopener noreferrer' }
-                  : {})}
+                platform={link.platform}
+                profileSlug={profileSlug}
+                target={external ? '_blank' : undefined}
+                rel={external ? 'noopener noreferrer' : undefined}
                 className="inline-flex h-10 items-center border border-border px-4 text-xs uppercase tracking-wider text-text-muted hover:text-text"
               >
                 {label}
-              </a>
+              </TrackedSocialLink>
             </li>
           );
         })}

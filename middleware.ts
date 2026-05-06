@@ -1,6 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { decideRedirect } from '@/lib/auth/decide-redirect';
+import { deriveProfileSlugFromPath } from '@/lib/analytics/derive-event';
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
@@ -53,7 +54,46 @@ export async function middleware(req: NextRequest) {
   // Vary on Accept-Language so future locale negotiation (task-29)
   // doesn't get the wrong cached entry. Per PRD §18 risk #12.
   res.headers.append('Vary', 'Accept-Language');
+
+  // Task-24 — public profile page-view capture. Fires for `/<slug>` only;
+  // skipped for everything else by `deriveProfileSlugFromPath`. We do NOT
+  // await this — the page must serve from cache without a network round-trip.
+  if (req.method === 'GET') {
+    const slug = deriveProfileSlugFromPath(req.nextUrl.pathname);
+    if (slug) firePageViewBeacon(req, slug);
+  }
   return res;
+}
+
+function firePageViewBeacon(req: NextRequest, slug: string): void {
+  if (process.env.ANALYTICS_BEACON_DISABLED === '1') return;
+  // Build the absolute URL to /api/track from the incoming request so
+  // it works on every Vercel preview without env config.
+  const base = new URL(req.nextUrl.origin);
+  base.pathname = '/api/track';
+  const headers = new Headers({
+    'content-type': 'application/json',
+    // Pass through the bits /api/track needs to derive the visitor hash
+    // and locale. The runtime `fetch` inside middleware doesn't inherit
+    // request headers automatically.
+    'user-agent': req.headers.get('user-agent') ?? '',
+    'accept-language': req.headers.get('accept-language') ?? '',
+    'x-forwarded-for': req.headers.get('x-forwarded-for') ?? '',
+  });
+  const country = req.headers.get('x-vercel-ip-country');
+  if (country) headers.set('x-vercel-ip-country', country);
+  void fetch(base.toString(), {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      event: 'page_view',
+      profileSlug: slug,
+      referrer: req.headers.get('referer') ?? null,
+    }),
+    keepalive: true,
+  }).catch(() => {
+    // Analytics is best-effort; never block the user-facing path.
+  });
 }
 
 export const config = {

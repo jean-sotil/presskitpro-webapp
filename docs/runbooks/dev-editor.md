@@ -318,3 +318,64 @@ update payload.users
 Then re-run the curl. The owned Profiles row(s) flip to
 `status = 'paused'`; visiting `/<slug>` now serves the branded
 "Press kit pausado" page at HTTP 200 (not 404).
+
+## Test the analytics pipeline (task-24)
+
+Three surfaces: capture (`/api/track`), rollup cron (`/api/cron/analytics`),
+dashboard (`/dashboard/analytics`).
+
+### Variables
+
+```bash
+# Already required by other tasks — analytics reuses them.
+NEXT_PUBLIC_SUPABASE_URL=…
+SUPABASE_SERVICE_ROLE_KEY=…
+CRON_SECRET=…   # task-23 already set this.
+
+# Optional — flips off the middleware beacon for noisy local sessions.
+ANALYTICS_BEACON_DISABLED=1
+```
+
+### Capture
+
+1. `supabase db push` to apply `20260506000001_task_24_analytics.sql`.
+2. Visit any published profile (e.g. `http://localhost:3000/marina-clube`).
+3. In the Next dev console, `[analytics]` log lines surface only on
+   warnings — silence is success. Inspect the row:
+
+   ```sql
+   select * from public.analytics_events order by id desc limit 5;
+   ```
+
+4. Click the press-kit / WhatsApp / social-link buttons; new rows
+   appear with `event_type` = `press_kit_click` / `contact_click` /
+   `social_click`. Each click is dispatched via
+   `navigator.sendBeacon('/api/track', …)` so it survives the
+   navigation that immediately follows.
+
+### Daily rollup
+
+```bash
+curl -X POST http://localhost:3000/api/cron/analytics \
+  -H "Authorization: Bearer $CRON_SECRET"
+```
+
+Without the header you get 401. With it the response is
+`{ ok, day, rollups, eventsScanned }`. Re-running is safe — the upsert
+is keyed on `(profile_id, event_type, day)`.
+
+### Dashboard
+
+`/dashboard/analytics` reads only the rollup table; if you just inserted
+events but haven't run the cron yet, the chart is all zeros. Run the
+curl above with `day = today` (passing `?day=YYYY-MM-DD` is reserved
+for task-31's backfill helper) — or wait until tomorrow's tick.
+
+### Privacy notes (PRD §15)
+
+- No tracking cookies are set on visitors. The /api/track route never
+  writes `Set-Cookie`; verify with `curl -i …`.
+- The visitor hash uses a daily-rotating salt stored in
+  `public.analytics_salts`. Yesterday's hash and today's hash for the
+  same visitor are uncorrelatable — by design.
+- Referrers are stored as host-only (`google.com`, not the search query).

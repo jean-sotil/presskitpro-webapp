@@ -1,6 +1,7 @@
 import type { EditorBundle } from '@/lib/editor/bundle';
 
 import { ContactForm } from './ContactForm';
+import { TrackedContactCta } from './TrackedContactCta';
 
 type ProfileWithContact = EditorBundle['profile'] & {
   contactWhatsapp?: string;
@@ -14,6 +15,7 @@ export function ContactRender({ bundle }: { bundle: EditorBundle }) {
   const email = profile.contactEmail?.trim() ?? '';
   const formEnabled = Boolean(profile.contactFormEnabled);
   const profileId = Number(profile.id);
+  const profileSlug = profile.slug;
 
   if (!whatsapp && !email && !formEnabled) return null;
 
@@ -24,22 +26,26 @@ export function ContactRender({ bundle }: { bundle: EditorBundle }) {
         <ul className="mt-6 flex flex-wrap gap-3">
           {whatsapp ? (
             <li>
-              <a
+              <TrackedContactCta
                 href={whatsappHref(whatsapp)}
+                channel="whatsapp"
+                profileSlug={profileSlug}
                 className="inline-flex h-12 items-center border border-accent bg-accent px-6 text-sm uppercase tracking-wider text-accent-contrast"
               >
                 Chamar no WhatsApp
-              </a>
+              </TrackedContactCta>
             </li>
           ) : null}
           {email ? (
             <li>
-              <a
+              <TrackedContactCta
                 href={emailHref(email)}
+                channel="email"
+                profileSlug={profileSlug}
                 className="inline-flex h-12 items-center border border-border px-6 text-sm uppercase tracking-wider text-text"
               >
                 Enviar e-mail
-              </a>
+              </TrackedContactCta>
             </li>
           ) : null}
         </ul>

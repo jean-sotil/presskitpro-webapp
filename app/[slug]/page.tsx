@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { AnalyticsClient } from '@/components/profile/AnalyticsClient';
 import { PausedTemplate } from '@/components/profile/PausedTemplate';
 import { ProfileRenderer } from '@/components/profile/ProfileRenderer';
 import { livePublicBundleDeps } from '@/lib/editor/bundle-public-live';
@@ -97,6 +98,7 @@ export default async function PublicProfilePage({ params }: PageParams) {
       />
       <AnchorNav bundle={bundle} />
       <ProfileRenderer bundle={bundle} mode="public" />
+      <AnalyticsClient profileSlug={slug} />
     </main>
   );
 }

@@ -106,14 +106,22 @@ export default async function DashboardPage() {
           </ul>
         )}
 
-        <form action="/auth/logout" method="post" className="mt-12">
-          <button
-            type="submit"
-            className="text-xs uppercase tracking-wider text-text-muted underline underline-offset-4 hover:text-text"
+        <div className="mt-12 flex items-center gap-6">
+          <Link
+            href="/dashboard/analytics"
+            className="font-display text-xs uppercase tracking-widest text-text underline underline-offset-4 hover:text-text-muted"
           >
-            Sair
-          </button>
-        </form>
+            Analytics →
+          </Link>
+          <form action="/auth/logout" method="post">
+            <button
+              type="submit"
+              className="text-xs uppercase tracking-wider text-text-muted underline underline-offset-4 hover:text-text"
+            >
+              Sair
+            </button>
+          </form>
+        </div>
       </Section>
     </main>
   );
