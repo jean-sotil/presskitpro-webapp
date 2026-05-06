@@ -13,7 +13,7 @@
  * (CSS-variable injection at render time). One source of truth.
  */
 
-import { wcagContrast } from 'culori';
+import { converter, wcagContrast } from 'culori';
 
 import {
   accentPresets,
@@ -30,6 +30,13 @@ export interface DerivedTokens {
   accent: string;
   text: string;
   accentContrast: string;
+  /** OKLCH triplets ("L C H") — what Tailwind's `bg-bg` etc. expect.
+   *  Tailwind generates `oklch(var(--bg) / <alpha>)`; the values must be
+   *  the bare triplet. */
+  bgOklch: string;
+  accentOklch: string;
+  textOklch: string;
+  accentContrastOklch: string;
   /** Extra metadata for the editor — which mode the bg is in (so the
    *  preview can default the auto-text correctly). */
   bgMode: ThemeMode;
@@ -73,8 +80,27 @@ export function deriveThemeTokens(theme: RawTheme | null | undefined): DerivedTo
     accent: accentHex.toUpperCase(),
     text: textHex.toUpperCase(),
     accentContrast: accentContrast.toUpperCase(),
+    bgOklch: hexToOklchTriplet(bgHex),
+    accentOklch: hexToOklchTriplet(accentHex),
+    textOklch: hexToOklchTriplet(textHex),
+    accentContrastOklch: hexToOklchTriplet(accentContrast),
     bgMode,
   };
+}
+
+const toOklch = converter('oklch');
+
+/** Format hex as Tailwind-compatible OKLCH triplet `"L C H"` with 3
+ *  decimals. Achromatic colors (where culori returns h=undefined or NaN)
+ *  emit hue=0. */
+export function hexToOklchTriplet(hex: string): string {
+  const parsed = toOklch(hex);
+  if (!parsed) return '0 0 0';
+  const l = Number.isFinite(parsed.l) ? parsed.l : 0;
+  const c = Number.isFinite(parsed.c) ? parsed.c : 0;
+  const h = Number.isFinite(parsed.h) ? (parsed.h as number) : 0;
+  const round = (n: number) => Number(n.toFixed(3));
+  return `${round(l)} ${round(c)} ${round(h)}`;
 }
 
 function pickBgPreset(id: string | null | undefined): BgPreset | undefined {

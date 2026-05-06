@@ -165,51 +165,9 @@ export const fontPairClasses: Record<FontPairId, string> = {
 };
 
 /**
- * Inline-style block for switching the active pair. Maps the three semantic
- * font CSS vars (--font-display, --font-body, --font-editorial) to the
- * concrete font vars from `next/font`. The default pair (Editorial Nightlife)
- * is also baked into globals.css so SSR has correct fonts before hydration —
- * this object is for the preview switcher and per-profile injection later.
+ * Pair → semantic-font-CSS-var override map. Re-exported from
+ * `font-pair-css-vars.ts` so consumers that don't need the next/font
+ * loaders (e.g. ProfileRenderer under vitest) can import it without
+ * pulling the loader side-effects in.
  */
-export const fontPairCssVars: Record<FontPairId, Record<string, string>> = {
-  'editorial-nightlife': {
-    '--font-display':   'var(--font-anton)',
-    '--font-body':      'var(--font-manrope)',
-    '--font-editorial': 'var(--font-fraunces)',
-  },
-  'magazine': {
-    '--font-display':   'var(--font-fraunces)',
-    '--font-body':      'var(--font-manrope)',
-    '--font-editorial': 'var(--font-fraunces)',
-  },
-  'brutalist': {
-    '--font-display':   'var(--font-archivo-black)',
-    '--font-body':      'var(--font-jetbrains)',
-    '--font-editorial': 'var(--font-jetbrains)',
-  },
-  'refined': {
-    '--font-display':   'var(--font-cormorant)',
-    '--font-body':      'var(--font-inter-tight)',
-    '--font-editorial': 'var(--font-cormorant)',
-  },
-  'industrial': {
-    '--font-display':   'var(--font-big-shoulders)',
-    '--font-body':      'var(--font-sora)',
-    '--font-editorial': 'var(--font-sora)',
-  },
-  'soft-pop': {
-    '--font-display':   'var(--font-outfit)',
-    '--font-body':      'var(--font-dm-sans)',
-    '--font-editorial': 'var(--font-dm-sans)',
-  },
-  'retro-future': {
-    '--font-display':   'var(--font-bebas-neue)',
-    '--font-body':      'var(--font-space-mono)',
-    '--font-editorial': 'var(--font-space-mono)',
-  },
-  'classic-press': {
-    '--font-display':   'var(--font-playfair)',
-    '--font-body':      'var(--font-source-sans)',
-    '--font-editorial': 'var(--font-playfair)',
-  },
-};
+export { fontPairCssVars } from './font-pair-css-vars';

@@ -8,8 +8,6 @@ describe('validateThemeContrast', () => {
       bg: '#000000',
       accent: '#ffaa00',
       text: '#ffffff',
-      accentContrast: '#000000',
-      bgMode: 'dark',
     });
     expect(result.ok).toBe(true);
     expect(result.ratios.textBg).toBeGreaterThanOrEqual(4.5);
@@ -21,8 +19,6 @@ describe('validateThemeContrast', () => {
       bg: '#ffffff',
       accent: '#0000ff',
       text: '#cccccc', // ~1.6:1 against white
-      accentContrast: '#ffffff',
-      bgMode: 'light',
     });
     expect(result.ok).toBe(false);
     expect(result.ratios.textBg).toBeLessThan(4.5);
@@ -34,8 +30,6 @@ describe('validateThemeContrast', () => {
       bg: '#ffffff',
       accent: '#eeeeee', // very low contrast vs white
       text: '#000000',
-      accentContrast: '#000000',
-      bgMode: 'light',
     });
     expect(result.ok).toBe(false);
     expect(result.ratios.accentBg).toBeLessThan(3);
@@ -47,8 +41,6 @@ describe('validateThemeContrast', () => {
       bg: '#ffffff',
       accent: '#eeeeee',
       text: '#cccccc',
-      accentContrast: '#000000',
-      bgMode: 'light',
     });
     expect(result.ok).toBe(false);
     expect(result.failures).toContain('text-bg');
@@ -62,8 +54,6 @@ describe('validateThemeContrast', () => {
       bg: '#030303',
       accent: '#018A00',
       text: '#F0EDE6',
-      accentContrast: '#FFFFFF',
-      bgMode: 'dark',
     });
     expect(result.ok).toBe(true);
   });

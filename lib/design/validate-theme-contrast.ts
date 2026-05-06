@@ -10,7 +10,6 @@
  */
 
 import { contrastRatio } from './contrast';
-import type { DerivedTokens } from './derive-theme-tokens';
 
 export const MIN_TEXT_BG_RATIO = 4.5;
 export const MIN_ACCENT_BG_RATIO = 3;
@@ -26,7 +25,16 @@ export interface ContrastResult {
   failures: ContrastFailure[];
 }
 
-export function validateThemeContrast(tokens: DerivedTokens): ContrastResult {
+/** Validates contrast off the hex fields only — the OKLCH triplets on
+ *  `DerivedTokens` aren't needed here. Accepting this narrower shape
+ *  keeps the contrast helper independent of derive-theme-tokens. */
+export interface ContrastInput {
+  bg: string;
+  accent: string;
+  text: string;
+}
+
+export function validateThemeContrast(tokens: ContrastInput): ContrastResult {
   const textBg = contrastRatio(tokens.text, tokens.bg);
   const accentBg = contrastRatio(tokens.accent, tokens.bg);
   const failures: ContrastFailure[] = [];

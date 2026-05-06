@@ -67,4 +67,13 @@ describe('deriveThemeTokens', () => {
     } as never);
     expect(t.bg.toLowerCase()).toBe('#030303');
   });
+
+  it('emits OKLCH triplets ("L C H") in the bg/accent/text/accentContrast aliases', () => {
+    const t = deriveThemeTokens({ bg: '#ffffff' } as never);
+    // White → L close to 1, C ≈ 0.
+    expect(t.bgOklch).toMatch(/^[\d.]+ [\d.]+ [\d.]+$/);
+    expect(parseFloat(t.bgOklch.split(' ')[0]!)).toBeGreaterThan(0.95);
+    const black = deriveThemeTokens({ bg: '#000000' } as never);
+    expect(parseFloat(black.bgOklch.split(' ')[0]!)).toBe(0);
+  });
 });

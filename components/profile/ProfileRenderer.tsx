@@ -1,4 +1,10 @@
 import { deriveThemeTokens } from '@/lib/design/derive-theme-tokens';
+import { fontPairCssVars } from '@/lib/design/font-pair-css-vars';
+import {
+  DEFAULT_FONT_PAIR,
+  fontPairs,
+  type FontPairId,
+} from '@/lib/design/tokens';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import {
   DEFAULT_SECTION_ORDER,
@@ -59,12 +65,28 @@ export function ProfileRenderer({ bundle, mode: _mode }: ProfileRendererProps) {
   const tokens = deriveThemeTokens(bundle.theme as never);
   // Scope the override to a per-profile data-attr so previews of multiple
   // profiles on the same page (e.g. dashboard cards) don't collide.
+  // Tailwind generates `oklch(var(--bg) / <alpha>)`, so the variable
+  // values must be bare OKLCH triplets ("L C H") — not hex.
   const scopeId = `pp-${String(bundle.profile.id ?? 'preview')}`;
+
+  const rawFontPairId = (bundle.theme as { fontPairId?: string } | null)
+    ?.fontPairId;
+  const fontPairId: FontPairId = (
+    fontPairs as readonly string[]
+  ).includes(rawFontPairId ?? '')
+    ? (rawFontPairId as FontPairId)
+    : DEFAULT_FONT_PAIR;
+  const fontVars = fontPairCssVars[fontPairId];
+  const fontDecls = Object.entries(fontVars)
+    .map(([k, v]) => `  ${k}: ${v};`)
+    .join('\n');
+
   const themeCss = `[data-theme-scope="${scopeId}"] {
-  --bg: ${tokens.bg};
-  --accent: ${tokens.accent};
-  --accent-contrast: ${tokens.accentContrast};
-  --text: ${tokens.text};
+  --bg: ${tokens.bgOklch};
+  --accent: ${tokens.accentOklch};
+  --accent-contrast: ${tokens.accentContrastOklch};
+  --text: ${tokens.textOklch};
+${fontDecls}
 }`;
 
   return (
