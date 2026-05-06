@@ -26,5 +26,9 @@ export default async function EditorPage({
   const bundle = await loadBundle(liveBundleDeps(), { profileId, user });
   if (!bundle) notFound();
 
-  return <EditorClient initialBundle={bundle} />;
+  return (
+    <main id="main">
+      <EditorClient initialBundle={bundle} />
+    </main>
+  );
 }

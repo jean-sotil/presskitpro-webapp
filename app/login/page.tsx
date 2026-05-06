@@ -18,7 +18,7 @@ export default async function LoginPage({
   const error = params.error;
 
   return (
-    <main className="flex min-h-[100dvh] items-center justify-center px-6 py-16">
+    <main id="main" className="flex min-h-[100dvh] items-center justify-center px-6 py-16">
       <div className="w-full max-w-md">
         <h1 className="font-display text-4xl uppercase tracking-tight">Entrar</h1>
         <p className="mt-3 text-sm text-text-muted">

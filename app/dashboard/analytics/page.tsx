@@ -65,7 +65,7 @@ export default async function DashboardAnalyticsPage() {
   const topReferrers = mergeTopReferrers(rows);
 
   return (
-    <main>
+    <main id="main">
       <Section>
         <SectionMarker number={1} label="ANALYTICS" />
         <h1 className="mt-4 font-display text-5xl uppercase tracking-tight">

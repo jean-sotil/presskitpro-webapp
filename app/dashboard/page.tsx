@@ -45,7 +45,7 @@ export default async function DashboardPage() {
     : { docs: [] as Array<{ id: number | string; slug: string; status: string; updatedAt?: string }> };
 
   return (
-    <main>
+    <main id="main">
       <Section>
         <SectionMarker number={1} label="DASHBOARD" />
         <h1 className="mt-4 font-display text-5xl uppercase tracking-tight">

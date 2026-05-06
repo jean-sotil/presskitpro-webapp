@@ -85,7 +85,7 @@ export default async function OnboardingStepPage({
       <aside className="md:w-56 md:shrink-0">
         <StepRail current={step} highestCompleted={highest} />
       </aside>
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <StepShell step={step} total={5} title={meta.title} helper={meta.helper}>
           {renderIsland(step, progress, user.id)}
         </StepShell>

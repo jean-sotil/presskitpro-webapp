@@ -89,7 +89,7 @@ export default async function PublicProfilePage({ params }: PageParams) {
   });
 
   return (
-    <main>
+    <main id="main">
       {/* Trusted: every value is canonicalized server-side. The
           `JSON.stringify` output is the entire script body. */}
       <script

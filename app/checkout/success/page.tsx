@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function CheckoutSuccessPage() {
   return (
-    <main>
+    <main id="main">
       <Section>
         <SectionMarker number={1} label="PLANO ATIVADO" />
         <h1 className="mt-4 max-w-2xl font-display text-5xl uppercase tracking-tight md:text-7xl">

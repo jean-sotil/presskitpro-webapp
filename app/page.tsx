@@ -51,12 +51,14 @@ export default async function MarketingHome() {
   const examples = await fetchExamples();
   return (
     <>
-      <MarketingHero />
-      <WhatIsPressKit />
-      <HowItWorks />
-      <LiveExamplesCarousel examples={examples} />
-      <PricingTeaser />
-      <FaqAccordion />
+      <main id="main">
+        <MarketingHero />
+        <WhatIsPressKit />
+        <HowItWorks />
+        <LiveExamplesCarousel examples={examples} />
+        <PricingTeaser />
+        <FaqAccordion />
+      </main>
       <MarketingFooter />
     </>
   );

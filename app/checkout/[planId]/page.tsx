@@ -46,7 +46,7 @@ export default async function CheckoutPage({
   if (!user) redirect(`/login?next=/checkout/${planId}`);
 
   return (
-    <main>
+    <main id="main">
       <Section className="max-w-3xl">
         <CheckoutCard
           planId={planId}

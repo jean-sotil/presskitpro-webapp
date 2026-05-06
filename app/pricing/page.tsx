@@ -25,19 +25,21 @@ export default async function PricingPage() {
 
   return (
     <>
-      <section className="border-b border-border px-6 py-20 md:px-12 md:py-32">
-        <p className="font-display text-xs uppercase tracking-widest text-text-muted">
-          {pricingCopy.hero.eyebrow}
-        </p>
-        <h1 className="mt-6 max-w-3xl font-display text-5xl uppercase tracking-tight md:text-7xl">
-          {pricingCopy.hero.title}
-        </h1>
-        <p className="mt-8 max-w-2xl text-lg text-text-muted md:text-xl">
-          {pricingCopy.hero.body}
-        </p>
-      </section>
-      <PricingTable loggedIn={loggedIn} />
-      <PricingFaq />
+      <main id="main">
+        <section className="border-b border-border px-6 py-20 md:px-12 md:py-32">
+          <p className="font-display text-xs uppercase tracking-widest text-text-muted">
+            {pricingCopy.hero.eyebrow}
+          </p>
+          <h1 className="mt-6 max-w-3xl font-display text-5xl uppercase tracking-tight md:text-7xl">
+            {pricingCopy.hero.title}
+          </h1>
+          <p className="mt-8 max-w-2xl text-lg text-text-muted md:text-xl">
+            {pricingCopy.hero.body}
+          </p>
+        </section>
+        <PricingTable loggedIn={loggedIn} />
+        <PricingFaq />
+      </main>
       <MarketingFooter />
     </>
   );

@@ -8,7 +8,7 @@ import { Section } from '@/components/ui/Section';
  */
 export default function PublicProfileNotFound() {
   return (
-    <main>
+    <main id="main">
       <Section>
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
           404

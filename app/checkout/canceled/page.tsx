@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function CheckoutCanceledPage() {
   return (
-    <main>
+    <main id="main">
       <Section>
         <SectionMarker number={1} label="CHECKOUT CANCELADO" />
         <h1 className="mt-4 max-w-2xl font-display text-5xl uppercase tracking-tight md:text-7xl">

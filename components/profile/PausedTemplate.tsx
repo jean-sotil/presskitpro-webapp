@@ -10,7 +10,7 @@ import { SectionMarker } from '@/components/atmosphere/SectionMarker';
  */
 export function PausedTemplate({ slug }: { slug: string }) {
   return (
-    <main>
+    <main id="main">
       <Section className="max-w-3xl">
         <SectionMarker number={1} label="PRESS KIT PAUSADO" />
         <h1 className="mt-4 font-display text-5xl uppercase tracking-tight md:text-7xl">

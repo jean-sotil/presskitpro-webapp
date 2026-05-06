@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SkipToContent } from '@/components/ui/SkipToContent';
 import { fontPairClasses } from '@/lib/design/fonts';
 import { Providers } from './providers';
 import './globals.css';
@@ -29,8 +30,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={allFontClasses}>
+    // PRD §10 — PT-BR is the v1 locale. Task-29 (next-intl) will swap
+    // this for a per-route value once the EN content lands.
+    <html lang="pt-BR" className={allFontClasses}>
       <body className="font-body bg-bg text-text antialiased">
+        <SkipToContent />
         <Providers>{children}</Providers>
       </body>
     </html>
