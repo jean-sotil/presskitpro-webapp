@@ -7,10 +7,8 @@ import {
   type LexicalEditor,
 } from 'lexical';
 import { $setBlocksType } from '@lexical/selection';
-import {
-  $createHeadingNode,
-  HeadingTagType,
-} from '@lexical/rich-text';
+import { $createHeadingNode } from '@lexical/rich-text';
+import type { HeadingTagType } from '@lexical/rich-text';
 import { $createParagraphNode } from 'lexical';
 import {
   INSERT_ORDERED_LIST_COMMAND,

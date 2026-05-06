@@ -39,7 +39,6 @@ export function TaglineStep({ initial }: { initial?: string }) {
       </label>
       <input
         id="tagline"
-        autoFocus
         value={value}
         onChange={(e) => setValue(e.target.value)}
         maxLength={MAX}

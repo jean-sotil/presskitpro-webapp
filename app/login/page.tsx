@@ -1,4 +1,5 @@
 import { type Metadata } from 'next';
+import Link from 'next/link';
 import { safeNext } from '@/lib/auth/next-param';
 import { LoginForm } from './login-form';
 
@@ -38,9 +39,9 @@ export default async function LoginPage({
 
         <p className="mt-8 text-sm text-text-muted">
           Sem conta ainda?{' '}
-          <a className="text-accent underline underline-offset-4" href="/signup">
+          <Link className="text-accent underline underline-offset-4" href="/signup">
             Criar press kit
-          </a>
+          </Link>
         </p>
       </div>
     </main>

@@ -23,15 +23,19 @@ describe('SaveStatus', () => {
     expect(status.textContent).toMatch(/12/);
   });
 
-  it('renders an error with a retry button that calls onRetry', () => {
+  it('renders an alert containing a retry button that calls onRetry', () => {
     const onRetry = vi.fn();
     render(
       <SaveStatus
         state={{ kind: 'error', message: 'network', onRetry }}
       />,
     );
-    const btn = screen.getByRole('alert');
-    expect(btn).toHaveTextContent(/tentar de novo/i);
+    // The alert region announces the error; the inner button is what
+    // the user clicks. Splitting the two roles is required so screen
+    // readers don't read "button" as the alert's role.
+    const alert = screen.getByRole('alert');
+    expect(alert).toHaveTextContent(/tentar de novo/i);
+    const btn = screen.getByRole('button', { name: /tentar de novo/i });
     fireEvent.click(btn);
     expect(onRetry).toHaveBeenCalledTimes(1);
   });

@@ -2,7 +2,6 @@
 
 import { useState, useTransition } from 'react';
 
-import { Button } from '@/components/ui/Button';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import {
   bindCompressDeps,

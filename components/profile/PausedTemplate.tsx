@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Section } from '@/components/ui/Section';
 import { SectionMarker } from '@/components/atmosphere/SectionMarker';
 
@@ -23,9 +25,9 @@ export function PausedTemplate({ slug }: { slug: string }) {
         </p>
         <p className="mt-6 max-w-xl text-base text-text-muted">
           É você o dono deste perfil?{' '}
-          <a className="underline" href="/login">
+          <Link className="underline" href="/login">
             Entrar e reativar
-          </a>
+          </Link>
           .
         </p>
       </Section>

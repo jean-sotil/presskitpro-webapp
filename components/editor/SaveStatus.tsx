@@ -47,16 +47,17 @@ export function SaveStatus({ state }: SaveStatusProps) {
   if (state.kind === 'error') {
     const handleRetry = state.onRetry;
     return (
-      <button
-        type="button"
-        role="alert"
-        onClick={handleRetry}
-        className={cn(
-          'inline-flex items-center gap-2 text-xs uppercase tracking-wider text-text underline underline-offset-4',
-        )}
-      >
-        Erro — clique para tentar de novo
-      </button>
+      <span role="alert" className="inline-flex items-center gap-2">
+        <button
+          type="button"
+          onClick={handleRetry}
+          className={cn(
+            'inline-flex items-center gap-2 text-xs uppercase tracking-wider text-text underline underline-offset-4',
+          )}
+        >
+          Erro — clique para tentar de novo
+        </button>
+      </span>
     );
   }
 

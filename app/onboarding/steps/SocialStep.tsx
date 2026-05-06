@@ -83,7 +83,6 @@ export function SocialStep({ initialPlatform, initialUrl }: SocialStepProps) {
       </label>
       <input
         id="url"
-        autoFocus
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         placeholder={placeholder}

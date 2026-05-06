@@ -1,7 +1,4 @@
-import {
-  DndContext,
-  type DndContextProps,
-} from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
 import {
   SortableContext,
   verticalListSortingStrategy,

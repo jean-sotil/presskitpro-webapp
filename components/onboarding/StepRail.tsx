@@ -68,11 +68,11 @@ export function StepRail({ current, highestCompleted }: StepRailProps) {
               </li>
             );
           }
-          return (
-            <li key={step} aria-disabled="true">
-              {inner}
-            </li>
-          );
+          // Locked future steps: not a link. Screen readers naturally
+          // announce them as plain list items; `aria-disabled` is not a
+          // valid attribute on `role="listitem"` so the visual style is
+          // the only "disabled" cue.
+          return <li key={step}>{inner}</li>;
         })}
       </ol>
     </nav>

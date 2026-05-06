@@ -100,7 +100,6 @@ export function SlugStep({ initialSlug, debounceMs = 300 }: SlugStepProps) {
           id="slug"
           name="slug"
           autoComplete="off"
-          autoFocus
           inputMode="url"
           value={slug}
           onChange={(e) => setSlug(e.target.value.toLowerCase())}

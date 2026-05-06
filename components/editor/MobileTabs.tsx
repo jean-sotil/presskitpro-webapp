@@ -67,7 +67,13 @@ export function MobileTabs({
 
   return (
     <div>
-      <div role="tablist" aria-label="Editor / preview" onKeyDown={onKey} className="flex border-b border-border">
+      <div
+        role="tablist"
+        aria-label="Editor / preview"
+        onKeyDown={onKey}
+        tabIndex={-1}
+        className="flex border-b border-border"
+      >
         {TABS.map(({ key, label }) => {
           const selected = key === active;
           return (

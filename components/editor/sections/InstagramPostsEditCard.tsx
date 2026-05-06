@@ -139,7 +139,7 @@ export function InstagramPostsEditCard({
 
       {slots.length === 0 ? (
         <p className="border border-dashed border-border p-4 text-sm text-text-muted">
-          Nenhum post adicionado. Clique em "Adicionar post" para começar.
+          Nenhum post adicionado. Clique em &ldquo;Adicionar post&rdquo; para começar.
         </p>
       ) : (
         <ol className="flex flex-col gap-3">

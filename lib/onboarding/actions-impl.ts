@@ -1,4 +1,4 @@
-import { track as defaultTrack } from '../analytics/track';
+import type { track as defaultTrack } from '../analytics/track';
 import {
   isComplete,
   nextStep,

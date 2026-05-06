@@ -16,7 +16,6 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useState } from 'react';
 
 import { Button } from '@/components/ui/Button';
 import type { EditorBundle } from '@/lib/editor/bundle';

@@ -4,7 +4,7 @@ import { createRateLimiter } from './rate-limit';
 
 describe('createRateLimiter', () => {
   it('admits up to `max` requests inside the window', () => {
-    let now = 1_000_000;
+    const now = 1_000_000;
     const limiter = createRateLimiter({
       windowMs: 60_000,
       max: 3,
@@ -19,7 +19,7 @@ describe('createRateLimiter', () => {
   });
 
   it('isolates buckets per key', () => {
-    let now = 1_000_000;
+    const now = 1_000_000;
     const limiter = createRateLimiter({
       windowMs: 60_000,
       max: 2,
