@@ -6,7 +6,7 @@ export function ServicesRender({ bundle }: { bundle: EditorBundle }) {
     | undefined) ?? [];
   if (services.length === 0) return null;
   return (
-    <section className="border-b border-border px-6 py-16 md:px-12">
+    <section id="servicos" className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">Serviços</h2>
       <ul className="mt-6 grid gap-4 md:grid-cols-2">
         {services.map((s, i) => (

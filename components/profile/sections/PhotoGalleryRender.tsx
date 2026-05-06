@@ -21,7 +21,7 @@ export function PhotoGalleryRender({ bundle }: { bundle: EditorBundle }) {
   const layout = (bundle.theme?.galleryLayout as GalleryLayout | undefined) ?? 'mosaic';
 
   return (
-    <section className="border-b border-border px-6 py-16 md:px-12">
+    <section id="galeria" className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">Galeria</h2>
       <ul className={gridClassFor(layout)}>
         {items.map((item) => {

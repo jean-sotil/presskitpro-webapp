@@ -18,7 +18,7 @@ export function ContactRender({ bundle }: { bundle: EditorBundle }) {
   if (!whatsapp && !email && !formEnabled) return null;
 
   return (
-    <section className="border-b border-border px-6 py-16 md:px-12">
+    <section id="contato" className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">Contato</h2>
       {whatsapp || email ? (
         <ul className="mt-6 flex flex-wrap gap-3">

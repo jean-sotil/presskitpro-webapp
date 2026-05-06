@@ -50,6 +50,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Vary on Accept-Language so future locale negotiation (task-29)
+  // doesn't get the wrong cached entry. Per PRD §18 risk #12.
+  res.headers.append('Vary', 'Accept-Language');
   return res;
 }
 

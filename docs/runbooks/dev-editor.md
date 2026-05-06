@@ -200,6 +200,23 @@ update payload.themes set contrast_validated_at = null where profile_id = <id>;
 ```
 Click **Publicar** → 422 lands → toast shows. Re-validate on the Tema tab to clear it.
 
+## Test the public profile route (task-19)
+
+1. Publish a profile via the editor (Theme tab green → **Publicar**).
+2. Visit `http://localhost:3000/<your-slug>` in a private window.
+3. Confirm:
+   - Single `<h1>` is the artist's display name (slug → spaces).
+   - The sticky **AnchorNav** at the top has links to Sobre / Serviços / Galeria / Faixa / Press kit / Contato — only the ones with content.
+   - Clicking an anchor scrolls smoothly to the matching section (CSS `scroll-behavior: smooth` + `scroll-padding-top: 4rem` to clear the sticky nav). With `prefers-reduced-motion`, the scroll is instant.
+   - The page emits `Vary: Accept-Language` (DevTools Network → Headers).
+   - Hero portrait loads via `next/image` (`<img>` has `data-nimg`), `priority`, explicit dimensions → no CLS.
+4. Visit a slug that doesn't exist or is in draft → branded 404 page (`app/[slug]/not-found.tsx`).
+5. **Revalidation smoke:** with the public page open in tab A and the editor in tab B, change the tagline and click **Publicar** → tab A reflects the change after a refresh within 5s. (The Profiles `afterChange` hook fires `revalidatePath('/<slug>')`.)
+
+### Trial-paused state (TODO, task-31)
+
+Today, paused / trial-expired profiles 404 just like missing ones. The branded paused page lands when billing fields exist (task-31).
+
 ## Mock autosave failures for QA
 
 The PATCH route returns 400 / 404 for invalid bodies / access denials. To force an error UI without changing code, point the PATCH at a non-existent id via the browser devtools (Network → "Override response"). The `SaveStatus` component should flip to the error state with a "tentar de novo" button.

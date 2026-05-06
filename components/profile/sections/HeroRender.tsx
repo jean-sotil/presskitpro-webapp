@@ -1,7 +1,17 @@
+import Image from 'next/image';
+
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
 
 type HeroStyle = 'full-bleed-portrait' | 'split-portrait-text' | 'centered-logo';
+
+type PortraitMedia = {
+  bucket: string;
+  path: string;
+  alt?: string;
+  width?: number | null;
+  height?: number | null;
+};
 
 export function HeroRender({ bundle }: { bundle: EditorBundle }) {
   const { profile, content } = bundle;
@@ -10,10 +20,15 @@ export function HeroRender({ bundle }: { bundle: EditorBundle }) {
   const ctaLabel = (content?.ctaLabel as string | undefined) ?? null;
   const ctaUrl = (content?.ctaUrl as string | undefined) ?? null;
 
-  const portraitMedia = profile.portrait as { bucket: string; path: string; alt?: string } | null | undefined;
+  const portraitMedia = profile.portrait as PortraitMedia | null | undefined;
   const logoMedia = profile.logo as { bucket: string; path: string; alt?: string } | null | undefined;
   const portraitUrl = mediaUrl(portraitMedia ?? null);
   const logoUrl = mediaUrl(logoMedia ?? null);
+  // Width/height come from `Media`'s exif fields when available; fall
+  // back to a 3:4 portrait aspect when missing so `next/image` still
+  // reserves space and avoids CLS.
+  const portraitWidth = (portraitMedia?.width ?? 1200) || 1200;
+  const portraitHeight = (portraitMedia?.height ?? 1600) || 1600;
 
   const displayName = profile.slug.replace(/-/g, ' ');
 
@@ -43,9 +58,13 @@ export function HeroRender({ bundle }: { bundle: EditorBundle }) {
     return (
       <header className="grid gap-8 border-b border-border px-6 py-16 md:grid-cols-2 md:px-12 md:py-24">
         {portraitUrl ? (
-          <img
+          <Image
             src={portraitUrl}
             alt={portraitMedia?.alt ?? ''}
+            width={portraitWidth}
+            height={portraitHeight}
+            priority
+            sizes="(min-width: 768px) 50vw, 100vw"
             className="aspect-[3/4] w-full object-cover"
           />
         ) : (
@@ -74,9 +93,13 @@ export function HeroRender({ bundle }: { bundle: EditorBundle }) {
   return (
     <header className="relative border-b border-border">
       {portraitUrl ? (
-        <img
+        <Image
           src={portraitUrl}
           alt={portraitMedia?.alt ?? ''}
+          width={portraitWidth}
+          height={portraitHeight}
+          priority
+          sizes="100vw"
           className="h-[70vh] w-full object-cover"
         />
       ) : null}

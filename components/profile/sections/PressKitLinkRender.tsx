@@ -23,7 +23,7 @@ export function PressKitLinkRender({ bundle }: { bundle: EditorBundle }) {
   const badge = PROVIDER_BADGE[provider];
 
   return (
-    <section className="border-b border-border px-6 py-16 md:px-12">
+    <section id="press-kit" className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">Press kit</h2>
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <TrackedPressKitAnchor

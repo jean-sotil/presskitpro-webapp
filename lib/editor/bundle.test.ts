@@ -2,7 +2,9 @@ import { describe, expect, it, vi } from 'vitest';
 
 import {
   type BundleDeps,
+  type PublicBundleDeps,
   loadBundle,
+  loadPublicBundle,
   publishProfile,
   unpublishProfile,
 } from './bundle';
@@ -126,6 +128,52 @@ describe('publishProfile', () => {
       profile: { ...PROFILE, status: 'published' },
       publicPath: '/mariana-luz',
     });
+  });
+});
+
+describe('loadPublicBundle', () => {
+  function makePublicDeps(
+    overrides: Partial<PublicBundleDeps> = {},
+  ): PublicBundleDeps {
+    return {
+      findPublishedProfileBySlug: vi
+        .fn()
+        .mockResolvedValue({ ...PROFILE, status: 'published' }),
+      findProfileContent: vi.fn().mockResolvedValue({
+        id: 11,
+        profile: 99,
+        tagline: 'House melódico',
+      }),
+      findTheme: vi.fn().mockResolvedValue(null),
+      findSocialLinks: vi.fn().mockResolvedValue([]),
+      findFeaturedTrack: vi.fn().mockResolvedValue(null),
+      findInstagramPosts: vi.fn().mockResolvedValue([]),
+      ...overrides,
+    };
+  }
+
+  it('returns null when the slug is missing', async () => {
+    const deps = makePublicDeps({
+      findPublishedProfileBySlug: vi.fn().mockResolvedValue(null),
+    });
+    expect(await loadPublicBundle(deps, { slug: 'nope' })).toBeNull();
+    // Section fetchers must NOT have been called when the gate fails.
+    expect(deps.findProfileContent).not.toHaveBeenCalled();
+    expect(deps.findTheme).not.toHaveBeenCalled();
+  });
+
+  it('composes the bundle in parallel when the profile is published', async () => {
+    const deps = makePublicDeps();
+    const result = await loadPublicBundle(deps, { slug: 'mariana-luz' });
+    expect(result).not.toBeNull();
+    expect(deps.findPublishedProfileBySlug).toHaveBeenCalledWith('mariana-luz');
+    // Section fetchers all keyed on the resolved profile id (99).
+    expect(deps.findProfileContent).toHaveBeenCalledWith(99);
+    expect(deps.findTheme).toHaveBeenCalledWith(99);
+    expect(deps.findSocialLinks).toHaveBeenCalledWith(99);
+    expect(deps.findFeaturedTrack).toHaveBeenCalledWith(99);
+    expect(deps.findInstagramPosts).toHaveBeenCalledWith(99);
+    expect(result?.instagramConnection).toBeNull();
   });
 });
 

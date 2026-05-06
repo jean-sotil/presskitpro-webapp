@@ -53,6 +53,13 @@
     text-rendering: optimizeLegibility;
     background-color: oklch(var(--bg));
     color: oklch(var(--text));
+    /* Enables anchor-link smooth scroll on the public profile (task-19).
+       The reduced-motion block below downgrades to `auto` for users who
+       request it. */
+    scroll-behavior: smooth;
+    /* Offset anchored sections under the sticky AnchorNav so headings
+       aren't hidden by it. Roughly the nav's height + breathing room. */
+    scroll-padding-top: 4rem;
   }
 
   body {

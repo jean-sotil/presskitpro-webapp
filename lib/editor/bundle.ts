@@ -93,6 +93,61 @@ export async function loadBundle(
   };
 }
 
+// =====================================================================
+// Public bundle (task-19)
+// =====================================================================
+
+/**
+ * Public-facing bundle deps — no user threading, no Instagram-token
+ * connection, no `updateProfileStatus`. The public route is read-only.
+ *
+ * `findPublishedProfileBySlug` MUST return null for non-published rows
+ * (the gate for the route's `notFound()`); enforcing it inside the dep
+ * keeps the loader simple.
+ */
+export type PublicBundleDeps = {
+  findPublishedProfileBySlug(slug: string): Promise<ProfileLite | null>;
+  findProfileContent(
+    profileId: number | string,
+  ): Promise<EditorBundle['content']>;
+  findTheme(profileId: number | string): Promise<EditorBundle['theme']>;
+  findSocialLinks(
+    profileId: number | string,
+  ): Promise<EditorBundle['socialLinks']>;
+  findFeaturedTrack(
+    profileId: number | string,
+  ): Promise<EditorBundle['featuredTrack']>;
+  findInstagramPosts(
+    profileId: number | string,
+  ): Promise<EditorBundle['instagramPosts']>;
+};
+
+export async function loadPublicBundle(
+  deps: PublicBundleDeps,
+  args: { slug: string },
+): Promise<EditorBundle | null> {
+  const profile = await deps.findPublishedProfileBySlug(args.slug);
+  if (!profile) return null;
+  const [content, theme, socialLinks, featuredTrack, instagramPosts] =
+    await Promise.all([
+      deps.findProfileContent(profile.id),
+      deps.findTheme(profile.id),
+      deps.findSocialLinks(profile.id),
+      deps.findFeaturedTrack(profile.id),
+      deps.findInstagramPosts(profile.id),
+    ]);
+  return {
+    profile,
+    content,
+    theme,
+    socialLinks,
+    featuredTrack,
+    // The public surface doesn't use the Graph-API connection.
+    instagramConnection: null,
+    instagramPosts,
+  };
+}
+
 /** Per PRD §14 — fail publish when the contrast gate hasn't been
  *  re-validated within this window. The editor's Theme tab bumps
  *  `Themes.contrastValidatedAt` on every successful contrast pass.

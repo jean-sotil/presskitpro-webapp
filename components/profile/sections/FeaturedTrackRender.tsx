@@ -11,7 +11,7 @@ export function FeaturedTrackRender({ bundle }: { bundle: EditorBundle }) {
   if (!url) return null;
 
   return (
-    <section className="border-b border-border px-6 py-16 md:px-12">
+    <section id="faixa" className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">
         Faixa em destaque
       </h2>
