@@ -31,6 +31,7 @@ function makeBundle(
     socialLinks: [],
     featuredTrack: null,
     instagramConnection: null,
+    instagramPosts: [],
   };
 }
 

@@ -77,6 +77,7 @@ export interface Config {
     'featured-tracks': FeaturedTrack;
     themes: Theme;
     'instagram-connections': InstagramConnection;
+    'instagram-posts': InstagramPost;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -93,6 +94,7 @@ export interface Config {
     'featured-tracks': FeaturedTracksSelect<false> | FeaturedTracksSelect<true>;
     themes: ThemesSelect<false> | ThemesSelect<true>;
     'instagram-connections': InstagramConnectionsSelect<false> | InstagramConnectionsSelect<true>;
+    'instagram-posts': InstagramPostsSelect<false> | InstagramPostsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -502,6 +504,29 @@ export interface InstagramConnection {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "instagram-posts".
+ */
+export interface InstagramPost {
+  id: number;
+  profile: number | Profile;
+  url: string;
+  /**
+   * Sanitized embed HTML — either Graph-oEmbed iframe or our blockquote fallback. Refreshed by the editor.
+   */
+  oembedHtml?: string | null;
+  /**
+   * Lower = earlier on the public profile.
+   */
+  displayOrder?: number | null;
+  /**
+   * When the embed cache was last refreshed.
+   */
+  fetchedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -559,6 +584,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'instagram-connections';
         value: number | InstagramConnection;
+      } | null)
+    | ({
+        relationTo: 'instagram-posts';
+        value: number | InstagramPost;
       } | null);
   globalSlug?: string | null;
   user:
@@ -785,6 +814,19 @@ export interface InstagramConnectionsSelect<T extends boolean = true> {
   accessToken?: T;
   tokenExpiresAt?: T;
   lastSyncedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "instagram-posts_select".
+ */
+export interface InstagramPostsSelect<T extends boolean = true> {
+  profile?: T;
+  url?: T;
+  oembedHtml?: T;
+  displayOrder?: T;
+  fetchedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

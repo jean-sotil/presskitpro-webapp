@@ -13,6 +13,7 @@ function makeBundle(links: EditorBundle['socialLinks']): EditorBundle {
     socialLinks: links,
     featuredTrack: null,
     instagramConnection: null,
+    instagramPosts: [],
   };
 }
 

@@ -10,6 +10,7 @@ import { AboutEditCard } from './sections/AboutEditCard';
 import { ContactEditCard } from './sections/ContactEditCard';
 import { FeaturedTrackEditCard } from './sections/FeaturedTrackEditCard';
 import { HeroEditCard } from './sections/HeroEditCard';
+import { InstagramPostsEditCard } from './sections/InstagramPostsEditCard';
 import { PhotoGalleryEditCard } from './sections/PhotoGalleryEditCard';
 import { PlaceholderEditCard } from './sections/PlaceholderEditCard';
 import { PressKitEditCard } from './sections/PressKitEditCard';
@@ -65,6 +66,8 @@ export function EditorPane({
       return <PressKitEditCard bundle={bundle} onMutate={onMutate} />;
     case 'featuredTrack':
       return <FeaturedTrackEditCard bundle={bundle} />;
+    case 'instagramFeed':
+      return <InstagramPostsEditCard bundle={bundle} />;
     default:
       return <PlaceholderEditCard meta={meta} />;
   }

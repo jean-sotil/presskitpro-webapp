@@ -44,6 +44,7 @@ function makeBundle(
           } as never)
         : null,
     instagramConnection: null,
+    instagramPosts: [],
   };
 }
 

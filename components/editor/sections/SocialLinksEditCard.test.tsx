@@ -27,6 +27,7 @@ function makeBundle(
     })) as never,
     featuredTrack: null,
     instagramConnection: null,
+    instagramPosts: [],
   };
 }
 

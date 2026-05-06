@@ -156,6 +156,33 @@ To temporarily disable the captcha for debugging, blank `NEXT_PUBLIC_TURNSTILE_S
 - **`Apenas links do soundcloud.com são aceitos`** — host check in `fetchSoundcloudOembed` rejected the URL before any network call.
 - **`Resposta do SoundCloud não pôde ser processada com segurança`** — the upstream `html` field is missing or its iframe `src` doesn't match `https://w.soundcloud.com`. We refuse to render it.
 
+## Test the Instagram editor (task-17)
+
+1. Open the editor; click **Instagram** in the rail.
+2. Click **+ Adicionar post**, paste a public IG post URL (e.g. `https://www.instagram.com/p/<shortcode>/` or `/reel/<id>/`), and click **Salvar**.
+3. The route hits `PUT /api/profiles/<id>/instagram-posts`. Server-side, each URL goes through `parseInstagramPostUrl` (host + path validation), then `fetchInstagramOembed`:
+   - **With `INSTAGRAM_OEMBED_ACCESS_TOKEN` set**: hits Meta's Graph oEmbed; returns a sanitized iframe.
+   - **Without the token**: builds the canonical `<blockquote class="instagram-media">` server-side. The browser loads `https://www.instagram.com/embed.js` once and hydrates each blockquote into the real iframe.
+4. The right-side preview pane mounts each post via `<LazyEmbed>` (intersection-deferred, same pattern as task-16's featured track).
+5. After 7 days the editor row shows a "Recomendado atualizar" hint. Click **Atualizar** on that row to force a re-fetch (sends `force: true`).
+6. Adding a 7th post is blocked at the UI cap; the route also rejects with `400 too-many` if a client somehow bypasses it.
+7. Removing all posts hides the public Instagram section entirely (no empty grid, per spec AC).
+
+### Wiring the Graph path (optional)
+
+The blockquote fallback is enough for v1. To switch to the higher-fidelity Graph oEmbed (returns a true `<iframe>` server-side, no client-side hydration needed):
+
+1. Register a Facebook app at <https://developers.facebook.com/apps>.
+2. Add the **oEmbed Read** permission and generate a long-lived app access token.
+3. Set `INSTAGRAM_OEMBED_ACCESS_TOKEN=...` in `.env`. **Restart `pnpm dev`.**
+4. Re-save any post; the response now uses the Graph path. If the Graph endpoint ever 404s, malformed-responses, or times out, the route silently falls back to the blockquote — saves never fail because of a Meta hiccup.
+
+### Common errors
+
+- **`Apenas links do instagram.com são aceitos.`** — host check rejected the URL.
+- **`Use o link de um post (`/p/`, `/reel/`, `/tv/`).`** — pasted a profile / explore page.
+- **`Limite de 6 posts atingido.`** — server-side cap hit.
+
 ## Mock autosave failures for QA
 
 The PATCH route returns 400 / 404 for invalid bodies / access denials. To force an error UI without changing code, point the PATCH at a non-existent id via the browser devtools (Network → "Override response"). The `SaveStatus` component should flip to the error state with a "tentar de novo" button.

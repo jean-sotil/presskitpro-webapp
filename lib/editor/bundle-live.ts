@@ -89,6 +89,19 @@ export function liveBundleDeps(): BundleDeps {
       return (result.docs[0] as never) ?? null;
     },
 
+    async findInstagramPosts(profileId, user) {
+      const p = await getPayloadInstance();
+      const result = await p.find({
+        collection: 'instagram-posts',
+        where: { profile: { equals: profileId } },
+        sort: 'displayOrder',
+        limit: 6,
+        depth: 0,
+        req: { user } as never,
+      });
+      return result.docs as never;
+    },
+
     async updateProfileStatus({ profileId, status, user }) {
       const p = await getPayloadInstance();
       const doc = await p.update({

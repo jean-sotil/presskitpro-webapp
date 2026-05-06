@@ -22,6 +22,7 @@ export type EditorBundle = {
   socialLinks: Array<{ id: number | string; profile: number | string; [key: string]: unknown }>;
   featuredTrack: { id: number | string; profile: number | string; [key: string]: unknown } | null;
   instagramConnection: { id: number | string; profile: number | string; [key: string]: unknown } | null;
+  instagramPosts: Array<{ id: number | string; profile: number | string; [key: string]: unknown }>;
 };
 
 export type BundleDeps = {
@@ -49,6 +50,10 @@ export type BundleDeps = {
     profileId: number | string,
     user: PayloadUserDoc,
   ): Promise<EditorBundle['instagramConnection']>;
+  findInstagramPosts(
+    profileId: number | string,
+    user: PayloadUserDoc,
+  ): Promise<EditorBundle['instagramPosts']>;
   updateProfileStatus(args: {
     profileId: number | string;
     status: 'published' | 'unpublished';
@@ -62,15 +67,30 @@ export async function loadBundle(
 ): Promise<EditorBundle | null> {
   const profile = await deps.findProfileById(args.profileId, args.user);
   if (!profile) return null;
-  const [content, theme, socialLinks, featuredTrack, instagramConnection] =
-    await Promise.all([
-      deps.findProfileContent(profile.id, args.user),
-      deps.findTheme(profile.id, args.user),
-      deps.findSocialLinks(profile.id, args.user),
-      deps.findFeaturedTrack(profile.id, args.user),
-      deps.findInstagramConnection(profile.id, args.user),
-    ]);
-  return { profile, content, theme, socialLinks, featuredTrack, instagramConnection };
+  const [
+    content,
+    theme,
+    socialLinks,
+    featuredTrack,
+    instagramConnection,
+    instagramPosts,
+  ] = await Promise.all([
+    deps.findProfileContent(profile.id, args.user),
+    deps.findTheme(profile.id, args.user),
+    deps.findSocialLinks(profile.id, args.user),
+    deps.findFeaturedTrack(profile.id, args.user),
+    deps.findInstagramConnection(profile.id, args.user),
+    deps.findInstagramPosts(profile.id, args.user),
+  ]);
+  return {
+    profile,
+    content,
+    theme,
+    socialLinks,
+    featuredTrack,
+    instagramConnection,
+    instagramPosts,
+  };
 }
 
 export async function publishProfile(

@@ -5,6 +5,7 @@ import * as migration_20260505_104511_task_10_hero_cta from './20260505_104511_t
 import * as migration_20260505_112853_task_12_gallery from './20260505_112853_task_12_gallery';
 import * as migration_20260505_192313_task_14_contact from './20260505_192313_task_14_contact';
 import * as migration_20260505_223425_task_15_press_kit_providers from './20260505_223425_task_15_press_kit_providers';
+import * as migration_20260505_234318_task_17_instagram_posts from './20260505_234318_task_17_instagram_posts';
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20260505_223425_task_15_press_kit_providers.up,
     down: migration_20260505_223425_task_15_press_kit_providers.down,
-    name: '20260505_223425_task_15_press_kit_providers'
+    name: '20260505_223425_task_15_press_kit_providers',
+  },
+  {
+    up: migration_20260505_234318_task_17_instagram_posts.up,
+    down: migration_20260505_234318_task_17_instagram_posts.down,
+    name: '20260505_234318_task_17_instagram_posts'
   },
 ];

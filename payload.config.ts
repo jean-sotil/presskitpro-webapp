@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import { Admins } from './payload/collections/Admins';
 import { FeaturedTracks } from './payload/collections/FeaturedTracks';
 import { InstagramConnections } from './payload/collections/InstagramConnections';
+import { InstagramPosts } from './payload/collections/InstagramPosts';
 import { Media } from './payload/collections/Media';
 import { ProfileContent } from './payload/collections/ProfileContent';
 import { Profiles } from './payload/collections/Profiles';
@@ -35,6 +36,7 @@ export default buildConfig({
     FeaturedTracks,
     Themes,
     InstagramConnections,
+    InstagramPosts,
   ],
   // PRD §10 — Phase 1 ships PT-BR. EN is configured now so task-29 doesn't
   // have to retrofit every collection. `fallback: true` returns defaultLocale

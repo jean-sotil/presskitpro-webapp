@@ -40,6 +40,7 @@ function makeBundle(items: Array<Partial<{ id: number; bucket: string; path: str
     socialLinks: [],
     featuredTrack: null,
     instagramConnection: null,
+    instagramPosts: [],
   };
 }
 

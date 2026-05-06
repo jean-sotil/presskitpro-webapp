@@ -33,6 +33,7 @@ function makeDeps(overrides: Partial<BundleDeps> = {}): BundleDeps {
     findSocialLinks: vi.fn().mockResolvedValue([]),
     findFeaturedTrack: vi.fn().mockResolvedValue(null),
     findInstagramConnection: vi.fn().mockResolvedValue(null),
+    findInstagramPosts: vi.fn().mockResolvedValue([]),
     updateProfileStatus: vi.fn().mockResolvedValue({ ...PROFILE, status: 'published' }),
     ...overrides,
   };

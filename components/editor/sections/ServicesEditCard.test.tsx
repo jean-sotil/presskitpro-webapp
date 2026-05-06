@@ -15,6 +15,7 @@ function makeBundle(services: Array<{ title: string; description?: string }> = [
     socialLinks: [],
     featuredTrack: null,
     instagramConnection: null,
+    instagramPosts: [],
   };
 }
 

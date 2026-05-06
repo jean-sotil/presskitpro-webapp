@@ -19,6 +19,7 @@ function makeBundle(overrides: Partial<EditorBundle> = {}): EditorBundle {
     socialLinks: [],
     featuredTrack: null,
     instagramConnection: null,
+    instagramPosts: [],
     ...overrides,
   };
 }

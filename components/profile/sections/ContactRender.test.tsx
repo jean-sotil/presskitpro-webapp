@@ -20,6 +20,7 @@ function makeBundle(overrides: Record<string, unknown> = {}): EditorBundle {
     socialLinks: [],
     featuredTrack: null,
     instagramConnection: null,
+    instagramPosts: [],
   };
 }
 
