@@ -217,6 +217,21 @@ Click **Publicar** → 422 lands → toast shows. Re-validate on the Tema tab to
 
 Today, paused / trial-expired profiles 404 just like missing ones. The branded paused page lands when billing fields exist (task-31).
 
+## Test the pricing page (task-22)
+
+1. Visit `http://localhost:3000/pricing`. Three tier cards (Trial / Pro / Agency) render with their includes lists.
+2. The **Pro** tier is featured (accent border + "Mais escolhido" eyebrow).
+3. Pro CTA href:
+   - **Logged out**: `/login?next=%2Fcheckout%2Fpro-monthly`.
+   - **Logged in**: `/checkout/pro-monthly` (404 today; task-23 owns the route).
+4. Trial CTA always points to `/signup`.
+5. Annual toggle: click **Anual** — the displayed Pro price swaps from `$12` to `$10` and a hint appears: "Anual em breve no Stripe — por enquanto, o checkout segue mensal." The CTA href stays on `/checkout/pro-monthly` until task-31 wires the annual Stripe Price ID.
+6. Billing FAQ uses native `<details>` (cancel anytime / what-if-no-conversion / refunds / custom domains).
+
+### Stripe Price IDs
+
+Display values live in [lib/pricing/plans.ts](lib/pricing/plans.ts) next to the env-var names that hold the live Stripe IDs (`STRIPE_PRICE_ID_PRO_MONTHLY`, `STRIPE_PRICE_ID_PRO_ANNUAL`, `STRIPE_PRICE_ID_AGENCY`). The pricing page itself renders fine without them set; task-23's checkout integration is what consumes them.
+
 ## Test the marketing landing (task-21)
 
 1. Visit `http://localhost:3000/`. Seven sections render top-to-bottom: hero / "what is a press kit" / "how it works" / live examples carousel / pricing teaser / FAQ / footer.
