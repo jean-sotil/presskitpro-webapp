@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+import { TrialBanner } from '@/components/dashboard/TrialBanner';
 import { Section } from '@/components/ui/Section';
 import { SectionMarker } from '@/components/atmosphere/SectionMarker';
 import { payload } from '@/lib/payload';
@@ -50,6 +51,27 @@ export default async function DashboardPage() {
         <h1 className="mt-4 font-display text-5xl uppercase tracking-tight">
           Olá, {user.email}
         </h1>
+
+        {userDoc ? (
+          <div className="mt-8">
+            <TrialBanner
+              user={{
+                plan: userDoc.plan,
+                trialEndsAt:
+                  typeof userDoc.trialEndsAt === 'string'
+                    ? userDoc.trialEndsAt
+                    : (userDoc.trialEndsAt as Date | null) ?? null,
+                stripeSubscriptionStatus:
+                  (userDoc.stripeSubscriptionStatus as
+                    | 'active'
+                    | 'past_due'
+                    | 'canceled'
+                    | null
+                    | undefined) ?? null,
+              }}
+            />
+          </div>
+        ) : null}
 
         {profilesResult.docs.length === 0 ? (
           <p className="mt-6 max-w-prose text-text-muted">

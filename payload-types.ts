@@ -78,6 +78,7 @@ export interface Config {
     themes: Theme;
     'instagram-connections': InstagramConnection;
     'instagram-posts': InstagramPost;
+    'stripe-webhook-events': StripeWebhookEvent;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -95,6 +96,7 @@ export interface Config {
     themes: ThemesSelect<false> | ThemesSelect<true>;
     'instagram-connections': InstagramConnectionsSelect<false> | InstagramConnectionsSelect<true>;
     'instagram-posts': InstagramPostsSelect<false> | InstagramPostsSelect<true>;
+    'stripe-webhook-events': StripeWebhookEventsSelect<false> | StripeWebhookEventsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -200,6 +202,18 @@ export interface User {
    */
   trialEndsAt?: string | null;
   /**
+   * Set on first checkout attempt (lazy customer creation). Webhook handler reads this to match incoming events.
+   */
+  stripeCustomerId?: string | null;
+  /**
+   * Set by `checkout.session.completed`; cleared by `customer.subscription.deleted`.
+   */
+  stripeSubscriptionId?: string | null;
+  /**
+   * Mirrored from Stripe webhooks. Null when no subscription has ever been created.
+   */
+  stripeSubscriptionStatus?: ('active' | 'past_due' | 'canceled') | null;
+  /**
    * Wizard progress. Owned by the wizard server actions; do not edit directly from admin.
    */
   onboardingProgress?:
@@ -238,7 +252,7 @@ export interface Profile {
   id: number;
   owner: number | User;
   slug: string;
-  status: 'draft' | 'published' | 'unpublished';
+  status: 'draft' | 'published' | 'unpublished' | 'paused';
   /**
    * Hero portrait. Renders on the public profile.
    */
@@ -530,6 +544,26 @@ export interface InstagramPost {
   createdAt: string;
 }
 /**
+ * Stripe webhook idempotency log. Read-only — written by /api/webhooks/stripe.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stripe-webhook-events".
+ */
+export interface StripeWebhookEvent {
+  id: number;
+  /**
+   * Stripe's `event.id`. Unique constraint enforces idempotency.
+   */
+  eventId: string;
+  /**
+   * Stripe's `event.type` (e.g. checkout.session.completed).
+   */
+  eventType: string;
+  processedAt: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -592,6 +626,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'instagram-posts';
         value: number | InstagramPost;
+      } | null)
+    | ({
+        relationTo: 'stripe-webhook-events';
+        value: number | StripeWebhookEvent;
       } | null);
   globalSlug?: string | null;
   user:
@@ -678,6 +716,9 @@ export interface UsersSelect<T extends boolean = true> {
   role?: T;
   plan?: T;
   trialEndsAt?: T;
+  stripeCustomerId?: T;
+  stripeSubscriptionId?: T;
+  stripeSubscriptionStatus?: T;
   onboardingProgress?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -832,6 +873,17 @@ export interface InstagramPostsSelect<T extends boolean = true> {
   oembedHtml?: T;
   displayOrder?: T;
   fetchedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stripe-webhook-events_select".
+ */
+export interface StripeWebhookEventsSelect<T extends boolean = true> {
+  eventId?: T;
+  eventType?: T;
+  processedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

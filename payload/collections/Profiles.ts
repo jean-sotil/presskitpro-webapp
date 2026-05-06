@@ -8,6 +8,7 @@ import { derivePressKitProviderHook } from '../../lib/payload/hooks/derive-press
 import { handleProfileRevalidate } from '../../lib/payload/hooks/profile-revalidate';
 import { handleSlugChange } from '../../lib/payload/hooks/profile-slug-changed';
 import { validateProfileSlug } from '../../lib/payload/hooks/profile-slug-validate';
+import { handleStartTrialTimer } from '../../lib/payload/hooks/start-trial-timer';
 
 // `lib/supabase/admin.ts` imports `server-only`, which Next provides at
 // build-time but the Payload CLI (tsx) cannot resolve. Loading it lazily
@@ -26,6 +27,7 @@ const profileAfterChange: CollectionAfterChangeHook = async ({
   doc,
   previousDoc,
   operation,
+  req,
 }) => {
   if (operation === 'update' && previousDoc?.slug && previousDoc.slug !== doc?.slug) {
     await handleSlugChange(
@@ -35,6 +37,39 @@ const profileAfterChange: CollectionAfterChangeHook = async ({
         previousDoc: { slug: previousDoc.slug },
       },
       { supabase: await loadSupabaseAdmin() },
+    );
+  }
+  if (operation === 'create' && doc?.owner !== undefined && doc?.owner !== null) {
+    await handleStartTrialTimer(
+      { operation, doc: { owner: doc.owner } },
+      {
+        now: () => new Date(),
+        findUserById: async (id) => {
+          const user = await req.payload.findByID({
+            collection: 'users',
+            id,
+            depth: 0,
+            overrideAccess: true,
+          });
+          if (!user) return null;
+          const raw = user.trialEndsAt as string | Date | null | undefined;
+          const trialEndsAt =
+            typeof raw === 'string'
+              ? raw
+              : raw && typeof (raw as Date).toISOString === 'function'
+                ? (raw as Date).toISOString()
+                : null;
+          return { id: user.id, trialEndsAt };
+        },
+        updateUser: async (id, patch) => {
+          await req.payload.update({
+            collection: 'users',
+            id,
+            data: patch,
+            overrideAccess: true,
+          });
+        },
+      },
     );
   }
   handleProfileRevalidate({
@@ -88,6 +123,7 @@ export const Profiles: CollectionConfig = {
         { label: 'Draft', value: 'draft' },
         { label: 'Published', value: 'published' },
         { label: 'Unpublished', value: 'unpublished' },
+        { label: 'Paused (trial expired)', value: 'paused' },
       ],
     },
 

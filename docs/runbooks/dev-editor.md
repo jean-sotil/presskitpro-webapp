@@ -269,3 +269,52 @@ update payload.profiles set status = 'draft' where id = <id>;
 ```
 
 Re-publish from the editor to confirm the ISR revalidation hook fires and the public route would update (the public route ships in task-19 — for now `/{slug}` returns 404).
+
+
+## Test the billing flow (task-23)
+
+The trial timer, checkout entry, webhook, and cron live behind env vars
+that default to "[dev] Stripe não configurado" so the editor still runs
+without a Stripe account. To exercise the full loop:
+
+### Variables
+
+```bash
+STRIPE_SECRET_KEY=sk_test_…          # dashboard → Developers → API keys
+STRIPE_PRICE_ID_PRO_MONTHLY=price_…  # dashboard → Products → Pro → Pricing
+STRIPE_WEBHOOK_SECRET=whsec_…        # printed by `stripe listen` (below)
+CRON_SECRET=$(openssl rand -base64 32)
+```
+
+### Webhook smoke (Stripe CLI)
+
+1. Install the CLI: `brew install stripe/stripe-cli/stripe && stripe login`.
+2. In one terminal, forward webhooks: `stripe listen --forward-to localhost:3000/api/webhooks/stripe`.
+   Copy the `whsec_…` value into `.env` and restart `next dev`.
+3. In another terminal, fire a synthetic event:
+   `stripe trigger checkout.session.completed`.
+4. The Next dev console should log `[stripe-webhook]` lines; the
+   `stripe-webhook-events` Payload collection should grow a row.
+5. Re-fire the same event id — the second arrival should short-circuit
+   with `kind: 'duplicate'`.
+
+### Trial pause cron
+
+```bash
+curl -X POST http://localhost:3000/api/cron/billing \
+  -H "Authorization: Bearer $CRON_SECRET"
+```
+
+Without the header you get a 401. With it, the response is
+`{ ok: true, paused, reminded, errors }`. To force a pause locally,
+update a Users row in psql:
+
+```sql
+update payload.users
+   set "trialEndsAt" = now() - interval '1 day'
+ where email = 'you@example.com';
+```
+
+Then re-run the curl. The owned Profiles row(s) flip to
+`status = 'paused'`; visiting `/<slug>` now serves the branded
+"Press kit pausado" page at HTTP 200 (not 404).

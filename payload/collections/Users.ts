@@ -84,6 +84,38 @@ export const Users: CollectionConfig = {
       },
     },
 
+    // ----- Stripe billing (task-23) -----
+    {
+      name: 'stripeCustomerId',
+      type: 'text',
+      admin: {
+        readOnly: true,
+        description:
+          'Set on first checkout attempt (lazy customer creation). Webhook handler reads this to match incoming events.',
+      },
+    },
+    {
+      name: 'stripeSubscriptionId',
+      type: 'text',
+      admin: {
+        readOnly: true,
+        description: 'Set by `checkout.session.completed`; cleared by `customer.subscription.deleted`.',
+      },
+    },
+    {
+      name: 'stripeSubscriptionStatus',
+      type: 'select',
+      options: [
+        { label: 'Active', value: 'active' },
+        { label: 'Past due', value: 'past_due' },
+        { label: 'Canceled', value: 'canceled' },
+      ],
+      admin: {
+        readOnly: true,
+        description: 'Mirrored from Stripe webhooks. Null when no subscription has ever been created.',
+      },
+    },
+
     // ----- Onboarding wizard state (task-06) -----
     // Cleared (set to null/empty) on wizard completion. Shape:
     //   { step: 1..5, slug?, taglinePtBR?, services?: string[], customServices?: string[],

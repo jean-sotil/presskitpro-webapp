@@ -7,6 +7,7 @@ import * as migration_20260505_192313_task_14_contact from './20260505_192313_ta
 import * as migration_20260505_223425_task_15_press_kit_providers from './20260505_223425_task_15_press_kit_providers';
 import * as migration_20260505_234318_task_17_instagram_posts from './20260505_234318_task_17_instagram_posts';
 import * as migration_20260506_012220_task_18_theme_accent_preset from './20260506_012220_task_18_theme_accent_preset';
+import * as migration_20260506_095315_task_23_stripe_billing from './20260506_095315_task_23_stripe_billing';
 
 export const migrations = [
   {
@@ -52,6 +53,11 @@ export const migrations = [
   {
     up: migration_20260506_012220_task_18_theme_accent_preset.up,
     down: migration_20260506_012220_task_18_theme_accent_preset.down,
-    name: '20260506_012220_task_18_theme_accent_preset'
+    name: '20260506_012220_task_18_theme_accent_preset',
+  },
+  {
+    up: migration_20260506_095315_task_23_stripe_billing.up,
+    down: migration_20260506_095315_task_23_stripe_billing.down,
+    name: '20260506_095315_task_23_stripe_billing'
   },
 ];

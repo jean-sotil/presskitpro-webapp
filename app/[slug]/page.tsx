@@ -1,14 +1,33 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { PausedTemplate } from '@/components/profile/PausedTemplate';
 import { ProfileRenderer } from '@/components/profile/ProfileRenderer';
 import { livePublicBundleDeps } from '@/lib/editor/bundle-public-live';
 import { loadPublicBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
+import { payload } from '@/lib/payload';
 import { buildProfileJsonLd } from '@/lib/seo/build-profile-jsonld';
 import { buildProfileMetadata } from '@/lib/seo/build-profile-metadata';
 
 import { AnchorNav } from './AnchorNav';
+
+async function findPausedProfileBySlug(slug: string): Promise<boolean> {
+  const p = await payload();
+  const result = await p.find({
+    collection: 'profiles',
+    where: {
+      and: [
+        { slug: { equals: slug } },
+        { status: { equals: 'paused' } },
+      ],
+    },
+    limit: 1,
+    depth: 0,
+    overrideAccess: true,
+  });
+  return result.totalDocs > 0;
+}
 
 const SITE_ORIGIN =
   process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
@@ -54,9 +73,15 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
 export default async function PublicProfilePage({ params }: PageParams) {
   const { slug } = await params;
   const bundle = await loadPublicBundle(livePublicBundleDeps(), { slug });
-  // `null` covers both "no such slug" and "slug exists but isn't published"
-  // (and, by extension, paused — task-31 will branch out a paused page).
-  if (!bundle) notFound();
+  if (!bundle) {
+    // Branch: paused profiles render a branded "Press kit pausado"
+    // page at HTTP 200 (PRD §16) — not a 404 — so inbound links keep
+    // resolving until the Day-90 cron releases the slug.
+    if (await findPausedProfileBySlug(slug)) {
+      return <PausedTemplate slug={slug} />;
+    }
+    notFound();
+  }
 
   const jsonLd = buildProfileJsonLd(bundle, SITE_ORIGIN, {
     imageUrl: resolveImageUrl(bundle),
