@@ -66,15 +66,55 @@ describe('loadBundle', () => {
 });
 
 describe('publishProfile', () => {
-  it('returns null when the user does not own the profile', async () => {
+  const FRESH_THEME = {
+    id: 12,
+    profile: 99,
+    contrastValidatedAt: new Date().toISOString(),
+  };
+
+  it('refuses with not-found when the user does not own the profile', async () => {
     const deps = makeDeps({ findProfileById: vi.fn().mockResolvedValue(null) });
     const r = await publishProfile(deps, { profileId: 99, user: USER });
-    expect(r).toBeNull();
+    expect(r).toEqual({ ok: false, refusal: { kind: 'not-found' } });
     expect(deps.updateProfileStatus).not.toHaveBeenCalled();
   });
 
-  it('flips status to published and returns the updated profile + public URL', async () => {
-    const deps = makeDeps();
+  it('refuses with contrast-stale when the theme has never been validated', async () => {
+    const deps = makeDeps({
+      findTheme: vi.fn().mockResolvedValue({
+        id: 12,
+        profile: 99,
+        contrastValidatedAt: null,
+      }),
+    });
+    const r = await publishProfile(deps, { profileId: 99, user: USER });
+    expect(r).toEqual({
+      ok: false,
+      refusal: { kind: 'contrast-stale', validatedAt: null },
+    });
+    expect(deps.updateProfileStatus).not.toHaveBeenCalled();
+  });
+
+  it('refuses with contrast-stale when the validation is older than 30 days', async () => {
+    const stale = new Date(Date.now() - 31 * 24 * 60 * 60 * 1000).toISOString();
+    const deps = makeDeps({
+      findTheme: vi.fn().mockResolvedValue({
+        id: 12,
+        profile: 99,
+        contrastValidatedAt: stale,
+      }),
+    });
+    const r = await publishProfile(deps, { profileId: 99, user: USER });
+    expect(r).toMatchObject({
+      ok: false,
+      refusal: { kind: 'contrast-stale', validatedAt: stale },
+    });
+  });
+
+  it('flips status to published when the theme is fresh', async () => {
+    const deps = makeDeps({
+      findTheme: vi.fn().mockResolvedValue(FRESH_THEME),
+    });
     const r = await publishProfile(deps, { profileId: 99, user: USER });
     expect(deps.updateProfileStatus).toHaveBeenCalledWith({
       profileId: 99,
@@ -82,6 +122,7 @@ describe('publishProfile', () => {
       user: USER,
     });
     expect(r).toEqual({
+      ok: true,
       profile: { ...PROFILE, status: 'published' },
       publicPath: '/mariana-luz',
     });

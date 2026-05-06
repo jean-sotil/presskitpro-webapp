@@ -183,6 +183,23 @@ The blockquote fallback is enough for v1. To switch to the higher-fidelity Graph
 - **`Use o link de um post (`/p/`, `/reel/`, `/tv/`).`** — pasted a profile / explore page.
 - **`Limite de 6 posts atingido.`** — server-side cap hit.
 
+## Test the Theme tab + contrast gate (task-18)
+
+1. Open the editor; click the **Tema** tab strip at the top of the left column. (Mobile users see it under the same toggle.)
+2. Pick a BG preset (e.g. **Paper White**) and an Accent preset (e.g. **Cobalt**). The right-side preview pane changes color immediately — tokens are injected as CSS variables on the rendered article (`--bg`, `--accent`, `--accent-contrast`, `--text`).
+3. The "Contraste" panel always shows ratios for **text / bg** and **accent / bg**. Pass thresholds: 4.5:1 and 3:1.
+4. Try a low-contrast custom hex pair (e.g. bg `#ffffff`, accent `#eeeeee`). The `role="alert"` banner appears: "Contraste insuficiente. Ajuste os valores acima…". The autosave still saves the colors so the user can keep iterating.
+5. **Server-side gate:** every theme PATCH that touches a color field re-runs `validateThemeContrast`. On pass, the route bumps `Themes.contrastValidatedAt`. On fail, the timestamp is left alone.
+6. **Publish gate:** `POST /api/profiles/<id>/publish` checks `contrastValidatedAt`. If null or > 30 days, returns `422 contrast-stale`. The editor surfaces this as a toast on the bottom-right: "O tema precisa ser revalidado…". Re-pick a passing preset on the Tema tab → autosave fires → server bumps the timestamp → Publicar works.
+
+### Verifying the toast / gate manually
+
+To force the publish gate to fire even on a passing theme, manually clear `contrastValidatedAt` in Postgres:
+```sql
+update payload.themes set contrast_validated_at = null where profile_id = <id>;
+```
+Click **Publicar** → 422 lands → toast shows. Re-validate on the Tema tab to clear it.
+
 ## Mock autosave failures for QA
 
 The PATCH route returns 400 / 404 for invalid bodies / access denials. To force an error UI without changing code, point the PATCH at a non-existent id via the browser devtools (Network → "Override response"). The `SaveStatus` component should flip to the error state with a "tentar de novo" button.

@@ -93,18 +93,47 @@ export async function loadBundle(
   };
 }
 
+/** Per PRD §14 — fail publish when the contrast gate hasn't been
+ *  re-validated within this window. The editor's Theme tab bumps
+ *  `Themes.contrastValidatedAt` on every successful contrast pass.
+ */
+export const CONTRAST_STALE_AFTER_MS = 30 * 24 * 60 * 60 * 1000;
+
+export type PublishRefusal =
+  | { kind: 'not-found' }
+  | { kind: 'contrast-stale'; validatedAt: string | null };
+
 export async function publishProfile(
   deps: BundleDeps,
-  args: { profileId: number | string; user: PayloadUserDoc },
-): Promise<{ profile: ProfileLite; publicPath: string } | null> {
+  args: { profileId: number | string; user: PayloadUserDoc; now?: () => number },
+): Promise<
+  | { ok: true; profile: ProfileLite; publicPath: string }
+  | { ok: false; refusal: PublishRefusal }
+> {
   const existing = await deps.findProfileById(args.profileId, args.user);
-  if (!existing) return null;
+  if (!existing) return { ok: false, refusal: { kind: 'not-found' } };
+
+  const theme = await deps.findTheme(args.profileId, args.user);
+  const validatedAtRaw = (theme as { contrastValidatedAt?: string | null } | null)
+    ?.contrastValidatedAt;
+  const validatedAt = typeof validatedAtRaw === 'string' ? validatedAtRaw : null;
+  const now = args.now ? args.now() : Date.now();
+  const fresh =
+    validatedAt &&
+    now - new Date(validatedAt).getTime() < CONTRAST_STALE_AFTER_MS;
+  if (!fresh) {
+    return {
+      ok: false,
+      refusal: { kind: 'contrast-stale', validatedAt },
+    };
+  }
+
   const updated = await deps.updateProfileStatus({
     profileId: args.profileId,
     status: 'published',
     user: args.user,
   });
-  return { profile: updated, publicPath: `/${updated.slug}` };
+  return { ok: true, profile: updated, publicPath: `/${updated.slug}` };
 }
 
 export async function unpublishProfile(

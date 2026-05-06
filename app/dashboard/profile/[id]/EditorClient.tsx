@@ -12,6 +12,7 @@ import { PreviewPane } from '@/components/editor/PreviewPane';
 import { PublishDialog } from '@/components/editor/PublishDialog';
 import { SaveStatus, type SaveStatusState } from '@/components/editor/SaveStatus';
 import { SectionRail } from '@/components/editor/SectionRail';
+import { ThemeTab } from '@/components/editor/ThemeTab';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { createAutosave } from '@/lib/editor/autosave';
@@ -69,6 +70,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     return mergeOrder(persisted ?? [...DEFAULT_SECTION_ORDER]);
   }, [bundle.theme]);
   const [active, setActive] = useState<SectionKey>(sectionOrder[0]!);
+  const [editorTab, setEditorTab] = useState<'sections' | 'theme'>('sections');
 
   const [saveState, setSaveState] = useState<SaveStatusState>({
     kind: 'idle',
@@ -202,11 +204,16 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
 
   // ----- Publish/unpublish ---------------------------------------------
   const [dialogIntent, setDialogIntent] = useState<'publish' | 'unpublish' | null>(null);
+  const [publishError, setPublishError] = useState<string | null>(null);
   const publish = useMutation({
     mutationFn: async (intent: 'publish' | 'unpublish') => {
       const res = await fetch(`/api/profiles/${bundle.profile.id}/${intent}`, {
         method: 'POST',
       });
+      if (res.status === 422) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(body.error ?? 'contrast-stale');
+      }
       if (!res.ok) throw new Error(`status ${res.status}`);
       return (await res.json()) as {
         profile: EditorBundle['profile'];
@@ -218,8 +225,18 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
         prev ? { ...prev, profile: { ...prev.profile, ...profile } } : prev,
       );
       setDialogIntent(null);
+      setPublishError(null);
       if (intent === 'publish' && publicPath) {
         router.refresh();
+      }
+    },
+    onError: (err) => {
+      if (err instanceof Error && err.message === 'contrast-stale') {
+        setPublishError(
+          'O tema precisa ser revalidado (contraste WCAG) antes de publicar. Abra a aba Tema e clique em "Validar contraste".',
+        );
+      } else {
+        setPublishError('Não foi possível publicar. Tente novamente.');
       }
     },
   });
@@ -255,25 +272,63 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     </header>
   );
 
+  const tabStrip = (
+    <div role="tablist" className="flex border-b border-border" aria-label="Modos do editor">
+      <button
+        type="button"
+        role="tab"
+        aria-selected={editorTab === 'sections'}
+        onClick={() => setEditorTab('sections')}
+        className={`flex-1 border-b-2 px-3 py-2 text-xs uppercase tracking-wider ${
+          editorTab === 'sections'
+            ? 'border-accent text-text'
+            : 'border-transparent text-text-muted'
+        }`}
+      >
+        Seções
+      </button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={editorTab === 'theme'}
+        onClick={() => setEditorTab('theme')}
+        className={`flex-1 border-b-2 px-3 py-2 text-xs uppercase tracking-wider ${
+          editorTab === 'theme'
+            ? 'border-accent text-text'
+            : 'border-transparent text-text-muted'
+        }`}
+      >
+        Tema
+      </button>
+    </div>
+  );
+
   const editPaneEl = (
     <div className="flex flex-col gap-6">
-      <SectionRail
-        order={sectionOrder}
-        active={active}
-        labels={labels}
-        onSelect={setActive}
-        onReorder={(next) => {
-          applyMutation('theme', {
-            sectionOrder: next.map((key) => ({ key })),
-          });
-        }}
-      />
-      <EditorPane
-        active={active}
-        bundle={bundle}
-        supabaseUserId={(bundle.profile.owner as unknown as { supabaseUserId?: string })?.supabaseUserId ?? ''}
-        onMutate={applyMutation}
-      />
+      {tabStrip}
+      {editorTab === 'sections' ? (
+        <>
+          <SectionRail
+            order={sectionOrder}
+            active={active}
+            labels={labels}
+            onSelect={setActive}
+            onReorder={(next) => {
+              applyMutation('theme', {
+                sectionOrder: next.map((key) => ({ key })),
+              });
+            }}
+          />
+          <EditorPane
+            active={active}
+            bundle={bundle}
+            supabaseUserId={(bundle.profile.owner as unknown as { supabaseUserId?: string })?.supabaseUserId ?? ''}
+            onMutate={applyMutation}
+          />
+        </>
+      ) : (
+        <ThemeTab bundle={bundle} onMutate={applyMutation} />
+      )}
     </div>
   );
 
@@ -295,8 +350,26 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
         slug={bundle.profile.slug}
         pending={publish.isPending}
         onConfirm={() => publish.mutate(dialogIntent!)}
-        onClose={() => setDialogIntent(null)}
+        onClose={() => {
+          setDialogIntent(null);
+          setPublishError(null);
+        }}
       />
+      {publishError ? (
+        <div
+          role="alert"
+          className="fixed bottom-4 right-4 z-50 max-w-sm border border-border bg-bg p-3 text-sm text-text shadow"
+        >
+          {publishError}
+          <button
+            type="button"
+            onClick={() => setPublishError(null)}
+            className="ml-2 text-text-muted underline"
+          >
+            Fechar
+          </button>
+        </div>
+      ) : null}
     </>
   );
 }

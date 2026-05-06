@@ -1,3 +1,4 @@
+import { deriveThemeTokens } from '@/lib/design/derive-theme-tokens';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import {
   DEFAULT_SECTION_ORDER,
@@ -55,12 +56,26 @@ export function ProfileRenderer({ bundle, mode: _mode }: ProfileRendererProps) {
     persisted?.map((entry) => entry.key as SectionKey) ?? [...DEFAULT_SECTION_ORDER],
   );
 
+  const tokens = deriveThemeTokens(bundle.theme as never);
+  // Scope the override to a per-profile data-attr so previews of multiple
+  // profiles on the same page (e.g. dashboard cards) don't collide.
+  const scopeId = `pp-${String(bundle.profile.id ?? 'preview')}`;
+  const themeCss = `[data-theme-scope="${scopeId}"] {
+  --bg: ${tokens.bg};
+  --accent: ${tokens.accent};
+  --accent-contrast: ${tokens.accentContrast};
+  --text: ${tokens.text};
+}`;
+
   return (
-    <article className="bg-bg text-text">
-      {order.map((key) => {
-        const Render = SECTION_RENDERERS[key];
-        return <Render key={key} bundle={bundle} />;
-      })}
-    </article>
+    <>
+      <style data-theme-scope={scopeId}>{themeCss}</style>
+      <article data-theme-scope={scopeId} className="bg-bg text-text">
+        {order.map((key) => {
+          const Render = SECTION_RENDERERS[key];
+          return <Render key={key} bundle={bundle} />;
+        })}
+      </article>
+    </>
   );
 }

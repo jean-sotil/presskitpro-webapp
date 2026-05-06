@@ -38,7 +38,18 @@ export const Themes: CollectionConfig = {
     {
       name: 'colorPresetId',
       type: 'text',
-      admin: { description: "Set when user picked a curated preset (e.g. 'editorial-night'). Empty when overriding via custom hex." },
+      admin: {
+        description:
+          "BG preset id (e.g. 'editorial-night'). Empty when overriding via custom hex.",
+      },
+    },
+    {
+      name: 'accentPresetId',
+      type: 'text',
+      admin: {
+        description:
+          "Accent preset id (e.g. 'electric-green'). Empty when overriding via custom hex.",
+      },
     },
     { name: 'bg',     type: 'text', admin: { description: 'Hex value, present when overriding the preset bg.' } },
     { name: 'accent', type: 'text', admin: { description: 'Hex value, present when overriding the preset accent.' } },

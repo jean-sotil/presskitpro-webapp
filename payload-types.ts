@@ -435,9 +435,13 @@ export interface Theme {
   id: number;
   profile: number | Profile;
   /**
-   * Set when user picked a curated preset (e.g. 'editorial-night'). Empty when overriding via custom hex.
+   * BG preset id (e.g. 'editorial-night'). Empty when overriding via custom hex.
    */
   colorPresetId?: string | null;
+  /**
+   * Accent preset id (e.g. 'electric-green'). Empty when overriding via custom hex.
+   */
+  accentPresetId?: string | null;
   /**
    * Hex value, present when overriding the preset bg.
    */
@@ -788,6 +792,7 @@ export interface FeaturedTracksSelect<T extends boolean = true> {
 export interface ThemesSelect<T extends boolean = true> {
   profile?: T;
   colorPresetId?: T;
+  accentPresetId?: T;
   bg?: T;
   accent?: T;
   text?: T;

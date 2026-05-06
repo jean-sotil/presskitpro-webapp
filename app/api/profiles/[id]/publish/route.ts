@@ -24,9 +24,23 @@ export async function POST(
   }
 
   const result = await publishProfile(liveBundleDeps(), { profileId, user });
-  if (!result) {
+  if (!result.ok) {
+    if (result.refusal.kind === 'contrast-stale') {
+      return NextResponse.json(
+        {
+          error: 'contrast-stale',
+          message:
+            'O tema precisa ser revalidado (contraste WCAG) antes de publicar.',
+          validatedAt: result.refusal.validatedAt,
+        },
+        { status: 422 },
+      );
+    }
     return NextResponse.json({ error: 'not found' }, { status: 404 });
   }
   // Note: ISR revalidate is fired by the Profiles afterChange hook (task-08).
-  return NextResponse.json(result);
+  return NextResponse.json({
+    profile: result.profile,
+    publicPath: result.publicPath,
+  });
 }
