@@ -1,22 +1,63 @@
-import Link from 'next/link';
+import type { Metadata } from 'next';
 
-export default function HomePage() {
+import { FaqAccordion } from '@/components/marketing/FaqAccordion';
+import { HowItWorks } from '@/components/marketing/HowItWorks';
+import { LiveExamplesCarousel } from '@/components/marketing/LiveExamplesCarousel';
+import { MarketingFooter } from '@/components/marketing/MarketingFooter';
+import { MarketingHero } from '@/components/marketing/MarketingHero';
+import { PricingTeaser } from '@/components/marketing/PricingTeaser';
+import { WhatIsPressKit } from '@/components/marketing/WhatIsPressKit';
+import {
+  loadLiveExamples,
+  type LiveExample,
+} from '@/lib/marketing/fetch-live-examples';
+import { copy } from '@/lib/marketing/copy';
+import { payload as getPayloadInstance } from '@/lib/payload';
+
+export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: 'PressKit Pro — Press kit profissional em 5 minutos',
+  description: copy.hero.tagline,
+};
+
+async function fetchExamples(): Promise<LiveExample[]> {
+  try {
+    const p = await getPayloadInstance();
+    return await loadLiveExamples({
+      limit: 8,
+      async find(args) {
+        const result = await p.find({
+          collection: 'profiles',
+          where: args.where,
+          sort: args.sort,
+          limit: args.limit,
+          depth: args.depth,
+          overrideAccess: args.overrideAccess,
+        });
+        return { docs: result.docs as never };
+      },
+    });
+  } catch {
+    // The marketing page must never crash because Payload is unavailable
+    // (e.g. during a brief deploy gap). Empty examples is the same UX
+    // the page shows on a fresh dev DB — the empty-state copy nudges
+    // the user to seed.
+    return [];
+  }
+}
+
+export default async function MarketingHome() {
+  const examples = await fetchExamples();
   return (
-    <main className="flex min-h-screen items-center justify-center p-8">
-      <div className="text-center">
-        <h1 className="font-display text-4xl uppercase tracking-tight">PressKit Pro</h1>
-        <p className="mt-4 text-sm text-text">
-          Scaffold ready. Visit{' '}
-          <Link
-            className="text-accent underline underline-offset-4"
-            href="/admin"
-            prefetch={false}
-          >
-            /admin
-          </Link>{' '}
-          to bootstrap Payload.
-        </p>
-      </div>
-    </main>
+    <>
+      <MarketingHero />
+      <WhatIsPressKit />
+      <HowItWorks />
+      <LiveExamplesCarousel examples={examples} />
+      <PricingTeaser />
+      <FaqAccordion />
+      <MarketingFooter />
+    </>
   );
 }

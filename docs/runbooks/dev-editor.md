@@ -217,6 +217,22 @@ Click **Publicar** → 422 lands → toast shows. Re-validate on the Tema tab to
 
 Today, paused / trial-expired profiles 404 just like missing ones. The branded paused page lands when billing fields exist (task-31).
 
+## Test the marketing landing (task-21)
+
+1. Visit `http://localhost:3000/`. Seven sections render top-to-bottom: hero / "what is a press kit" / "how it works" / live examples carousel / pricing teaser / FAQ / footer.
+2. Click **Crie seu press kit** in the hero — lands on `/signup` in one tap.
+3. Live examples carousel:
+   - With published profiles, cards scroll horizontally with snap. Each card links to `/{slug}`.
+   - Without published profiles (fresh dev DB), the empty-state nudges you to run `pnpm seed`.
+   - Autoplay (one card every 5s) only fires when `prefers-reduced-motion: no-preference`. Toggle the OS setting and reload — the carousel should freeze when reduced-motion is requested.
+4. FAQ uses native `<details>` elements — keyboard arrow keys / space toggle them; no JS needed.
+5. Footer links: privacy/terms/status/contact 404 today (those pages aren't in scope yet); social links open in new tab; the **English** lang button is disabled with `title="Em breve"` (task-29 wires the toggle).
+6. The pricing teaser links to `/pricing`, which 404s until task-22 lands.
+
+### Translatable copy
+
+Every visible string lives in [lib/marketing/copy.ts](lib/marketing/copy.ts). Task-29 swaps the lookup for next-intl `t('hero.title')` with a one-line edit — no component churn.
+
 ## Test the SEO foundation (task-20)
 
 1. **Robots:** open `http://localhost:3000/robots.txt`. Expect `User-Agent: *`, `Allow: /`, and `Disallow:` lines for `/dashboard/`, `/api/`, `/admin/`, `/onboarding/`, `/login`, `/signup`, `/auth/`, `/dev/`, `/spike`. The `Sitemap:` line should point at `<NEXT_PUBLIC_APP_URL>/sitemap.xml`.
