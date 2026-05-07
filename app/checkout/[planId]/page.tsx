@@ -17,6 +17,16 @@ const PLAN_LABELS: Record<string, { label: string; priceCopy: string }> = {
     label: 'Pro — anual',
     priceCopy: 'US$ 10 / mês, cobrado anualmente. Você economiza 17%.',
   },
+  // task-31 — `agency-monthly` is the new canonical key; `agency` is
+  // kept as an alias for one release so existing CTAs still resolve.
+  'agency-monthly': {
+    label: 'Agency — mensal',
+    priceCopy: 'US$ 39 / mês. Até 10 perfis.',
+  },
+  'agency-annual': {
+    label: 'Agency — anual',
+    priceCopy: 'US$ 33 / mês, cobrado anualmente. Você economiza ~15%.',
+  },
   agency: {
     label: 'Agency',
     priceCopy: 'US$ 39 / mês. Até 10 perfis.',

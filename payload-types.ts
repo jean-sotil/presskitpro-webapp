@@ -196,7 +196,7 @@ export interface User {
   supabaseUserId: string;
   displayName?: string | null;
   role: 'user' | 'admin';
-  plan: 'free' | 'pro';
+  plan: 'trial' | 'pro' | 'agency';
   /**
    * Set on first profile creation; consumed by the trial-expiration cron (task-23).
    */

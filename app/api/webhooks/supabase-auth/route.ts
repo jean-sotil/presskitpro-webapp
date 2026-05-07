@@ -98,7 +98,7 @@ export async function POST(req: Request) {
       email: rec.email,
       displayName: displayName ?? undefined,
       role: 'user',
-      plan: 'free',
+      plan: 'trial',
     },
   });
   return NextResponse.json({ ok: true, action: 'created' });

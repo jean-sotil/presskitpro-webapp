@@ -70,10 +70,16 @@ export const Users: CollectionConfig = {
       name: 'plan',
       type: 'select',
       required: true,
-      defaultValue: 'free',
+      defaultValue: 'trial',
       options: [
-        { label: 'Free / Trial', value: 'free' },
+        // `trial` was historically labeled `free`; existing rows are
+        // backfilled via a one-shot SQL UPDATE documented in the
+        // runbook. Both old (`free`) and new (`trial`) values resolve
+        // to the same UX (no paid features) so a stray legacy row
+        // doesn't break runtime.
+        { label: 'Free / Trial', value: 'trial' },
         { label: 'Pro', value: 'pro' },
+        { label: 'Agency', value: 'agency' },
       ],
     },
     {

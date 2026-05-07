@@ -1,16 +1,20 @@
+import { priceIdToPlan } from '../pricing/price-id-to-plan';
+
 /**
  * Pure dispatch for the events the app cares about. The route layer is
  * responsible for signature verification and parsing — it then calls
  * this with `{ event, deps }`. Returning a tagged result lets the route
  * map to a 200 (handled / ignored / duplicate) without leaking internals.
  *
- * Three-event minimum (PRD §16, plan §6):
+ * Five events the app cares about (PRD §16, plans §6, §16 task-31):
  *   - checkout.session.completed       → user converted; mirror sub + flip plan.
+ *   - customer.subscription.created    → first sub + plan via priceIdToPlan (task-31).
+ *   - customer.subscription.updated    → upgrade/downgrade/proration (task-31).
  *   - invoice.payment_failed           → mirror past_due; do NOT pause yet.
  *   - customer.subscription.deleted    → terminal; downgrade + pause profiles.
  *
  * Anything else returns `ignored` (still logged for idempotency so retries
- * short-circuit). See plan-doc Decisions #5/#6 for rationale.
+ * short-circuit).
  */
 
 export type StripeEventLike = {
@@ -29,7 +33,7 @@ export type WebhookDeps = {
   updateUser: (
     userId: number | string,
     patch: {
-      plan?: 'free' | 'pro';
+      plan?: 'trial' | 'pro' | 'agency';
       stripeCustomerId?: string | null;
       stripeSubscriptionId?: string | null;
       stripeSubscriptionStatus?: 'active' | 'past_due' | 'canceled' | null;
@@ -46,6 +50,8 @@ export type WebhookResult =
 
 const HANDLED_TYPES = new Set([
   'checkout.session.completed',
+  'customer.subscription.created',
+  'customer.subscription.updated',
   'invoice.payment_failed',
   'customer.subscription.deleted',
 ]);
@@ -64,6 +70,10 @@ export async function handleStripeWebhook(args: {
   switch (event.type) {
     case 'checkout.session.completed':
       result = await handleCheckoutCompleted(event, deps);
+      break;
+    case 'customer.subscription.created':
+    case 'customer.subscription.updated':
+      result = await handleSubscriptionChanged(event, deps);
       break;
     case 'invoice.payment_failed':
       result = await handlePaymentFailed(event, deps);
@@ -120,6 +130,57 @@ async function handleCheckoutCompleted(
   return { kind: 'handled' };
 }
 
+async function handleSubscriptionChanged(
+  event: StripeEventLike,
+  deps: WebhookDeps,
+): Promise<WebhookResult> {
+  const sub = event.data.object;
+  const customerId = stringField(sub, 'customer');
+  if (!customerId) return { kind: 'ignored', reason: 'missing-customer' };
+
+  const user = await deps.findUserByCustomerId(customerId);
+  if (!user) {
+    deps.log({
+      kind: 'webhook-orphan-subscription-changed',
+      eventId: event.id,
+      customerId,
+    });
+    return { kind: 'ignored', reason: 'no-user-match' };
+  }
+
+  // Stripe subscription objects expose `items.data[].price.id` for the
+  // current line items. Pull the first one — our subscriptions are
+  // single-product. Pure `priceIdToPlan` reverse-maps to a plan name.
+  const priceId = readFirstItemPriceId(sub);
+  const resolved = priceId ? priceIdToPlan(priceId) : null;
+  if (!resolved) {
+    deps.log({
+      kind: 'webhook-unknown-price',
+      eventId: event.id,
+      priceId,
+      subscriptionId: stringField(sub, 'id'),
+    });
+    return { kind: 'ignored', reason: 'unknown-price' };
+  }
+
+  const status = stringField(sub, 'status');
+  await deps.updateUser(user.id, {
+    plan: resolved.plan,
+    stripeSubscriptionId: stringField(sub, 'id'),
+    stripeSubscriptionStatus:
+      status === 'active' || status === 'past_due' || status === 'canceled'
+        ? (status as 'active' | 'past_due' | 'canceled')
+        : 'active',
+  });
+  return { kind: 'handled' };
+}
+
+function readFirstItemPriceId(sub: Record<string, unknown>): string | null {
+  const items = sub.items as { data?: Array<{ price?: { id?: string } }> } | undefined;
+  const price = items?.data?.[0]?.price;
+  return typeof price?.id === 'string' && price.id.length > 0 ? price.id : null;
+}
+
 async function handlePaymentFailed(
   event: StripeEventLike,
   deps: WebhookDeps,
@@ -155,7 +216,7 @@ async function handleSubscriptionDeleted(
   }
 
   await deps.updateUser(user.id, {
-    plan: 'free',
+    plan: 'trial',
     stripeSubscriptionId: null,
     stripeSubscriptionStatus: 'canceled',
   });

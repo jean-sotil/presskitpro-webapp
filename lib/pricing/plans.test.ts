@@ -37,12 +37,20 @@ describe('priceForBilling', () => {
     expect(priceForBilling(pro, 'annual')).toBe(pro.priceUSDAnnual);
   });
 
+  it('returns the annual price for annual cycle on Agency (task-31)', () => {
+    expect(priceForBilling(agency, 'annual')).toBe(agency.priceUSDAnnual);
+  });
+
   it('returns 0 for the trial regardless of cycle', () => {
     expect(priceForBilling(trial, 'monthly')).toBe(0);
     expect(priceForBilling(trial, 'annual')).toBe(0);
   });
 
   it('falls back to monthly when annual is missing on a tier', () => {
-    expect(priceForBilling(agency, 'annual')).toBe(agency.priceUSD);
+    // Synthetic plan without an annual price — the helper should not
+    // explode. (Every shipped tier has annual since task-31, so we
+    // construct a fake here to keep the safety-net test alive.)
+    const noAnnual = { ...pro, priceUSDAnnual: undefined };
+    expect(priceForBilling(noAnnual, 'annual')).toBe(noAnnual.priceUSD);
   });
 });

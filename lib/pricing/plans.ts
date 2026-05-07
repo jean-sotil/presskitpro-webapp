@@ -49,8 +49,15 @@ export const PLANS: PlanConfig[] = [
   {
     id: 'agency',
     priceUSD: 39,
-    stripePriceIdEnv: 'STRIPE_PRICE_ID_AGENCY',
-    ctaCheckoutPath: '/checkout/agency',
+    // ~2 months free off the monthly cadence (39 × 10 / 12 = 32.5 → 33).
+    priceUSDAnnual: 33,
+    // task-31 — `STRIPE_PRICE_ID_AGENCY_MONTHLY` is the new name; the
+    // legacy `STRIPE_PRICE_ID_AGENCY` is honored as a fallback by
+    // `priceIdToPlan` for one rolling-deploy release. Drop the legacy
+    // env once every deploy migrates.
+    stripePriceIdEnv: 'STRIPE_PRICE_ID_AGENCY_MONTHLY',
+    stripePriceIdAnnualEnv: 'STRIPE_PRICE_ID_AGENCY_ANNUAL',
+    ctaCheckoutPath: '/checkout/agency-monthly',
   },
 ];
 

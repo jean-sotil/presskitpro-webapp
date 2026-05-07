@@ -75,7 +75,7 @@ export async function POST(req: Request) {
             and: [
               { trialEndsAt: { greater_than: windowStart } },
               { trialEndsAt: { less_than: windowEnd } },
-              { plan: { equals: 'free' } },
+              { plan: { in: ['trial', 'free'] } },
               {
                 or: [
                   { stripeSubscriptionStatus: { exists: false } },

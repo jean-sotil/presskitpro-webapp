@@ -23,7 +23,15 @@ import { getStripeClientOrThrow } from './stripe-client';
  * of a 500.
  */
 
-export type CheckoutPlanKey = 'pro-monthly' | 'pro-annual' | 'agency';
+export type CheckoutPlanKey =
+  | 'pro-monthly'
+  | 'pro-annual'
+  | 'agency-monthly'
+  | 'agency-annual'
+  // Legacy alias for `agency-monthly` — accepted for one rolling-deploy
+  // release so existing CTAs continue to resolve. Drop after task-31
+  // PR-B's pricing-page rollout lands.
+  | 'agency';
 
 type CheckoutInput = {
   planKey: CheckoutPlanKey;
@@ -113,10 +121,22 @@ function resolvePriceId(planKey: CheckoutPlanKey): string | null {
       if (!plan?.stripePriceIdAnnualEnv) return null;
       return process.env[plan.stripePriceIdAnnualEnv] ?? null;
     }
-    case 'agency': {
+    case 'agency':
+    case 'agency-monthly': {
       const plan = getPlan('agency');
       if (!plan?.stripePriceIdEnv) return null;
-      return process.env[plan.stripePriceIdEnv] ?? null;
+      // Honor the legacy `STRIPE_PRICE_ID_AGENCY` env name as a
+      // fallback so a deploy mid-rename doesn't break checkout.
+      return (
+        process.env[plan.stripePriceIdEnv] ??
+        process.env.STRIPE_PRICE_ID_AGENCY ??
+        null
+      );
+    }
+    case 'agency-annual': {
+      const plan = getPlan('agency');
+      if (!plan?.stripePriceIdAnnualEnv) return null;
+      return process.env[plan.stripePriceIdAnnualEnv] ?? null;
     }
     default:
       return null;

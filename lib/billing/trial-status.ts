@@ -14,7 +14,9 @@ export type TrialStatus =
   | { kind: 'paid'; daysRemaining: null };
 
 export type TrialUser = {
-  plan?: 'free' | 'pro' | string | null;
+  // `'free'` is the legacy label for `'trial'` — both resolve to the
+  // same trial-status logic so a stray legacy row doesn't break.
+  plan?: 'trial' | 'pro' | 'agency' | 'free' | string | null;
   trialEndsAt?: string | Date | null;
   stripeSubscriptionStatus?: 'active' | 'past_due' | 'canceled' | null;
 };

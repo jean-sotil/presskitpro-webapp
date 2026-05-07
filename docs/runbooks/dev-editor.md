@@ -319,6 +319,49 @@ Then re-run the curl. The owned Profiles row(s) flip to
 `status = 'paused'`; visiting `/<slug>` now serves the branded
 "Press kit pausado" page at HTTP 200 (not 404).
 
+### Switch plans (task-31 PR-A)
+
+Existing subscribers can upgrade or downgrade between Pro/Agency
+monthly/annual via `POST /api/billing/switch-plan`:
+
+```bash
+curl -X POST http://localhost:3000/api/billing/switch-plan \
+  -H "content-type: application/json" \
+  -H "cookie: $YOUR_SUPABASE_AUTH_COOKIE" \
+  -d '{"planKey":"pro-annual"}'
+```
+
+Valid `planKey` values: `pro-monthly`, `pro-annual`, `agency-monthly`,
+`agency-annual`. Stripe applies `proration_behavior: 'create_prorations'`
+so monthly→annual issues a prorated invoice instantly, and the inverse
+issues a credit on the next bill. The route returns
+`{ ok, subscriptionId, status }` on success.
+
+To verify proration end-to-end against Stripe sandbox:
+
+1. Set `STRIPE_PRICE_ID_PRO_MONTHLY` + `STRIPE_PRICE_ID_PRO_ANNUAL` to
+   real test-mode price ids in `.env`.
+2. Complete a checkout to create an active subscription.
+3. Call the switch-plan endpoint with `pro-annual`.
+4. Open the Stripe dashboard's "Invoices" tab — a prorated invoice
+   appears within seconds. The dashboard also shows the subscription's
+   line items now reference the annual price.
+5. The `customer.subscription.updated` webhook fires shortly after and
+   flips `Users.plan` (verified by the existing webhook test suite).
+
+### Plan rename: `'free'` → `'trial'`
+
+Task-31 renamed the legacy plan label. Existing rows are backfilled
+with one SQL UPDATE:
+
+```sql
+update payload.users set "plan" = 'trial' where "plan" = 'free';
+```
+
+The trial-status code accepts both values during the rolling window so
+unmigrated rows behave correctly — but running the UPDATE keeps the
+data clean. Run it once per environment.
+
 ### Press-kit health-check cron (task-30)
 
 Daily sweep that HEADs every published profile's `pressKitUrl` and

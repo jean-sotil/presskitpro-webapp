@@ -179,7 +179,7 @@ describe('handleStripeWebhook', () => {
       });
       expect(result.kind).toBe('handled');
       expect(deps.updateUser).toHaveBeenCalledWith(1, {
-        plan: 'free',
+        plan: 'trial',
         stripeSubscriptionId: null,
         stripeSubscriptionStatus: 'canceled',
       });
@@ -187,6 +187,81 @@ describe('handleStripeWebhook', () => {
       expect(deps.log).toHaveBeenCalledWith(
         expect.objectContaining({ kind: 'subscription-canceled-email' }),
       );
+    });
+  });
+
+  describe('customer.subscription.created/updated (task-31)', () => {
+    const ENV = {
+      STRIPE_PRICE_ID_PRO_MONTHLY: 'price_pro_m',
+      STRIPE_PRICE_ID_PRO_ANNUAL: 'price_pro_a',
+      STRIPE_PRICE_ID_AGENCY_MONTHLY: 'price_ag_m',
+      STRIPE_PRICE_ID_AGENCY_ANNUAL: 'price_ag_a',
+    };
+
+    function subEvent(
+      type: 'customer.subscription.created' | 'customer.subscription.updated',
+      priceId: string,
+      status = 'active',
+    ): StripeEventLike {
+      return {
+        id: `evt_sub_${type}_${priceId}`,
+        type,
+        data: {
+          object: {
+            id: 'sub_99',
+            customer: 'cus_1',
+            status,
+            items: { data: [{ price: { id: priceId } }] },
+          },
+        },
+      };
+    }
+
+    it('flips Users.plan to pro on subscription.created with the pro price', async () => {
+      for (const [k, v] of Object.entries(ENV)) vi.stubEnv(k, v);
+      const deps = makeDeps();
+      const result = await handleStripeWebhook({
+        event: subEvent('customer.subscription.created', 'price_pro_m'),
+        deps,
+      });
+      expect(result.kind).toBe('handled');
+      expect(deps.updateUser).toHaveBeenCalledWith(1, {
+        plan: 'pro',
+        stripeSubscriptionId: 'sub_99',
+        stripeSubscriptionStatus: 'active',
+      });
+      vi.unstubAllEnvs();
+    });
+
+    it('flips Users.plan to agency on subscription.updated with the agency price', async () => {
+      for (const [k, v] of Object.entries(ENV)) vi.stubEnv(k, v);
+      const deps = makeDeps();
+      const result = await handleStripeWebhook({
+        event: subEvent('customer.subscription.updated', 'price_ag_a'),
+        deps,
+      });
+      expect(result.kind).toBe('handled');
+      expect(deps.updateUser).toHaveBeenCalledWith(1, {
+        plan: 'agency',
+        stripeSubscriptionId: 'sub_99',
+        stripeSubscriptionStatus: 'active',
+      });
+      vi.unstubAllEnvs();
+    });
+
+    it('ignores subscriptions referencing an unknown price id (logs but no plan flip)', async () => {
+      for (const [k, v] of Object.entries(ENV)) vi.stubEnv(k, v);
+      const deps = makeDeps();
+      const result = await handleStripeWebhook({
+        event: subEvent('customer.subscription.updated', 'price_unknown'),
+        deps,
+      });
+      expect(result.kind).toBe('ignored');
+      expect(deps.updateUser).not.toHaveBeenCalled();
+      expect(deps.log).toHaveBeenCalledWith(
+        expect.objectContaining({ kind: 'webhook-unknown-price' }),
+      );
+      vi.unstubAllEnvs();
     });
   });
 
