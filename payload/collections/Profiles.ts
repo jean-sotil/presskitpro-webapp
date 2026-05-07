@@ -1,7 +1,7 @@
 import type { CollectionAfterChangeHook, CollectionConfig } from 'payload';
 
 import {
-  canCreateForOwnedProfile,
+  canCreateProfileWithCap,
   ownsProfile,
 } from '../../lib/payload/access/predicates';
 import { derivePressKitProviderHook } from '../../lib/payload/hooks/derive-press-kit-provider';
@@ -92,7 +92,8 @@ export const Profiles: CollectionConfig = {
     read: ownsProfile,
     update: ownsProfile,
     delete: ownsProfile,
-    create: canCreateForOwnedProfile,
+    // task-31 PR-B — enforce the per-plan cap (trial/pro=1, agency=10).
+    create: canCreateProfileWithCap,
   },
   hooks: {
     beforeChange: [derivePressKitProviderHook],

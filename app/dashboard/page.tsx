@@ -1,9 +1,11 @@
+import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { TrialBanner } from '@/components/dashboard/TrialBanner';
 import { Section } from '@/components/ui/Section';
 import { SectionMarker } from '@/components/atmosphere/SectionMarker';
+import { ACTIVE_PROFILE_COOKIE_NAME } from '@/lib/dashboard/active-profile';
 import { payload } from '@/lib/payload';
 import {
   isComplete,
@@ -43,6 +45,11 @@ export default async function DashboardPage() {
         depth: 0,
       })
     : { docs: [] as Array<{ id: number | string; slug: string; status: string; updatedAt?: string }> };
+
+  // Task-31 PR-B — surface the most-recently opened profile so agency
+  // users (and Pro users with > 1 profile) resume context.
+  const activeProfileId =
+    (await cookies()).get(ACTIVE_PROFILE_COOKIE_NAME)?.value ?? null;
 
   return (
     <main id="main">
@@ -86,11 +93,29 @@ export default async function DashboardPage() {
                 status: 'draft' | 'published' | 'unpublished';
                 updatedAt?: string;
               };
+              const isActive = String(profile.id) === activeProfileId;
               return (
-                <li key={String(profile.id)} className="border border-border bg-surface p-6">
-                  <p className="font-display text-xs uppercase tracking-widest text-text-muted">
-                    {profile.status}
-                  </p>
+                <li
+                  key={String(profile.id)}
+                  data-testid={`profile-card-${profile.id}`}
+                  data-active={isActive ? 'true' : undefined}
+                  className={`border bg-surface p-6 ${
+                    isActive ? 'border-accent' : 'border-border'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <p className="font-display text-xs uppercase tracking-widest text-text-muted">
+                      {profile.status}
+                    </p>
+                    {isActive ? (
+                      <span
+                        className="inline-flex items-center border border-accent px-2 py-0.5 text-[0.65rem] uppercase tracking-widest text-accent"
+                        aria-label="Perfil ativo"
+                      >
+                        ● Ativo
+                      </span>
+                    ) : null}
+                  </div>
                   <p className="mt-2 font-display text-2xl uppercase tracking-tight">
                     presskit.pro/{profile.slug}
                   </p>

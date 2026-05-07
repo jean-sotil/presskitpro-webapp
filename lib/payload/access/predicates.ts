@@ -1,5 +1,7 @@
 import type { Access, AccessArgs } from 'payload';
 
+import { canCreateProfile } from '../../billing/profile-cap';
+
 /**
  * Access predicates shared across Payload collections. Three flavors:
  *
@@ -66,4 +68,33 @@ export const canCreateForOwnedProfile: Access = async ({
     depth: 0,
   });
   return result.totalDocs > 0;
+};
+
+/**
+ * Profiles-collection create predicate (task-31 PR-B). Enforces the
+ * per-plan cap: trial/pro users get 1 profile, agency users get 10.
+ *
+ * Local-API server actions (`payload.create({ collection: 'profiles', ... })`)
+ * bypass this predicate by default — they live behind their own
+ * server-side gate. This predicate is defense-in-depth for any
+ * REST/GraphQL caller that hits the create endpoint with a session
+ * token (e.g. the future agency add-profile flow).
+ */
+export const canCreateProfileWithCap: Access = async ({ req }) => {
+  if (!req.user) return false;
+  if (isAdmin(req.user)) return true;
+  const userId = (req.user as { id: number | string }).id;
+  const userPlan = (req.user as { plan?: string | null }).plan ?? null;
+  const owned = await req.payload.find({
+    collection: 'profiles',
+    where: { owner: { equals: userId } },
+    limit: 0,
+    pagination: false,
+    depth: 0,
+  });
+  const decision = canCreateProfile({
+    plan: userPlan,
+    ownedCount: owned.totalDocs,
+  });
+  return decision.ok;
 };

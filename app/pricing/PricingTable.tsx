@@ -23,8 +23,15 @@ export function PricingTable({ loggedIn }: PricingTableProps) {
 
   function ctaHref(plan: PlanConfig): string {
     if (plan.id === 'trial') return plan.ctaCheckoutPath;
-    if (loggedIn) return plan.ctaCheckoutPath;
-    return `/login?next=${encodeURIComponent(plan.ctaCheckoutPath)}`;
+    // Cycle-aware CTA (task-31 PR-B) — annual cycle picks
+    // `ctaCheckoutPathAnnual` when present, otherwise falls back to
+    // the monthly path. Trial has no checkout flow regardless.
+    const target =
+      cycle === 'annual' && plan.ctaCheckoutPathAnnual
+        ? plan.ctaCheckoutPathAnnual
+        : plan.ctaCheckoutPath;
+    if (loggedIn) return target;
+    return `/login?next=${encodeURIComponent(target)}`;
   }
 
   return (

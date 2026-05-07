@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-07T18:31:49.760Z",
+  "generated": "2026-05-07T19:12:48.185Z",
   "toleranceKB": 10,
   "routes": {
     "/": 410.64,
@@ -54,7 +54,7 @@
     "/onboarding/[step]": 394.62,
     "/onboarding/[step]/not-found": 353.83,
     "/onboarding/layout": 345.56,
-    "/pricing": 361.66,
+    "/pricing": 361.85,
     "/privacy": 345.56,
     "/robots.txt/route": 345.56,
     "/signup": 617.05,

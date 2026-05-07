@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 
 import { resolvePayloadUserLive } from '@/lib/auth/payload-user-from-request';
+import { setActiveProfileAction } from '@/lib/dashboard/active-profile-actions';
 import { liveBundleDeps } from '@/lib/editor/bundle-live';
 import { loadBundle } from '@/lib/editor/bundle';
 
@@ -25,6 +26,10 @@ export default async function EditorPage({
 
   const bundle = await loadBundle(liveBundleDeps(), { profileId, user });
   if (!bundle) notFound();
+
+  // Task-31 PR-B — record this profile as the user's active one so the
+  // dashboard switcher resumes here on the next visit.
+  await setActiveProfileAction(profileId);
 
   return (
     <main id="main">

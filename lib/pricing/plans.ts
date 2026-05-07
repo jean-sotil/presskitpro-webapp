@@ -22,9 +22,12 @@ export interface PlanConfig {
   stripePriceIdEnv: string | null;
   /** Env var for annual Stripe Price ID. Optional; tier may not have annual. */
   stripePriceIdAnnualEnv?: string;
-  /** Path the CTA navigates to after auth. The page wraps this in
-   *  `/login?next=...` for logged-out users. */
+  /** Path the CTA navigates to after auth (monthly cadence). The page
+   *  wraps this in `/login?next=...` for logged-out users. */
   ctaCheckoutPath: string;
+  /** Annual checkout path for tiers that offer annual billing. When
+   *  unset, the pricing table falls back to `ctaCheckoutPath`. */
+  ctaCheckoutPathAnnual?: string;
   /** True for the recommended tier — gets visual emphasis. */
   featured?: boolean;
 }
@@ -44,6 +47,7 @@ export const PLANS: PlanConfig[] = [
     stripePriceIdEnv: 'STRIPE_PRICE_ID_PRO_MONTHLY',
     stripePriceIdAnnualEnv: 'STRIPE_PRICE_ID_PRO_ANNUAL',
     ctaCheckoutPath: '/checkout/pro-monthly',
+    ctaCheckoutPathAnnual: '/checkout/pro-annual',
     featured: true,
   },
   {
@@ -58,6 +62,7 @@ export const PLANS: PlanConfig[] = [
     stripePriceIdEnv: 'STRIPE_PRICE_ID_AGENCY_MONTHLY',
     stripePriceIdAnnualEnv: 'STRIPE_PRICE_ID_AGENCY_ANNUAL',
     ctaCheckoutPath: '/checkout/agency-monthly',
+    ctaCheckoutPathAnnual: '/checkout/agency-annual',
   },
 ];
 
