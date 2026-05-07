@@ -252,7 +252,15 @@ export interface Profile {
   id: number;
   owner: number | User;
   slug: string;
-  status: 'draft' | 'published' | 'unpublished' | 'paused';
+  status: 'draft' | 'published' | 'unpublished' | 'paused' | 'soft-released';
+  /**
+   * When the Day-23 inactivity warning email was sent. Cleared by the "Keep my slug" one-click action.
+   */
+  slugReclaimWarningAt?: string | null;
+  /**
+   * When the slug entered the 24h reversal window (Day-30). Cleared on revert; cron finalizes 24h after.
+   */
+  slugSoftReleasedAt?: string | null;
   /**
    * Hero portrait. Renders on the public profile.
    */
@@ -749,6 +757,8 @@ export interface ProfilesSelect<T extends boolean = true> {
   owner?: T;
   slug?: T;
   status?: T;
+  slugReclaimWarningAt?: T;
+  slugSoftReleasedAt?: T;
   portrait?: T;
   logo?: T;
   gallery?: T;

@@ -72,6 +72,20 @@
     "pressKitBroken": {
       "subject": "Link do press kit foi escondido — ação necessária",
       "body": "Olá! O link do seu press kit ({url}) falhou três vezes seguidas, então escondemos o botão de download na sua página pública para evitar que bookers cliquem em um link quebrado. Atualize o link no editor para reativar o download. — Equipe PressKit Pro"
+    },
+    "slugReclaimWarning": {
+      "subject": "Aviso: seu link presskit.pro/{slug} pode ser liberado em 7 dias",
+      "body": "Olá! Notamos que você está há mais de 23 dias sem acessar a PressKit Pro e sem novas visitas no seu press kit. Para manter o link presskit.pro/{slug}, basta clicar no botão abaixo. Se nada for feito em 7 dias, o link voltará para o pool de slugs disponíveis e qualquer artista poderá reservá-lo.\n\nManter o slug: {keepUrl}\n\n— Equipe PressKit Pro"
+    },
+    "slugReclaimReleased": {
+      "subject": "Seu link presskit.pro/{slug} foi liberado",
+      "body": "Olá! Como detalhado no aviso anterior, o link presskit.pro/{slug} foi liberado por inatividade. Sua conta segue intacta — você pode reivindicar um novo slug no editor a qualquer momento. — Equipe PressKit Pro"
+    }
+  },
+  "slug": {
+    "keepSuccess": {
+      "title": "Link salvo!",
+      "body": "O link presskit.pro/{slug} continua reservado para você. Bom press-kitting!"
     }
   },
   "profile": {

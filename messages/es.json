@@ -73,6 +73,20 @@
     "pressKitBroken": {
       "subject": "Enlace del press kit oculto — acción necesaria",
       "body": "¡Hola! Tu enlace de press kit ({url}) falló tres verificaciones seguidas, así que ocultamos el botón de descarga en tu página pública para evitar enviar a los bookers a un enlace roto. Actualiza el enlace en el editor para reactivar la descarga. — El equipo de PressKit Pro"
+    },
+    "slugReclaimWarning": {
+      "subject": "Aviso: tu enlace presskit.pro/{slug} podría liberarse en 7 días",
+      "body": "¡Hola! Notamos que llevas más de 23 días sin entrar a PressKit Pro y sin visitas nuevas en tu press kit. Para mantener presskit.pro/{slug}, haz clic en el enlace de abajo. Si no haces nada en 7 días, el slug regresará al pool disponible y cualquier artista podrá reclamarlo.\n\nMantener el slug: {keepUrl}\n\n— El equipo de PressKit Pro"
+    },
+    "slugReclaimReleased": {
+      "subject": "Tu enlace presskit.pro/{slug} fue liberado",
+      "body": "¡Hola! Como se indicó en el aviso anterior, el enlace presskit.pro/{slug} fue liberado por inactividad. Tu cuenta sigue intacta — puedes reclamar un nuevo slug desde el editor cuando quieras. — El equipo de PressKit Pro"
+    }
+  },
+  "slug": {
+    "keepSuccess": {
+      "title": "¡Enlace guardado!",
+      "body": "presskit.pro/{slug} sigue siendo tuyo. ¡Buen press-kitting!"
     }
   },
   "profile": {

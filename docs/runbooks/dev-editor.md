@@ -362,6 +362,84 @@ The trial-status code accepts both values during the rolling window so
 unmigrated rows behave correctly — but running the UPDATE keeps the
 data clean. Run it once per environment.
 
+### Sync hosted DB schema after a Profiles field add
+
+Payload v3 with the postgres adapter does not auto-apply schema
+changes to a remote database — you have to run the ALTER yourself
+when you add a field to a collection. Forgetting this surfaces as a
+500 on every page that queries Profiles, with a Postgres error that
+names the missing column.
+
+```sql
+-- task-30 + task-32 added these columns to payload.profiles. Run
+-- once per environment after pulling the corresponding code.
+ALTER TABLE payload.profiles
+  ADD COLUMN IF NOT EXISTS press_kit_consecutive_fails integer DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS slug_reclaim_warning_at     timestamptz,
+  ADD COLUMN IF NOT EXISTS slug_soft_released_at       timestamptz;
+```
+
+When in doubt, the Postgres error message names the exact column —
+just `ADD COLUMN IF NOT EXISTS <that_name> <type>`.
+
+### Slug reclamation cron (task-32)
+
+Daily inactivity sweep that warns at Day-23, soft-releases at Day-30,
+and finalizes (slug rotation) 24h after that. Active or past-due
+subscribers are skipped regardless of activity.
+
+```bash
+curl -X POST http://localhost:3000/api/cron/slug-reclaim \
+  -H "Authorization: Bearer $CRON_SECRET"
+```
+
+Response: `{ ok, checked, warned, released, finalized, skipped, durationMs }`.
+
+To exercise the warn → release transition end-to-end locally:
+
+```sql
+-- Fake 30+ days of inactivity on a published profile.
+update payload.profiles
+   set "updatedAt" = now() - interval '40 days',
+       "slugReclaimWarningAt" = null,
+       "slugSoftReleasedAt" = null
+ where slug = 'mariana-luz';
+```
+
+Run the curl once → status stays `published`, `slugReclaimWarningAt`
+gets stamped, and a warning email is logged (or sent if
+`RESEND_API_KEY` is set). Re-run with the warning timestamp pushed
+back 8 days:
+
+```sql
+update payload.profiles
+   set "slugReclaimWarningAt" = now() - interval '8 days'
+ where slug = 'mariana-luz';
+```
+
+Now the curl flips status to `soft-released` and stamps
+`slugSoftReleasedAt`. Wait 24h (or fake the timestamp back another
+day) and the next cron run finalizes — the slug rotates to
+`<slug>-r<timestamp>` and the original returns to the available pool.
+
+The "Keep my slug" link in the warning email points to
+`/api/slug/keep?token=<sig>`. The token is signed (HMAC) with
+`KEEP_SLUG_TOKEN_SECRET` over `(profileId, warningAt)` so it can't be
+forged. Clicking the link clears `slugReclaimWarningAt` (and reverts
+`status` back to `published` when the profile is already
+soft-released). Idempotent — a stale token returns 410.
+
+To recover a slug after finalize, edit the row in Payload Admin or run:
+
+```sql
+update payload.profiles
+   set "slug" = 'mariana-luz', "status" = 'unpublished'
+ where slug like 'mariana-luz-r%';
+```
+
+(The slug must not have been re-claimed by another user in the
+meantime — recovery within hours is typically safe.)
+
 ### Press-kit health-check cron (task-30)
 
 Daily sweep that HEADs every published profile's `pressKitUrl` and

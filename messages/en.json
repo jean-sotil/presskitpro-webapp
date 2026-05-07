@@ -73,6 +73,20 @@
     "pressKitBroken": {
       "subject": "Press-kit link hidden — action needed",
       "body": "Hi! Your press-kit link ({url}) failed three checks in a row, so we hid the download button on your public page to avoid sending bookers to a broken link. Update the link in the editor to re-enable the download. — The PressKit Pro team"
+    },
+    "slugReclaimWarning": {
+      "subject": "Heads up: your presskit.pro/{slug} link may be released in 7 days",
+      "body": "Hi! It's been 23+ days since you signed in or your press kit got any new visits. To keep presskit.pro/{slug}, click the link below. If nothing happens in 7 days, the slug returns to the available pool and anyone can claim it.\n\nKeep my slug: {keepUrl}\n\n— The PressKit Pro team"
+    },
+    "slugReclaimReleased": {
+      "subject": "Your presskit.pro/{slug} link has been released",
+      "body": "Hi! As stated in the previous notice, the link presskit.pro/{slug} has been released due to inactivity. Your account is intact — you can claim a new slug from the editor anytime. — The PressKit Pro team"
+    }
+  },
+  "slug": {
+    "keepSuccess": {
+      "title": "Slug saved!",
+      "body": "presskit.pro/{slug} is yours to keep. Happy press-kitting!"
     }
   },
   "profile": {

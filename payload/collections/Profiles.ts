@@ -125,7 +125,30 @@ export const Profiles: CollectionConfig = {
         { label: 'Published', value: 'published' },
         { label: 'Unpublished', value: 'unpublished' },
         { label: 'Paused (trial expired)', value: 'paused' },
+        { label: 'Soft-released (24h reversal window)', value: 'soft-released' },
       ],
+    },
+    // task-32 — inactivity-driven slug reclamation. The cron stamps
+    // `slugReclaimWarningAt` at Day-23 (warning sent), then
+    // `slugSoftReleasedAt` at Day-30 (status flips to soft-released).
+    // Day-31 finalize rotates the slug.
+    {
+      name: 'slugReclaimWarningAt',
+      type: 'date',
+      admin: {
+        readOnly: true,
+        description:
+          'When the Day-23 inactivity warning email was sent. Cleared by the "Keep my slug" one-click action.',
+      },
+    },
+    {
+      name: 'slugSoftReleasedAt',
+      type: 'date',
+      admin: {
+        readOnly: true,
+        description:
+          'When the slug entered the 24h reversal window (Day-30). Cleared on revert; cron finalizes 24h after.',
+      },
     },
 
     // ----- Hero media (PRD §6.3) -----
