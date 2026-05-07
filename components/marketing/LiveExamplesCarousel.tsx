@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
 
-import { copy } from '@/lib/marketing/copy';
 import type { LiveExample } from '@/lib/marketing/fetch-live-examples';
 import { mediaUrl } from '@/lib/media/url';
 
@@ -15,6 +15,7 @@ export interface LiveExamplesCarouselProps {
 
 export function LiveExamplesCarousel({ examples }: LiveExamplesCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations('marketing.examples');
 
   useEffect(() => {
     if (examples.length === 0) return;
@@ -43,12 +44,12 @@ export function LiveExamplesCarousel({ examples }: LiveExamplesCarouselProps) {
     return (
       <section className="border-b border-border px-6 py-20 md:px-12 md:py-32">
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
-          {copy.examples.eyebrow}
+          {t('eyebrow')}
         </p>
         <h2 className="mt-4 font-display text-3xl uppercase tracking-tight md:text-5xl">
-          {copy.examples.title}
+          {t('title')}
         </h2>
-        <p className="mt-6 max-w-prose text-text-muted">{copy.examples.empty}</p>
+        <p className="mt-6 max-w-prose text-text-muted">{t('empty')}</p>
       </section>
     );
   }
@@ -57,10 +58,10 @@ export function LiveExamplesCarousel({ examples }: LiveExamplesCarouselProps) {
     <section className="border-b border-border py-20 md:py-32">
       <div className="px-6 md:px-12">
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
-          {copy.examples.eyebrow}
+          {t('eyebrow')}
         </p>
         <h2 className="mt-4 font-display text-3xl uppercase tracking-tight md:text-5xl">
-          {copy.examples.title}
+          {t('title')}
         </h2>
       </div>
       <ul

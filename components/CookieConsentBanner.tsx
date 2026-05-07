@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import {
@@ -8,7 +9,6 @@ import {
   hasConsent,
   serializeConsentCookie,
 } from '@/lib/consent/cookie-consent';
-import { copy } from '@/lib/marketing/copy';
 
 /**
  * Cookie consent banner (task-27 PR-2).
@@ -20,6 +20,7 @@ import { copy } from '@/lib/marketing/copy';
  * the consent cookie for one year.
  */
 export function CookieConsentBanner() {
+  const t = useTranslations('consent');
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -41,18 +42,18 @@ export function CookieConsentBanner() {
   return (
     <div
       role="region"
-      aria-label="Aviso de cookies"
+      aria-label={t('regionLabel')}
       data-testid={CONSENT_COOKIE_NAME}
       className="fixed inset-x-3 bottom-3 z-50 mx-auto max-w-3xl border border-border bg-surface p-4 shadow-lg md:bottom-6 md:p-5"
     >
       <div className="flex flex-col gap-3 text-sm md:flex-row md:items-center md:justify-between">
         <p className="text-text-muted">
-          {copy.consent.body}{' '}
+          {t('body')}{' '}
           <Link
-            href={copy.consent.learnMoreHref}
+            href={t('learnMoreHref')}
             className="underline hover:text-text"
           >
-            {copy.consent.learnMore}
+            {t('learnMore')}
           </Link>
           .
         </p>
@@ -61,7 +62,7 @@ export function CookieConsentBanner() {
           onClick={accept}
           className="self-start border border-accent bg-accent px-4 py-2 text-sm font-medium uppercase tracking-wider text-accent-contrast md:self-auto"
         >
-          {copy.consent.cta}
+          {t('cta')}
         </button>
       </div>
     </div>

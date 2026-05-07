@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 
@@ -7,6 +8,13 @@ import { PausedTemplate } from '@/components/profile/PausedTemplate';
 import { ProfileRenderer } from '@/components/profile/ProfileRenderer';
 import { livePublicBundleDeps } from '@/lib/editor/bundle-public-live';
 import { loadPublicBundle } from '@/lib/editor/bundle';
+import {
+  fromPayloadLocale,
+  isSupportedLocale,
+  toBcp47,
+  toPayloadLocale,
+  type SupportedLocale,
+} from '@/lib/i18n/locale';
 import { mediaUrl } from '@/lib/media/url';
 import { payload } from '@/lib/payload';
 import { buildProfileJsonLd } from '@/lib/seo/build-profile-jsonld';
@@ -34,11 +42,12 @@ async function findPausedProfileBySlug(slug: string): Promise<boolean> {
 const SITE_ORIGIN =
   process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
 
-// ISR: re-render on demand (the Profiles afterChange hook calls
-// `revalidatePath('/<slug>')` whenever a published row changes).
-// `revalidate: 3600` is a belt-and-braces hourly fallback so even if a
-// revalidate trigger is missed, freshness is bounded.
-export const revalidate = 3600;
+// Task-29 PR-B — locale negotiation per request makes the public
+// profile dynamic. ISR (revalidate) was a cross-locale cache trap: the
+// first render's locale stuck for an hour. Vercel's CDN still caches
+// via the middleware's `Cache-Control` header, varying on
+// `Accept-Language` + `Cookie` for correctness.
+export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
 
 interface PageParams {
@@ -65,16 +74,52 @@ function resolveImageUrl(bundle: ReturnType<typeof Object.assign>): string | und
  *  practice. */
 export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
   const { slug } = await params;
-  const bundle = await loadPublicBundle(livePublicBundleDeps(), { slug });
+  const locale = (await getLocale()) as SupportedLocale;
+  const bundle = await loadPublicBundle(livePublicBundleDeps(), {
+    slug,
+    locale: toPayloadLocale(locale),
+  });
   if (!bundle) return { title: 'Not found' };
-  return buildProfileMetadata(bundle, SITE_ORIGIN, {
+  const baseMeta = buildProfileMetadata(bundle, SITE_ORIGIN, {
     imageUrl: resolveImageUrl(bundle),
   });
+  // Task-29 PR-B — emit `<link rel="alternate" hreflang="…">` for every
+  // locale the profile has published content in, plus `x-default`.
+  const localesAvailable = readLocalesAvailable(bundle.profile as { localesAvailable?: unknown });
+  const canonical = `${SITE_ORIGIN}/${slug}`;
+  return {
+    ...baseMeta,
+    alternates: {
+      canonical,
+      languages: {
+        ...Object.fromEntries(
+          localesAvailable.map((l) => [toBcp47(l), canonical]),
+        ),
+        'x-default': canonical,
+      },
+    },
+  };
+}
+
+function readLocalesAvailable(profile: { localesAvailable?: unknown }): SupportedLocale[] {
+  const raw = profile.localesAvailable;
+  if (!Array.isArray(raw)) return ['pt'];
+  const seen = new Set<SupportedLocale>();
+  for (const item of raw) {
+    const short = fromPayloadLocale(String(item));
+    if (short) seen.add(short);
+  }
+  return seen.size > 0 ? [...seen] : ['pt'];
 }
 
 export default async function PublicProfilePage({ params }: PageParams) {
   const { slug } = await params;
-  const bundle = await loadPublicBundle(livePublicBundleDeps(), { slug });
+  const rawLocale = await getLocale();
+  const requestedLocale = isSupportedLocale(rawLocale) ? rawLocale : 'pt';
+  const bundle = await loadPublicBundle(livePublicBundleDeps(), {
+    slug,
+    locale: toPayloadLocale(requestedLocale),
+  });
   if (!bundle) {
     // Branch: paused profiles render a branded "Press kit pausado"
     // page at HTTP 200 (PRD §16) — not a 404 — so inbound links keep
@@ -93,6 +138,19 @@ export default async function PublicProfilePage({ params }: PageParams) {
   // theme `<style>` and the JSON-LD `<script>`.
   const nonce = (await headers()).get('x-nonce') ?? undefined;
 
+  // Task-29 PR-B — fallback banner. Show when the requested locale
+  // isn't published on this profile; the visitor sees the
+  // defaultLocale's content (Payload returns it via `fallback: true`).
+  const localesAvailable = readLocalesAvailable(bundle.profile as { localesAvailable?: unknown });
+  const profileDefaultLocale =
+    fromPayloadLocale(
+      String((bundle.profile as { defaultLocale?: string }).defaultLocale ?? 'pt-BR'),
+    ) ?? 'pt';
+  const showFallbackBanner =
+    !localesAvailable.includes(requestedLocale) &&
+    requestedLocale !== profileDefaultLocale;
+  const t = await getTranslations('profile');
+
   return (
     <main id="main">
       {/* Trusted: every value is canonicalized server-side. The
@@ -102,6 +160,15 @@ export default async function PublicProfilePage({ params }: PageParams) {
         nonce={nonce}
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {showFallbackBanner ? (
+        <aside
+          role="status"
+          lang={toBcp47(profileDefaultLocale)}
+          className="border-b border-border bg-surface px-6 py-3 text-center text-sm text-text-muted md:px-12"
+        >
+          {t('fallbackBanner', { language: t(`languageNames.${profileDefaultLocale}`) })}
+        </aside>
+      ) : null}
       <AnchorNav bundle={bundle} />
       <ProfileRenderer bundle={bundle} mode="public" nonce={nonce} />
       <AnalyticsClient profileSlug={slug} />

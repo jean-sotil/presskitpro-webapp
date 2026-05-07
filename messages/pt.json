@@ -1,0 +1,133 @@
+{
+  "_meta": {
+    "locale": "pt",
+    "label": "Português",
+    "draft": false
+  },
+  "marketing": {
+    "hero": {
+      "eyebrow": "Press kit profissional para artistas",
+      "title": "Seu press kit em 5 minutos.",
+      "tagline": "Crie uma página pública de press kit com sua bio, fotos, faixas, redes e link para download — tudo no seu domínio presskit.pro/seu-nome.",
+      "cta": "Crie seu press kit",
+      "ctaHint": "Grátis por 14 dias. Sem cartão."
+    },
+    "whatIsPressKit": {
+      "eyebrow": "O que é um press kit?",
+      "title": "Tudo que um booker precisa para fechar.",
+      "body": "Um press kit reúne bio, fotos profissionais, faixas em destaque, links das redes e contato em uma página só — pronta pra mandar pra qualquer casa, festival ou produtor. PressKit Pro entrega isso num link curto, otimizado pra SEO e leve no celular."
+    },
+    "howItWorks": {
+      "eyebrow": "Como funciona",
+      "title": "Três passos.",
+      "steps": [
+        {
+          "n": "01",
+          "title": "Reserve seu link",
+          "body": "Escolha presskit.pro/seu-nome no onboarding. Reservado por 7 dias enquanto você termina o cadastro."
+        },
+        {
+          "n": "02",
+          "title": "Monte seu press kit",
+          "body": "Suba bio, fotos, faixas, redes e o link do seu material em alta. Sem código, sem template difícil — tudo em PT-BR."
+        },
+        {
+          "n": "03",
+          "title": "Compartilhe",
+          "body": "Mande o link para bookers, festivais ou no DM. Você atualiza quando quiser; o link nunca muda."
+        }
+      ]
+    },
+    "examples": {
+      "eyebrow": "Quem já usa",
+      "title": "Inspire-se em quem já está no ar.",
+      "empty": "Nenhum perfil publicado ainda. Rode `pnpm seed` no ambiente de dev para popular exemplos.",
+      "seeAll": "Ver todos os exemplos"
+    },
+    "pricingTeaser": {
+      "eyebrow": "Plano único",
+      "title": "R$ 19/mês. Tudo incluso.",
+      "body": "Hospedagem, domínio presskit.pro/seu-nome, atualizações ilimitadas, suporte em PT. Cancele quando quiser.",
+      "cta": "Ver detalhes do plano",
+      "href": "/pricing"
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Perguntas frequentes.",
+      "items": [
+        { "q": "Preciso saber programar?", "a": "Não. O editor é totalmente visual. Em 5 minutos seu press kit está no ar." },
+        { "q": "Posso usar meu próprio domínio?", "a": "No plano atual o link é presskit.pro/seu-nome. Domínio próprio entra na próxima fase do produto." },
+        { "q": "Os bookers conseguem baixar minhas fotos?", "a": "Sim. Você cola o link do seu Drive/Dropbox e nós validamos que está público antes de salvar." },
+        { "q": "Funciona no celular?", "a": "Sim — desktop, celular e tablet. As páginas públicas têm Lighthouse 95+ em mobile." },
+        { "q": "O conteúdo está em português?", "a": "Tudo em PT-BR. Suporte para EN e ES está disponível via toggle de idioma." },
+        { "q": "Posso despublicar a qualquer momento?", "a": "Sim. Despublicar tira do ar imediatamente — o link público volta a 404." }
+      ]
+    }
+  },
+  "profile": {
+    "fallbackBanner": "Conteúdo original em {language}. Tradução para o seu idioma ainda não está disponível.",
+    "languageNames": {
+      "pt": "Português",
+      "en": "Inglês",
+      "es": "Espanhol"
+    }
+  },
+  "consent": {
+    "body": "Usamos apenas cookies essenciais — sessão de login e preferência de idioma. Não usamos cookies de rastreamento ou publicidade.",
+    "cta": "Entendido",
+    "learnMore": "Saiba mais",
+    "learnMoreHref": "/privacy",
+    "regionLabel": "Aviso de cookies"
+  },
+  "footer": {
+    "tagline": "Press kits, do jeito certo.",
+    "navLabel": "Rodapé",
+    "nav": {
+      "privacy": { "label": "Privacidade", "href": "/privacy" },
+      "terms": { "label": "Termos", "href": "/terms" },
+      "status": { "label": "Status", "href": "https://status.presskit.pro" },
+      "contact": { "label": "Contato", "href": "mailto:contato@presskit.pro" }
+    },
+    "social": {
+      "instagram": { "label": "Instagram", "href": "https://www.instagram.com/presskitpro" },
+      "twitter": { "label": "Twitter / X", "href": "https://x.com/presskitpro" }
+    },
+    "lang": {
+      "label": "Idioma",
+      "pt": "Português",
+      "en": "English",
+      "es": "Español"
+    },
+    "copyright": "© PressKit Pro. Todos os direitos reservados."
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "updatedLabel": "Atualizado em",
+    "updatedAt": "2026-04-29",
+    "draftBadge": "Rascunho — pendente de revisão jurídica.",
+    "intro": "Esta política descreve como a PressKit Pro coleta, usa e protege seus dados pessoais quando você usa o serviço. Ao criar uma conta ou navegar nas páginas públicas, você concorda com os termos desta política.",
+    "sections": [
+      { "heading": "Dados que coletamos", "body": "Coletamos o e-mail informado no cadastro e o conteúdo que você publica no seu press kit (bio, fotos, links, faixas). Não coletamos dados de localização, dispositivo ou navegação para fins de publicidade." },
+      { "heading": "Cookies", "body": "Usamos apenas dois cookies essenciais: o cookie de sessão de autenticação e o cookie de preferência de idioma. Não definimos cookies de rastreamento ou de publicidade. O cookie `cookie_consent` armazena seu reconhecimento desse aviso." },
+      { "heading": "Compartilhamento", "body": "Não vendemos nem alugamos seus dados. Compartilhamos apenas com provedores essenciais para o funcionamento do serviço (hospedagem, processamento de pagamento), sob contratos com obrigações de confidencialidade." },
+      { "heading": "Seus direitos (LGPD)", "body": "Você pode acessar, corrigir, exportar ou apagar seus dados a qualquer momento. As ferramentas de exportação e exclusão self-serve estão na próxima versão (task-33). Até lá, escreva para contato@presskit.pro." },
+      { "heading": "Contato", "body": "Dúvidas sobre esta política: contato@presskit.pro." }
+    ]
+  },
+  "terms": {
+    "title": "Termos de Uso",
+    "updatedLabel": "Atualizado em",
+    "updatedAt": "2026-04-29",
+    "draftBadge": "Rascunho — pendente de revisão jurídica.",
+    "intro": "Estes termos regulam o uso da PressKit Pro. Ao criar uma conta, você aceita as condições abaixo. Se não concordar, não use o serviço.",
+    "sections": [
+      { "heading": "Conta e conteúdo", "body": "Você é responsável pelo conteúdo publicado no seu press kit, incluindo direitos sobre fotos, faixas e textos. Conteúdo que infrinja direitos de terceiros, viole leis ou seja ofensivo pode ser removido sem aviso prévio." },
+      { "heading": "Plano e cobrança", "body": "A PressKit Pro oferece um período gratuito de 14 dias. Ao final, é necessário assinar um plano para manter o press kit no ar. O cancelamento pode ser feito a qualquer momento e produz efeito ao fim do ciclo de cobrança." },
+      { "heading": "Slug e link público", "body": "O endereço presskit.pro/seu-nome é reservado enquanto sua conta está ativa. Em caso de inatividade prolongada, o slug pode ser liberado conforme a política de reciclagem (task-32)." },
+      { "heading": "Suspensão e encerramento", "body": "Podemos suspender ou encerrar contas que violem estes termos. Em caso de encerramento por violação, não há reembolso pro-rata." },
+      { "heading": "Limitação de responsabilidade", "body": "O serviço é fornecido \"como está\". Não garantimos disponibilidade contínua, embora façamos o possível para manter SLAs alinhados ao tier do plano." },
+      { "heading": "Foro e legislação", "body": "Estes termos são regidos pelas leis da República Federativa do Brasil. Fica eleito o foro da comarca de São Paulo - SP para dirimir eventuais conflitos." },
+      { "heading": "Contato", "body": "Dúvidas sobre estes termos: contato@presskit.pro." }
+    ]
+  }
+}

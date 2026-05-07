@@ -1,0 +1,134 @@
+{
+  "_meta": {
+    "locale": "en",
+    "label": "English",
+    "draft": true,
+    "draftNote": "Engineering-drafted translations pending content-team review."
+  },
+  "marketing": {
+    "hero": {
+      "eyebrow": "Professional press kit for artists",
+      "title": "Your press kit in 5 minutes.",
+      "tagline": "Build a public press kit page with your bio, photos, tracks, social links, and download link — all on your own presskit.pro/your-name URL.",
+      "cta": "Build your press kit",
+      "ctaHint": "Free for 14 days. No credit card."
+    },
+    "whatIsPressKit": {
+      "eyebrow": "What is a press kit?",
+      "title": "Everything a booker needs to close.",
+      "body": "A press kit pulls your bio, professional photos, featured tracks, social links, and contact info into a single page — ready to send to any venue, festival, or producer. PressKit Pro delivers it on a short link, optimized for SEO and lightweight on mobile."
+    },
+    "howItWorks": {
+      "eyebrow": "How it works",
+      "title": "Three steps.",
+      "steps": [
+        {
+          "n": "01",
+          "title": "Reserve your link",
+          "body": "Pick presskit.pro/your-name during onboarding. We hold it for 7 days while you finish signup."
+        },
+        {
+          "n": "02",
+          "title": "Build your press kit",
+          "body": "Upload a bio, photos, tracks, social links, and a link to your high-res assets. No code, no fiddly templates."
+        },
+        {
+          "n": "03",
+          "title": "Share",
+          "body": "Send the link to bookers, festivals, or in DMs. Update whenever you want; the link never changes."
+        }
+      ]
+    },
+    "examples": {
+      "eyebrow": "Already on PressKit Pro",
+      "title": "Get inspired by artists already live.",
+      "empty": "No published profiles yet. Run `pnpm seed` in dev to populate examples.",
+      "seeAll": "See all examples"
+    },
+    "pricingTeaser": {
+      "eyebrow": "One plan",
+      "title": "$5/month. Everything included.",
+      "body": "Hosting, the presskit.pro/your-name URL, unlimited updates, support in PT/EN/ES. Cancel anytime.",
+      "cta": "See plan details",
+      "href": "/pricing"
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Frequently asked questions.",
+      "items": [
+        { "q": "Do I need to know how to code?", "a": "No. The editor is fully visual. Your press kit goes live in 5 minutes." },
+        { "q": "Can I use my own domain?", "a": "On the current plan the link is presskit.pro/your-name. Custom domains land in the next product phase." },
+        { "q": "Can bookers download my photos?", "a": "Yes. You paste your Drive/Dropbox link and we verify it's public before saving." },
+        { "q": "Does it work on mobile?", "a": "Yes — desktop, mobile, and tablet. Public pages score 95+ on Lighthouse mobile." },
+        { "q": "What languages are supported?", "a": "Portuguese, English, and Spanish via the language toggle in the footer." },
+        { "q": "Can I unpublish at any time?", "a": "Yes. Unpublishing removes the page immediately — the public link returns 404." }
+      ]
+    }
+  },
+  "profile": {
+    "fallbackBanner": "Original content in {language}. A translation in your language is not yet available.",
+    "languageNames": {
+      "pt": "Portuguese",
+      "en": "English",
+      "es": "Spanish"
+    }
+  },
+  "consent": {
+    "body": "We only use essential cookies — login session and language preference. No tracking or advertising cookies.",
+    "cta": "Got it",
+    "learnMore": "Learn more",
+    "learnMoreHref": "/privacy",
+    "regionLabel": "Cookie notice"
+  },
+  "footer": {
+    "tagline": "Press kits, done right.",
+    "navLabel": "Footer",
+    "nav": {
+      "privacy": { "label": "Privacy", "href": "/privacy" },
+      "terms": { "label": "Terms", "href": "/terms" },
+      "status": { "label": "Status", "href": "https://status.presskit.pro" },
+      "contact": { "label": "Contact", "href": "mailto:contato@presskit.pro" }
+    },
+    "social": {
+      "instagram": { "label": "Instagram", "href": "https://www.instagram.com/presskitpro" },
+      "twitter": { "label": "Twitter / X", "href": "https://x.com/presskitpro" }
+    },
+    "lang": {
+      "label": "Language",
+      "pt": "Português",
+      "en": "English",
+      "es": "Español"
+    },
+    "copyright": "© PressKit Pro. All rights reserved."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "updatedLabel": "Updated on",
+    "updatedAt": "2026-04-29",
+    "draftBadge": "Draft — pending legal review.",
+    "intro": "This policy describes how PressKit Pro collects, uses, and protects your personal data when you use the service. By creating an account or browsing the public pages, you agree to the terms of this policy.",
+    "sections": [
+      { "heading": "Data we collect", "body": "We collect the email you provide at signup and the content you publish in your press kit (bio, photos, links, tracks). We do not collect location, device, or browsing data for advertising purposes." },
+      { "heading": "Cookies", "body": "We only use essential cookies: the authentication session cookie and the language preference cookie. We do not set tracking or advertising cookies. The `cookie_consent` cookie stores your acknowledgment of this notice." },
+      { "heading": "Sharing", "body": "We do not sell or rent your data. We only share with providers essential to the service (hosting, payment processing) under contracts with confidentiality obligations." },
+      { "heading": "Your rights (LGPD)", "body": "You can access, correct, export, or delete your data at any time. Self-serve export and deletion ship in the next version (task-33). Until then, write to contato@presskit.pro." },
+      { "heading": "Contact", "body": "Questions about this policy: contato@presskit.pro." }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "updatedLabel": "Updated on",
+    "updatedAt": "2026-04-29",
+    "draftBadge": "Draft — pending legal review.",
+    "intro": "These terms govern the use of PressKit Pro. By creating an account, you accept the conditions below. If you do not agree, do not use the service.",
+    "sections": [
+      { "heading": "Account and content", "body": "You are responsible for the content you publish in your press kit, including rights to photos, tracks, and text. Content that infringes third-party rights, violates laws, or is offensive may be removed without prior notice." },
+      { "heading": "Plan and billing", "body": "PressKit Pro offers a 14-day free trial. After that, a paid plan is required to keep the press kit live. Cancellation can be made at any time and takes effect at the end of the billing cycle." },
+      { "heading": "Slug and public link", "body": "The presskit.pro/your-name URL is reserved while your account is active. After prolonged inactivity, the slug may be released per the recycling policy (task-32)." },
+      { "heading": "Suspension and termination", "body": "We may suspend or terminate accounts that violate these terms. In the case of termination for violation, no pro-rated refunds are issued." },
+      { "heading": "Limitation of liability", "body": "The service is provided \"as is\". We do not guarantee continuous availability, although we strive to meet SLAs aligned with the plan tier." },
+      { "heading": "Governing law and venue", "body": "These terms are governed by the laws of the Federative Republic of Brazil. The courts of São Paulo - SP are the agreed venue for any disputes." },
+      { "heading": "Contact", "body": "Questions about these terms: contato@presskit.pro." }
+    ]
+  }
+}

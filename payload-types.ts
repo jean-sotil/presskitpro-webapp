@@ -105,10 +105,10 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('pt-BR' | 'en') | ('pt-BR' | 'en')[];
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('pt-BR' | 'en' | 'es') | ('pt-BR' | 'en' | 'es')[];
   globals: {};
   globalsSelect: {};
-  locale: 'pt-BR' | 'en';
+  locale: 'pt-BR' | 'en' | 'es';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -299,11 +299,11 @@ export interface Profile {
    * Destination email for form submissions. Falls back to `contactEmail` when empty.
    */
   contactFormDestination?: string | null;
-  defaultLocale: 'pt-BR' | 'en';
+  defaultLocale: 'pt-BR' | 'en' | 'es';
   /**
-   * Locales with published content. The public profile uses this to gate the locale toggle (task-19).
+   * Locales with published content. The public profile uses this to gate the locale toggle (task-29).
    */
-  localesAvailable?: ('pt-BR' | 'en')[] | null;
+  localesAvailable?: ('pt-BR' | 'en' | 'es')[] | null;
   updatedAt: string;
   createdAt: string;
 }

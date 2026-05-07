@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
 import { FaqAccordion } from '@/components/marketing/FaqAccordion';
 import { HowItWorks } from '@/components/marketing/HowItWorks';
@@ -11,15 +12,21 @@ import {
   loadLiveExamples,
   type LiveExample,
 } from '@/lib/marketing/fetch-live-examples';
-import { copy } from '@/lib/marketing/copy';
 import { payload as getPayloadInstance } from '@/lib/payload';
 
-export const revalidate = 3600;
+// Task-29 — locale negotiation reads cookies + Accept-Language per
+// request, which makes this route dynamic. The previous `revalidate`
+// was a cross-locale cache trap (first render's locale stuck for an
+// hour). PR-B will introduce per-locale ISR keying.
+export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
-  title: 'PressKit Pro — Press kit profissional em 5 minutos',
-  description: copy.hero.tagline,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('marketing.hero');
+  return {
+    title: 'PressKit Pro',
+    description: t('tagline'),
+  };
+}
 
 async function fetchExamples(): Promise<LiveExample[]> {
   try {

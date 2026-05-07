@@ -1,24 +1,26 @@
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
 import { LegalPage } from '@/components/legal/LegalPage';
-import { legalCopy } from '@/lib/legal/copy';
 
-export const metadata: Metadata = {
-  title: 'Termos de Uso — PressKit Pro',
-  description:
-    'Termos que regulam o uso da PressKit Pro.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('terms');
+  return { title: `${t('title')} — PressKit Pro` };
+}
 
-export default function TermsPage() {
-  const c = legalCopy.terms;
+type LegalSection = { heading: string; body: string };
+
+export default async function TermsPage() {
+  const t = await getTranslations('terms');
+  const sections = t.raw('sections') as LegalSection[];
   return (
     <LegalPage
-      title={c.title}
-      intro={c.intro}
-      updatedLabel={c.updatedLabel}
-      updatedAt={c.updatedAt}
-      draftBadge={c.draftBadge}
-      sections={c.sections}
+      title={t('title')}
+      intro={t('intro')}
+      updatedLabel={t('updatedLabel')}
+      updatedAt={t('updatedAt')}
+      draftBadge={t('draftBadge')}
+      sections={sections}
     />
   );
 }

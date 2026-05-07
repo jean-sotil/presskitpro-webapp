@@ -256,6 +256,7 @@ export const Profiles: CollectionConfig = {
       options: [
         { label: 'Português (Brasil)', value: 'pt-BR' },
         { label: 'English', value: 'en' },
+        { label: 'Español', value: 'es' },
       ],
     },
     {
@@ -266,10 +267,11 @@ export const Profiles: CollectionConfig = {
       options: [
         { label: 'Português (Brasil)', value: 'pt-BR' },
         { label: 'English', value: 'en' },
+        { label: 'Español', value: 'es' },
       ],
       admin: {
         description:
-          'Locales with published content. The public profile uses this to gate the locale toggle (task-19).',
+          'Locales with published content. The public profile uses this to gate the locale toggle (task-29).',
       },
     },
   ],

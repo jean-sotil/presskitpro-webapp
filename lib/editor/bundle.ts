@@ -109,6 +109,7 @@ export type PublicBundleDeps = {
   findPublishedProfileBySlug(slug: string): Promise<ProfileLite | null>;
   findProfileContent(
     profileId: number | string,
+    locale?: string,
   ): Promise<EditorBundle['content']>;
   findTheme(profileId: number | string): Promise<EditorBundle['theme']>;
   findSocialLinks(
@@ -124,13 +125,20 @@ export type PublicBundleDeps = {
 
 export async function loadPublicBundle(
   deps: PublicBundleDeps,
-  args: { slug: string },
+  args: { slug: string; locale?: string },
 ): Promise<EditorBundle | null> {
   const profile = await deps.findPublishedProfileBySlug(args.slug);
   if (!profile) return null;
   const [content, theme, socialLinks, featuredTrack, instagramPosts] =
     await Promise.all([
-      deps.findProfileContent(profile.id),
+      // Only ProfileContent has localized fields today (tagline, bio,
+      // services). Other relations (theme, socialLinks, featuredTrack,
+      // instagramPosts) are locale-agnostic. The locale arg is omitted
+      // when undefined so callers/tests that don't care about i18n get
+      // the legacy single-arg signature.
+      args.locale !== undefined
+        ? deps.findProfileContent(profile.id, args.locale)
+        : deps.findProfileContent(profile.id),
       deps.findTheme(profile.id),
       deps.findSocialLinks(profile.id),
       deps.findFeaturedTrack(profile.id),

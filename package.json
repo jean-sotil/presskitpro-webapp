@@ -22,6 +22,7 @@
     "analyze": "cross-env ANALYZE=1 NODE_OPTIONS=--no-deprecation next build",
     "bundle:check": "tsx scripts/check-bundle-budget.ts",
     "bundle:update": "tsx scripts/check-bundle-budget.ts --update",
+    "i18n:check": "tsx scripts/check-i18n-keys.ts",
     "lighthouse": "lhci autorun",
     "lighthouse:assert": "lhci assert",
     "generate:grain": "tsx scripts/generate-grain.ts",

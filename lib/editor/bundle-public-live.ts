@@ -35,11 +35,16 @@ export function livePublicBundleDeps(): PublicBundleDeps {
       return doc ? (doc as unknown as ProfileLite) : null;
     },
 
-    async findProfileContent(profileId) {
+    async findProfileContent(profileId, locale) {
       const p = await getPayloadInstance();
       const result = await p.find({
         collection: 'profile-content',
         where: { profile: { equals: profileId } },
+        // Task-29 — pass the active Payload locale so the localized
+        // fields (tagline, bio, services) come back in the requested
+        // locale. Payload's `fallback: true` returns defaultLocale's
+        // values when the requested locale's column is null.
+        ...(locale ? { locale: locale as 'pt-BR' | 'en' | 'es' } : {}),
         limit: 1,
         depth: 1,
         overrideAccess: true,

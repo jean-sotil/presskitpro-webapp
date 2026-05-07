@@ -26,6 +26,12 @@ export default defineConfig({
     : [['list']],
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000',
+    // Task-29 — pin the browser locale so `Accept-Language` defaults to
+    // the PRD-default PT-BR. Chromium otherwise ships `en-US` and our
+    // negotiator correctly resolves to `en`, breaking specs that
+    // assume PT. Specs that need a non-PT locale set the `NEXT_LOCALE`
+    // cookie explicitly via `context.addCookies`.
+    locale: 'pt-BR',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

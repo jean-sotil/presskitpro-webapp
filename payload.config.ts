@@ -40,12 +40,13 @@ export default buildConfig({
     InstagramPosts,
     StripeWebhookEvents,
   ],
-  // PRD §10 — Phase 1 ships PT-BR. EN is configured now so task-29 doesn't
-  // have to retrofit every collection. `fallback: true` returns defaultLocale
-  // for missing-locale lookups; the public profile route (task-19) must
-  // check `Profiles.localesAvailable` before linking to a locale toggle.
+  // PRD §10 + task-29 — PT-BR is the v1 default; EN was wired since
+  // task-08; ES was promoted from task-34 by user direction. The
+  // `localized: true` fields on ProfileContent already exist; adding a
+  // locale here is a non-destructive add (Payload backfills missing
+  // rows by returning defaultLocale via `fallback: true`).
   localization: {
-    locales: ['pt-BR', 'en'],
+    locales: ['pt-BR', 'en', 'es'],
     defaultLocale: 'pt-BR',
     fallback: true,
   },
