@@ -2,8 +2,28 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { decideRedirect } from '@/lib/auth/decide-redirect';
 import { deriveProfileSlugFromPath } from '@/lib/analytics/derive-event';
+import { createRateLimiterFromEnv } from '@/lib/server/rate-limit-from-env';
+import { buildCspHeader } from '@/lib/security/csp';
+import { mintNonce } from '@/lib/security/nonce';
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
+
+const AUTH_PATHS = new Set<string>(['/login', '/signup', '/auth/callback']);
+
+// Module-scoped so a single limiter instance persists across requests in
+// the same Edge isolate. In production with KV env set the underlying
+// store is shared across regions; in dev each isolate has its own Map.
+const authLimiter = createRateLimiterFromEnv({
+  windowMs: 60_000,
+  max: 5,
+  prefix: 'rl:auth',
+});
+
+function clientIp(req: NextRequest): string {
+  const xff = req.headers.get('x-forwarded-for');
+  if (xff) return xff.split(',')[0]!.trim();
+  return req.headers.get('x-real-ip') ?? 'unknown';
+}
 
 /**
  * Auth middleware.
@@ -12,9 +32,42 @@ type CookieToSet = { name: string; value: string; options?: CookieOptions };
  * and applies our pure `decideRedirect` policy. Real session validation
  * happens in server components via `supabase.auth.getUser()`; middleware is
  * a fast UX redirect, not the security boundary.
+ *
+ * Task-27 added: per-request CSP nonce, `Content-Security-Policy-Report-Only`
+ * response header, and IP-based rate limiting on the auth surface.
  */
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next({ request: req });
+  // Task-27 — auth-path rate limiter. Hit BEFORE Supabase cookie work
+  // so abusive clients don't generate session-decode CPU.
+  if (AUTH_PATHS.has(req.nextUrl.pathname)) {
+    const decision = await authLimiter.check(clientIp(req));
+    if (!decision.ok) {
+      return new NextResponse('Too Many Requests', {
+        status: 429,
+        headers: {
+          'Retry-After': String(decision.retryAfterSec),
+          'content-type': 'text/plain; charset=utf-8',
+        },
+      });
+    }
+  }
+
+  // Task-27 — per-request CSP nonce, threaded to RSCs via the
+  // `x-nonce` request header. The inline theme `<style>` on the public
+  // profile reads it; everything else uses external stylesheets.
+  const nonce = mintNonce();
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-nonce', nonce);
+  const res = NextResponse.next({ request: { headers: requestHeaders } });
+
+  // CSP — Report-Only for v1. Flip to enforce mode after a 7-day
+  // staging soak shows zero unexpected violations (PRD §14).
+  const csp = buildCspHeader({ nonce });
+  const cspHeader =
+    process.env.CSP_ENFORCE === '1'
+      ? 'Content-Security-Policy'
+      : 'Content-Security-Policy-Report-Only';
+  res.headers.set(cspHeader, csp);
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

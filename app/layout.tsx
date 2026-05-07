@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { CookieConsentBanner } from '@/components/CookieConsentBanner';
 import { SkipToContent } from '@/components/ui/SkipToContent';
 import { fontPairClasses } from '@/lib/design/fonts';
 import { Providers } from './providers';
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-body bg-bg text-text antialiased">
         <SkipToContent />
         <Providers>{children}</Providers>
+        <CookieConsentBanner />
       </body>
     </html>
   );

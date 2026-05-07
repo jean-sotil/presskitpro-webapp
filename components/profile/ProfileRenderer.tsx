@@ -47,6 +47,12 @@ export interface ProfileRendererProps {
    * that case (handled by the public route — task-19).
    */
   mode: 'preview' | 'public';
+  /**
+   * Per-request CSP nonce minted in middleware (task-27). When omitted
+   * the inline `<style>` falls back to `'unsafe-inline'` in style-src
+   * for older browsers; modern browsers rely on the nonce attribute.
+   */
+  nonce?: string;
 }
 
 /**
@@ -54,7 +60,7 @@ export interface ProfileRendererProps {
  * public profile route (task-19). The order comes from `Themes.sectionOrder`,
  * reconciled with the registry defaults.
  */
-export function ProfileRenderer({ bundle, mode: _mode }: ProfileRendererProps) {
+export function ProfileRenderer({ bundle, mode: _mode, nonce }: ProfileRendererProps) {
   const persisted = bundle.theme?.sectionOrder as
     | Array<{ key: string }>
     | undefined;
@@ -91,7 +97,7 @@ ${fontDecls}
 
   return (
     <>
-      <style data-theme-scope={scopeId}>{themeCss}</style>
+      <style data-theme-scope={scopeId} nonce={nonce}>{themeCss}</style>
       <article data-theme-scope={scopeId} className="bg-bg text-text">
         {order.map((key) => {
           const Render = SECTION_RENDERERS[key];

@@ -16,6 +16,8 @@ const RESERVED_TOP_LEVEL_PATHS = new Set([
   'auth',
   'dev',
   'spike',
+  'privacy',
+  'terms',
   'sitemap.xml',
   'robots.txt',
 ]);

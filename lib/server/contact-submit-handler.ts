@@ -18,7 +18,7 @@
  */
 
 import { validateContactForm } from './contact-validate';
-import type { RateLimiter } from './rate-limit';
+import type { AsyncRateLimiter } from './rate-limit-kv';
 
 export type ContactProfileSnapshot = {
   contactEmail: string;
@@ -28,7 +28,7 @@ export type ContactProfileSnapshot = {
 };
 
 export type ContactSubmitDeps = {
-  rateLimiter: RateLimiter;
+  rateLimiter: AsyncRateLimiter;
   /** From address on outbound contact emails. Resend rejects unverified
    *  domains, so dev typically uses `onboarding@resend.dev` and prod
    *  uses an address on a domain verified in the Resend dashboard. */
@@ -65,7 +65,7 @@ export async function handleContactSubmit(args: {
 }): Promise<ContactSubmitResult> {
   const { deps, profileId, ip, body } = args;
 
-  const rl = deps.rateLimiter.check(`contact:${ip}`);
+  const rl = await deps.rateLimiter.check(`contact:${ip}`);
   if (!rl.ok) {
     return {
       status: 429,

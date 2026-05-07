@@ -92,6 +92,13 @@ export const copy = {
       },
     ],
   },
+  consent: {
+    body:
+      'Usamos apenas cookies essenciais — sessão de login e preferência de idioma. Não usamos cookies de rastreamento ou publicidade.',
+    cta: 'Entendido',
+    learnMore: 'Saiba mais',
+    learnMoreHref: '/privacy',
+  },
   footer: {
     tagline: 'Press kits, do jeito certo.',
     nav: {

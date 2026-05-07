@@ -7,17 +7,18 @@ import {
   type ContactSubmitBody,
   type ContactSubmitDeps,
 } from '@/lib/server/contact-submit-handler';
-import { createRateLimiter } from '@/lib/server/rate-limit';
+import { createRateLimiterFromEnv } from '@/lib/server/rate-limit-from-env';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 // Module-singleton so the limiter survives request-to-request inside one
-// process. PRD §14: 5 / IP / hour. Multi-instance deployments will need
-// shared storage — task-27 follow-up.
-const rateLimiter = createRateLimiter({
+// process. PRD §14: 5 / IP / hour. KV-backed when KV_REST_API_URL is set
+// (task-27); falls back to in-memory in dev.
+const rateLimiter = createRateLimiterFromEnv({
   windowMs: 60 * 60 * 1000,
   max: 5,
+  prefix: 'rl:contact',
 });
 
 export async function POST(

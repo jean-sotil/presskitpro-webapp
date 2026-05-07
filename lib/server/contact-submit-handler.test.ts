@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { createRateLimiter } from './rate-limit';
+import { createRateLimiterFromEnv } from './rate-limit-from-env';
 import {
   handleContactSubmit,
   type ContactSubmitDeps,
@@ -12,7 +12,7 @@ function makeDeps(overrides: Partial<ContactSubmitDeps> = {}): {
 } {
   const sent: Array<{ to: string; from: string; subject: string; body: string }> = [];
   const deps: ContactSubmitDeps = {
-    rateLimiter: createRateLimiter({ windowMs: 60_000, max: 5 }),
+    rateLimiter: createRateLimiterFromEnv({ windowMs: 60_000, max: 5, kvAdapter: null }),
     fromAddress: 'contact@test.example',
     findProfile: vi.fn(async (id: number) =>
       id === 1
@@ -138,10 +138,10 @@ describe('handleContactSubmit', () => {
 
   it('returns 429 with Retry-After when rate limit is exceeded', async () => {
     const { deps } = makeDeps({
-      rateLimiter: createRateLimiter({
+      rateLimiter: createRateLimiterFromEnv({
         windowMs: 60_000,
         max: 1,
-        now: () => 0,
+        kvAdapter: null,
       }),
     });
     await handleContactSubmit({ deps, profileId: 1, ip: 'X', body: validBody });

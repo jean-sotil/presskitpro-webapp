@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 import { AnalyticsClient } from '@/components/profile/AnalyticsClient';
@@ -88,16 +89,21 @@ export default async function PublicProfilePage({ params }: PageParams) {
     imageUrl: resolveImageUrl(bundle),
   });
 
+  // Task-27 — CSP nonce minted in middleware, threaded into the inline
+  // theme `<style>` and the JSON-LD `<script>`.
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
+
   return (
     <main id="main">
       {/* Trusted: every value is canonicalized server-side. The
           `JSON.stringify` output is the entire script body. */}
       <script
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <AnchorNav bundle={bundle} />
-      <ProfileRenderer bundle={bundle} mode="public" />
+      <ProfileRenderer bundle={bundle} mode="public" nonce={nonce} />
       <AnalyticsClient profileSlug={slug} />
     </main>
   );
