@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
 
@@ -30,7 +32,13 @@ export function PhotoGalleryRender({ bundle }: { bundle: EditorBundle }) {
           const alt = item.decorative ? '' : item.alt ?? '';
           return (
             <li key={item.id} className={itemClassFor(layout)}>
-              <img src={src} alt={alt} className="h-full w-full object-cover" loading="lazy" />
+              <Image
+                src={src}
+                alt={alt}
+                fill
+                sizes="(min-width: 768px) 33vw, 50vw"
+                className="object-cover"
+              />
             </li>
           );
         })}
@@ -53,14 +61,16 @@ function gridClassFor(layout: GalleryLayout): string {
 }
 
 function itemClassFor(layout: GalleryLayout): string {
+  // `relative` is required so the inner `<Image fill>` positions against
+  // the item box. `aspect-*` classes give that box intrinsic height.
   switch (layout) {
     case 'uniform-grid':
-      return 'aspect-square overflow-hidden';
+      return 'relative aspect-square overflow-hidden';
     case 'carousel':
-      return 'aspect-[3/4] w-64 flex-shrink-0 snap-start overflow-hidden';
+      return 'relative aspect-[3/4] w-64 flex-shrink-0 snap-start overflow-hidden';
     case 'mosaic':
     default:
       // Every 5th item spans 2 columns + 2 rows for visual rhythm.
-      return 'aspect-square overflow-hidden md:[&:nth-child(5n+1)]:row-span-2 md:[&:nth-child(5n+1)]:col-span-2 md:[&:nth-child(5n+1)]:aspect-auto';
+      return 'relative aspect-square overflow-hidden md:[&:nth-child(5n+1)]:row-span-2 md:[&:nth-child(5n+1)]:col-span-2 md:[&:nth-child(5n+1)]:aspect-auto';
   }
 }

@@ -379,3 +379,59 @@ for task-31's backfill helper) — or wait until tomorrow's tick.
   `public.analytics_salts`. Yesterday's hash and today's hash for the
   same visitor are uncorrelatable — by design.
 - Referrers are stored as host-only (`google.com`, not the search query).
+
+## Performance budget (task-26)
+
+Three gates enforce PRD §13: a Lighthouse-CI assertion config, a
+committed bundle-size lock file, and `next/image` on every public
+surface.
+
+### Lighthouse-CI
+
+```bash
+bun run lighthouse        # full collect + assert + upload
+bun run lighthouse:assert # assert only against an existing collect run
+```
+
+`lighthouserc.json` runs `bun run start`, hits `http://localhost:3000/`
+with 3 mobile runs, and asserts: Performance ≥ 95, A11y ≥ 95,
+Best-Practices ≥ 95, LCP < 2500 ms, CLS < 0.1, TBT < 200 ms (lab proxy
+for INP), JS budget ≤ 250 KB, CSS budget ≤ 60 KB. CI runs the same
+config via `treosh/lighthouse-ci-action@v12`.
+
+### Bundle baseline
+
+`bundles.lock.json` records the First Load JS (KB) per route. CI fails
+on any route that grows by more than the lock's `toleranceKB` (default
+10 KB) or appears without an entry.
+
+```bash
+bun run analyze         # ANALYZE=1 next build → opens analyzer report
+bun run build           # produces .next/app-build-manifest.json
+bun run bundle:check    # diffs current sizes vs bundles.lock.json
+bun run bundle:update   # regenerates the lock file (commit the diff)
+```
+
+The lock-file flow on a legitimate size change: edit the code, rebuild,
+run `bundle:update`, eyeball the new numbers, commit the lock file
+alongside the code change. Only update when the increase is intentional.
+
+### Image policy
+
+- Public-facing surfaces (hero, gallery, logos) ship as `<Image>` with
+  explicit `width`/`height` OR `fill` inside an aspect-ratio container.
+- The hero portrait in `HeroRender.tsx` is the LCP element and carries
+  `priority`. Do not add `priority` to any other image on the page.
+- Editor / wizard preview `<img>` tags use `URL.createObjectURL` blob
+  URLs, which `next/image` cannot optimize. They keep an
+  `eslint-disable @next/next/no-img-element` with a one-line
+  justification — leave that pattern intact.
+
+### Edge cache
+
+Middleware sets `Cache-Control` and `CDN-Cache-Control` on `/[slug]`
+responses (`public, s-maxage=3600, stale-while-revalidate=86400`).
+`/api/*` is excluded by the middleware matcher; `/dashboard` and other
+reserved paths are excluded by `deriveProfileSlugFromPath`. The smoke
+spec at [tests/e2e/perf-headers.spec.ts](../../tests/e2e/perf-headers.spec.ts)
+asserts both the positive and negative branches.

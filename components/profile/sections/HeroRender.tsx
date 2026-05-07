@@ -21,7 +21,10 @@ export function HeroRender({ bundle }: { bundle: EditorBundle }) {
   const ctaUrl = (content?.ctaUrl as string | undefined) ?? null;
 
   const portraitMedia = profile.portrait as PortraitMedia | null | undefined;
-  const logoMedia = profile.logo as { bucket: string; path: string; alt?: string } | null | undefined;
+  const logoMedia = profile.logo as
+    | { bucket: string; path: string; alt?: string; width?: number | null; height?: number | null }
+    | null
+    | undefined;
   const portraitUrl = mediaUrl(portraitMedia ?? null);
   const logoUrl = mediaUrl(logoMedia ?? null);
   // Width/height come from `Media`'s exif fields when available; fall
@@ -29,6 +32,10 @@ export function HeroRender({ bundle }: { bundle: EditorBundle }) {
   // reserves space and avoids CLS.
   const portraitWidth = (portraitMedia?.width ?? 1200) || 1200;
   const portraitHeight = (portraitMedia?.height ?? 1600) || 1600;
+  // Logos vary wildly in aspect; default to a horizontal 3:1 box when
+  // the upstream Media doc lacks dimensions. CSS sizes the rendered img.
+  const logoWidth = (logoMedia?.width ?? 480) || 480;
+  const logoHeight = (logoMedia?.height ?? 160) || 160;
 
   const displayName = profile.slug.replace(/-/g, ' ');
 
@@ -36,9 +43,13 @@ export function HeroRender({ bundle }: { bundle: EditorBundle }) {
     return (
       <header className="flex flex-col items-center border-b border-border px-6 py-16 text-center md:px-12 md:py-24">
         {logoUrl ? (
-          <img
+          <Image
             src={logoUrl}
             alt={logoMedia?.alt ?? ''}
+            width={logoWidth}
+            height={logoHeight}
+            priority
+            sizes="(min-width: 768px) 256px, 192px"
             className="h-24 w-auto md:h-32"
           />
         ) : (
@@ -72,7 +83,14 @@ export function HeroRender({ bundle }: { bundle: EditorBundle }) {
         )}
         <div className="flex flex-col justify-center">
           {logoUrl ? (
-            <img src={logoUrl} alt={logoMedia?.alt ?? ''} className="mb-6 h-12 w-auto" />
+            <Image
+              src={logoUrl}
+              alt={logoMedia?.alt ?? ''}
+              width={logoWidth}
+              height={logoHeight}
+              sizes="192px"
+              className="mb-6 h-12 w-auto"
+            />
           ) : null}
           <p className="font-display text-xs uppercase tracking-widest text-text-muted">
             presskit.pro/{profile.slug}
@@ -105,7 +123,14 @@ export function HeroRender({ bundle }: { bundle: EditorBundle }) {
       ) : null}
       <div className="px-6 py-16 md:px-12 md:py-24">
         {logoUrl ? (
-          <img src={logoUrl} alt={logoMedia?.alt ?? ''} className="mb-6 h-12 w-auto" />
+          <Image
+            src={logoUrl}
+            alt={logoMedia?.alt ?? ''}
+            width={logoWidth}
+            height={logoHeight}
+            sizes="192px"
+            className="mb-6 h-12 w-auto"
+          />
         ) : null}
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
           presskit.pro/{profile.slug}

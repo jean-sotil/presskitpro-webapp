@@ -48,6 +48,10 @@ export function GalleryItem({
     >
       <div className="relative">
         {url ? (
+          // Editor thumbnail uses local blob URLs during upload and the
+          // raw bucket URL once persisted; `next/image` is unnecessary
+          // overhead for the editor surface (Lighthouse only scores public).
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={url}
             alt={item.decorative ? '' : item.alt}

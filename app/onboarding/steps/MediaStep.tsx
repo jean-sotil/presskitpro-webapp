@@ -179,6 +179,9 @@ function Dropzone({
   return (
     <label className="flex h-48 cursor-pointer flex-col items-center justify-center border-2 border-dashed border-border bg-surface p-4 text-center transition-colors hover:border-accent">
       {slot.previewUrl ? (
+        // Wizard preview shows a `URL.createObjectURL` blob before upload;
+        // `next/image` does not support blob/data URLs.
+        // eslint-disable-next-line @next/next/no-img-element
         <img src={slot.previewUrl} alt="" className="h-32 w-auto object-contain" />
       ) : (
         <span className="font-display text-sm uppercase tracking-wider text-text-muted">

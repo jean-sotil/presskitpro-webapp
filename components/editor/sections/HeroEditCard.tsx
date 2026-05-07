@@ -308,6 +308,9 @@ function Dropzone({
   return (
     <label className="flex h-40 cursor-pointer items-center justify-center border-2 border-dashed border-border bg-bg p-3 text-center transition-colors hover:border-accent">
       {previewUrl ? (
+        // `previewUrl` is a `URL.createObjectURL` blob; `next/image`
+        // cannot optimize blob/data URLs. Plain `<img>` is correct here.
+        // eslint-disable-next-line @next/next/no-img-element
         <img src={previewUrl} alt={previewAlt} className="h-32 w-auto object-contain" />
       ) : (
         <span className="font-display text-xs uppercase tracking-wider text-text-muted">

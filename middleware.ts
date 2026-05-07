@@ -60,7 +60,18 @@ export async function middleware(req: NextRequest) {
   // await this — the page must serve from cache without a network round-trip.
   if (req.method === 'GET') {
     const slug = deriveProfileSlugFromPath(req.nextUrl.pathname);
-    if (slug) firePageViewBeacon(req, slug);
+    if (slug) {
+      firePageViewBeacon(req, slug);
+      // Task-26 — edge cache for the public profile route. The page is
+      // already ISR-revalidated every hour; layering CDN cache on top
+      // lets Vercel serve a fresh page for 1h and stale for 24h while
+      // regen runs. `deriveProfileSlugFromPath` already excludes
+      // `/api`, `/dashboard`, etc., so authenticated routes never
+      // receive these headers.
+      const cache = 'public, s-maxage=3600, stale-while-revalidate=86400';
+      res.headers.set('Cache-Control', cache);
+      res.headers.set('CDN-Cache-Control', cache);
+    }
   }
   return res;
 }
