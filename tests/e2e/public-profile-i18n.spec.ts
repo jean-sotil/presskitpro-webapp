@@ -49,7 +49,10 @@ test.describe('Public profile i18n @smoke', () => {
         path: '/',
       },
     ]);
-    await page.goto('/probe-locale-html-lang-task29');
+    // `/privacy` is a real, locale-aware route. Using a probe slug
+    // would trip the 404 boundary, which doesn't always re-render the
+    // root layout in production builds.
+    await page.goto('/privacy');
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   });
 });
