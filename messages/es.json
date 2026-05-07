@@ -65,6 +65,16 @@
       ]
     }
   },
+  "email": {
+    "pressKitWarning": {
+      "subject": "Aviso: el enlace de tu press kit podría estar roto",
+      "body": "¡Hola! Detectamos que el enlace de tu press kit ({url}) falló en nuestras dos últimas verificaciones automáticas. Por favor abre el enlace y confirma que sigue siendo accesible públicamente. Si continúa fallando, ocultaremos el botón de descarga en tu página pública después de la próxima verificación. — El equipo de PressKit Pro"
+    },
+    "pressKitBroken": {
+      "subject": "Enlace del press kit oculto — acción necesaria",
+      "body": "¡Hola! Tu enlace de press kit ({url}) falló tres verificaciones seguidas, así que ocultamos el botón de descarga en tu página pública para evitar enviar a los bookers a un enlace roto. Actualiza el enlace en el editor para reactivar la descarga. — El equipo de PressKit Pro"
+    }
+  },
   "profile": {
     "fallbackBanner": "Contenido original en {language}. Aún no hay traducción para tu idioma.",
     "languageNames": {

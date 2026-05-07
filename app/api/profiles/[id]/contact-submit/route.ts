@@ -7,6 +7,7 @@ import {
   type ContactSubmitBody,
   type ContactSubmitDeps,
 } from '@/lib/server/contact-submit-handler';
+import { sendEmail } from '@/lib/email/send';
 import { createRateLimiterFromEnv } from '@/lib/server/rate-limit-from-env';
 
 export const runtime = 'nodejs';
@@ -117,58 +118,6 @@ async function verifyCaptcha(token: string): Promise<{ ok: boolean }> {
     const body = (await res.json()) as { success?: boolean };
     return { ok: Boolean(body.success) };
   } catch {
-    return { ok: false };
-  }
-}
-
-/** Resend transactional email. Until `RESEND_API_KEY` is set, this logs
- *  and returns ok — keeps the route testable in dev/CI. */
-async function sendEmail(args: {
-  to: string;
-  from: string;
-  subject: string;
-  body: string;
-}): Promise<{ ok: boolean }> {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      '[contact-form] RESEND_API_KEY unset — message NOT delivered:',
-      args,
-    );
-    return { ok: true };
-  }
-  try {
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${key}`,
-      },
-      body: JSON.stringify({
-        from: args.from,
-        to: args.to,
-        subject: args.subject,
-        text: args.body,
-      }),
-    });
-    if (!res.ok) {
-      const detail = await res.text().catch(() => '');
-      // eslint-disable-next-line no-console
-      console.error(
-        `[contact-form] Resend rejected (${res.status}):`,
-        detail,
-        '\n  from:',
-        args.from,
-        '\n  to:',
-        args.to,
-      );
-      return { ok: false };
-    }
-    return { ok: true };
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('[contact-form] Resend fetch failed:', err);
     return { ok: false };
   }
 }

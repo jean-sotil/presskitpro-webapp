@@ -319,6 +319,44 @@ Then re-run the curl. The owned Profiles row(s) flip to
 `status = 'paused'`; visiting `/<slug>` now serves the branded
 "Press kit pausado" page at HTTP 200 (not 404).
 
+### Press-kit health-check cron (task-30)
+
+Daily sweep that HEADs every published profile's `pressKitUrl` and
+flips status on consecutive failures: 2 → `warning` (artist gets a
+warning email), 3 → `broken` (CTA hidden + broken email).
+
+```bash
+curl -X POST http://localhost:3000/api/cron/press-kit-health \
+  -H "Authorization: Bearer $CRON_SECRET"
+```
+
+Response: `{ ok, checked, healthy, transitionedToWarning, transitionedToBroken, transitionedToHealthy, durationMs }`.
+
+To exercise the transition end-to-end locally:
+
+```sql
+-- Force a failing URL on a published profile.
+update payload.profiles
+   set "pressKitUrl" = 'https://example.invalid/missing',
+       "pressKitConsecutiveFails" = 1,
+       "pressKitHealthStatus" = 'healthy'
+ where slug = 'mariana-luz';
+```
+
+Then run the curl twice: the first pass flips status to `warning` +
+sends the warning email; the second flips to `broken` + sends the
+broken email. Without `RESEND_API_KEY` set, emails are logged to the
+console rather than delivered (see `lib/email/send.ts`).
+
+Vercel cron schedule (configured in the project dashboard, not in
+repo): `0 3 * * *` (03:00 UTC daily). Path: `/api/cron/press-kit-health`.
+
+To recover a profile, reset the URL to a working one and re-run the
+curl — the next successful check resets the counter to 0 and flips
+status back to `healthy`. The public CTA reappears on the next render
+(the `/[slug]` route is `force-dynamic` per task-29 PR-B, so freshness
+is per-request).
+
 ## Test the analytics pipeline (task-24)
 
 Three surfaces: capture (`/api/track`), rollup cron (`/api/cron/analytics`),

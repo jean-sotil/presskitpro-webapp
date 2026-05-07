@@ -18,6 +18,16 @@ const PROVIDER_BADGE: Record<PressKitProvider, string | null> = {
 export function PressKitLinkRender({ bundle }: { bundle: EditorBundle }) {
   const url = (bundle.profile.pressKitUrl as string | undefined) ?? null;
   if (!url) return null;
+  // Task-30 — hide the public CTA when the daily cron has flipped the
+  // health status to `broken` (3 consecutive failures). Bookers don't
+  // get a dead download link; the artist still sees their broken state
+  // in the editor.
+  const health = (bundle.profile.pressKitHealthStatus ?? 'unknown') as
+    | 'unknown'
+    | 'healthy'
+    | 'warning'
+    | 'broken';
+  if (health === 'broken') return null;
   const provider = (bundle.profile.pressKitProvider ?? 'unknown') as PressKitProvider;
   const slug = String(bundle.profile.slug ?? '');
   const badge = PROVIDER_BADGE[provider];

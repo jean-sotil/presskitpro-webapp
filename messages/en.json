@@ -65,6 +65,16 @@
       ]
     }
   },
+  "email": {
+    "pressKitWarning": {
+      "subject": "Heads up: your press-kit link may be broken",
+      "body": "Hi! Your press-kit link ({url}) failed our last two automated checks. Please open the link and confirm it's still publicly accessible. If it keeps failing, we'll hide the download button on your public page after the next check. — The PressKit Pro team"
+    },
+    "pressKitBroken": {
+      "subject": "Press-kit link hidden — action needed",
+      "body": "Hi! Your press-kit link ({url}) failed three checks in a row, so we hid the download button on your public page to avoid sending bookers to a broken link. Update the link in the editor to re-enable the download. — The PressKit Pro team"
+    }
+  },
   "profile": {
     "fallbackBanner": "Original content in {language}. A translation in your language is not yet available.",
     "languageNames": {

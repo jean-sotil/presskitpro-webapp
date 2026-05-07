@@ -284,6 +284,10 @@ export interface Profile {
    */
   pressKitHealthStatus?: ('unknown' | 'healthy' | 'warning' | 'broken') | null;
   /**
+   * Counter the daily cron flips status on (task-30). 2 → warning, 3 → broken. Reset to 0 on success.
+   */
+  pressKitConsecutiveFails?: number | null;
+  /**
    * Public WhatsApp contact (E.164, e.g. +5511999999999). Editor canonicalizes; the public profile renders a wa.me link.
    */
   contactWhatsapp?: string | null;
@@ -752,6 +756,7 @@ export interface ProfilesSelect<T extends boolean = true> {
   pressKitProvider?: T;
   pressKitLastCheckedAt?: T;
   pressKitHealthStatus?: T;
+  pressKitConsecutiveFails?: T;
   contactWhatsapp?: T;
   contactEmail?: T;
   contactFormEnabled?: T;

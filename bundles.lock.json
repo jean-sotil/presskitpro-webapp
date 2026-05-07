@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-07T06:55:04.616Z",
+  "generated": "2026-05-07T07:15:05.337Z",
   "toleranceKB": 10,
   "routes": {
     "/": 410.64,
@@ -14,6 +14,7 @@
     "/[slug]/not-found": 353.83,
     "/api/cron/analytics/route": 345.55,
     "/api/cron/billing/route": 345.55,
+    "/api/cron/press-kit-health/route": 345.55,
     "/api/media/[id]/route": 345.55,
     "/api/media/route": 345.55,
     "/api/press-kit-validate/route": 345.55,
@@ -42,7 +43,7 @@
     "/dashboard": 353.8,
     "/dashboard/analytics": 353.83,
     "/dashboard/layout": 345.55,
-    "/dashboard/profile/[id]": 614.85,
+    "/dashboard/profile/[id]": 614.92,
     "/dashboard/profile/[id]/loading": 345.55,
     "/dashboard/profile/[id]/not-found": 353.83,
     "/dev/preview": 407.23,

@@ -208,6 +208,16 @@ export const Profiles: CollectionConfig = {
         description: 'Set by the daily cron (task-30).',
       },
     },
+    {
+      name: 'pressKitConsecutiveFails',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        readOnly: true,
+        description:
+          'Counter the daily cron flips status on (task-30). 2 → warning, 3 → broken. Reset to 0 on success.',
+      },
+    },
 
     // ----- Contact (PRD §6.3, task-14) -----
     {
