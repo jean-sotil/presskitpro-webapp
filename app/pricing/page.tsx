@@ -1,18 +1,37 @@
 import type { Metadata } from 'next';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import { MarketingFooter } from '@/components/marketing/MarketingFooter';
+import { isSupportedLocale, type SupportedLocale } from '@/lib/i18n/locale';
 import { pricingCopy } from '@/lib/marketing/pricing-copy';
+import { buildMarketingMetadata } from '@/lib/seo/build-marketing-metadata';
 import { supabaseServer } from '@/lib/supabase/server';
 
 import { PricingFaq } from './PricingFaq';
 import { PricingTable } from './PricingTable';
 
-export const revalidate = 3600;
+// Task-29 — locale negotiation reads cookies + Accept-Language per
+// request, which makes this route dynamic. The earlier `revalidate=3600`
+// was a cross-locale cache trap (first render's locale stuck for an
+// hour). The middleware's CDN cache + `Vary: Cookie, Accept-Language`
+// still reuses entries per locale.
+export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
-  title: 'Planos & preços — PressKit Pro',
-  description: pricingCopy.hero.body,
-};
+const SITE_ORIGIN =
+  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const rawLocale = await getLocale();
+  const locale: SupportedLocale = isSupportedLocale(rawLocale) ? rawLocale : 'pt';
+  const t = await getTranslations('seo.pricing');
+  return buildMarketingMetadata({
+    origin: SITE_ORIGIN,
+    path: '/pricing',
+    locale,
+    title: t('title'),
+    description: t('description'),
+  });
+}
 
 export default async function PricingPage() {
   // Server-side session check so the CTA hrefs render with the right

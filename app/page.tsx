@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import { FaqAccordion } from '@/components/marketing/FaqAccordion';
 import { HowItWorks } from '@/components/marketing/HowItWorks';
@@ -8,11 +8,13 @@ import { MarketingFooter } from '@/components/marketing/MarketingFooter';
 import { MarketingHero } from '@/components/marketing/MarketingHero';
 import { PricingTeaser } from '@/components/marketing/PricingTeaser';
 import { WhatIsPressKit } from '@/components/marketing/WhatIsPressKit';
+import { isSupportedLocale, type SupportedLocale } from '@/lib/i18n/locale';
 import {
   loadLiveExamples,
   type LiveExample,
 } from '@/lib/marketing/fetch-live-examples';
 import { payload as getPayloadInstance } from '@/lib/payload';
+import { buildMarketingMetadata } from '@/lib/seo/build-marketing-metadata';
 
 // Task-29 — locale negotiation reads cookies + Accept-Language per
 // request, which makes this route dynamic. The previous `revalidate`
@@ -20,12 +22,20 @@ import { payload as getPayloadInstance } from '@/lib/payload';
 // hour). PR-B will introduce per-locale ISR keying.
 export const dynamic = 'force-dynamic';
 
+const SITE_ORIGIN =
+  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
+
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('marketing.hero');
-  return {
-    title: 'PressKit Pro',
-    description: t('tagline'),
-  };
+  const rawLocale = await getLocale();
+  const locale: SupportedLocale = isSupportedLocale(rawLocale) ? rawLocale : 'pt';
+  const t = await getTranslations('seo');
+  return buildMarketingMetadata({
+    origin: SITE_ORIGIN,
+    path: '/',
+    locale,
+    title: t('siteTitle'),
+    description: t('siteDescription'),
+  });
 }
 
 async function fetchExamples(): Promise<LiveExample[]> {

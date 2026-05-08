@@ -57,7 +57,7 @@ describe('LiveExamplesCarousel', () => {
   it('renders the empty state when no examples are provided', () => {
     stubMatchMedia(false);
     renderWithIntl(<LiveExamplesCarousel examples={[]} />);
-    expect(screen.getByText(/nenhum perfil publicado/i)).toBeInTheDocument();
+    expect(screen.getByText(/no published profiles yet/i)).toBeInTheDocument();
   });
 
   it('renders one card per example with a link to /<slug>', () => {

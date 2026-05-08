@@ -1,7 +1,13 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
+import type { GalleryVariant } from '@/lib/presets';
+
+import { PhotoGalleryEditorialGrid } from './PhotoGalleryRender.editorial-grid';
 
 type GalleryEntry = {
   id: number;
@@ -13,18 +19,29 @@ type GalleryEntry = {
 
 type GalleryLayout = 'mosaic' | 'uniform-grid' | 'carousel';
 
-export function PhotoGalleryRender({ bundle }: { bundle: EditorBundle }) {
+export function PhotoGalleryRender({
+  bundle,
+  variant,
+}: {
+  bundle: EditorBundle;
+  variant?: GalleryVariant;
+}) {
+  const t = useTranslations('profile.gallery');
+  if (variant === 'editorial-grid') {
+    return <PhotoGalleryEditorialGrid bundle={bundle} />;
+  }
   const raw = bundle.profile.gallery as Array<GalleryEntry | number> | undefined;
   const items = Array.isArray(raw)
     ? raw.filter((entry): entry is GalleryEntry => typeof entry === 'object' && entry !== null && 'id' in entry)
     : [];
   if (items.length === 0) return null;
 
-  const layout = (bundle.theme?.galleryLayout as GalleryLayout | undefined) ?? 'mosaic';
+  const fallback = (bundle.theme?.galleryLayout as GalleryLayout | undefined) ?? 'mosaic';
+  const layout: GalleryLayout = variant ?? fallback;
 
   return (
     <section id="galeria" className="border-b border-border px-6 py-16 md:px-12">
-      <h2 className="font-display text-2xl uppercase tracking-tight">Galeria</h2>
+      <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
       <ul className={gridClassFor(layout)}>
         {items.map((item) => {
           const src = mediaUrl({ bucket: item.bucket, path: item.path });

@@ -1,0 +1,752 @@
+{
+  "preset": {
+    "id": "hard-techno-underground",
+    "name": "Hard Techno Underground",
+    "version": "1.0.0",
+    "description": "Raw underground rave aesthetic. Brutalist editorial, high-contrast black and electric cobalt blue, massive condensed type, distressed ink textures, glitched hero, and relentless marquee energy. Designed for techno, hard techno, industrial, and EBM artists.",
+    "category": "underground-electronic",
+    "mood": ["dark", "raw", "industrial", "aggressive", "underground", "brutal", "editorial"],
+    "genres": ["techno", "hard-techno", "industrial", "rave", "EBM", "noise"],
+    "lightVariantAvailable": false,
+
+    "colors": {
+      "bg": "#000000",
+      "surface": "#090909",
+      "surface2": "#111111",
+      "surface3": "#1a1a1a",
+      "border": "#1f1f1f",
+      "borderHover": "#333333",
+      "text": "#ffffff",
+      "textMuted": "#888888",
+      "textSubtle": "#444444",
+      "accent": "#1133FF",
+      "accentLight": "#3355FF",
+      "accentDark": "#0022CC",
+      "accentContrast": "#ffffff",
+      "accentMuted": "rgba(17, 51, 255, 0.12)",
+      "accentBorder": "rgba(17, 51, 255, 0.4)",
+      "destructive": "#FF1133",
+      "overlayLight": "rgba(255, 255, 255, 0.04)",
+      "overlayDark": "rgba(0, 0, 0, 0.65)"
+    },
+
+    "colorSemantics": {
+      "heroOverlayBlend": "luminosity",
+      "heroVignette": "linear-gradient(to top, #000000 0%, rgba(0,0,0,0.5) 50%, transparent 100%)",
+      "heroTitleColor": "accent",
+      "heroTitleStyle": "ghost-outlined",
+      "sectionAccentLine": "accent",
+      "marqueeBg": "accent",
+      "marqueeText": "text",
+      "inkSplatterColor": "accent",
+      "photoTreatment": "high-contrast-bw-with-accent-bleed",
+      "ctaBg": "accent",
+      "ctaText": "accentContrast",
+      "ctaHoverBg": "text",
+      "ctaHoverText": "bg"
+    },
+
+    "typography": {
+      "fontDisplay": {
+        "family": "'Impact', 'Haas Grotesk Display', 'Arial Black', 'Franklin Gothic Heavy', sans-serif",
+        "fallback": "sans-serif",
+        "googleFont": null,
+        "nextFontId": "impact-system",
+        "note": "System font — no network load. Closest Google Fonts alternative: 'Anton' or 'Bebas Neue' if system Impact is unacceptable."
+      },
+      "fontBody": {
+        "family": "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+        "fallback": "sans-serif",
+        "googleFont": null,
+        "nextFontId": "helvetica-system"
+      },
+      "fontMono": {
+        "family": "'Courier New', 'Courier', monospace",
+        "fallback": "monospace",
+        "note": "Used for handle/slug display and metadata"
+      },
+      "alternativePairs": [
+        {
+          "id": "bebas-inter",
+          "display": "Bebas Neue",
+          "body": "Inter",
+          "mood": "slightly softer but still strong"
+        },
+        {
+          "id": "anton-space-mono",
+          "display": "Anton",
+          "body": "Space Mono",
+          "mood": "retro-futuristic rave"
+        }
+      ],
+
+      "scale": {
+        "heroTitle": {
+          "fontSize": "clamp(5rem, 18vw, 14rem)",
+          "fontWeight": 900,
+          "textTransform": "uppercase",
+          "letterSpacing": "-0.02em",
+          "lineHeight": 0.85,
+          "color": "accent",
+          "webkitTextStroke": "2px currentColor",
+          "webkitTextFillColor": "transparent",
+          "note": "Outlined/ghost text. Layered over portrait photo. Glitch effect applied on page load."
+        },
+        "heroArtistName": {
+          "fontSize": "clamp(3rem, 8vw, 7rem)",
+          "fontWeight": 900,
+          "textTransform": "uppercase",
+          "letterSpacing": "-0.02em",
+          "lineHeight": 1.0,
+          "color": "text"
+        },
+        "heroHandle": {
+          "fontSize": "0.75rem",
+          "fontFamily": "fontMono",
+          "fontWeight": 400,
+          "textTransform": "lowercase",
+          "letterSpacing": "0.05em",
+          "color": "textMuted"
+        },
+        "sectionLabel": {
+          "fontSize": "0.625rem",
+          "fontWeight": 700,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.2em",
+          "color": "textMuted",
+          "note": "Used for numbered markers like '01 — SOBRE'"
+        },
+        "sectionTitle": {
+          "fontSize": "clamp(2.5rem, 6vw, 5rem)",
+          "fontWeight": 900,
+          "textTransform": "uppercase",
+          "letterSpacing": "-0.01em",
+          "lineHeight": 0.95,
+          "color": "text"
+        },
+        "cardTitle": {
+          "fontSize": "clamp(1.25rem, 2.5vw, 1.75rem)",
+          "fontWeight": 700,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.04em",
+          "lineHeight": 1.1,
+          "color": "text"
+        },
+        "body": {
+          "fontSize": "clamp(0.8125rem, 1.5vw, 0.9375rem)",
+          "fontWeight": 400,
+          "letterSpacing": "0.01em",
+          "lineHeight": 1.7,
+          "color": "textMuted"
+        },
+        "caption": {
+          "fontSize": "0.6875rem",
+          "fontWeight": 400,
+          "letterSpacing": "0.06em",
+          "textTransform": "uppercase",
+          "color": "textSubtle"
+        },
+        "marqueeText": {
+          "fontSize": "clamp(1.5rem, 4vw, 3rem)",
+          "fontWeight": 900,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.05em",
+          "lineHeight": 1.0,
+          "color": "accentContrast"
+        },
+        "ctaText": {
+          "fontSize": "0.6875rem",
+          "fontWeight": 700,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.18em"
+        }
+      }
+    },
+
+    "effects": {
+      "filmGrain": {
+        "enabled": true,
+        "method": "svg-feTurbulence-overlay",
+        "opacity": 0.055,
+        "baseFrequency": 0.65,
+        "numOctaves": 4,
+        "blendMode": "overlay",
+        "animated": true,
+        "animationSeed": "random",
+        "animationSpeed": "0.5s",
+        "animationTimingFunction": "steps(1)",
+        "appliedTo": "html-root",
+        "zIndex": 9999,
+        "pointerEvents": "none",
+        "note": "CSS pseudo-element on body::after using SVG data URI noise filter. GPU composited."
+      },
+      "glitch": {
+        "enabled": true,
+        "target": "heroTitle",
+        "trigger": "on-load-then-random",
+        "loadDelay": "400ms",
+        "randomIntervalMin": "4000ms",
+        "randomIntervalMax": "12000ms",
+        "duration": "600ms",
+        "intensity": "heavy",
+        "method": "css-keyframes-clip-path",
+        "channels": {
+          "blue": {
+            "transform": "translate(8px, 0)",
+            "color": "#1133FF",
+            "opacity": 0.9
+          },
+          "red": {
+            "transform": "translate(-4px, 2px)",
+            "color": "#FF0033",
+            "opacity": 0.6
+          }
+        },
+        "horizontalDisplacement": "12px",
+        "verticalDisplacement": "3px",
+        "clipPathSlices": 6,
+        "keyframes": [
+          { "progress": "0%",   "transforms": "none" },
+          { "progress": "10%",  "transforms": "clip-top skewX(-1deg) translateX(8px)" },
+          { "progress": "20%",  "transforms": "clip-mid translateX(-12px)" },
+          { "progress": "30%",  "transforms": "clip-bottom skewX(2deg) translateX(4px)" },
+          { "progress": "40%",  "transforms": "none" },
+          { "progress": "55%",  "transforms": "clip-top-third translateX(-6px) skewX(-3deg)" },
+          { "progress": "70%",  "transforms": "clip-bottom-half translateX(10px)" },
+          { "progress": "100%", "transforms": "none" }
+        ]
+      },
+      "marquee": {
+        "enabled": true,
+        "position": "below-hero",
+        "content": "artistName",
+        "separator": " — ",
+        "repeat": 8,
+        "speed": "18s",
+        "direction": "left",
+        "pauseOnHover": false,
+        "background": "accent",
+        "textStyle": "marqueeText",
+        "padding": "0.875rem 0",
+        "overflow": "hidden",
+        "duplicateForSeamlessLoop": true,
+        "cssMethod": "translateX-animation on inline-flex container",
+        "performanceHint": "will-change: transform"
+      },
+      "inkSplatter": {
+        "enabled": true,
+        "variants": [
+          {
+            "id": "hero-bottom-left",
+            "position": "hero-overlay",
+            "alignment": "bottom-left",
+            "color": "accent",
+            "opacity": 0.25,
+            "type": "organic-brush-svg",
+            "scale": 1.4,
+            "rotate": "15deg"
+          },
+          {
+            "id": "presskit-bg",
+            "position": "presskit-section-background",
+            "alignment": "center",
+            "color": "accent",
+            "opacity": 0.18,
+            "type": "radial-splatter-svg",
+            "scale": 2.0,
+            "rotate": "0deg"
+          },
+          {
+            "id": "bio-left",
+            "position": "bio-image-overlay",
+            "alignment": "center",
+            "color": "accent",
+            "opacity": 0.3,
+            "type": "abstract-brushstroke-svg",
+            "blendMode": "color-dodge",
+            "scale": 1.1,
+            "rotate": "-10deg"
+          }
+        ]
+      },
+      "scrollReveal": {
+        "enabled": true,
+        "method": "IntersectionObserver",
+        "threshold": 0.08,
+        "rootMargin": "0px 0px -48px 0px",
+        "animation": {
+          "from": { "opacity": 0, "transform": "translateY(32px)" },
+          "to":   { "opacity": 1, "transform": "translateY(0)" },
+          "duration": "560ms",
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)"
+        },
+        "stagger": "80ms",
+        "respectReducedMotion": true
+      },
+      "pageLoadReveal": {
+        "enabled": true,
+        "type": "staggered-fade-up",
+        "sequence": [
+          { "target": "heroHandle",   "delay": "0ms" },
+          { "target": "heroTitle",    "delay": "80ms" },
+          { "target": "heroName",     "delay": "200ms" },
+          { "target": "heroCTA",      "delay": "320ms" },
+          { "target": "heroSocials",  "delay": "400ms" }
+        ],
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "duration": "600ms",
+        "glitchAfterReveal": true,
+        "glitchDelay": "900ms"
+      },
+      "hoverEffects": {
+        "ctaButton": {
+          "transition": "background 120ms ease, color 120ms ease",
+          "hoverBg": "text",
+          "hoverText": "bg"
+        },
+        "socialIcon": {
+          "transition": "border-color 150ms ease, background 150ms ease",
+          "hoverBorderColor": "accent",
+          "hoverBg": "accent",
+          "hoverIconColor": "accentContrast"
+        },
+        "galleryImage": {
+          "transition": "transform 300ms cubic-bezier(0.25, 1, 0.5, 1), filter 300ms ease",
+          "hoverTransform": "scale(1.03)",
+          "hoverFilter": "brightness(1.15) contrast(1.05)"
+        },
+        "navAnchor": {
+          "transition": "color 100ms ease",
+          "hoverColor": "accent"
+        }
+      }
+    },
+
+    "layout": {
+      "heroStyle": "full-bleed-portrait",
+      "heroHeight": "100svh",
+      "heroMinHeight": "640px",
+      "heroTextPosition": "bottom-left",
+      "heroPortraitPosition": "center-right",
+      "heroPortraitWidth": "55%",
+      "heroPortraitClipPath": "polygon(12% 0%, 100% 0%, 100% 100%, 0% 100%)",
+      "heroOverlayGradient": "linear-gradient(to right, #000000 20%, transparent 60%), linear-gradient(to top, #000000 0%, transparent 50%)",
+
+      "contentMaxWidth": "1440px",
+      "contentPadding": "0 clamp(1.5rem, 6vw, 6rem)",
+      "sectionPaddingY": "clamp(5rem, 10vh, 9rem)",
+      "sectionGap": "0px",
+      "itemGap": "2rem",
+
+      "sectionMarkers": {
+        "enabled": true,
+        "style": "numbered-dashed",
+        "format": "0{n} — {SECTION_NAME}",
+        "fontSize": "0.5625rem",
+        "letterSpacing": "0.2em",
+        "fontWeight": 700,
+        "textTransform": "uppercase",
+        "color": "textSubtle",
+        "marginBottom": "2.5rem"
+      },
+
+      "dividers": {
+        "style": "1px solid",
+        "color": "border",
+        "opacity": 1
+      },
+
+      "anchorNav": {
+        "enabled": true,
+        "position": "sticky-top",
+        "background": "rgba(0,0,0,0.85)",
+        "backdropFilter": "blur(12px)",
+        "borderBottom": "1px solid border",
+        "fontSize": "0.625rem",
+        "fontWeight": 700,
+        "letterSpacing": "0.18em",
+        "textTransform": "uppercase",
+        "color": "textMuted",
+        "activeColor": "accent",
+        "gap": "2.5rem",
+        "padding": "0.875rem 0"
+      }
+    },
+
+    "sections": {
+      "hero": {
+        "background": "bg",
+        "fullBleed": true,
+        "height": "100svh",
+        "portraitFilter": "contrast(1.1) saturate(0.15)",
+        "portraitBlendMode": "luminosity",
+        "overlayType": "dual-gradient-vignette",
+        "titleStyle": "massive-outlined-ghost",
+        "titleLayering": "behind-portrait-in-front-of-bg",
+        "ctaStyle": "solid-rectangle-sharp",
+        "socialIconsPosition": "hero-bottom-right",
+        "elements": ["handle", "heroTitle", "artistName", "cta", "socialIcons", "portraitPhoto"]
+      },
+      "marqueeStrip": {
+        "background": "accent",
+        "height": "auto",
+        "paddingY": "0.875rem",
+        "overflow": "hidden",
+        "content": "repeating-artist-name",
+        "separator": " — "
+      },
+      "biography": {
+        "background": "bg",
+        "layout": "split-40-60",
+        "imageStyle": "high-contrast-bw",
+        "imageOverlay": "inkSplatter-bio-left",
+        "imageAspectRatio": "4/5",
+        "gapBetweenColumns": "clamp(3rem, 6vw, 6rem)",
+        "mobileStackOrder": "text-first",
+        "breakpoint": "768px"
+      },
+      "services": {
+        "background": "surface",
+        "layout": "horizontal-scroll-cards",
+        "cardBg": "bg",
+        "cardBorder": "1px solid border",
+        "cardPadding": "2rem",
+        "cardBorderRadius": 0,
+        "cardHoverBorderColor": "accent",
+        "cardTitleTransform": "uppercase",
+        "maxCardsVisible": 3
+      },
+      "socialMedia": {
+        "background": "bg",
+        "layout": "split-50-50",
+        "leftContent": "platform-icon-list",
+        "rightContent": "device-mockup-or-stats",
+        "iconStyle": "circle-outlined",
+        "iconSize": "3rem",
+        "iconBorderColor": "textMuted",
+        "iconHoverBg": "accent",
+        "platformLabelStyle": "uppercase-bold",
+        "platformLabelSize": "1.5rem"
+      },
+      "featuredTrack": {
+        "background": "surface",
+        "embedWrapperBg": "surface2",
+        "embedBorder": "1px solid border",
+        "labelStyle": "numbered-section-marker",
+        "embedBorderRadius": 0
+      },
+      "instagram": {
+        "background": "bg",
+        "gridColumns": "repeat(3, 1fr)",
+        "gap": "4px",
+        "imageFilter": "none",
+        "hoverOverlayColor": "accentMuted",
+        "borderRadius": 0
+      },
+      "gallery": {
+        "background": "surface",
+        "layout": "asymmetric-mosaic",
+        "gap": "4px",
+        "imageFilter": "none",
+        "imageHoverScale": 1.03,
+        "borderRadius": 0,
+        "altTextRequired": true,
+        "columns": {
+          "mobile": 2,
+          "tablet": 3,
+          "desktop": "auto-asymmetric"
+        }
+      },
+      "pressKit": {
+        "background": "bg",
+        "fullBleed": true,
+        "paddingY": "clamp(5rem, 10vh, 9rem)",
+        "backgroundOverlay": "inkSplatter-presskit-bg",
+        "layout": "centered-with-artist-photos",
+        "titleStyle": "massive-bold-uppercase",
+        "ctaStyle": "cursor-illustration-button",
+        "cursorIllustration": {
+          "type": "retro-finger-pointer",
+          "color": "text",
+          "size": "2.5rem",
+          "position": "left-of-button"
+        },
+        "artistPhotos": {
+          "count": 3,
+          "layout": "scattered-behind-content",
+          "filter": "none",
+          "opacity": 0.8
+        }
+      },
+      "contact": {
+        "background": "bg",
+        "layout": "right-aligned-with-photo",
+        "labelStyle": "uppercase-spaced",
+        "emailDisplay": "monospace-small",
+        "ctaStyle": "cursor-illustration-button",
+        "iconStyle": "circle-outlined-large",
+        "icons": ["whatsapp", "email"],
+        "artistPhoto": {
+          "position": "left-full-height",
+          "width": "45%",
+          "filter": "high-contrast"
+        }
+      }
+    },
+
+    "components": {
+      "ctaButton": {
+        "default": {
+          "background": "accent",
+          "color": "accentContrast",
+          "border": "none",
+          "borderRadius": 0,
+          "padding": "0.875rem 2.5rem",
+          "fontSize": "0.6875rem",
+          "fontWeight": 700,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.18em",
+          "cursor": "pointer",
+          "transition": "background 120ms ease, color 120ms ease",
+          "hover": {
+            "background": "text",
+            "color": "bg"
+          },
+          "active": {
+            "transform": "scale(0.98)"
+          }
+        },
+        "ghost": {
+          "background": "transparent",
+          "color": "text",
+          "border": "1px solid text",
+          "hover": {
+            "background": "text",
+            "color": "bg"
+          }
+        },
+        "accent-outline": {
+          "background": "transparent",
+          "color": "accent",
+          "border": "1px solid accent",
+          "hover": {
+            "background": "accent",
+            "color": "accentContrast"
+          }
+        }
+      },
+      "socialIcon": {
+        "shape": "circle",
+        "size": "3rem",
+        "border": "1px solid",
+        "borderColor": "textSubtle",
+        "bg": "transparent",
+        "iconColor": "textMuted",
+        "borderRadius": "50%",
+        "hoverBorder": "accent",
+        "hoverBg": "accent",
+        "hoverIcon": "accentContrast",
+        "transition": "all 150ms ease",
+        "gap": "0.75rem"
+      },
+      "platformListItem": {
+        "layout": "flex-row",
+        "gap": "1.25rem",
+        "iconSize": "2rem",
+        "iconStyle": "circle-outlined",
+        "labelStyle": {
+          "fontSize": "clamp(1.25rem, 3vw, 1.75rem)",
+          "fontWeight": 900,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.06em",
+          "color": "text"
+        },
+        "borderBottom": "1px solid border",
+        "paddingY": "1.25rem",
+        "hoverLabelColor": "accent"
+      },
+      "bioText": {
+        "firstParagraph": {
+          "fontSize": "clamp(0.875rem, 1.8vw, 1.0625rem)",
+          "fontWeight": 700,
+          "color": "text",
+          "firstWordStyle": {
+            "color": "accent",
+            "fontWeight": 900
+          }
+        },
+        "bodyParagraphs": {
+          "fontSize": "clamp(0.8125rem, 1.5vw, 0.9375rem)",
+          "fontWeight": 400,
+          "color": "textMuted",
+          "lineHeight": 1.75
+        }
+      },
+      "galleryImage": {
+        "borderRadius": 0,
+        "overflow": "hidden",
+        "cursor": "pointer",
+        "hoverTransform": "scale(1.03)",
+        "hoverFilter": "brightness(1.15)",
+        "transition": "transform 300ms cubic-bezier(0.25, 1, 0.5, 1)"
+      },
+      "embedWrapper": {
+        "borderRadius": 0,
+        "border": "1px solid border",
+        "overflow": "hidden",
+        "background": "surface2",
+        "padding": "0"
+      }
+    },
+
+    "textures": {
+      "filmGrain": {
+        "method": "css-pseudo-element-svg-filter",
+        "selector": "body::after",
+        "position": "fixed",
+        "inset": 0,
+        "zIndex": 9998,
+        "pointerEvents": "none",
+        "svgFilter": "feTurbulence type=fractalNoise baseFrequency=0.65 numOctaves=4",
+        "opacity": 0.055,
+        "blendMode": "overlay",
+        "animationName": "grain-shift",
+        "animationDuration": "0.5s",
+        "animationTimingFunction": "steps(1, end)",
+        "animationIterationCount": "infinite",
+        "cssAnimation": "@keyframes grain-shift { 0% { transform: translate(0,0); } 25% { transform: translate(-2px,1px); } 50% { transform: translate(1px,-2px); } 75% { transform: translate(-1px,2px); } 100% { transform: translate(2px,-1px); } }"
+      },
+      "inkSplatterAssets": {
+        "format": "inline-svg",
+        "variants": ["organic-brush", "radial-splatter", "abstract-brushstroke"],
+        "colorVariable": "accent",
+        "note": "SVG paths rendered as absolutely positioned elements. Pointer events none. Aria-hidden true."
+      }
+    },
+
+    "radius": {
+      "default": "0px",
+      "button": "0px",
+      "card": "0px",
+      "image": "0px",
+      "embed": "0px",
+      "input": "0px",
+      "pill": "9999px",
+      "icon": "50%",
+      "note": "Sharp edges everywhere — zero border-radius is a core identity marker of this preset."
+    },
+
+    "spacing": {
+      "heroTopPadding": "clamp(2rem, 5vh, 4rem)",
+      "heroBottomPadding": "clamp(3rem, 8vh, 6rem)",
+      "sectionPaddingY": "clamp(5rem, 10vh, 9rem)",
+      "sectionGap": "0px",
+      "columnGap": "clamp(3rem, 6vw, 6rem)",
+      "cardPadding": "2rem",
+      "itemSpacing": "2rem",
+      "iconGap": "0.75rem",
+      "anchorNavHeight": "3rem"
+    },
+
+    "accessibility": {
+      "contrastRatios": {
+        "textOnBg": "21:1",
+        "accentOnBg": "4.7:1",
+        "mutedTextOnBg": "5.2:1",
+        "textOnAccent": "8.8:1"
+      },
+      "focusRing": {
+        "style": "2px solid",
+        "color": "accent",
+        "offset": "3px",
+        "borderRadius": "0px"
+      },
+      "skipToContent": {
+        "enabled": true,
+        "style": "accent-bg white-text top-left on focus"
+      },
+      "reducedMotion": {
+        "disableGlitch": true,
+        "disableGrain": true,
+        "disableMarquee": false,
+        "disableScrollReveal": true,
+        "marqueeReducedSpeed": "60s"
+      }
+    },
+
+    "performance": {
+      "filmGrainMethod": "CSS pseudo-element — zero JS, GPU composited",
+      "marqueeMethod": "CSS translateX animation on will-change:transform container",
+      "glitchMethod": "CSS @keyframes with clip-path — no canvas, no JS heavy loops",
+      "scrollRevealMethod": "IntersectionObserver API — no scroll event listeners",
+      "imageOptimization": "next/image AVIF, explicit dimensions, lazy below fold",
+      "fontStrategy": "System fonts only — zero font network requests for this preset",
+      "inkSplatterMethod": "Inline SVG with CSS color variable — no raster images",
+      "estimatedPageWeight": "< 500KB compressed excluding hero image (no font payloads)"
+    },
+
+    "cssVariables": {
+      "--pk-bg":             "#000000",
+      "--pk-surface":        "#090909",
+      "--pk-surface2":       "#111111",
+      "--pk-border":         "#1f1f1f",
+      "--pk-text":           "#ffffff",
+      "--pk-text-muted":     "#888888",
+      "--pk-text-subtle":    "#444444",
+      "--pk-accent":         "#1133FF",
+      "--pk-accent-light":   "#3355FF",
+      "--pk-accent-muted":   "rgba(17,51,255,0.12)",
+      "--pk-accent-border":  "rgba(17,51,255,0.4)",
+      "--pk-accent-contrast":"#ffffff",
+      "--pk-radius":         "0px",
+      "--pk-font-display":   "'Impact','Arial Black',sans-serif",
+      "--pk-font-body":      "'Helvetica Neue','Arial',sans-serif",
+      "--pk-font-mono":      "'Courier New',monospace"
+    },
+
+    "tailwindExtensions": {
+      "colors": {
+        "pk-bg":      "#000000",
+        "pk-surface": "#090909",
+        "pk-border":  "#1f1f1f",
+        "pk-text":    "#ffffff",
+        "pk-muted":   "#888888",
+        "pk-subtle":  "#444444",
+        "pk-accent":  "#1133FF"
+      },
+      "fontFamily": {
+        "display": ["Impact", "Arial Black", "sans-serif"],
+        "body":    ["Helvetica Neue", "Arial", "sans-serif"],
+        "mono":    ["Courier New", "monospace"]
+      },
+      "borderRadius": {
+        "pk": "0px"
+      }
+    },
+
+    "payloadThemeRecord": {
+      "colorPresetId": "hard-techno-underground",
+      "bg":            "#000000",
+      "surface":       "#090909",
+      "accent":        "#1133FF",
+      "text":          "#ffffff",
+      "fontPairId":    "impact-helvetica-system",
+      "heroStyle":     "full-bleed-portrait",
+      "galleryLayout": "mosaic",
+      "sectionOrder":  ["hero", "marquee", "biography", "services", "socialMedia", "featuredTrack", "instagram", "gallery", "pressKit", "contact"],
+      "effects": {
+        "filmGrain":    true,
+        "glitch":       true,
+        "marquee":      true,
+        "inkSplatter":  true,
+        "scrollReveal": true
+      },
+      "radius":        "sharp",
+      "contrastValidated": true,
+      "contrastRatios": {
+        "textOnBg":     "21:1",
+        "accentOnBg":   "4.7:1"
+      }
+    }
+  }
+}

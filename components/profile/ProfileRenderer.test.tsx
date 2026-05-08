@@ -1,8 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { ProfileRenderer } from './ProfileRenderer';
 import type { EditorBundle } from '@/lib/editor/bundle';
+import { renderAsync } from '@/tests/helpers/render-async';
+
+import { ProfileRenderer } from './ProfileRenderer';
 
 function makeBundle(overrides: Partial<EditorBundle> = {}): EditorBundle {
   return {
@@ -24,8 +26,8 @@ function makeBundle(overrides: Partial<EditorBundle> = {}): EditorBundle {
 }
 
 describe('ProfileRenderer', () => {
-  it('renders the hero from slug alone (other sections silent without data)', () => {
-    render(<ProfileRenderer bundle={makeBundle()} mode="preview" />);
+  it('renders the hero from slug alone (other sections silent without data)', async () => {
+    await renderAsync(ProfileRenderer({ bundle: makeBundle(), mode: 'preview' }));
     expect(
       screen.getByRole('heading', { level: 1, name: /mariana luz/i }),
     ).toBeInTheDocument();
@@ -33,28 +35,30 @@ describe('ProfileRenderer', () => {
     expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
   });
 
-  it('renders services when present', () => {
-    render(
-      <ProfileRenderer
-        mode="preview"
-        bundle={makeBundle({
+  it('renders services when present', async () => {
+    await renderAsync(
+      ProfileRenderer({
+        mode: 'preview',
+        bundle: makeBundle({
           content: {
             id: 9,
             profile: 1,
             services: [{ title: 'DJ Set', description: '60 min' }],
           },
-        })}
-      />,
+        }),
+      }),
     );
-    expect(screen.getByRole('heading', { level: 2, name: /serviços/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: /services/i }),
+    ).toBeInTheDocument();
     expect(screen.getByText('DJ Set')).toBeInTheDocument();
   });
 
-  it('respects a custom Themes.sectionOrder', () => {
-    const { container } = render(
-      <ProfileRenderer
-        mode="preview"
-        bundle={makeBundle({
+  it('respects a custom Themes.sectionOrder', async () => {
+    const { container } = await renderAsync(
+      ProfileRenderer({
+        mode: 'preview',
+        bundle: makeBundle({
           profile: {
             id: 1,
             owner: 1,
@@ -72,8 +76,8 @@ describe('ProfileRenderer', () => {
             ],
           },
           content: { id: 9, profile: 1, tagline: 'House' },
-        })}
-      />,
+        }),
+      }),
     );
     const headings = container.querySelectorAll('h1, h2');
     // Contact h2 comes BEFORE the hero h1 in DOM order.
@@ -82,18 +86,20 @@ describe('ProfileRenderer', () => {
     expect(order[1]).toBe('H1');
   });
 
-  it('falls back to default order when theme.sectionOrder is missing', () => {
-    render(
-      <ProfileRenderer
-        mode="preview"
-        bundle={makeBundle({
+  it('falls back to default order when theme.sectionOrder is missing', async () => {
+    await renderAsync(
+      ProfileRenderer({
+        mode: 'preview',
+        bundle: makeBundle({
           content: { id: 9, profile: 1, tagline: 'House' },
-        })}
-      />,
+        }),
+      }),
     );
     expect(
       screen.getByRole('heading', { level: 1, name: /mariana luz/i }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 2, name: /sobre/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: /about/i }),
+    ).toBeInTheDocument();
   });
 });

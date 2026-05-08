@@ -465,6 +465,10 @@ export interface Theme {
   id: number;
   profile: number | Profile;
   /**
+   * Design preset. Source of truth for section variants when set; null falls back to heroStyle/galleryLayout.
+   */
+  presetId?: ('mediakit-pro-v1' | 'editorial-nightlife-v1') | null;
+  /**
    * BG preset id (e.g. 'editorial-night'). Empty when overriding via custom hex.
    */
   colorPresetId?: string | null;
@@ -852,6 +856,7 @@ export interface FeaturedTracksSelect<T extends boolean = true> {
  */
 export interface ThemesSelect<T extends boolean = true> {
   profile?: T;
+  presetId?: T;
   colorPresetId?: T;
   accentPresetId?: T;
   bg?: T;

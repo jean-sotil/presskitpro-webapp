@@ -4,6 +4,7 @@ import {
   canCreateForOwnedProfile,
   ownsViaProfile,
 } from '../../lib/payload/access/predicates';
+import { PRESETS } from '../../lib/presets';
 
 /**
  * One theme record per Profile (1:1, enforced by `unique: true` on `profile`).
@@ -33,6 +34,20 @@ export const Themes: CollectionConfig = {
       required: true,
       unique: true,
       index: true,
+    },
+    // ----- Preset (task-35) -----
+    // Source of truth for section variants and decorations. When set, the
+    // renderer ignores the legacy `heroStyle` / `galleryLayout` fallbacks
+    // below. Null = legacy row (pre task-35); the runbook backfill sets
+    // every existing row to `editorial-nightlife-v1`.
+    {
+      name: 'presetId',
+      type: 'select',
+      options: PRESETS.map((p) => ({ label: p.name, value: p.id })),
+      admin: {
+        description:
+          'Design preset. Source of truth for section variants when set; null falls back to heroStyle/galleryLayout.',
+      },
     },
     // ----- Color -----
     {

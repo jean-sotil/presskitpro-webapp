@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -22,6 +23,8 @@ import {
   type SectionKey,
 } from '@/lib/editor/section-order';
 import { sectionLabels } from '@/lib/editor/sections';
+
+import { DesignTab } from './DesignTab';
 
 const AUTOSAVE_MS = 5_000;
 
@@ -70,7 +73,10 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     return mergeOrder(persisted ?? [...DEFAULT_SECTION_ORDER]);
   }, [bundle.theme]);
   const [active, setActive] = useState<SectionKey>(sectionOrder[0]!);
-  const [editorTab, setEditorTab] = useState<'sections' | 'theme'>('sections');
+  const [editorTab, setEditorTab] = useState<'sections' | 'theme' | 'design'>(
+    'sections',
+  );
+  const tDesign = useTranslations('editor.design');
 
   const [saveState, setSaveState] = useState<SaveStatusState>({
     kind: 'idle',
@@ -300,6 +306,19 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
       >
         Tema
       </button>
+      <button
+        type="button"
+        role="tab"
+        aria-selected={editorTab === 'design'}
+        onClick={() => setEditorTab('design')}
+        className={`flex-1 border-b-2 px-3 py-2 text-xs uppercase tracking-wider ${
+          editorTab === 'design'
+            ? 'border-accent text-text'
+            : 'border-transparent text-text-muted'
+        }`}
+      >
+        {tDesign('tabLabel')}
+      </button>
     </div>
   );
 
@@ -326,8 +345,16 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
             onMutate={applyMutation}
           />
         </>
-      ) : (
+      ) : editorTab === 'theme' ? (
         <ThemeTab bundle={bundle} onMutate={applyMutation} />
+      ) : (
+        <DesignTab
+          profileId={Number(bundle.profile.id)}
+          profileSlug={String(bundle.profile.slug ?? '')}
+          activePresetId={
+            ((bundle.theme as { presetId?: string | null } | null)?.presetId) ?? null
+          }
+        />
       )}
     </div>
   );

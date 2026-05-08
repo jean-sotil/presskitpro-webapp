@@ -8,6 +8,7 @@ import * as migration_20260505_223425_task_15_press_kit_providers from './202605
 import * as migration_20260505_234318_task_17_instagram_posts from './20260505_234318_task_17_instagram_posts';
 import * as migration_20260506_012220_task_18_theme_accent_preset from './20260506_012220_task_18_theme_accent_preset';
 import * as migration_20260506_095315_task_23_stripe_billing from './20260506_095315_task_23_stripe_billing';
+import * as migration_20260508_053258_task_35_themes_preset_id from './20260508_053258_task_35_themes_preset_id';
 
 export const migrations = [
   {
@@ -58,6 +59,11 @@ export const migrations = [
   {
     up: migration_20260506_095315_task_23_stripe_billing.up,
     down: migration_20260506_095315_task_23_stripe_billing.down,
-    name: '20260506_095315_task_23_stripe_billing'
+    name: '20260506_095315_task_23_stripe_billing',
+  },
+  {
+    up: migration_20260508_053258_task_35_themes_preset_id.up,
+    down: migration_20260508_053258_task_35_themes_preset_id.down,
+    name: '20260508_053258_task_35_themes_preset_id'
   },
 ];

@@ -92,8 +92,10 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     locale: toPayloadLocale(locale),
   });
   if (!bundle) return { title: 'Not found' };
+  const tProfile = await getTranslations('profile');
   const baseMeta = buildProfileMetadata(bundle, SITE_ORIGIN, {
     imageUrl: resolveImageUrl(bundle),
+    titleSuffix: tProfile('metaTitleSuffix'),
   });
   // Task-29 PR-B — emit `<link rel="alternate" hreflang="…">` for every
   // locale the profile has published content in, plus `x-default`.

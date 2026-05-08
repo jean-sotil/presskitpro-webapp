@@ -594,3 +594,42 @@ responses (`public, s-maxage=3600, stale-while-revalidate=86400`).
 reserved paths are excluded by `deriveProfileSlugFromPath`. The smoke
 spec at [tests/e2e/perf-headers.spec.ts](../../tests/e2e/perf-headers.spec.ts)
 asserts both the positive and negative branches.
+
+## Design presets — task-35 backfill
+
+New profiles created via onboarding now seed `Themes.preset_id =
+'mediakit-pro-v1'` automatically. Existing profiles created before
+task-35 have `preset_id = NULL` and continue to render via the legacy
+`hero_style` / `gallery_layout` fallbacks; their visual output is
+unchanged because the renderer only reads the preset when the column
+is non-null.
+
+To migrate existing profiles to the peer preset that matches today's
+look, run this one-shot SQL once per environment (idempotent):
+
+```sql
+update payload.themes
+set preset_id = 'editorial-nightlife-v1'
+where preset_id is null;
+```
+
+After the backfill, every existing artist's page is driven by the
+`editorial-nightlife-v1` preset — visually identical to today, but now
+typed as a preset so the Design tab displays "Selected" on the right
+card.
+
+### Adding a new preset
+
+1. Add `lib/presets/<id>.ts` exporting a `Preset` (see
+   [`mediakit-pro-v1.ts`](../../lib/presets/mediakit-pro-v1.ts) for the
+   shape).
+2. Append the import + entry to `lib/presets/index.ts`.
+3. Add `presets.<id>.{name,tagline}` to `messages/{pt,en,es}.json` and
+   re-run `pnpm i18n:check`.
+4. Implement any new variant components the preset references; add
+   the variant string to the matching union in `lib/presets/types.ts`
+   (TypeScript will flag the renderer's switch as exhaustive-failed
+   until you handle it).
+5. Run `pnpm generate:types` — `Themes.presetId`'s select options are
+   derived from the registry, so the new id flows into the typed
+   schema automatically.

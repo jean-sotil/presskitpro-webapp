@@ -115,4 +115,47 @@
     animation-range: entry 10% cover 30%;
     animation-delay: calc(var(--reveal-index, 0) * var(--motion-stagger));
   }
+
+  /* Task-35 — marquee scroll. Track is duplicated 2x in the DOM so
+     translateX(-50%) loops without a visible seam. */
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+
+  /* Task-35 — gallery lightbox enter animations. Backdrop fades in,
+     image scales up from 96% — both 200ms ease-out. Exit unmounts
+     immediately to feel responsive. Reduced-motion users see the
+     final state instantly. */
+  @keyframes lightbox-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes lightbox-zoom-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* Task-35 — animated film grain overlay. Scoped to the
+     `[data-preset-grain]` wrapper so it only renders when a preset
+     opts in. Fixed-position pseudo-element, pointer-events:none, GPU
+     composited via transform. */
+  [data-preset-grain]::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    animation: grain-shift 0.5s steps(1, end) infinite;
+  }
+  @keyframes grain-shift {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(-2px, 1px); }
+    50%  { transform: translate(1px, -2px); }
+    75%  { transform: translate(-1px, 2px); }
+    100% { transform: translate(2px, -1px); }
+  }
 }

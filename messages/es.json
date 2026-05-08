@@ -117,6 +117,71 @@
       "pt": "Portugués",
       "en": "Inglés",
       "es": "Español"
+    },
+    "metaTitleSuffix": "Press Kit & EPK",
+    "ctaDefault": "Contacto",
+    "ctaUnderground": "Haz clic",
+    "about": {
+      "label": "Acerca de",
+      "heading": "Biografía"
+    },
+    "services": {
+      "label": "Servicios",
+      "heading": "Lo que obtienes",
+      "setsLabel": "{count} sets"
+    },
+    "social": {
+      "label": "Redes sociales",
+      "heading": "Sigue",
+      "asideHeading": "Abre un canal\ncierra el booking.",
+      "asideHint": "Cada link abre en nueva pestaña. Los DMs están abiertos.",
+      "platforms": {
+        "instagram": "Instagram",
+        "tiktok": "TikTok",
+        "soundcloud": "SoundCloud",
+        "spotify": "Spotify",
+        "youtube": "YouTube",
+        "twitter": "Twitter / X",
+        "bandcamp": "Bandcamp",
+        "mixcloud": "Mixcloud",
+        "apple-music": "Apple Music",
+        "beatport": "Beatport",
+        "whatsapp": "WhatsApp",
+        "email": "Email",
+        "website": "Sitio web"
+      }
+    },
+    "gallery": {
+      "label": "Galería",
+      "heading": "Frames en vivo"
+    },
+    "pressKit": {
+      "label": "Press kit",
+      "heading": "Descargar\npress kit",
+      "ctaLegacy": "Descargar press kit",
+      "providers": {
+        "google-drive": "Alojado en Google Drive",
+        "dropbox": "Alojado en Dropbox",
+        "onedrive": "Alojado en OneDrive",
+        "wetransfer": "Alojado en WeTransfer",
+        "notion": "Alojado en Notion",
+        "mediafire": "Alojado en MediaFire"
+      }
+    },
+    "contact": {
+      "label": "Contacto",
+      "heading": "Para booking\ncontacto",
+      "whatsappCta": "Abrir WhatsApp",
+      "emailCta": "Enviar email"
+    },
+    "lightbox": {
+      "viewerLabel": "Visor de fotos",
+      "viewerLabelWithAlt": "Visor de fotos: {alt}",
+      "openPhoto": "Abrir foto {idx} de {total}",
+      "openPhotoWithAlt": "Abrir foto {idx} de {total}: {alt}",
+      "close": "Cerrar visor",
+      "previous": "Foto anterior",
+      "next": "Foto siguiente"
     }
   },
   "consent": {
@@ -176,5 +241,41 @@
       { "heading": "Foro y legislación", "body": "Estos términos se rigen por las leyes de la República Federativa de Brasil. Se elige el foro de São Paulo - SP para resolver eventuales conflictos." },
       { "heading": "Contacto", "body": "Preguntas sobre estos términos: contato@presskit.pro." }
     ]
+  },
+  "seo": {
+    "siteTitle": "Press kits profesionales en 5 minutos",
+    "siteDescription": "Crea un press kit público con tu bio, fotos, tracks, links y contacto — listo para enviar a bookers, festivales y clubs. PT/EN/ES.",
+    "pricing": {
+      "title": "Planes y precios",
+      "description": "Prueba de 14 días, luego Pro a $5/mes: URL presskit.pro/tu-nombre, actualizaciones ilimitadas, soporte en PT/EN/ES. Cancela cuando quieras."
+    },
+    "privacy": {
+      "description": "Cómo PressKit Pro recopila, usa y protege tus datos — solo cookies esenciales, cumplimiento LGPD, sin tracking."
+    },
+    "terms": {
+      "description": "Términos de uso de PressKit Pro: cuenta, contenido publicado, plan y facturación, slug y enlace público, suspensión, jurisdicción Brasil."
+    }
+  },
+  "presets": {
+    "mediakit-pro-v1": {
+      "name": "Hard Techno Underground",
+      "tagline": "Estética rave underground: negro puro, cobalt eléctrico, título fantasma y marquesina de alto voltaje."
+    },
+    "editorial-nightlife-v1": {
+      "name": "Editorial Nightlife",
+      "tagline": "El look original de PressKit Pro: editorial brutalista, alto contraste."
+    }
+  },
+  "editor": {
+    "design": {
+      "tabLabel": "Diseño",
+      "heading": "Elige un preset de diseño",
+      "description": "Cada preset cambia el tratamiento visual completo de tu página: colores, tipografía, hero, redes, press-kit y contacto. Aún podrás ajustar color y tipografía en \"Tema\" después.",
+      "activeBadge": "Seleccionado",
+      "applyCta": "Aplicar preset",
+      "pendingCta": "Aplicando…",
+      "applyHint": "Los tokens de color y tipografía se sobrescribirán. Necesitarás revalidar el contraste antes de publicar de nuevo.",
+      "errorMessage": "No se pudo aplicar el preset. Inténtalo de nuevo."
+    }
   }
 }

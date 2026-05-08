@@ -1,5 +1,11 @@
-import type { EditorBundle } from '@/lib/editor/bundle';
+'use client';
 
+import { useTranslations } from 'next-intl';
+
+import type { EditorBundle } from '@/lib/editor/bundle';
+import type { ContactVariant } from '@/lib/presets';
+
+import { ContactDarkPanel } from './ContactRender.dark-panel';
 import { ContactForm } from './ContactForm';
 import { TrackedContactCta } from './TrackedContactCta';
 
@@ -9,7 +15,17 @@ type ProfileWithContact = EditorBundle['profile'] & {
   contactFormEnabled?: boolean;
 };
 
-export function ContactRender({ bundle }: { bundle: EditorBundle }) {
+export function ContactRender({
+  bundle,
+  variant,
+}: {
+  bundle: EditorBundle;
+  variant?: ContactVariant;
+}) {
+  const t = useTranslations('profile.contact');
+  if (variant === 'dark-panel') {
+    return <ContactDarkPanel bundle={bundle} />;
+  }
   const profile = bundle.profile as ProfileWithContact;
   const whatsapp = profile.contactWhatsapp?.trim() ?? '';
   const email = profile.contactEmail?.trim() ?? '';
@@ -21,7 +37,7 @@ export function ContactRender({ bundle }: { bundle: EditorBundle }) {
 
   return (
     <section id="contato" className="border-b border-border px-6 py-16 md:px-12">
-      <h2 className="font-display text-2xl uppercase tracking-tight">Contato</h2>
+      <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
       {whatsapp || email ? (
         <ul className="mt-6 flex flex-wrap gap-3">
           {whatsapp ? (
@@ -32,7 +48,7 @@ export function ContactRender({ bundle }: { bundle: EditorBundle }) {
                 profileSlug={profileSlug}
                 className="inline-flex h-12 items-center border border-accent bg-accent px-6 text-sm uppercase tracking-wider text-accent-contrast"
               >
-                Chamar no WhatsApp
+                {t('whatsappCta')}
               </TrackedContactCta>
             </li>
           ) : null}
@@ -44,7 +60,7 @@ export function ContactRender({ bundle }: { bundle: EditorBundle }) {
                 profileSlug={profileSlug}
                 className="inline-flex h-12 items-center border border-border px-6 text-sm uppercase tracking-wider text-text"
               >
-                Enviar e-mail
+                {t('emailCta')}
               </TrackedContactCta>
             </li>
           ) : null}

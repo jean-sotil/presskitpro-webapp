@@ -117,6 +117,71 @@
       "pt": "Portuguese",
       "en": "English",
       "es": "Spanish"
+    },
+    "metaTitleSuffix": "Press Kit & EPK",
+    "ctaDefault": "Contact",
+    "ctaUnderground": "Click here",
+    "about": {
+      "label": "About",
+      "heading": "Biography"
+    },
+    "services": {
+      "label": "Services",
+      "heading": "What you get",
+      "setsLabel": "{count} sets"
+    },
+    "social": {
+      "label": "Social media",
+      "heading": "Follow",
+      "asideHeading": "Tap a channel\nclose the booking.",
+      "asideHint": "Every link opens in a new tab. The DMs are open.",
+      "platforms": {
+        "instagram": "Instagram",
+        "tiktok": "TikTok",
+        "soundcloud": "SoundCloud",
+        "spotify": "Spotify",
+        "youtube": "YouTube",
+        "twitter": "Twitter / X",
+        "bandcamp": "Bandcamp",
+        "mixcloud": "Mixcloud",
+        "apple-music": "Apple Music",
+        "beatport": "Beatport",
+        "whatsapp": "WhatsApp",
+        "email": "Email",
+        "website": "Website"
+      }
+    },
+    "gallery": {
+      "label": "Gallery",
+      "heading": "Live frames"
+    },
+    "pressKit": {
+      "label": "Press kit",
+      "heading": "Download\npress kit",
+      "ctaLegacy": "Download press kit",
+      "providers": {
+        "google-drive": "Hosted on Google Drive",
+        "dropbox": "Hosted on Dropbox",
+        "onedrive": "Hosted on OneDrive",
+        "wetransfer": "Hosted on WeTransfer",
+        "notion": "Hosted on Notion",
+        "mediafire": "Hosted on MediaFire"
+      }
+    },
+    "contact": {
+      "label": "Contact",
+      "heading": "For booking\ncontact",
+      "whatsappCta": "Open WhatsApp",
+      "emailCta": "Send email"
+    },
+    "lightbox": {
+      "viewerLabel": "Photo viewer",
+      "viewerLabelWithAlt": "Photo viewer: {alt}",
+      "openPhoto": "Open photo {idx} of {total}",
+      "openPhotoWithAlt": "Open photo {idx} of {total}: {alt}",
+      "close": "Close photo viewer",
+      "previous": "Previous photo",
+      "next": "Next photo"
     }
   },
   "consent": {
@@ -176,5 +241,41 @@
       { "heading": "Governing law and venue", "body": "These terms are governed by the laws of the Federative Republic of Brazil. The courts of São Paulo - SP are the agreed venue for any disputes." },
       { "heading": "Contact", "body": "Questions about these terms: contato@presskit.pro." }
     ]
+  },
+  "seo": {
+    "siteTitle": "Professional press kits in 5 minutes",
+    "siteDescription": "Build a public press kit with your bio, photos, tracks, links, and contact — ready to send to bookers, festivals, and clubs. PT/EN/ES.",
+    "pricing": {
+      "title": "Plans & pricing",
+      "description": "14-day trial, then Pro at $5/month: presskit.pro/your-name URL, unlimited updates, support in PT/EN/ES. Cancel anytime."
+    },
+    "privacy": {
+      "description": "How PressKit Pro collects, uses, and protects your data — essential cookies only, LGPD-compliant, no tracking."
+    },
+    "terms": {
+      "description": "Terms of use for PressKit Pro: account, published content, plan and billing, slug and public link, suspension, Brazilian jurisdiction."
+    }
+  },
+  "presets": {
+    "mediakit-pro-v1": {
+      "name": "Hard Techno Underground",
+      "tagline": "Underground rave aesthetic: pure black, electric cobalt, ghost-outlined title and a high-voltage marquee."
+    },
+    "editorial-nightlife-v1": {
+      "name": "Editorial Nightlife",
+      "tagline": "The original PressKit Pro look: brutalist editorial, high contrast."
+    }
+  },
+  "editor": {
+    "design": {
+      "tabLabel": "Design",
+      "heading": "Pick a design preset",
+      "description": "Each preset swaps the entire visual treatment of your page: colors, typography, hero, socials, press-kit, and contact. You can still tweak color + type later under \"Theme\".",
+      "activeBadge": "Selected",
+      "applyCta": "Apply preset",
+      "pendingCta": "Applying…",
+      "applyHint": "Color and font tokens will be overwritten. You'll need to revalidate contrast before publishing again.",
+      "errorMessage": "Could not apply the preset. Please try again."
+    }
   }
 }

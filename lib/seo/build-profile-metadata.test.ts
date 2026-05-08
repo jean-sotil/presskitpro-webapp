@@ -30,7 +30,7 @@ function makeBundle(overrides: {
 describe('buildProfileMetadata', () => {
   it('uses the auto-fallback title when metaTitle is missing', () => {
     const meta = buildProfileMetadata(makeBundle(), 'https://presskit.pro');
-    expect(meta.title).toBe('mariana luz — Press Kit & EPK');
+    expect(meta.title).toEqual({ absolute: 'mariana luz — Press Kit & EPK' });
   });
 
   it('uses metaTitle verbatim when present', () => {
@@ -38,7 +38,7 @@ describe('buildProfileMetadata', () => {
       makeBundle({ content: { metaTitle: 'Custom Title' } }),
       'https://presskit.pro',
     );
-    expect(meta.title).toBe('Custom Title');
+    expect(meta.title).toEqual({ absolute: 'Custom Title' });
   });
 
   it('passes through metaDescription / tagline as description', () => {

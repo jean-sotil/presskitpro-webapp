@@ -1,11 +1,24 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 import { LegalPage } from '@/components/legal/LegalPage';
+import { isSupportedLocale, type SupportedLocale } from '@/lib/i18n/locale';
+import { buildMarketingMetadata } from '@/lib/seo/build-marketing-metadata';
+
+const SITE_ORIGIN =
+  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('terms');
-  return { title: `${t('title')} — PressKit Pro` };
+  const rawLocale = await getLocale();
+  const locale: SupportedLocale = isSupportedLocale(rawLocale) ? rawLocale : 'pt';
+  const t = await getTranslations();
+  return buildMarketingMetadata({
+    origin: SITE_ORIGIN,
+    path: '/terms',
+    locale,
+    title: t('terms.title'),
+    description: t('seo.terms.description'),
+  });
 }
 
 type LegalSection = { heading: string; body: string };

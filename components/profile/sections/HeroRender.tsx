@@ -1,7 +1,13 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
+import type { HeroVariant } from '@/lib/presets';
+
+import { HeroTitleOverlayBroken } from './HeroRender.title-overlay-broken';
 
 type HeroStyle = 'full-bleed-portrait' | 'split-portrait-text' | 'centered-logo';
 
@@ -13,9 +19,22 @@ type PortraitMedia = {
   height?: number | null;
 };
 
-export function HeroRender({ bundle }: { bundle: EditorBundle }) {
+export function HeroRender({
+  bundle,
+  variant,
+}: {
+  bundle: EditorBundle;
+  /** Preset-driven variant. When set, wins over the legacy `heroStyle`
+   *  field — task-35 plumbs this from `ProfileRenderer`. */
+  variant?: HeroVariant;
+}) {
+  const t = useTranslations('profile');
+  if (variant === 'title-overlay-broken') {
+    return <HeroTitleOverlayBroken bundle={bundle} />;
+  }
   const { profile, content } = bundle;
-  const style = (bundle.theme?.heroStyle as HeroStyle | undefined) ?? 'full-bleed-portrait';
+  const fallback = (bundle.theme?.heroStyle as HeroStyle | undefined) ?? 'full-bleed-portrait';
+  const style: HeroStyle = variant ?? fallback;
   const tagline = (content?.tagline as string | undefined) ?? null;
   const ctaLabel = (content?.ctaLabel as string | undefined) ?? null;
   const ctaUrl = (content?.ctaUrl as string | undefined) ?? null;
@@ -60,7 +79,7 @@ export function HeroRender({ bundle }: { bundle: EditorBundle }) {
         {tagline ? (
           <p className="mt-6 max-w-prose text-lg text-text-muted">{tagline}</p>
         ) : null}
-        {ctaUrl ? <CtaButton url={ctaUrl} label={ctaLabel ?? 'Contato'} /> : null}
+        {ctaUrl ? <CtaButton url={ctaUrl} label={ctaLabel ?? t('ctaDefault')} /> : null}
       </header>
     );
   }
@@ -101,7 +120,7 @@ export function HeroRender({ bundle }: { bundle: EditorBundle }) {
           {tagline ? (
             <p className="mt-6 max-w-prose text-lg text-text-muted">{tagline}</p>
           ) : null}
-          {ctaUrl ? <CtaButton url={ctaUrl} label={ctaLabel ?? 'Contato'} /> : null}
+          {ctaUrl ? <CtaButton url={ctaUrl} label={ctaLabel ?? t('ctaDefault')} /> : null}
         </div>
       </header>
     );
@@ -141,7 +160,7 @@ export function HeroRender({ bundle }: { bundle: EditorBundle }) {
         {tagline ? (
           <p className="mt-6 max-w-prose text-lg text-text-muted">{tagline}</p>
         ) : null}
-        {ctaUrl ? <CtaButton url={ctaUrl} label={ctaLabel ?? 'Contato'} /> : null}
+        {ctaUrl ? <CtaButton url={ctaUrl} label={ctaLabel ?? t('ctaDefault')} /> : null}
       </div>
     </header>
   );

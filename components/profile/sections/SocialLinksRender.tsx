@@ -1,22 +1,12 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 import type { EditorBundle } from '@/lib/editor/bundle';
+import type { SocialVariant } from '@/lib/presets';
 
+import { SocialLinksIconList } from './SocialLinksRender.icon-list';
 import { TrackedSocialLink } from './TrackedSocialLink';
-
-const PLATFORM_LABELS: Record<string, string> = {
-  instagram: 'Instagram',
-  tiktok: 'TikTok',
-  soundcloud: 'SoundCloud',
-  spotify: 'Spotify',
-  youtube: 'YouTube',
-  twitter: 'Twitter / X',
-  bandcamp: 'Bandcamp',
-  mixcloud: 'Mixcloud',
-  'apple-music': 'Apple Music',
-  beatport: 'Beatport',
-  whatsapp: 'WhatsApp',
-  email: 'E-mail',
-  website: 'Website',
-};
 
 type LinkRow = {
   id: number | string;
@@ -25,7 +15,18 @@ type LinkRow = {
   displayOrder?: number;
 };
 
-export function SocialLinksRender({ bundle }: { bundle: EditorBundle }) {
+export function SocialLinksRender({
+  bundle,
+  variant,
+}: {
+  bundle: EditorBundle;
+  variant?: SocialVariant;
+}) {
+  const t = useTranslations('profile.social');
+  const tPlatforms = useTranslations('profile.social.platforms');
+  if (variant === 'icon-list') {
+    return <SocialLinksIconList bundle={bundle} />;
+  }
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
   if (!raw.length) return null;
   const links = [...raw].sort(
@@ -35,12 +36,17 @@ export function SocialLinksRender({ bundle }: { bundle: EditorBundle }) {
   return (
     <section className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">
-        Redes sociais
+        {t('label')}
       </h2>
       <ul className="mt-6 flex flex-wrap gap-3">
         {links.map((link) => {
           const href = hrefFor(link);
-          const label = PLATFORM_LABELS[link.platform] ?? link.platform;
+          let label: string;
+          try {
+            label = tPlatforms(link.platform);
+          } catch {
+            label = link.platform;
+          }
           const external =
             link.platform !== 'email' && link.platform !== 'whatsapp';
           return (

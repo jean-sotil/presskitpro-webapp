@@ -18,6 +18,8 @@ import {
 } from '@/lib/onboarding/state';
 import { track } from '@/lib/analytics/track';
 import { payload as getPayloadInstance } from '@/lib/payload';
+import { buildApplyPresetPatch } from '@/lib/presets/apply-preset';
+import { getDefaultPreset } from '@/lib/presets';
 import { reserveSlug, releaseSlug } from '@/lib/slug/operations';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { supabaseServer } from '@/lib/supabase/server';
@@ -111,6 +113,17 @@ function buildDeps(): WizardDeps {
             platform: args.socialPlatform,
             url: args.socialUrl,
             displayOrder: 0,
+          } as never,
+        });
+        // Task-35 — seed the design preset on profile creation. Tokens are
+        // copied from the registry so the contrast gate has values to
+        // run against from the first visit to the editor.
+        const defaultPatch = buildApplyPresetPatch(getDefaultPreset());
+        await p.create({
+          collection: 'themes',
+          data: {
+            profile: profile.id,
+            ...defaultPatch,
           } as never,
         });
       } catch (err) {

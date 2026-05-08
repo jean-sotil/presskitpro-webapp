@@ -19,6 +19,10 @@ import type { EditorBundle } from '@/lib/editor/bundle';
 
 export interface BuildMetadataOptions {
   imageUrl?: string;
+  /** Localized "Press Kit & EPK" title suffix. Page must pass the
+   *  translation from `getTranslations('profile.metaTitleSuffix')`;
+   *  defaults to the English form when omitted (test convenience). */
+  titleSuffix?: string;
 }
 
 export function buildProfileMetadata(
@@ -38,7 +42,8 @@ export function buildProfileMetadata(
   const cleanOrigin = origin.replace(/\/$/, '');
   const canonical = `${cleanOrigin}/${profile.slug}`;
   const displayName = displayFromSlug(profile.slug);
-  const title = content?.metaTitle?.trim() || `${displayName} — Press Kit & EPK`;
+  const titleSuffix = options.titleSuffix ?? 'Press Kit & EPK';
+  const title = content?.metaTitle?.trim() || `${displayName} — ${titleSuffix}`;
   const description =
     content?.metaDescription?.trim() || content?.tagline?.trim() || undefined;
   const image = options.imageUrl;
@@ -52,7 +57,12 @@ export function buildProfileMetadata(
   languages['x-default'] = canonical;
 
   return {
-    title,
+    // `absolute` opts out of the root layout's `title.template` so the
+    // `<title>` reads `Mariana Luz — Press Kit & EPK` rather than
+    // `Mariana Luz — Press Kit & EPK | PressKit Pro` (the brand suffix
+    // is already inside the title via "Press Kit & EPK" — adding it
+    // twice is brand-stuffing).
+    title: { absolute: title },
     description,
     alternates: {
       canonical,
