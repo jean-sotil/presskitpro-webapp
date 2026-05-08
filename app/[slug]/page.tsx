@@ -33,10 +33,22 @@ async function findPausedProfileBySlug(slug: string): Promise<boolean> {
       ],
     },
     limit: 1,
-    depth: 0,
+    depth: 1,
     overrideAccess: true,
   });
-  return result.totalDocs > 0;
+  const doc = result.docs[0] as
+    | { owner?: { deletionRequestedAt?: string | null } | number | string | null }
+    | undefined;
+  if (!doc) return false;
+  // Task-33 PR-A — soft-deleted owners 404 even when the profile row
+  // is still in the legacy `paused` state. The hard-delete cron will
+  // remove the profile entirely in 14 days; until then the public
+  // surface is gone.
+  const owner = doc.owner;
+  if (owner && typeof owner === 'object' && owner.deletionRequestedAt) {
+    return false;
+  }
+  return true;
 }
 
 const SITE_ORIGIN =

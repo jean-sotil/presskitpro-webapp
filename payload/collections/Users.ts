@@ -90,6 +90,17 @@ export const Users: CollectionConfig = {
       },
     },
 
+    // ----- LGPD account deletion (task-33) -----
+    {
+      name: 'deletionRequestedAt',
+      type: 'date',
+      admin: {
+        readOnly: true,
+        description:
+          'When the user clicked "Delete my account" in /dashboard/settings/privacy. Profiles are soft-deleted (status=unpublished, public 404) immediately; the hard-delete cron sweeps 14 days later.',
+      },
+    },
+
     // ----- Stripe billing (task-23) -----
     {
       name: 'stripeCustomerId',

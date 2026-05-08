@@ -202,6 +202,10 @@ export interface User {
    */
   trialEndsAt?: string | null;
   /**
+   * When the user clicked "Delete my account" in /dashboard/settings/privacy. Profiles are soft-deleted (status=unpublished, public 404) immediately; the hard-delete cron sweeps 14 days later.
+   */
+  deletionRequestedAt?: string | null;
+  /**
    * Set on first checkout attempt (lazy customer creation). Webhook handler reads this to match incoming events.
    */
   stripeCustomerId?: string | null;
@@ -728,6 +732,7 @@ export interface UsersSelect<T extends boolean = true> {
   role?: T;
   plan?: T;
   trialEndsAt?: T;
+  deletionRequestedAt?: T;
   stripeCustomerId?: T;
   stripeSubscriptionId?: T;
   stripeSubscriptionStatus?: T;

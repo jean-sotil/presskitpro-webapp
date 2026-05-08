@@ -89,6 +89,28 @@
       "body": "presskit.pro/{slug} is yours to keep. Happy press-kitting!"
     }
   },
+  "privacySettings": {
+    "title": "Privacy",
+    "intro": "Export your data or delete your account anytime, in line with LGPD.",
+    "export": {
+      "title": "Export my data",
+      "body": "We'll generate a ZIP with everything you've published (profiles, content, photos, links, and analytics) and email you a download link. The link expires in 24 hours.",
+      "cta": "Request export",
+      "pending": "Preparing your archive... We'll email you when it's ready."
+    },
+    "delete": {
+      "title": "Delete my account",
+      "body": "Your account enters a 14-day window before permanent deletion. During that time your press kit is taken offline (public link returns 404). After 14 days we remove your data from Auth, Storage, Stripe, and analytics.",
+      "cta": "Delete account",
+      "confirmTitle": "Confirm deletion",
+      "confirmBody": "To confirm, type your email below. This starts the 14-day window.",
+      "confirmInputLabel": "Confirm your email",
+      "confirmDestructive": "Delete my account",
+      "cancel": "Cancel",
+      "errorEmail": "Email does not match. Confirm exactly as it appears on your account.",
+      "successBanner": "Account marked for deletion. You've been signed out and your profiles are offline. Contact support within 14 days if you want to cancel the deletion."
+    }
+  },
   "profile": {
     "fallbackBanner": "Original content in {language}. A translation in your language is not yet available.",
     "languageNames": {

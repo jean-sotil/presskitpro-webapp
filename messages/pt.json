@@ -88,6 +88,28 @@
       "body": "O link presskit.pro/{slug} continua reservado para você. Bom press-kitting!"
     }
   },
+  "privacySettings": {
+    "title": "Privacidade",
+    "intro": "Exporte seus dados ou apague sua conta a qualquer momento, conforme a LGPD.",
+    "export": {
+      "title": "Exportar meus dados",
+      "body": "Geramos um arquivo ZIP com tudo que você publicou (perfis, conteúdo, fotos, links e estatísticas) e enviamos um link de download por e-mail. O link expira em 24 horas.",
+      "cta": "Pedir exportação",
+      "pending": "Preparando o arquivo... Avisaremos por e-mail quando estiver pronto."
+    },
+    "delete": {
+      "title": "Apagar minha conta",
+      "body": "Sua conta entra em uma janela de 14 dias antes da exclusão definitiva. Durante esse período seu press kit fica fora do ar (link público retorna 404). Depois dos 14 dias, removemos seus dados de Auth, Storage, Stripe e analytics.",
+      "cta": "Apagar conta",
+      "confirmTitle": "Confirmar exclusão",
+      "confirmBody": "Para confirmar, digite seu e-mail abaixo. Esta ação inicia a janela de 14 dias.",
+      "confirmInputLabel": "Confirme seu e-mail",
+      "confirmDestructive": "Apagar minha conta",
+      "cancel": "Cancelar",
+      "errorEmail": "O e-mail não confere. Confirme exatamente como aparece na sua conta.",
+      "successBanner": "Conta marcada para exclusão. Você foi desconectado e seus perfis estão fora do ar. Avise nosso suporte em até 14 dias se quiser cancelar a exclusão."
+    }
+  },
   "profile": {
     "fallbackBanner": "Conteúdo original em {language}. Tradução para o seu idioma ainda não está disponível.",
     "languageNames": {
