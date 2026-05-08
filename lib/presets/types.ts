@@ -16,7 +16,8 @@ export type HeroVariant =
   | 'full-bleed-portrait'
   | 'split-portrait-text'
   | 'centered-logo'
-  | 'title-overlay-broken';
+  | 'title-overlay-broken'
+  | 'cutout-layered';
 
 export type BioVariant = 'classic' | 'split-image-text';
 
@@ -24,15 +25,19 @@ export type GalleryVariant =
   | 'mosaic'
   | 'uniform-grid'
   | 'carousel'
-  | 'editorial-grid';
+  | 'editorial-grid'
+  | 'film-strip';
 
-export type ServicesVariant = 'classic' | 'rail-cards';
+export type ServicesVariant = 'classic' | 'rail-cards' | 'orange-cards';
 
-export type SocialVariant = 'pill-list' | 'icon-list';
+export type SocialVariant = 'pill-list' | 'icon-list' | 'platform-stats';
 
-export type PressKitVariant = 'inline-cta' | 'square-panel';
+export type PressKitVariant = 'inline-cta' | 'square-panel' | 'cursor-cta';
 
-export type ContactVariant = 'inline-cta' | 'dark-panel';
+export type ContactVariant =
+  | 'inline-cta'
+  | 'dark-panel'
+  | 'two-column-footer';
 
 export type PresetTheme = {
   /** `bgPresets[*].id` — populates `Themes.colorPresetId` on apply. */

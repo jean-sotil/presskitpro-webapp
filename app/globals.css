@@ -123,6 +123,21 @@
     to   { transform: translate3d(-50%, 0, 0); }
   }
 
+  /* Task-35 — Festival Club Orange decorative phone-frame float. The
+     base rotation comes from an inline transform in the component so
+     the keyframe just animates the translate. */
+  @keyframes phone-float {
+    0%, 100% { transform: rotate(-6deg) translateY(0); }
+    50%      { transform: rotate(-6deg) translateY(-8px); }
+  }
+
+  /* Task-35 — retro cursor wiggle for the festival press-kit CTA. */
+  @keyframes cursor-wiggle {
+    0%, 100% { transform: rotate(-12deg); }
+    25%      { transform: rotate(-18deg); }
+    75%      { transform: rotate(-6deg); }
+  }
+
   /* Task-35 — gallery lightbox enter animations. Backdrop fades in,
      image scales up from 96% — both 200ms ease-out. Exit unmounts
      immediately to feel responsive. Reduced-motion users see the

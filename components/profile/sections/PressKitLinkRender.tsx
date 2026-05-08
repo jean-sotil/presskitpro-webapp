@@ -6,6 +6,7 @@ import type { EditorBundle } from '@/lib/editor/bundle';
 import type { PressKitProvider } from '@/lib/payload/hooks/derive-press-kit-provider';
 import type { PressKitVariant } from '@/lib/presets';
 
+import { PressKitLinkCursorCta } from './PressKitLinkRender.cursor-cta';
 import { PressKitLinkSquarePanel } from './PressKitLinkRender.square-panel';
 import { TrackedPressKitAnchor } from './TrackedPressKitAnchor';
 
@@ -20,6 +21,9 @@ export function PressKitLinkRender({
   const tProviders = useTranslations('profile.pressKit.providers');
   if (variant === 'square-panel') {
     return <PressKitLinkSquarePanel bundle={bundle} />;
+  }
+  if (variant === 'cursor-cta') {
+    return <PressKitLinkCursorCta bundle={bundle} />;
   }
   const url = (bundle.profile.pressKitUrl as string | undefined) ?? null;
   if (!url) return null;

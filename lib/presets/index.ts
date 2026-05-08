@@ -1,4 +1,5 @@
 import { editorialNightlifeV1 } from './editorial-nightlife-v1';
+import { festivalClubOrange } from './festival-club-orange';
 import { mediakitProV1 } from './mediakit-pro-v1';
 import type { Preset } from './types';
 
@@ -22,6 +23,7 @@ export type {
  */
 export const PRESETS: readonly Preset[] = [
   mediakitProV1,
+  festivalClubOrange,
   editorialNightlifeV1,
 ] as const;
 

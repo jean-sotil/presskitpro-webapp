@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import type { ServicesVariant } from '@/lib/presets';
 
+import { ServicesOrangeCards } from './ServicesRender.orange-cards';
 import { ServicesRailCards } from './ServicesRender.rail-cards';
 
 export function ServicesRender({
@@ -17,6 +18,9 @@ export function ServicesRender({
   const t = useTranslations('profile.services');
   if (variant === 'rail-cards') {
     return <ServicesRailCards bundle={bundle} />;
+  }
+  if (variant === 'orange-cards') {
+    return <ServicesOrangeCards bundle={bundle} />;
   }
   const services = (bundle.content?.services as
     | Array<{ title: string; description?: string }>

@@ -7,6 +7,7 @@ import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
 import type { HeroVariant } from '@/lib/presets';
 
+import { HeroCutoutLayered } from './HeroRender.cutout-layered';
 import { HeroTitleOverlayBroken } from './HeroRender.title-overlay-broken';
 
 type HeroStyle = 'full-bleed-portrait' | 'split-portrait-text' | 'centered-logo';
@@ -31,6 +32,9 @@ export function HeroRender({
   const t = useTranslations('profile');
   if (variant === 'title-overlay-broken') {
     return <HeroTitleOverlayBroken bundle={bundle} />;
+  }
+  if (variant === 'cutout-layered') {
+    return <HeroCutoutLayered bundle={bundle} />;
   }
   const { profile, content } = bundle;
   const fallback = (bundle.theme?.heroStyle as HeroStyle | undefined) ?? 'full-bleed-portrait';

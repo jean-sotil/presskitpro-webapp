@@ -6,6 +6,7 @@ import type { EditorBundle } from '@/lib/editor/bundle';
 import type { SocialVariant } from '@/lib/presets';
 
 import { SocialLinksIconList } from './SocialLinksRender.icon-list';
+import { SocialLinksPlatformStats } from './SocialLinksRender.platform-stats';
 import { TrackedSocialLink } from './TrackedSocialLink';
 
 type LinkRow = {
@@ -26,6 +27,9 @@ export function SocialLinksRender({
   const tPlatforms = useTranslations('profile.social.platforms');
   if (variant === 'icon-list') {
     return <SocialLinksIconList bundle={bundle} />;
+  }
+  if (variant === 'platform-stats') {
+    return <SocialLinksPlatformStats bundle={bundle} />;
   }
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
   if (!raw.length) return null;

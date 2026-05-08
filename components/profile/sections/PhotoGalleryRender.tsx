@@ -8,6 +8,7 @@ import { mediaUrl } from '@/lib/media/url';
 import type { GalleryVariant } from '@/lib/presets';
 
 import { PhotoGalleryEditorialGrid } from './PhotoGalleryRender.editorial-grid';
+import { PhotoGalleryFilmStrip } from './PhotoGalleryRender.film-strip';
 
 type GalleryEntry = {
   id: number;
@@ -29,6 +30,9 @@ export function PhotoGalleryRender({
   const t = useTranslations('profile.gallery');
   if (variant === 'editorial-grid') {
     return <PhotoGalleryEditorialGrid bundle={bundle} />;
+  }
+  if (variant === 'film-strip') {
+    return <PhotoGalleryFilmStrip bundle={bundle} />;
   }
   const raw = bundle.profile.gallery as Array<GalleryEntry | number> | undefined;
   const items = Array.isArray(raw)

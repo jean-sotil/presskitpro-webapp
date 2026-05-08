@@ -1,0 +1,784 @@
+{
+  "preset": {
+    "id": "festival-club-orange",
+    "name": "Festival Club Orange",
+    "version": "1.0.0",
+    "description": "High-energy festival and club DJ aesthetic. Alternating light/dark sections, warm electric orange accent, massive condensed display typography, artist cutout hero with layered text, crowd photography with color overlay, phone mockup stats, and multi-pose press kit layout. Designed for house, melodic, R&B-fusion, and mainstream club artists.",
+    "category": "festival-mainstream",
+    "mood": ["energetic", "warm", "bold", "vibrant", "polished", "festival", "commercial"],
+    "genres": ["house", "melodic-house", "RnB-fusion", "club", "pop-dance", "festival-edm"],
+    "lightVariantAvailable": true,
+
+    "colors": {
+      "bg": "#F2F0EB",
+      "bgAlt": "#ECEAE4",
+      "bgDark": "#0E0E0E",
+      "bgDark2": "#1A1A1A",
+      "bgDark3": "#252525",
+      "surface": "#FFFFFF",
+      "surfaceDark": "#161616",
+      "border": "#DDDBD5",
+      "borderDark": "#2A2A2A",
+      "text": "#0E0E0E",
+      "textMuted": "#555550",
+      "textSubtle": "#999990",
+      "textInverse": "#FFFFFF",
+      "textInverseMuted": "#AAAAAA",
+      "accent": "#FF5500",
+      "accentLight": "#FF7733",
+      "accentDark": "#CC4400",
+      "accentContrast": "#FFFFFF",
+      "accentMuted": "rgba(255, 85, 0, 0.12)",
+      "accentBorder": "rgba(255, 85, 0, 0.4)",
+      "crowdOverlay": "rgba(255, 85, 0, 0.55)",
+      "marqueeBg": "#0E0E0E",
+      "marqueeText": "#FFFFFF",
+      "overlayDark": "rgba(0,0,0,0.7)"
+    },
+
+    "colorSemantics": {
+      "heroBackground": "bg",
+      "heroTitleColor": "accent",
+      "heroTitleLayering": "behind-artist-cutout",
+      "heroCutoutBg": "bg",
+      "sectionLightBg": "bg",
+      "sectionDarkBg": "bgDark",
+      "marqueeBg": "bgDark",
+      "marqueeText": "textInverse",
+      "crowdPhotoOverlay": "crowdOverlay",
+      "crowdOverlayBlendMode": "multiply",
+      "statsBackground": "bgDark",
+      "statsText": "textInverse",
+      "presKitBackground": "bgDark2",
+      "footerBackground": "bgDark",
+      "ctaBg": "accent",
+      "ctaText": "accentContrast",
+      "ctaHoverBg": "text",
+      "ctaHoverText": "bg"
+    },
+
+    "sectionAlternation": {
+      "pattern": ["light", "light", "marquee-dark", "full-bleed-crowd", "marquee-dark", "dark", "dark", "footer-dark"],
+      "description": "Alternating light cream and dark charcoal sections create visual rhythm. Hero and bio are light. Stats, presskit, footer are dark.",
+      "transitionStyle": "hard-cut",
+      "transitionAngle": "0deg"
+    },
+
+    "typography": {
+      "fontDisplay": {
+        "family": "'Big Shoulders Display', 'Barlow Condensed', 'Impact', 'Arial Narrow', sans-serif",
+        "fallback": "sans-serif",
+        "googleFont": "Big Shoulders Display",
+        "googleFontWeights": [700, 900],
+        "nextFontId": "big-shoulders-display",
+        "note": "Extremely condensed, heavy weight. Closest alternative: Barlow Condensed Black or Impact."
+      },
+      "fontBody": {
+        "family": "'Nunito', 'Poppins', 'Inter', 'Helvetica Neue', sans-serif",
+        "fallback": "sans-serif",
+        "googleFont": "Nunito",
+        "googleFontWeights": [400, 600, 700, 800],
+        "nextFontId": "nunito"
+      },
+      "fontAccentEditorial": {
+        "family": "'Big Shoulders Display', sans-serif",
+        "note": "Used for the editorial mixed-case section headers like BIOGRAPHY with visual weight variation"
+      },
+
+      "scale": {
+        "heroTitle": {
+          "fontSize": "clamp(6rem, 22vw, 18rem)",
+          "fontWeight": 900,
+          "textTransform": "uppercase",
+          "letterSpacing": "-0.03em",
+          "lineHeight": 0.82,
+          "color": "accent",
+          "opacity": 0.85,
+          "position": "absolute-layered-behind-portrait",
+          "note": "Rendered behind artist PNG cutout. Partially obscured by the artist's body for depth."
+        },
+        "heroLabel": {
+          "fontSize": "0.75rem",
+          "fontWeight": 700,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.08em",
+          "color": "text",
+          "backgroundBadge": {
+            "bg": "text",
+            "color": "bg",
+            "padding": "0.25rem 0.5rem"
+          }
+        },
+        "heroHandle": {
+          "fontSize": "0.6875rem",
+          "fontWeight": 400,
+          "letterSpacing": "0.04em",
+          "color": "textMuted"
+        },
+        "sectionTitle": {
+          "fontSize": "clamp(3rem, 8vw, 7rem)",
+          "fontWeight": 900,
+          "textTransform": "uppercase",
+          "letterSpacing": "-0.02em",
+          "lineHeight": 0.9,
+          "editorialMixedCase": {
+            "enabled": true,
+            "pattern": "heavy-weight-alternating",
+            "example": "BIOgRAPHy",
+            "description": "Some letters rendered at different visual weight or size to create editorial tension. Achieved via nested spans with weight override.",
+            "altLetterWeight": 400,
+            "altLetterOpacity": 0.6
+          }
+        },
+        "sectionTitleDark": {
+          "extends": "sectionTitle",
+          "color": "textInverse"
+        },
+        "statsPlatformName": {
+          "fontSize": "clamp(1.25rem, 3vw, 1.75rem)",
+          "fontWeight": 900,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.04em",
+          "color": "textInverse"
+        },
+        "statsCount": {
+          "fontSize": "clamp(1rem, 2vw, 1.375rem)",
+          "fontWeight": 700,
+          "letterSpacing": "0.02em",
+          "color": "textInverse"
+        },
+        "statsLabel": {
+          "fontSize": "0.6875rem",
+          "fontWeight": 400,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.1em",
+          "color": "textInverseMuted"
+        },
+        "body": {
+          "fontSize": "clamp(0.8125rem, 1.4vw, 0.9375rem)",
+          "fontWeight": 400,
+          "lineHeight": 1.75,
+          "letterSpacing": "0.01em",
+          "color": "textMuted",
+          "textAlign": "left"
+        },
+        "bodyDark": {
+          "extends": "body",
+          "color": "textInverseMuted"
+        },
+        "footerContactLabel": {
+          "fontSize": "clamp(2rem, 5vw, 4rem)",
+          "fontWeight": 900,
+          "textTransform": "uppercase",
+          "letterSpacing": "-0.01em",
+          "color": "textInverse"
+        },
+        "contactDetail": {
+          "fontSize": "clamp(0.8125rem, 1.5vw, 0.9375rem)",
+          "fontWeight": 600,
+          "letterSpacing": "0.02em",
+          "color": "textInverse"
+        },
+        "marqueeText": {
+          "fontSize": "clamp(1.25rem, 3vw, 2.5rem)",
+          "fontWeight": 900,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.08em",
+          "color": "textInverse"
+        },
+        "ctaText": {
+          "fontSize": "0.6875rem",
+          "fontWeight": 700,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.15em"
+        },
+        "presKitTitle": {
+          "fontSize": "clamp(2.5rem, 6vw, 5rem)",
+          "fontWeight": 900,
+          "textTransform": "uppercase",
+          "letterSpacing": "-0.01em",
+          "lineHeight": 0.9,
+          "color": "textInverse"
+        }
+      }
+    },
+
+    "effects": {
+      "filmGrain": {
+        "enabled": true,
+        "method": "svg-feTurbulence-pseudo-element",
+        "opacity": 0.04,
+        "baseFrequency": 0.68,
+        "numOctaves": 4,
+        "blendMode": "multiply",
+        "animated": true,
+        "animationSpeed": "0.6s",
+        "animationTimingFunction": "steps(1, end)",
+        "appliedTo": "html-root",
+        "note": "Slightly lighter grain than the dark preset — blendMode multiply works better on light backgrounds."
+      },
+      "heroTextLayering": {
+        "enabled": true,
+        "technique": "css-z-index-stacking",
+        "layers": [
+          { "z": 0, "content": "heroBackground",        "bg": "bg" },
+          { "z": 1, "content": "heroTitleText",         "color": "accent", "opacity": 0.85 },
+          { "z": 2, "content": "artistCutoutImage",     "note": "PNG with transparent background or CSS mask-image for cutout effect" },
+          { "z": 3, "content": "heroLabels",            "position": "top-left" }
+        ],
+        "cutoutMethod": "css-mask-image-or-png-with-transparency",
+        "cutoutEdge": "natural-shoulder-crop",
+        "bgMatchForCutout": "bg"
+      },
+      "marquee": {
+        "enabled": true,
+        "instances": [
+          {
+            "id": "marquee-top",
+            "position": "below-biography",
+            "content": "MEDIAKIT",
+            "separator": " ",
+            "repeat": 8,
+            "direction": "left",
+            "speed": "20s",
+            "background": "marqueeBg",
+            "textColor": "marqueeText",
+            "fontSize": "marqueeText",
+            "padding": "0.75rem 0",
+            "borderTop": "1px solid borderDark",
+            "borderBottom": "1px solid borderDark"
+          },
+          {
+            "id": "marquee-bottom",
+            "position": "below-crowd-photo",
+            "content": "MEDIAKIT",
+            "separator": " ",
+            "repeat": 8,
+            "direction": "left",
+            "speed": "20s",
+            "background": "marqueeBg",
+            "textColor": "marqueeText",
+            "fontSize": "marqueeText",
+            "padding": "0.75rem 0"
+          }
+        ],
+        "pauseOnHover": false,
+        "duplicateForSeamlessLoop": true,
+        "cssMethod": "CSS translateX on will-change:transform container"
+      },
+      "crowdPhotoOverlay": {
+        "enabled": true,
+        "method": "css-pseudo-element-or-div",
+        "background": "crowdOverlay",
+        "blendMode": "multiply",
+        "position": "absolute-inset-0",
+        "note": "Orange overlay on crowd concert photo creates brand cohesion with accent color"
+      },
+      "phoneMockup": {
+        "enabled": true,
+        "position": "stats-section-right",
+        "style": "floating-device-frame",
+        "device": "modern-smartphone",
+        "tilt": "-8deg",
+        "shadow": "none",
+        "content": "instagram-profile-screenshot",
+        "borderRadius": "2rem",
+        "border": "6px solid bgDark3",
+        "width": "clamp(180px, 28vw, 280px)",
+        "floatAnimation": {
+          "enabled": true,
+          "keyframes": "translateY 0px → -8px → 0px",
+          "duration": "3s",
+          "easing": "ease-in-out",
+          "iterationCount": "infinite"
+        }
+      },
+      "scrollReveal": {
+        "enabled": true,
+        "method": "IntersectionObserver",
+        "threshold": 0.1,
+        "animation": {
+          "from": { "opacity": 0, "transform": "translateY(24px)" },
+          "to":   { "opacity": 1, "transform": "translateY(0)" },
+          "duration": "500ms",
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)"
+        },
+        "stagger": "60ms",
+        "respectReducedMotion": true
+      },
+      "pageLoadReveal": {
+        "enabled": true,
+        "sequence": [
+          { "target": "heroLabel",    "delay": "0ms" },
+          { "target": "heroHandle",   "delay": "60ms" },
+          { "target": "heroTitle",    "delay": "150ms" },
+          { "target": "heroCutout",   "delay": "200ms" }
+        ],
+        "duration": "500ms",
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)"
+      },
+      "hoverEffects": {
+        "ctaButton": {
+          "transition": "background 120ms ease, color 120ms ease",
+          "hoverBg": "text",
+          "hoverText": "bg",
+          "activeTransform": "scale(0.98)"
+        },
+        "socialIcon": {
+          "transition": "color 150ms ease, transform 150ms ease",
+          "hoverColor": "accent",
+          "hoverTransform": "translateY(-3px)"
+        },
+        "galleryImage": {
+          "transition": "transform 300ms cubic-bezier(0.25, 1, 0.5, 1), brightness 300ms ease",
+          "hoverTransform": "scale(1.04)",
+          "hoverBrightness": 1.1
+        },
+        "statItem": {
+          "transition": "color 150ms ease",
+          "hoverIconColor": "accent"
+        }
+      }
+    },
+
+    "layout": {
+      "heroStyle": "light-bg-cutout-portrait",
+      "heroHeight": "100svh",
+      "heroMinHeight": "600px",
+      "heroPortraitPosition": "center",
+      "heroPortraitWidth": "clamp(280px, 50vw, 600px)",
+      "heroPortraitAlignment": "bottom-center",
+      "heroTitlePosition": "absolute-center-behind-portrait",
+      "heroLabelPosition": "top-left",
+
+      "contentMaxWidth": "1440px",
+      "contentPadding": "0 clamp(1.5rem, 6vw, 6rem)",
+      "sectionPaddingY": "clamp(4rem, 9vh, 8rem)",
+      "sectionGap": "0px",
+
+      "anchorNav": {
+        "enabled": true,
+        "position": "sticky-top",
+        "background": "rgba(242, 240, 235, 0.9)",
+        "backdropFilter": "blur(12px)",
+        "borderBottom": "1px solid border",
+        "fontSize": "0.625rem",
+        "fontWeight": 700,
+        "letterSpacing": "0.18em",
+        "textTransform": "uppercase",
+        "color": "textMuted",
+        "activeColor": "accent",
+        "gap": "2.5rem",
+        "padding": "0.875rem 0",
+        "darkVariant": {
+          "background": "rgba(14, 14, 14, 0.92)",
+          "borderBottom": "1px solid borderDark",
+          "color": "textInverseMuted",
+          "activeColor": "accent"
+        }
+      }
+    },
+
+    "sections": {
+      "hero": {
+        "theme": "light",
+        "background": "bg",
+        "height": "100svh",
+        "layout": "layered-cutout",
+        "layers": {
+          "background": { "color": "bg", "zIndex": 0 },
+          "titleText":  { "content": "MEDIAKIT", "color": "accent", "opacity": 0.85, "zIndex": 1, "position": "absolute-center" },
+          "artistCutout": { "type": "png-with-alpha-or-masked-img", "position": "center-bottom-anchored", "zIndex": 2 },
+          "labelBadge": { "position": "top-left", "zIndex": 3, "content": "MEDIAKIT badge + handle" }
+        },
+        "labelBadge": {
+          "bg": "text",
+          "color": "bg",
+          "fontSize": "0.6875rem",
+          "fontWeight": 700,
+          "letterSpacing": "0.08em",
+          "textTransform": "uppercase",
+          "padding": "0.3rem 0.625rem"
+        }
+      },
+      "biography": {
+        "theme": "light",
+        "background": "bg",
+        "layout": "split-55-45",
+        "leftContent": "bio-text-block",
+        "rightContent": "portrait-photo",
+        "sectionTitleStyle": "editorial-mixed-case",
+        "gapBetweenColumns": "clamp(3rem, 6vw, 6rem)",
+        "portraitAspectRatio": "3/4",
+        "portraitStyle": "natural-color-no-filter",
+        "mobileStackOrder": "title-then-text-then-image",
+        "breakpoint": "768px",
+        "portraitCaption": {
+          "enabled": true,
+          "content": "platform-handle-badge",
+          "position": "bottom-right-of-image",
+          "bg": "bgDark",
+          "color": "textInverse",
+          "padding": "0.375rem 0.875rem",
+          "fontSize": "0.6875rem",
+          "fontWeight": 700,
+          "letterSpacing": "0.08em",
+          "textTransform": "uppercase"
+        }
+      },
+      "marqueeTop": {
+        "theme": "dark",
+        "background": "marqueeBg",
+        "content": "repeating-brand-name",
+        "brandName": "MEDIAKIT",
+        "padding": "0.75rem 0",
+        "borderTop": "1px solid borderDark",
+        "borderBottom": "1px solid borderDark"
+      },
+      "crowdPhoto": {
+        "theme": "dark",
+        "layout": "full-bleed-photo",
+        "height": "clamp(280px, 45vw, 560px)",
+        "imageType": "concert-crowd-energy",
+        "imagePosition": "center",
+        "imageFilter": "contrast(1.1) saturate(1.2)",
+        "overlay": {
+          "enabled": true,
+          "color": "crowdOverlay",
+          "blendMode": "multiply"
+        }
+      },
+      "marqueeBottom": {
+        "extends": "marqueeTop"
+      },
+      "socialStats": {
+        "theme": "dark",
+        "background": "bgDark",
+        "layout": "split-55-45",
+        "leftContent": "platform-stats-list",
+        "rightContent": "phone-device-mockup",
+        "sectionTitle": "SOCIAL NETWORK STATS",
+        "sectionTitleStyle": "multiline-heavy-uppercase",
+        "statsItems": [
+          { "platform": "instagram", "metric": "followers", "iconStyle": "official-brand-icon" },
+          { "platform": "soundcloud", "metric": "followers", "iconStyle": "official-brand-icon" },
+          { "platform": "spotify", "metric": "monthly-listeners", "iconStyle": "official-brand-icon" },
+          { "platform": "facebook", "metric": "followers", "iconStyle": "official-brand-icon" }
+        ],
+        "statItemLayout": "icon-name-count-horizontal",
+        "statDivider": "1px solid borderDark",
+        "phoneMockup": {
+          "enabled": true,
+          "content": "artist-instagram-profile-screenshot",
+          "tiltAngle": "-8deg",
+          "floatAnimation": true
+        }
+      },
+      "pressKit": {
+        "theme": "dark",
+        "background": "bgDark2",
+        "layout": "left-text-cta-right-scattered-photos",
+        "titleContent": "DOWNLOAD PRESSKIT",
+        "ctaStyle": "cursor-illustration-button",
+        "cursorIllustration": {
+          "type": "retro-hand-finger-pointer",
+          "color": "textInverse",
+          "size": "2.5rem",
+          "position": "left-of-button-label"
+        },
+        "artistPhotos": {
+          "count": 3,
+          "layout": "scattered-overlapping-right-side",
+          "sizes": ["large-seated", "medium-standing", "medium-standing-alt"],
+          "filter": "none",
+          "overlap": true,
+          "zIndexing": "sequential"
+        }
+      },
+      "footer": {
+        "theme": "dark",
+        "background": "bgDark",
+        "layout": "two-column-equal",
+        "borderTop": "1px solid borderDark",
+        "leftColumn": {
+          "content": "social-icons-row",
+          "title": "SOCIAL MEDIA",
+          "titleStyle": "footerContactLabel",
+          "icons": ["instagram", "spotify", "soundcloud"],
+          "iconStyle": "circle-outlined-large",
+          "iconSize": "3.5rem",
+          "iconBorder": "2px solid borderDark",
+          "iconHoverColor": "accent",
+          "iconGap": "1rem"
+        },
+        "rightColumn": {
+          "content": "contact-info",
+          "title": "CONTACTS",
+          "titleStyle": "footerContactLabel",
+          "titleColor": "accent",
+          "items": [
+            { "icon": "email", "type": "email" },
+            { "icon": "phone", "type": "phone" }
+          ],
+          "itemFontSize": "0.875rem",
+          "itemFontWeight": 600,
+          "itemColor": "textInverse"
+        }
+      }
+    },
+
+    "components": {
+      "ctaButton": {
+        "default": {
+          "background": "accent",
+          "color": "accentContrast",
+          "border": "none",
+          "borderRadius": "0px",
+          "padding": "0.875rem 2rem",
+          "fontSize": "0.6875rem",
+          "fontWeight": 700,
+          "textTransform": "uppercase",
+          "letterSpacing": "0.15em",
+          "transition": "background 120ms ease, color 120ms ease",
+          "hover": { "background": "text", "color": "bg" },
+          "active": { "transform": "scale(0.98)" }
+        },
+        "ghost-light": {
+          "background": "transparent",
+          "color": "text",
+          "border": "1px solid text",
+          "hover": { "background": "text", "color": "bg" }
+        },
+        "ghost-dark": {
+          "background": "transparent",
+          "color": "textInverse",
+          "border": "1px solid textInverse",
+          "hover": { "background": "textInverse", "color": "bgDark" }
+        }
+      },
+      "cursorCTA": {
+        "layout": "flex-row-center",
+        "gap": "0.75rem",
+        "cursorIcon": {
+          "type": "retro-hand-pointer-svg",
+          "width": "2.5rem",
+          "color": "textInverse",
+          "animateWiggle": true,
+          "wiggleDuration": "1.5s",
+          "wiggleAngle": "15deg"
+        },
+        "buttonLabel": {
+          "extends": "ctaButton.default"
+        }
+      },
+      "socialIconCircle": {
+        "shape": "circle",
+        "size": "3.5rem",
+        "border": "2px solid",
+        "borderColor": "borderDark",
+        "bg": "transparent",
+        "iconColor": "textInverse",
+        "borderRadius": "50%",
+        "hoverBorderColor": "accent",
+        "hoverIconColor": "accent",
+        "hoverTransform": "translateY(-3px)",
+        "transition": "all 150ms ease",
+        "gap": "1rem"
+      },
+      "statRow": {
+        "layout": "flex-row-align-center",
+        "gap": "1.25rem",
+        "padding": "1.25rem 0",
+        "borderBottom": "1px solid borderDark",
+        "icon": {
+          "size": "2.25rem",
+          "style": "circle-brand-color",
+          "borderRadius": "50%"
+        },
+        "nameLabel": { "extends": "statsPlatformName" },
+        "countLabel": { "extends": "statsCount" }
+      },
+      "platformBadge": {
+        "bg": "bgDark",
+        "color": "textInverse",
+        "padding": "0.3rem 0.75rem",
+        "fontSize": "0.6875rem",
+        "fontWeight": 700,
+        "letterSpacing": "0.1em",
+        "textTransform": "uppercase",
+        "borderRadius": "0px",
+        "border": "none"
+      },
+      "sectionDivider": {
+        "height": "1px",
+        "background": "border",
+        "darkVariant": { "background": "borderDark" }
+      },
+      "bioFirstWord": {
+        "color": "text",
+        "fontWeight": 800,
+        "fontSize": "inherit"
+      }
+    },
+
+    "textures": {
+      "filmGrain": {
+        "method": "css-pseudo-element-svg-filter",
+        "selector": "body::after",
+        "position": "fixed",
+        "inset": 0,
+        "zIndex": 9998,
+        "pointerEvents": "none",
+        "blendMode": "multiply",
+        "opacity": 0.04,
+        "animated": true,
+        "animationSpeed": "0.6s",
+        "note": "blendMode multiply works correctly on light cream bg — darker grain appears. Switch to overlay for dark sections."
+      },
+      "sectionGrainVariants": {
+        "onLight": { "blendMode": "multiply", "opacity": 0.04 },
+        "onDark":  { "blendMode": "overlay",  "opacity": 0.06 }
+      }
+    },
+
+    "radius": {
+      "default": "0px",
+      "button": "0px",
+      "card": "0px",
+      "image": "0px",
+      "input": "0px",
+      "statRow": "0px",
+      "phoneMockup": "2rem",
+      "socialIconCircle": "50%",
+      "platformBadge": "0px",
+      "pill": "9999px",
+      "note": "Sharp zero-radius everywhere except the phone mockup device frame and social icon circles."
+    },
+
+    "spacing": {
+      "heroTopPadding": "clamp(1.5rem, 4vh, 3rem)",
+      "heroBottomPadding": "0px",
+      "sectionPaddingY": "clamp(4rem, 9vh, 8rem)",
+      "sectionGap": "0px",
+      "columnGap": "clamp(3rem, 6vw, 6rem)",
+      "cardPadding": "2rem",
+      "statRowPaddingY": "1.25rem",
+      "iconGap": "1rem",
+      "footerPaddingY": "3rem"
+    },
+
+    "accessibility": {
+      "contrastRatios": {
+        "darkTextOnLightBg":  "17.5:1",
+        "accentOnLightBg":     "3.4:1",
+        "whiteTextOnDarkBg":  "18.1:1",
+        "accentOnDarkBg":      "5.1:1"
+      },
+      "contrastWarning": {
+        "accentOnLightBg": "3.4:1 — fails WCAG AA for body text (4.5:1 required). Accent must only be used at display size (≥18px bold = 3:1 threshold OK) or dark bg contexts.",
+        "mitigation": "Never use accent color for body text on light background. Use text color for readable copy."
+      },
+      "focusRing": {
+        "style": "2px solid",
+        "color": "accent",
+        "offset": "3px",
+        "borderRadius": "0px"
+      },
+      "skipToContent": {
+        "enabled": true,
+        "style": "accent-bg white-text top-left on focus"
+      },
+      "reducedMotion": {
+        "disableMarqueeAnimation": false,
+        "reduceMarqueeSpeed": "60s",
+        "disablePhoneFloat": true,
+        "disableScrollReveal": true,
+        "disableGrain": true,
+        "disableHeroReveal": true
+      }
+    },
+
+    "performance": {
+      "filmGrainMethod": "CSS pseudo-element fixed — zero JS, GPU composited layer",
+      "marqueeMethod": "CSS translateX animation on will-change:transform, no JS scroll listener",
+      "phoneMockupFloat": "CSS keyframes translateY, GPU composited",
+      "scrollRevealMethod": "IntersectionObserver API",
+      "imageOptimization": "next/image AVIF, explicit dimensions, lazy below fold, eager for hero",
+      "fontStrategy": "Google Fonts via next/font with latin+latin-ext subset, display:swap",
+      "crowdPhotoStrategy": "next/image with priority=false, sizes responsive, orange overlay via CSS",
+      "estimatedPageWeight": "< 620KB compressed (excludes hero portrait and crowd photo)"
+    },
+
+    "cssVariables": {
+      "--pk-bg":               "#F2F0EB",
+      "--pk-bg-alt":           "#ECEAE4",
+      "--pk-bg-dark":          "#0E0E0E",
+      "--pk-bg-dark2":         "#1A1A1A",
+      "--pk-border":           "#DDDBD5",
+      "--pk-border-dark":      "#2A2A2A",
+      "--pk-text":             "#0E0E0E",
+      "--pk-text-muted":       "#555550",
+      "--pk-text-subtle":      "#999990",
+      "--pk-text-inverse":     "#FFFFFF",
+      "--pk-text-inv-muted":   "#AAAAAA",
+      "--pk-accent":           "#FF5500",
+      "--pk-accent-light":     "#FF7733",
+      "--pk-accent-muted":     "rgba(255,85,0,0.12)",
+      "--pk-accent-border":    "rgba(255,85,0,0.4)",
+      "--pk-accent-contrast":  "#FFFFFF",
+      "--pk-crowd-overlay":    "rgba(255,85,0,0.55)",
+      "--pk-radius":           "0px",
+      "--pk-font-display":     "'Big Shoulders Display','Impact',sans-serif",
+      "--pk-font-body":        "'Nunito','Helvetica Neue',sans-serif"
+    },
+
+    "tailwindExtensions": {
+      "colors": {
+        "pk-bg":          "#F2F0EB",
+        "pk-bg-dark":     "#0E0E0E",
+        "pk-text":        "#0E0E0E",
+        "pk-inv":         "#FFFFFF",
+        "pk-muted":       "#555550",
+        "pk-inv-muted":   "#AAAAAA",
+        "pk-accent":      "#FF5500",
+        "pk-border":      "#DDDBD5",
+        "pk-border-dark": "#2A2A2A"
+      },
+      "fontFamily": {
+        "display": ["Big Shoulders Display", "Impact", "sans-serif"],
+        "body":    ["Nunito", "Helvetica Neue", "sans-serif"]
+      },
+      "borderRadius": {
+        "pk": "0px",
+        "pk-device": "2rem"
+      }
+    },
+
+    "payloadThemeRecord": {
+      "colorPresetId": "festival-club-orange",
+      "bg":            "#F2F0EB",
+      "surface":       "#FFFFFF",
+      "bgDark":        "#0E0E0E",
+      "accent":        "#FF5500",
+      "text":          "#0E0E0E",
+      "fontPairId":    "big-shoulders-nunito",
+      "heroStyle":     "light-bg-cutout-portrait",
+      "galleryLayout": "mosaic",
+      "sectionAlternation": "light-dark-alternating",
+      "sectionOrder":  ["hero", "biography", "marqueeTop", "crowdPhoto", "marqueeBottom", "socialStats", "pressKit", "footer"],
+      "effects": {
+        "filmGrain":        true,
+        "heroTextLayering": true,
+        "marquee":          true,
+        "crowdOverlay":     true,
+        "phoneMockup":      true,
+        "phoneFloat":       true,
+        "scrollReveal":     true,
+        "cursorIllustration": true
+      },
+      "radius": "sharp",
+      "contrastValidated": true,
+      "contrastWarnings": ["accent-on-light-bg-body-text-only"]
+    }
+  }
+}

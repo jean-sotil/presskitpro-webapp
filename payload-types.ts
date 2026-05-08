@@ -467,7 +467,7 @@ export interface Theme {
   /**
    * Design preset. Source of truth for section variants when set; null falls back to heroStyle/galleryLayout.
    */
-  presetId?: ('mediakit-pro-v1' | 'editorial-nightlife-v1') | null;
+  presetId?: ('mediakit-pro-v1' | 'festival-club-orange' | 'editorial-nightlife-v1') | null;
   /**
    * BG preset id (e.g. 'editorial-night'). Empty when overriding via custom hex.
    */
