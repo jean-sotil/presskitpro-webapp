@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { uploadMedia, type UploadDeps } from './media-upload';
+import { MAX_UPLOAD_BYTES, uploadMedia, type UploadDeps } from './media-upload';
 
 function makeDeps(overrides: Partial<UploadDeps> = {}): UploadDeps {
   return {
@@ -91,6 +91,33 @@ describe('uploadMedia', () => {
     });
     expect(result).toMatchObject({ ok: false, reason: 'put-failed' });
     expect(deps.register).not.toHaveBeenCalled();
+  });
+
+  it('refuses files larger than MAX_UPLOAD_BYTES before calling sign (server would 400)', async () => {
+    const deps = makeDeps();
+    const huge = new File([new Uint8Array(MAX_UPLOAD_BYTES + 1)], 'studio.jpg', {
+      type: 'image/jpeg',
+    });
+    const result = await uploadMedia(deps, {
+      file: huge,
+      bucket: 'gallery',
+      supabaseUserId: 'sb-1',
+      alt: 'Foto estúdio',
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.reason).toBe('too-large');
+      // Detail should communicate the actual size vs the budget so the UI
+      // can show a humanized message ("12.0MB > 10MB").
+      expect(result.detail).toMatch(/MB.*>.*MB/i);
+    }
+    expect(deps.sign).not.toHaveBeenCalled();
+    expect(deps.putFile).not.toHaveBeenCalled();
+    expect(deps.register).not.toHaveBeenCalled();
+  });
+
+  it('exposes MAX_UPLOAD_BYTES = 10MB to match the server route', () => {
+    expect(MAX_UPLOAD_BYTES).toBe(10 * 1024 * 1024);
   });
 
   it('surfaces a register failure (treats it as recoverable — caller can retry)', async () => {

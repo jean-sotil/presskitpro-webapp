@@ -111,6 +111,79 @@ describe('compressImage', () => {
     expect(out).toBe(input);
   });
 
+  it('with targetMaxBytes, retries lower quality until the blob fits the byte budget', async () => {
+    // Studio JPEG (e.g. 12MB original) where AVIF at default quality still
+    // exceeds the 10MB upload ceiling — the compressor must retry at lower
+    // qualities before falling through to JPEG or returning the original.
+    const input = makeFile('studio.jpg', 'image/jpeg', 12 * 1024 * 1024);
+    const huge = new Blob([new Uint8Array(11 * 1024 * 1024)], { type: 'image/avif' });
+    const ok = new Blob([new Uint8Array(8 * 1024 * 1024)], { type: 'image/avif' });
+    const drawAndExport = vi
+      .fn()
+      .mockResolvedValueOnce(huge) // q=0.7 → 11MB (over budget)
+      .mockResolvedValueOnce(ok); // q=0.5 → 8MB (under budget)
+    const deps: CompressDeps = {
+      loadImage: vi.fn().mockResolvedValue({ width: 1926, height: 2568 }),
+      drawAndExport,
+    };
+    const out = await compressImage(
+      input,
+      { maxEdge: 2400, targetMaxBytes: 10 * 1024 * 1024 },
+      deps,
+    );
+    expect(out.size).toBe(8 * 1024 * 1024);
+    expect(out.type).toBe('image/avif');
+    expect(drawAndExport).toHaveBeenCalledTimes(2);
+    expect(drawAndExport.mock.calls[0]![0]).toMatchObject({ quality: 0.7 });
+    expect(drawAndExport.mock.calls[1]![0]!.quality).toBeLessThan(0.7);
+  });
+
+  it('with targetMaxBytes, falls through to next format when no quality fits', async () => {
+    // AVIF stays over budget even at lowest quality → try JPEG.
+    const input = makeFile('studio.jpg', 'image/jpeg', 12 * 1024 * 1024);
+    const overBudget = (mime: string) =>
+      new Blob([new Uint8Array(11 * 1024 * 1024)], { type: mime });
+    const jpegOk = new Blob([new Uint8Array(7 * 1024 * 1024)], { type: 'image/jpeg' });
+    const drawAndExport = vi
+      .fn()
+      // AVIF ladder — all over budget
+      .mockResolvedValueOnce(overBudget('image/avif'))
+      .mockResolvedValueOnce(overBudget('image/avif'))
+      .mockResolvedValueOnce(overBudget('image/avif'))
+      // JPEG ladder — first quality already under budget
+      .mockResolvedValueOnce(jpegOk);
+    const deps: CompressDeps = {
+      loadImage: vi.fn().mockResolvedValue({ width: 1926, height: 2568 }),
+      drawAndExport,
+    };
+    const out = await compressImage(
+      input,
+      { targetMaxBytes: 10 * 1024 * 1024 },
+      deps,
+    );
+    expect(out.type).toBe('image/jpeg');
+    expect(out.size).toBe(7 * 1024 * 1024);
+  });
+
+  it('with targetMaxBytes, returns the original when no format/quality combo fits', async () => {
+    const input = makeFile('studio.jpg', 'image/jpeg', 12 * 1024 * 1024);
+    const overBudget = new Blob([new Uint8Array(11 * 1024 * 1024)], {
+      type: 'image/avif',
+    });
+    const deps: CompressDeps = {
+      loadImage: vi.fn().mockResolvedValue({ width: 1926, height: 2568 }),
+      drawAndExport: vi.fn().mockResolvedValue(overBudget),
+    };
+    const out = await compressImage(
+      input,
+      { targetMaxBytes: 10 * 1024 * 1024 },
+      deps,
+    );
+    // The pre-flight in `uploadMedia` will catch this and surface
+    // 'too-large' to the user; here we just guarantee no surprise truncation.
+    expect(out).toBe(input);
+  });
+
   it('honors a custom format ladder (e.g. JPEG-only for legacy callers)', async () => {
     const input = makeFile('hero.jpg', 'image/jpeg', 5 * 1024 * 1024);
     const jpegBlob = new Blob([new Uint8Array(800 * 1024)], { type: 'image/jpeg' });

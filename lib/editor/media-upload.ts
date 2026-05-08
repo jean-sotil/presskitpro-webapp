@@ -9,9 +9,27 @@
  * for testability.
  */
 
+/**
+ * Hard ceiling for direct uploads — must mirror MAX_BYTES in
+ * `app/api/storage/sign-upload/route.ts`. Enforced client-side as a
+ * pre-flight so an oversize file never reaches the server (otherwise the
+ * server returns a generic 400 "invalid size" that the user sees as an
+ * opaque "sign-failed").
+ */
+export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+
 export type UploadResult =
   | { ok: true; mediaId: number; path: string; bucket: string }
-  | { ok: false; reason: 'alt-required' | 'sign-failed' | 'put-failed' | 'register-failed'; detail?: string };
+  | {
+      ok: false;
+      reason:
+        | 'alt-required'
+        | 'too-large'
+        | 'sign-failed'
+        | 'put-failed'
+        | 'register-failed';
+      detail?: string;
+    };
 
 export type UploadDeps = {
   sign(args: {
@@ -50,6 +68,14 @@ export async function uploadMedia(
     return { ok: false, reason: 'alt-required' };
   }
 
+  if (args.file.size > MAX_UPLOAD_BYTES) {
+    return {
+      ok: false,
+      reason: 'too-large',
+      detail: `${formatMB(args.file.size)} > ${formatMB(MAX_UPLOAD_BYTES)}`,
+    };
+  }
+
   const signed = await deps.sign({
     bucket: args.bucket,
     mimeType: args.file.type,
@@ -83,6 +109,10 @@ export async function uploadMedia(
     path: signed.path,
     bucket: signed.bucket,
   };
+}
+
+function formatMB(bytes: number): string {
+  return `${(bytes / 1024 / 1024).toFixed(1)}MB`;
 }
 
 // ---------- live wiring (browser-side) ----------------------------------

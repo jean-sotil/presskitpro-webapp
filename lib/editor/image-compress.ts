@@ -31,7 +31,17 @@ export type CompressOptions = {
    * (try AVIF first, fall back to JPEG).
    */
   formatLadder?: CompressMimeType[];
+  /**
+   * If set, the compressor retries each format at progressively lower
+   * qualities (default → 0.5 → 0.35) until the encoded blob fits this
+   * byte budget, then falls through to the next format. Use this to
+   * keep uploads under the server's MAX_UPLOAD_BYTES ceiling instead of
+   * relying on a single fixed quality.
+   */
+  targetMaxBytes?: number;
 };
+
+const ADAPTIVE_FALLBACK_QUALITIES = [0.5, 0.35] as const;
 
 export type Dimensions = { width: number; height: number };
 
@@ -102,26 +112,50 @@ export async function compressImage(
   const { width, height } = pickResizeDimensions(image.width, image.height, maxEdge);
 
   for (const mimeType of ladder) {
-    const quality = overrideQuality ?? DEFAULT_QUALITY[mimeType];
-    const blob = await deps.drawAndExport({
-      image,
-      width,
-      height,
-      mimeType,
-      quality,
-    });
-    if (!blob) continue; // format unavailable (e.g. AVIF on Safari 15)
-    if (blob.size >= file.size) {
-      // Compression yielded a LARGER blob — keep the original (defensive).
-      return file;
+    const baseQuality = overrideQuality ?? DEFAULT_QUALITY[mimeType];
+    const qualities =
+      options.targetMaxBytes !== undefined
+        ? [baseQuality, ...ADAPTIVE_FALLBACK_QUALITIES]
+        : [baseQuality];
+
+    let smallest: Blob | null = null;
+    let formatUnavailable = false;
+    for (const quality of qualities) {
+      const blob = await deps.drawAndExport({
+        image,
+        width,
+        height,
+        mimeType,
+        quality,
+      });
+      if (!blob) {
+        // format unavailable (e.g. AVIF on Safari 15); skip remaining qualities
+        formatUnavailable = true;
+        break;
+      }
+      if (!smallest || blob.size < smallest.size) smallest = blob;
+      if (
+        options.targetMaxBytes === undefined ||
+        blob.size <= options.targetMaxBytes
+      ) {
+        break;
+      }
+    }
+    if (formatUnavailable) continue;
+    if (!smallest) continue;
+    if (smallest.size >= file.size) continue; // compression made it worse
+    if (
+      options.targetMaxBytes !== undefined &&
+      smallest.size > options.targetMaxBytes
+    ) {
+      continue; // doesn't fit budget; try next format
     }
     const newName = swapExtension(file.name, FILE_EXT[mimeType]);
-    return new File([blob], newName, { type: mimeType });
+    return new File([smallest], newName, { type: mimeType });
   }
 
-  // Every format in the ladder failed — keep the original. Caller will
-  // upload it as-is; the sign-upload route's MAX_BYTES check is the
-  // ultimate gate.
+  // Every format in the ladder failed — keep the original. Caller's
+  // pre-flight (uploadMedia) catches oversize files before signing.
   return file;
 }
 

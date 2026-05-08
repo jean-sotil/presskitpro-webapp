@@ -8,7 +8,8 @@ import {
   compressImage,
 } from '@/lib/editor/image-compress';
 import { isValidCtaUrl, normalizeCtaUrl } from '@/lib/editor/cta-url';
-import { liveUploadDeps, uploadMedia } from '@/lib/editor/media-upload';
+import { MAX_UPLOAD_BYTES, liveUploadDeps, uploadMedia } from '@/lib/editor/media-upload';
+import { humanizeUploadError } from '@/lib/editor/upload-error-message';
 import { mediaUrl } from '@/lib/media/url';
 import type { MutationScope } from '@/app/dashboard/profile/[id]/EditorClient';
 
@@ -81,7 +82,11 @@ export function HeroEditCard({ bundle, supabaseUserId, onMutate }: HeroEditCardP
     try {
       const compressed = SVG_TYPES.has(file.type)
         ? file
-        : await compressImage(file, undefined, bindCompressDeps(file));
+        : await compressImage(
+            file,
+            { targetMaxBytes: MAX_UPLOAD_BYTES },
+            bindCompressDeps(file),
+          );
       const result = await uploadMedia(liveUploadDeps, {
         file: compressed,
         bucket: 'avatars',
@@ -89,7 +94,7 @@ export function HeroEditCard({ bundle, supabaseUserId, onMutate }: HeroEditCardP
         alt: alt || (slot === 'portrait' ? 'Foto principal' : 'Logo'),
       });
       if (!result.ok) {
-        setter({ uploading: false, error: result.reason });
+        setter({ uploading: false, error: humanizeUploadError(result) });
         return;
       }
       onMutate('profile', { [slot]: result.mediaId });

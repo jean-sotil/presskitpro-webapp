@@ -28,8 +28,9 @@ import {
   bindCompressDeps,
   compressImage,
 } from '@/lib/editor/image-compress';
-import { liveUploadDeps, uploadMedia } from '@/lib/editor/media-upload';
+import { MAX_UPLOAD_BYTES, liveUploadDeps, uploadMedia } from '@/lib/editor/media-upload';
 import { runParallel } from '@/lib/editor/parallel-upload';
+import { humanizeUploadError } from '@/lib/editor/upload-error-message';
 import {
   type UploadPhase,
 } from '@/lib/editor/upload-phase';
@@ -162,7 +163,7 @@ export function PhotoGalleryEditCard({
           setQueuePhase(rowId, 'compressing');
           const compressed = await compressImage(
             file,
-            undefined,
+            { targetMaxBytes: MAX_UPLOAD_BYTES },
             bindCompressDeps(file),
           ).catch(() => file);
           setQueuePhase(rowId, 'uploading');
@@ -173,7 +174,7 @@ export function PhotoGalleryEditCard({
             alt: 'Sem alt — preencher abaixo',
           });
           if (!result.ok) {
-            setQueuePhase(rowId, 'error', result.reason);
+            setQueuePhase(rowId, 'error', humanizeUploadError(result));
             throw new Error(result.reason);
           }
           setQueuePhase(rowId, 'registering');
