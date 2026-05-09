@@ -155,6 +155,14 @@
       "label": "Galería",
       "heading": "Frames en vivo"
     },
+    "featuredTrack": {
+      "label": "Track destacado",
+      "heading": "En rotación",
+      "openExternal": "Abrir track"
+    },
+    "instagram": {
+      "label": "Instagram"
+    },
     "pressKit": {
       "label": "Press kit",
       "heading": "Descargar\npress kit",
@@ -271,6 +279,49 @@
     }
   },
   "editor": {
+    "common": {
+      "editingPrefix": "Editando ·"
+    },
+    "rail": {
+      "ariaLabel": "Secciones del perfil",
+      "reorderItem": "Reordenar {label}"
+    },
+    "cards": {
+      "about": {
+        "label": "Sobre",
+        "heading": "Bio",
+        "promptsIntro": "¿No sabes por dónde empezar?",
+        "prompts": [
+          "¿Cómo describes tu música?",
+          "¿Dónde has tocado?",
+          "¿Qué proyectos definen tu trabajo?"
+        ],
+        "bioAriaLabel": "Bio en PT-BR",
+        "bioLoadingAriaLabel": "Cargando editor de bio"
+      },
+      "contact": {
+        "label": "Contacto",
+        "heading": "Contacto",
+        "whatsappLabel": "WhatsApp",
+        "whatsappPlaceholder": "+34 600 000 000",
+        "whatsappError": "Ingresa el número con código de país (p. ej. +55 para Brasil).",
+        "whatsappHint": "Acepta formato BR (+55) o URL wa.me. Se muestra como botón en la página pública.",
+        "emailLabel": "Correo electrónico",
+        "emailPlaceholder": "contacto@tu-dominio.com",
+        "emailError": "Correo electrónico inválido.",
+        "formLegend": "Formulario de contacto",
+        "formToggle": "Activar formulario en la página pública",
+        "formToggleAriaLabel": "Activar formulario de contacto",
+        "destinationLabel": "Destino de los mensajes",
+        "destinationPlaceholderWithDefault": "Predeterminado: {email}",
+        "destinationHint": "Si está vacío, usa el correo anterior."
+      }
+    },
+    "tabs": {
+      "ariaLabel": "Modos del editor",
+      "sections": "Secciones",
+      "theme": "Tema"
+    },
     "design": {
       "tabLabel": "Diseño",
       "heading": "Elige un preset de diseño",

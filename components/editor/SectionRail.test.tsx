@@ -60,7 +60,9 @@ describe('SectionRail', () => {
         onReorder={vi.fn()}
       />,
     );
-    expect(screen.getByLabelText('Reordenar Hero')).toBeInTheDocument();
-    expect(screen.getByLabelText('Reordenar Contato')).toBeInTheDocument();
+    // Test setup mocks `useTranslations` against en.json — assert against
+    // the EN string from `editor.rail.reorderItem` ("Reorder {label}").
+    expect(screen.getByLabelText('Reorder Hero')).toBeInTheDocument();
+    expect(screen.getByLabelText('Reorder Contato')).toBeInTheDocument();
   });
 });

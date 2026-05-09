@@ -7,6 +7,7 @@ import type { EditorBundle } from '@/lib/editor/bundle';
 import { isEmptyLexicalState } from '@/lib/editor/rich-text/is-empty';
 import type { BioVariant } from '@/lib/presets';
 
+import { AboutFireFrame } from './AboutRender.fire-frame';
 import { AboutSplitImageText } from './AboutRender.split-image-text';
 
 export function AboutRender({
@@ -19,6 +20,9 @@ export function AboutRender({
   const t = useTranslations('profile.about');
   if (variant === 'split-image-text') {
     return <AboutSplitImageText bundle={bundle} />;
+  }
+  if (variant === 'fire-frame') {
+    return <AboutFireFrame bundle={bundle} />;
   }
   const tagline = (bundle.content?.tagline as string | undefined) ?? null;
   const bio = (bundle.content?.bio as never) ?? null;

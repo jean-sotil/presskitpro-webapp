@@ -17,27 +17,46 @@ export type HeroVariant =
   | 'split-portrait-text'
   | 'centered-logo'
   | 'title-overlay-broken'
-  | 'cutout-layered';
+  | 'cutout-layered'
+  | 'fire-techno';
 
-export type BioVariant = 'classic' | 'split-image-text';
+export type BioVariant = 'classic' | 'split-image-text' | 'fire-frame';
 
 export type GalleryVariant =
   | 'mosaic'
   | 'uniform-grid'
   | 'carousel'
   | 'editorial-grid'
-  | 'film-strip';
+  | 'film-strip'
+  | 'glow-grid';
 
-export type ServicesVariant = 'classic' | 'rail-cards' | 'orange-cards';
+export type ServicesVariant =
+  | 'classic'
+  | 'rail-cards'
+  | 'orange-cards'
+  | 'fire-cards';
 
-export type SocialVariant = 'pill-list' | 'icon-list' | 'platform-stats';
+export type InstagramVariant = 'classic' | 'glow-feed';
 
-export type PressKitVariant = 'inline-cta' | 'square-panel' | 'cursor-cta';
+export type FeaturedTrackVariant = 'classic' | 'glow-track';
+
+export type SocialVariant =
+  | 'pill-list'
+  | 'icon-list'
+  | 'platform-stats'
+  | 'glow-buttons';
+
+export type PressKitVariant =
+  | 'inline-cta'
+  | 'square-panel'
+  | 'cursor-cta'
+  | 'fire-cta';
 
 export type ContactVariant =
   | 'inline-cta'
   | 'dark-panel'
-  | 'two-column-footer';
+  | 'two-column-footer'
+  | 'fire-footer';
 
 export type PresetTheme = {
   /** `bgPresets[*].id` — populates `Themes.colorPresetId` on apply. */
@@ -58,6 +77,8 @@ export type PresetSections = {
   bio: BioVariant;
   services: ServicesVariant;
   gallery: GalleryVariant;
+  featuredTrack: FeaturedTrackVariant;
+  instagram: InstagramVariant;
   socialLinks: SocialVariant;
   pressKit: PressKitVariant;
   contact: ContactVariant;
@@ -72,10 +93,23 @@ export type PresetSections = {
  *     the repeating text.
  *   - `filmGrain` — animated grain overlay scoped to the article via
  *     `[data-preset-grain]` (see app/globals.css). `true` opts in.
+ *   - `electricFire` — bundled techno-rave effect stack (CRT scanlines,
+ *     fire-edge gradients on the hero, gold→amber→fire gradient on
+ *     display headings, neon-pulse box-shadow on the press kit CTA,
+ *     cyan glow on gallery cards). Scoped to the article via
+ *     `[data-preset-electric-fire]`. Pure CSS — GPU composited, zero
+ *     JS, respects `prefers-reduced-motion`.
+ *   - `circuitBoard` — faint cyan circuit-grid SVG repeating-tile
+ *     applied as background-image on the article. Pairs with
+ *     `electricFire` to give the page a "tech / motherboard" undertone
+ *     without competing with content. Pure CSS via
+ *     `[data-preset-circuit-board]`.
  */
 export type PresetDecorations = {
   marquee?: { source: 'displayName' | 'tagline' };
   filmGrain?: boolean;
+  electricFire?: boolean;
+  circuitBoard?: boolean;
 };
 
 export type Preset = {

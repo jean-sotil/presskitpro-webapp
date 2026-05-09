@@ -1,0 +1,856 @@
+{
+  "preset": {
+    "id": "electric-fire-techno",
+    "name": "Electric Fire Techno",
+    "version": "1.0.0",
+    "description": "Explosive fire-and-lightning rave aesthetic. Full-dark near-black canvas with blue undertone, raging flame particle borders, electric cyan lightning bolt motifs, chromatic-aberration artist portrait, massive orange-red-to-yellow gradient display type, neon-glow CTA borders, scanline noise, and album card grid with electric edge treatment. Designed for techno, industrial, hard bass, and power-noise artists.",
+    "category": "extreme-underground-rave",
+    "mood": ["explosive", "aggressive", "electric", "infernal", "raw", "intense", "cinematic"],
+    "genres": ["techno", "industrial-techno", "hard-bass", "power-noise", "dark-rave", "EBM", "industrial"],
+    "lightVariantAvailable": false,
+
+    "colors": {
+      "bg":                 "#09090F",
+      "bgBlue":             "#0D1117",
+      "bgDeep":             "#050508",
+      "surface":            "#111118",
+      "surface2":           "#16161F",
+      "surface3":           "#1C1C28",
+      "border":             "#1E1E2E",
+      "borderGlow":         "#FF5500",
+      "text":               "#FFFFFF",
+      "textMuted":          "#CCCCCC",
+      "textSubtle":         "#888899",
+      "fireOrange":         "#FF4500",
+      "fireAmber":          "#FF8C00",
+      "fireGold":           "#FFD700",
+      "fireRed":            "#CC2200",
+      "lightningCyan":      "#00BFFF",
+      "lightningIce":       "#4FC3F7",
+      "lightningPurple":    "#7B2FFF",
+      "neonGlowOrange":     "rgba(255, 85, 0, 0.85)",
+      "neonGlowCyan":       "rgba(0, 191, 255, 0.7)",
+      "gradientTitleStart": "#FF4500",
+      "gradientTitleMid":   "#FF8C00",
+      "gradientTitleEnd":   "#FFD700",
+      "accentPrimary":      "#FF5500",
+      "accentSecondary":    "#00BFFF",
+      "accentContrast":     "#FFFFFF",
+      "overlayDark":        "rgba(0, 0, 0, 0.72)",
+      "scanlineColor":      "rgba(0, 0, 0, 0.35)",
+      "fireOverlayEdge":    "rgba(255, 69, 0, 0.22)"
+    },
+
+    "colorSemantics": {
+      "heroBackground":         "bgDeep",
+      "heroTitleGradient":      "linear-gradient(180deg, #FFD700 0%, #FF8C00 40%, #FF4500 100%)",
+      "heroLightningColor":     "lightningCyan",
+      "heroFireColor":          "fireOrange",
+      "biographyBackground":    "bg",
+      "biographyBorderFrame":   "fireOrange",
+      "discographyBackground":  "bgBlue",
+      "cardBorderGlow":         "lightningCyan",
+      "cardTitleGradient":      "linear-gradient(180deg, #FFD700 0%, #FF5500 100%)",
+      "socialBackground":       "bg",
+      "socialButtonBorder":     "lightningCyan",
+      "socialButtonText":       "text",
+      "socialButtonHoverBg":    "lightningCyan",
+      "presKitGlowBorder":      "fireOrange",
+      "presKitBg":              "bg",
+      "footerBackground":       "bgBlue",
+      "footerFireEdge":         "fireOrange"
+    },
+
+    "typography": {
+      "fontDisplay": {
+        "family":        "'Bebas Neue', 'Bank Gothic', 'Impact', 'Arial Black', sans-serif",
+        "fallback":      "sans-serif",
+        "googleFont":    "Bebas Neue",
+        "googleFontWeights": [400],
+        "nextFontId":    "bebas-neue",
+        "note":          "Tall condensed display — all caps inherent. Gradient fill via background-clip:text. Alternatives: Oswald Black, Anton, Impact."
+      },
+      "fontBody": {
+        "family":        "'Rajdhani', 'Orbitron', 'Barlow', 'Helvetica Neue', sans-serif",
+        "fallback":      "sans-serif",
+        "googleFont":    "Rajdhani",
+        "googleFontWeights": [400, 500, 600, 700],
+        "nextFontId":    "rajdhani",
+        "note":          "Semi-condensed techy sans. Rajdhani has sci-fi weight. Alt: Barlow Condensed or plain Helvetica Neue."
+      },
+      "fontMono": {
+        "family":        "'Share Tech Mono', 'Courier New', monospace",
+        "googleFont":    "Share Tech Mono",
+        "note":          "Used for metadata, counters, scanline UI elements"
+      },
+
+      "scale": {
+        "heroArtistTitle": {
+          "fontSize":       "clamp(5rem, 20vw, 13rem)",
+          "fontFamily":     "fontDisplay",
+          "fontWeight":     400,
+          "textTransform":  "uppercase",
+          "letterSpacing":  "-0.01em",
+          "lineHeight":     0.88,
+          "fillMethod":     "css-gradient-text",
+          "gradient":       "linear-gradient(180deg, #FFD700 0%, #FF8C00 45%, #FF4500 100%)",
+          "webkitBackgroundClip": "text",
+          "webkitTextFillColor": "transparent",
+          "backgroundClip": "text",
+          "color":          "transparent",
+          "textShadow":     "none",
+          "dropShadow":     "0 0 40px rgba(255,85,0,0.5)",
+          "position":       "right-side-of-hero",
+          "lines":          ["TECHNO", "VIBRATIONS"],
+          "note":           "Two stacked lines, right-aligned. Partially overlaps portrait area."
+        },
+        "sectionTitle": {
+          "fontSize":       "clamp(2rem, 5vw, 3.5rem)",
+          "fontFamily":     "fontDisplay",
+          "fontWeight":     400,
+          "textTransform":  "uppercase",
+          "letterSpacing":  "0.06em",
+          "lineHeight":     1.0,
+          "color":          "text",
+          "textAlign":      "center",
+          "textShadow":     "0 0 20px rgba(255,255,255,0.15)"
+        },
+        "cardTitle": {
+          "fontSize":       "clamp(1.25rem, 3vw, 1.875rem)",
+          "fontFamily":     "fontDisplay",
+          "fontWeight":     400,
+          "textTransform":  "uppercase",
+          "letterSpacing":  "0.04em",
+          "lineHeight":     0.95,
+          "fillMethod":     "css-gradient-text",
+          "gradient":       "linear-gradient(180deg, #FFD700 0%, #FF5500 100%)",
+          "webkitBackgroundClip": "text",
+          "webkitTextFillColor": "transparent",
+          "backgroundClip": "text"
+        },
+        "cardSubtitle": {
+          "fontSize":       "0.625rem",
+          "fontFamily":     "fontDisplay",
+          "fontWeight":     400,
+          "textTransform":  "uppercase",
+          "letterSpacing":  "0.12em",
+          "color":          "text",
+          "textAlign":      "center"
+        },
+        "body": {
+          "fontSize":       "clamp(0.875rem, 1.6vw, 1.0625rem)",
+          "fontFamily":     "fontBody",
+          "fontWeight":     400,
+          "lineHeight":     1.7,
+          "letterSpacing":  "0.02em",
+          "color":          "textMuted",
+          "textAlign":      "center"
+        },
+        "socialButtonLabel": {
+          "fontSize":       "0.8125rem",
+          "fontFamily":     "fontDisplay",
+          "fontWeight":     400,
+          "textTransform":  "uppercase",
+          "letterSpacing":  "0.1em",
+          "color":          "text"
+        },
+        "ctaLabel": {
+          "fontSize":       "clamp(1.5rem, 4vw, 2.5rem)",
+          "fontFamily":     "fontDisplay",
+          "fontWeight":     400,
+          "textTransform":  "uppercase",
+          "letterSpacing":  "0.06em",
+          "lineHeight":     1.0,
+          "fillMethod":     "css-gradient-text",
+          "gradient":       "linear-gradient(180deg, #FFD700 0%, #FF8C00 40%, #FF4500 100%)",
+          "webkitBackgroundClip": "text",
+          "webkitTextFillColor": "transparent",
+          "backgroundClip": "text"
+        },
+        "footerTitle": {
+          "fontSize":       "clamp(1.75rem, 5vw, 3.5rem)",
+          "fontFamily":     "fontDisplay",
+          "fontWeight":     400,
+          "textTransform":  "uppercase",
+          "letterSpacing":  "0.04em",
+          "lineHeight":     1.0,
+          "color":          "text",
+          "textAlign":      "center"
+        },
+        "footerEmail": {
+          "fontSize":       "clamp(0.875rem, 2.5vw, 1.5rem)",
+          "fontFamily":     "fontBody",
+          "fontWeight":     600,
+          "letterSpacing":  "0.04em",
+          "color":          "text",
+          "textAlign":      "center"
+        },
+        "monoTag": {
+          "fontSize":       "0.5625rem",
+          "fontFamily":     "fontMono",
+          "fontWeight":     400,
+          "letterSpacing":  "0.15em",
+          "color":          "lightningCyan",
+          "textTransform":  "uppercase",
+          "note":           "Used for decorative UI metadata in corners and scanline overlays"
+        }
+      }
+    },
+
+    "effects": {
+      "filmGrain": {
+        "enabled":        true,
+        "method":         "svg-feTurbulence-pseudo-element",
+        "selector":       "body::after",
+        "position":       "fixed",
+        "inset":          0,
+        "zIndex":         9998,
+        "pointerEvents":  "none",
+        "opacity":        0.07,
+        "baseFrequency":  0.72,
+        "numOctaves":     4,
+        "blendMode":      "overlay",
+        "animated":       true,
+        "animationSpeed": "0.4s",
+        "animationTimingFunction": "steps(1, end)",
+        "animationIterationCount": "infinite"
+      },
+      "scanlines": {
+        "enabled":        true,
+        "method":         "css-pseudo-element-repeating-linear-gradient",
+        "selector":       "body::before",
+        "position":       "fixed",
+        "inset":          0,
+        "zIndex":         9997,
+        "pointerEvents":  "none",
+        "background":     "repeating-linear-gradient(0deg, rgba(0,0,0,0.35) 0px, rgba(0,0,0,0.35) 1px, transparent 1px, transparent 3px)",
+        "opacity":        0.3,
+        "blendMode":      "multiply",
+        "note":           "CRT scanline effect — thin horizontal lines at 3px repeat. Adds vintage TV feel."
+      },
+      "fireParticles": {
+        "enabled":        true,
+        "method":         "css-layered-flame-svgs",
+        "positions": [
+          {
+            "id":         "hero-left-edge",
+            "anchor":     "left-0 bottom-0",
+            "width":      "35%",
+            "height":     "100%",
+            "gradient":   "radial-gradient(ellipse at left, rgba(255,69,0,0.4) 0%, transparent 70%)",
+            "svgFlames":  true,
+            "zIndex":     3
+          },
+          {
+            "id":         "hero-right-edge",
+            "anchor":     "right-0 bottom-0",
+            "width":      "30%",
+            "height":     "100%",
+            "gradient":   "radial-gradient(ellipse at right, rgba(255,140,0,0.3) 0%, transparent 70%)",
+            "svgFlames":  true,
+            "zIndex":     3
+          },
+          {
+            "id":         "bio-left-right-edges",
+            "anchor":     "full-width",
+            "edgeWidth":  "20%",
+            "gradient":   "fire-edge-feather",
+            "opacity":    0.5,
+            "zIndex":     2
+          },
+          {
+            "id":         "footer-top-edge",
+            "anchor":     "top-0 full-width",
+            "height":     "40%",
+            "gradient":   "linear-gradient(to bottom, rgba(255,69,0,0.4), transparent)",
+            "svgFlames":  true,
+            "flipY":      true,
+            "zIndex":     2
+          }
+        ],
+        "svgFlameAsset": {
+          "format":       "inline-svg-path",
+          "style":        "organic-flame-tongues",
+          "baseColor":    "fireOrange",
+          "tipColor":     "fireGold",
+          "opacity":      0.85,
+          "animated":     true,
+          "animationName": "flame-flicker",
+          "animationKeyframes": "@keyframes flame-flicker { 0%,100%{transform:scaleY(1) skewX(0deg)} 25%{transform:scaleY(1.04) skewX(-1.5deg)} 75%{transform:scaleY(0.97) skewX(1deg)} }",
+          "animationDuration": "1.8s",
+          "animationTimingFunction": "ease-in-out",
+          "animationIterationCount": "infinite",
+          "animationAlternate": true,
+          "pointerEvents": "none",
+          "ariaHidden":   true
+        }
+      },
+      "lightningBolts": {
+        "enabled":        true,
+        "method":         "inline-svg-decorative-elements",
+        "positions": [
+          {
+            "id":         "hero-center-bolt",
+            "location":   "hero-between-portrait-and-title",
+            "size":       "6rem",
+            "color":      "lightningCyan",
+            "rotation":   "-10deg",
+            "glowBlur":   "20px",
+            "glowColor":  "rgba(0,191,255,0.6)"
+          },
+          {
+            "id":         "hero-small-bolts",
+            "count":      3,
+            "locations":  ["hero-top-left", "hero-mid-right", "hero-bottom-center"],
+            "size":       "3rem",
+            "color":      "fireGold",
+            "glowBlur":   "12px",
+            "glowColor":  "rgba(255,215,0,0.5)"
+          },
+          {
+            "id":         "card-border-bolts",
+            "location":   "discography-card-corners",
+            "size":       "1.75rem",
+            "color":      "lightningCyan",
+            "position":   "absolute-corner-accent"
+          }
+        ],
+        "svgLightningPath": {
+          "shape":        "zigzag-bolt",
+          "strokeWidth":  0,
+          "fill":         "currentColor",
+          "filter":       "drop-shadow(0 0 8px currentColor)",
+          "note":         "Classic lightning bolt SVG path. Rendered as decorative aria-hidden element."
+        }
+      },
+      "chromaticAberration": {
+        "enabled":        true,
+        "target":         "heroPortrait",
+        "method":         "css-filter-multi-layer",
+        "layers": [
+          { "channel": "red",   "transform": "translate(4px, 0)",   "opacity": 0.7, "mixBlendMode": "screen" },
+          { "channel": "blue",  "transform": "translate(-4px, 0)",  "opacity": 0.7, "mixBlendMode": "screen" },
+          { "channel": "green", "transform": "translate(0, 2px)",   "opacity": 0.7, "mixBlendMode": "screen" }
+        ],
+        "cssImplementation": "Three absolute-positioned copies of the portrait image with CSS color filters (hue-rotate) and mix-blend-mode:screen, offset slightly to create RGB split",
+        "intensity":      "medium",
+        "note":           "Creates the glitch RGB-split effect visible on the artist's face in the hero."
+      },
+      "neonGlowBorder": {
+        "enabled":        true,
+        "target":         "presKitCTAButton",
+        "method":         "css-box-shadow-layered-glow",
+        "borderColor":    "fireOrange",
+        "borderWidth":    "2px",
+        "boxShadows": [
+          "0 0 6px rgba(255,85,0,1)",
+          "0 0 20px rgba(255,85,0,0.8)",
+          "0 0 60px rgba(255,85,0,0.5)",
+          "inset 0 0 20px rgba(255,85,0,0.15)"
+        ],
+        "animated":       true,
+        "animationName":  "neon-pulse",
+        "animationKeyframes": "@keyframes neon-pulse { 0%,100%{box-shadow:0 0 6px rgba(255,85,0,1),0 0 20px rgba(255,85,0,0.8),0 0 60px rgba(255,85,0,0.5),inset 0 0 20px rgba(255,85,0,0.15)} 50%{box-shadow:0 0 10px rgba(255,85,0,1),0 0 35px rgba(255,85,0,0.9),0 0 80px rgba(255,85,0,0.65),inset 0 0 30px rgba(255,85,0,0.25)} }",
+        "animationDuration": "2.5s",
+        "animationTimingFunction": "ease-in-out",
+        "animationIterationCount": "infinite"
+      },
+      "cardGlowBorder": {
+        "enabled":        true,
+        "target":         "discographyCards",
+        "method":         "css-box-shadow-and-border",
+        "borderColor":    "lightningCyan",
+        "borderWidth":    "1px",
+        "boxShadows": [
+          "0 0 6px rgba(0,191,255,0.7)",
+          "0 0 20px rgba(0,191,255,0.4)",
+          "inset 0 0 10px rgba(0,191,255,0.08)"
+        ],
+        "hoverIntensify": true,
+        "hoverBoxShadows": [
+          "0 0 10px rgba(0,191,255,1)",
+          "0 0 30px rgba(0,191,255,0.7)",
+          "inset 0 0 15px rgba(0,191,255,0.15)"
+        ]
+      },
+      "socialButtonGlow": {
+        "enabled":        true,
+        "target":         "socialLinkButtons",
+        "method":         "css-border-box-shadow",
+        "borderColor":    "lightningCyan",
+        "borderWidth":    "1px",
+        "boxShadow":      "0 0 8px rgba(0,191,255,0.4)",
+        "hover": {
+          "background":   "rgba(0,191,255,0.12)",
+          "boxShadow":    "0 0 14px rgba(0,191,255,0.7), inset 0 0 8px rgba(0,191,255,0.1)",
+          "borderColor":  "lightningCyan"
+        }
+      },
+      "cornerMetadata": {
+        "enabled":        true,
+        "positions": [
+          { "location": "hero-top-right",    "content": "random-hex-string", "color": "lightningCyan" },
+          { "location": "hero-bottom-right", "content": "random-coordinates", "color": "textSubtle" }
+        ],
+        "fontFamily":     "fontMono",
+        "fontSize":       "0.5rem",
+        "letterSpacing":  "0.12em",
+        "opacity":        0.5,
+        "note":           "Decorative sci-fi metadata strings. aria-hidden=true."
+      },
+      "scrollReveal": {
+        "enabled":        true,
+        "method":         "IntersectionObserver",
+        "threshold":      0.1,
+        "animation": {
+          "from": { "opacity": 0, "transform": "translateY(28px)" },
+          "to":   { "opacity": 1, "transform": "translateY(0)" },
+          "duration": "520ms",
+          "easing": "cubic-bezier(0.16, 1, 0.3, 1)"
+        },
+        "stagger":        "70ms",
+        "respectReducedMotion": true
+      },
+      "pageLoadReveal": {
+        "enabled":        true,
+        "sequence": [
+          { "target": "heroPortrait",     "delay": "0ms",   "from": { "opacity": 0, "transform": "translateX(-24px)" } },
+          { "target": "heroLightning",    "delay": "150ms", "from": { "opacity": 0, "transform": "scale(0.5)" } },
+          { "target": "heroTitle",        "delay": "200ms", "from": { "opacity": 0, "transform": "translateX(24px)" } },
+          { "target": "heroFire",         "delay": "300ms", "from": { "opacity": 0 } }
+        ],
+        "duration":       "600ms",
+        "easing":         "cubic-bezier(0.16, 1, 0.3, 1)"
+      },
+      "hoverEffects": {
+        "socialButton": {
+          "transition":   "all 150ms ease",
+          "hoverBg":      "rgba(0,191,255,0.12)",
+          "hoverShadow":  "0 0 14px rgba(0,191,255,0.7)"
+        },
+        "discographyCard": {
+          "transition":   "transform 250ms cubic-bezier(0.25,1,0.5,1), box-shadow 250ms ease",
+          "hoverTransform": "translateY(-6px) scale(1.02)",
+          "hoverShadow":  "0 0 20px rgba(0,191,255,0.8), 0 12px 40px rgba(0,0,0,0.6)"
+        },
+        "footerIcon": {
+          "transition":   "color 150ms ease, transform 150ms ease, filter 150ms ease",
+          "hoverColor":   "fireOrange",
+          "hoverFilter":  "drop-shadow(0 0 8px rgba(255,85,0,0.8))",
+          "hoverTransform": "translateY(-3px)"
+        }
+      }
+    },
+
+    "layout": {
+      "heroStyle":            "split-portrait-title",
+      "heroHeight":           "100svh",
+      "heroMinHeight":        "640px",
+      "heroPortraitPosition": "left-center",
+      "heroPortraitWidth":    "50%",
+      "heroTitlePosition":    "right-50pct",
+      "heroTitleAlignment":   "left",
+      "heroBackground":       "bgDeep",
+      "heroBgTexture":        "dark-circuit-board-or-noise",
+      "heroFireLeft":         true,
+      "heroFireRight":        true,
+
+      "contentMaxWidth":      "900px",
+      "contentPadding":       "0 clamp(1.25rem, 5vw, 3rem)",
+      "sectionPaddingY":      "clamp(3.5rem, 8vh, 6rem)",
+      "sectionGap":           "0px",
+      "allSectionsBg":        "bgDeep",
+      "themeMode":            "full-dark-no-alternation",
+      "note":                 "Unlike the other two presets, this design does NOT alternate light/dark sections. Every section is dark — the visual separation comes from fire/glow dividers."
+    },
+
+    "sections": {
+      "hero": {
+        "theme":            "dark",
+        "background":       "bgDeep",
+        "height":           "100svh",
+        "layout":           "split-portrait-left-title-right",
+        "portraitStyle":    "chromatic-aberration-rgb-split",
+        "portraitPosition": "left-aligned-bottom-anchored",
+        "portraitWidth":    "50%",
+        "fireEffects":      ["left-edge", "right-edge"],
+        "lightningBolts":   ["center-large-cyan", "scattered-small-gold"],
+        "cornerMetadata":   true,
+        "titleLayout": {
+          "lines":          ["TECHNO", "VIBRATIONS"],
+          "alignment":      "left",
+          "gradientFill":   true,
+          "gradient":       "linear-gradient(180deg, #FFD700 0%, #FF8C00 45%, #FF4500 100%)"
+        }
+      },
+      "biography": {
+        "theme":            "dark",
+        "background":       "bg",
+        "layout":           "centered-text-with-fire-frame",
+        "frameStyle": {
+          "type":           "fire-border-effect",
+          "method":         "css-box-shadow-plus-flame-svgs-on-edges",
+          "topEdgeFire":    true,
+          "bottomEdgeFire": true,
+          "leftEdgeFire":   true,
+          "rightEdgeFire":  true,
+          "innerGlow":      "rgba(255,69,0,0.1)"
+        },
+        "sectionTitleAlignment": "center",
+        "textAlignment":    "center",
+        "maxTextWidth":     "720px",
+        "textColumns":      1
+      },
+      "discography": {
+        "theme":            "dark",
+        "background":       "bgBlue",
+        "layout":           "3-column-card-grid",
+        "sectionTitleAlignment": "center",
+        "cardCount":        3,
+        "card": {
+          "background":     "surface",
+          "borderRadius":   "0px",
+          "border":         "1px solid lightningCyan",
+          "boxShadow":      "cardGlowBorder",
+          "aspectRatio":    "1/1",
+          "overflow":       "hidden",
+          "position":       "relative",
+          "imageLayer":     "full-bleed-cover-art",
+          "overlayLayer":   "dark-gradient-from-bottom",
+          "titleLayer":     "absolute-center gradient-text",
+          "lightning":      "corner-accent-bolts",
+          "subtitlePosition": "below-card-centered"
+        },
+        "gridGap":          "1.25rem",
+        "gridColumns":      "repeat(3, 1fr)",
+        "mobileColumns":    "repeat(3, 1fr)",
+        "cardCornerBolts": {
+          "enabled":        true,
+          "position":       "top-right corner",
+          "size":           "1.5rem",
+          "color":          "lightningCyan"
+        }
+      },
+      "socialMedia": {
+        "theme":            "dark",
+        "background":       "bg",
+        "layout":           "centered-button-grid",
+        "sectionTitle":     "SOCIAL MEDIA & LINKS",
+        "sectionTitleAlignment": "center",
+        "buttonGrid": {
+          "columns":        "repeat(2, 1fr)",
+          "gap":            "0.75rem",
+          "maxWidth":       "540px",
+          "margin":         "0 auto"
+        },
+        "button": {
+          "style":          "outlined-rectangle-with-icon",
+          "background":     "transparent",
+          "border":         "1px solid lightningCyan",
+          "boxShadow":      "socialButtonGlow",
+          "borderRadius":   "0px",
+          "padding":        "0.875rem 1.5rem",
+          "layout":         "flex-row-icon-label",
+          "iconSize":       "1.125rem",
+          "iconStyle":      "official-brand-monochrome",
+          "iconColor":      "text",
+          "labelStyle":     "socialButtonLabel",
+          "hover":          "socialButton"
+        },
+        "platforms":        ["instagram", "soundcloud", "youtube", "more-links"],
+        "moreLinksButton": {
+          "icon":           "ti-dots",
+          "label":          "MORE LINKS"
+        }
+      },
+      "pressKit": {
+        "theme":            "dark",
+        "background":       "bg",
+        "layout":           "centered-single-cta",
+        "paddingY":         "clamp(3rem, 7vh, 6rem)",
+        "cta": {
+          "style":          "neon-glow-bordered-button",
+          "background":     "transparent",
+          "border":         "2px solid fireOrange",
+          "boxShadow":      "neonGlowBorder",
+          "borderRadius":   "4px",
+          "padding":        "1.75rem 4rem",
+          "width":          "clamp(280px, 70%, 480px)",
+          "margin":         "0 auto",
+          "layout":         "flex-row-text-cursor",
+          "textContent":    "DOWNLOAD\nPRESSKIT",
+          "textStyle":      "ctaLabel",
+          "textLines":      2,
+          "cursor": {
+            "type":         "retro-hand-pointer-svg",
+            "color":        "text",
+            "size":         "2.5rem",
+            "position":     "right-of-text",
+            "wiggleAnimation": true
+          }
+        }
+      },
+      "footer": {
+        "theme":            "dark",
+        "background":       "bgBlue",
+        "layout":           "centered-stacked",
+        "fireTopEdge":      true,
+        "paddingY":         "clamp(2.5rem, 6vh, 5rem)",
+        "titleContent":     "FOR BOOKING CONTACT",
+        "titleStyle":       "footerTitle",
+        "emailStyle":       "footerEmail",
+        "iconRow": {
+          "icons":          ["email", "whatsapp"],
+          "iconSize":       "2.5rem",
+          "iconColor":      "text",
+          "iconGap":        "1.5rem",
+          "iconStyle":      "flat-svg-white",
+          "hoverColor":     "fireOrange",
+          "hoverFilter":    "drop-shadow(0 0 8px rgba(255,85,0,0.8))"
+        },
+        "divider": {
+          "enabled":        true,
+          "content":        "lightningBolt-svg",
+          "color":          "fireOrange",
+          "margin":         "1.5rem 0"
+        }
+      }
+    },
+
+    "components": {
+      "ctaButton": {
+        "neonGlow": {
+          "background":     "transparent",
+          "color":          "transparent",
+          "textFill":       "gradient",
+          "gradient":       "linear-gradient(180deg, #FFD700 0%, #FF8C00 40%, #FF4500 100%)",
+          "border":         "2px solid #FF5500",
+          "borderRadius":   "4px",
+          "padding":        "1.75rem 4rem",
+          "boxShadow":      "0 0 6px rgba(255,85,0,1), 0 0 20px rgba(255,85,0,0.8), 0 0 60px rgba(255,85,0,0.5), inset 0 0 20px rgba(255,85,0,0.15)",
+          "animation":      "neon-pulse 2.5s ease-in-out infinite",
+          "hover": {
+            "boxShadow":    "0 0 10px rgba(255,85,0,1), 0 0 40px rgba(255,85,0,0.9), 0 0 90px rgba(255,85,0,0.7)"
+          },
+          "active": {
+            "transform":    "scale(0.98)"
+          }
+        }
+      },
+      "socialButton": {
+        "background":       "transparent",
+        "border":           "1px solid rgba(0,191,255,0.7)",
+        "borderRadius":     "0px",
+        "padding":          "0.875rem 1.5rem",
+        "color":            "text",
+        "boxShadow":        "0 0 8px rgba(0,191,255,0.35)",
+        "transition":       "all 150ms ease",
+        "hover": {
+          "background":     "rgba(0,191,255,0.10)",
+          "boxShadow":      "0 0 14px rgba(0,191,255,0.7), inset 0 0 8px rgba(0,191,255,0.1)",
+          "border":         "1px solid rgba(0,191,255,1)"
+        }
+      },
+      "discographyCard": {
+        "background":       "surface",
+        "border":           "1px solid rgba(0,191,255,0.6)",
+        "borderRadius":     "0px",
+        "boxShadow":        "0 0 8px rgba(0,191,255,0.5), inset 0 0 10px rgba(0,191,255,0.05)",
+        "overflow":         "hidden",
+        "aspectRatio":      "1/1",
+        "position":         "relative",
+        "transition":       "transform 250ms cubic-bezier(0.25,1,0.5,1), box-shadow 250ms ease",
+        "hover": {
+          "transform":      "translateY(-6px) scale(1.02)",
+          "boxShadow":      "0 0 22px rgba(0,191,255,0.9), 0 12px 40px rgba(0,0,0,0.7)"
+        },
+        "innerLayers": {
+          "coverImage":     { "position": "absolute-inset", "objectFit": "cover", "zIndex": 0 },
+          "overlay":        { "background": "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%)", "zIndex": 1 },
+          "title":          { "position": "absolute-center", "zIndex": 2, "style": "cardTitle" },
+          "cornerBolt":     { "position": "absolute-top-right-8px", "zIndex": 3, "size": "1.5rem", "color": "lightningCyan" }
+        }
+      },
+      "footerIcon": {
+        "size":             "2.5rem",
+        "color":            "text",
+        "transition":       "color 150ms ease, filter 150ms ease, transform 150ms ease",
+        "hover": {
+          "color":          "fireOrange",
+          "filter":         "drop-shadow(0 0 8px rgba(255,85,0,0.8))",
+          "transform":      "translateY(-3px)"
+        }
+      }
+    },
+
+    "textures": {
+      "filmGrain": {
+        "selector":         "body::after",
+        "blendMode":        "overlay",
+        "opacity":          0.07,
+        "baseFrequency":    0.72
+      },
+      "scanlines": {
+        "selector":         "body::before",
+        "pattern":          "repeating-linear-gradient(0deg, rgba(0,0,0,0.35) 0px, rgba(0,0,0,0.35) 1px, transparent 1px, transparent 3px)",
+        "opacity":          0.3
+      },
+      "circuitBoardBg": {
+        "enabled":          true,
+        "method":           "css-background-image-svg-pattern",
+        "sections":         ["hero", "discography"],
+        "patternType":      "subtle-circuit-grid",
+        "color":            "rgba(0,191,255,0.04)",
+        "note":             "Very faint cyan grid/circuit trace pattern. Gives a tech feel without being distracting."
+      }
+    },
+
+    "radius": {
+      "default":            "0px",
+      "button":             "0px",
+      "ctaNeonBorder":      "4px",
+      "card":               "0px",
+      "image":              "0px",
+      "socialButton":       "0px",
+      "footerIconCircle":   "0px",
+      "pill":               "9999px",
+      "note":               "Sharper than the other presets — only the neon CTA button has 4px to help the glow look rounder. Everything else is 0."
+    },
+
+    "spacing": {
+      "heroTopPadding":     "clamp(2rem, 5vh, 4rem)",
+      "sectionPaddingY":    "clamp(3.5rem, 8vh, 6rem)",
+      "sectionGap":         "0px",
+      "cardGridGap":        "1.25rem",
+      "socialButtonGap":    "0.75rem",
+      "iconGap":            "1.5rem",
+      "footerPaddingY":     "clamp(2.5rem, 6vh, 5rem)"
+    },
+
+    "accessibility": {
+      "contrastRatios": {
+        "whiteTextOnDarkBg":    "18.1:1",
+        "gradientTitleOnDark":  "6.8:1",
+        "cyanOnDark":           "7.2:1",
+        "fireOrangeOnDark":     "5.1:1"
+      },
+      "contrastWarning": {
+        "note":                 "All foreground text is white or bright gradient on near-black. Ratios are safe. Fire orange used only at display sizes."
+      },
+      "motionSensitiveEffects": ["flame-flicker", "neon-pulse", "float-animation", "chromatic-aberration"],
+      "reducedMotion": {
+        "disableFlameAnimation": true,
+        "disableNeonPulse":      true,
+        "staticNeonBorderOnly":  true,
+        "disableChromaticAberration": true,
+        "disableScrollReveal":   true,
+        "disablePageLoad":       true,
+        "disableGrain":          true,
+        "disableScanlines":      true
+      },
+      "focusRing": {
+        "style":                "2px solid",
+        "color":                "lightningCyan",
+        "offset":               "3px",
+        "borderRadius":         "0px"
+      },
+      "ariaHidden": {
+        "targets":              ["fireParticles", "lightningBolts", "filmGrain", "scanlines", "cornerMetadata"],
+        "all":                  true
+      },
+      "skipToContent": {
+        "enabled":              true,
+        "bg":                   "fireOrange",
+        "color":                "text"
+      }
+    },
+
+    "performance": {
+      "filmGrainMethod":        "CSS pseudo-element — zero JS, GPU composited via will-change:transform",
+      "scanlineMethod":         "CSS repeating-linear-gradient pseudo-element — pure CSS, zero cost",
+      "flameMethod":            "Inline SVG paths with CSS animation — no canvas, no JS",
+      "neonGlowMethod":         "CSS box-shadow animation — GPU composited",
+      "chromaticAberration":    "CSS filter + position on static img elements — GPU composited",
+      "lightningBolts":         "Static inline SVG icons with CSS drop-shadow filter",
+      "scrollReveal":           "IntersectionObserver API — no scroll listeners",
+      "fontStrategy":           "Bebas Neue via next/font latin subset only; Rajdhani latin only",
+      "estimatedPageWeight":    "< 580KB compressed excluding hero portrait and card artwork"
+    },
+
+    "cssVariables": {
+      "--pk-bg":                "#09090F",
+      "--pk-bg-blue":           "#0D1117",
+      "--pk-surface":           "#111118",
+      "--pk-border":            "#1E1E2E",
+      "--pk-text":              "#FFFFFF",
+      "--pk-text-muted":        "#CCCCCC",
+      "--pk-text-subtle":       "#888899",
+      "--pk-fire-orange":       "#FF4500",
+      "--pk-fire-amber":        "#FF8C00",
+      "--pk-fire-gold":         "#FFD700",
+      "--pk-lightning-cyan":    "#00BFFF",
+      "--pk-lightning-ice":     "#4FC3F7",
+      "--pk-neon-glow":         "rgba(255,85,0,0.85)",
+      "--pk-neon-glow-cyan":    "rgba(0,191,255,0.7)",
+      "--pk-gradient-title":    "linear-gradient(180deg,#FFD700 0%,#FF8C00 45%,#FF4500 100%)",
+      "--pk-radius":            "0px",
+      "--pk-radius-neon":       "4px",
+      "--pk-font-display":      "'Bebas Neue','Impact',sans-serif",
+      "--pk-font-body":         "'Rajdhani','Helvetica Neue',sans-serif",
+      "--pk-font-mono":         "'Share Tech Mono','Courier New',monospace"
+    },
+
+    "tailwindExtensions": {
+      "colors": {
+        "pk-bg":            "#09090F",
+        "pk-bg-blue":       "#0D1117",
+        "pk-surface":       "#111118",
+        "pk-text":          "#FFFFFF",
+        "pk-muted":         "#CCCCCC",
+        "pk-subtle":        "#888899",
+        "pk-fire":          "#FF4500",
+        "pk-amber":         "#FF8C00",
+        "pk-gold":          "#FFD700",
+        "pk-cyan":          "#00BFFF",
+        "pk-border":        "#1E1E2E"
+      },
+      "fontFamily": {
+        "display":          ["Bebas Neue", "Impact", "sans-serif"],
+        "body":             ["Rajdhani", "Helvetica Neue", "sans-serif"],
+        "mono":             ["Share Tech Mono", "Courier New", "monospace"]
+      },
+      "borderRadius": {
+        "pk":               "0px",
+        "pk-neon":          "4px"
+      }
+    },
+
+    "payloadThemeRecord": {
+      "colorPresetId":          "electric-fire-techno",
+      "bg":                     "#09090F",
+      "surface":                "#111118",
+      "accent":                 "#FF4500",
+      "accentSecondary":        "#00BFFF",
+      "text":                   "#FFFFFF",
+      "fontPairId":             "bebas-neue-rajdhani",
+      "heroStyle":              "split-portrait-left-title-right",
+      "galleryLayout":          "uniform-grid",
+      "sectionOrder":           ["hero", "biography", "discography", "socialMedia", "pressKit", "footer"],
+      "effects": {
+        "filmGrain":            true,
+        "scanlines":            true,
+        "fireParticles":        true,
+        "lightningBolts":       true,
+        "chromaticAberration":  true,
+        "neonGlowBorder":       true,
+        "cardGlowBorder":       true,
+        "circuitBoardTexture":  true,
+        "scrollReveal":         true,
+        "cornerMetadata":       true
+      },
+      "radius":                 "sharp",
+      "themeMode":              "full-dark",
+      "contrastValidated":      true
+    }
+  }
+}

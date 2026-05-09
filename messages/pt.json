@@ -154,6 +154,14 @@
       "label": "Galeria",
       "heading": "Frames ao vivo"
     },
+    "featuredTrack": {
+      "label": "Faixa em destaque",
+      "heading": "Em rotação",
+      "openExternal": "Abrir faixa"
+    },
+    "instagram": {
+      "label": "Instagram"
+    },
     "pressKit": {
       "label": "Press kit",
       "heading": "Baixar\npress kit",
@@ -270,6 +278,49 @@
     }
   },
   "editor": {
+    "common": {
+      "editingPrefix": "Editando ·"
+    },
+    "rail": {
+      "ariaLabel": "Seções do perfil",
+      "reorderItem": "Reordenar {label}"
+    },
+    "cards": {
+      "about": {
+        "label": "Sobre",
+        "heading": "Bio",
+        "promptsIntro": "Não sabe por onde começar?",
+        "prompts": [
+          "Como você descreve sua música?",
+          "Onde já tocou?",
+          "Que projetos definem seu trabalho?"
+        ],
+        "bioAriaLabel": "Bio em PT-BR",
+        "bioLoadingAriaLabel": "Carregando editor de bio"
+      },
+      "contact": {
+        "label": "Contato",
+        "heading": "Contato",
+        "whatsappLabel": "WhatsApp",
+        "whatsappPlaceholder": "+55 11 99999-9999",
+        "whatsappError": "Digite o número com código do país (ex.: +55 para Brasil).",
+        "whatsappHint": "Aceita formato BR (+55) ou URL wa.me. Renderiza como botão na página pública.",
+        "emailLabel": "E-mail",
+        "emailPlaceholder": "contato@seu-dominio.com",
+        "emailError": "E-mail inválido.",
+        "formLegend": "Formulário de contato",
+        "formToggle": "Ativar formulário na página pública",
+        "formToggleAriaLabel": "Ativar formulário de contato",
+        "destinationLabel": "Destino das mensagens",
+        "destinationPlaceholderWithDefault": "Padrão: {email}",
+        "destinationHint": "Em branco, usa o e-mail acima."
+      }
+    },
+    "tabs": {
+      "ariaLabel": "Modos do editor",
+      "sections": "Seções",
+      "theme": "Tema"
+    },
     "design": {
       "tabLabel": "Design",
       "heading": "Escolha um preset de design",

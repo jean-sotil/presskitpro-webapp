@@ -26,6 +26,8 @@ export const editorialNightlifeV1: Preset = {
     bio: 'classic',
     services: 'classic',
     gallery: 'mosaic',
+    featuredTrack: 'classic',
+    instagram: 'classic',
     socialLinks: 'pill-list',
     pressKit: 'inline-cta',
     contact: 'inline-cta',

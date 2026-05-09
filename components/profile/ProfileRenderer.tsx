@@ -54,9 +54,9 @@ function renderSection(
     case 'services':
       return <ServicesRender bundle={bundle} variant={preset?.sections.services} />;
     case 'featuredTrack':
-      return <FeaturedTrackRender bundle={bundle} />;
+      return <FeaturedTrackRender bundle={bundle} variant={preset?.sections.featuredTrack} />;
     case 'instagramFeed':
-      return <InstagramFeedRender bundle={bundle} />;
+      return <InstagramFeedRender bundle={bundle} variant={preset?.sections.instagram} />;
     case 'photoGallery':
       return <PhotoGalleryRender bundle={bundle} variant={preset?.sections.gallery} />;
     case 'pressKitLink':
@@ -134,6 +134,8 @@ ${fontDecls}
 }`;
 
   const filmGrain = preset?.decorations?.filmGrain === true;
+  const electricFire = preset?.decorations?.electricFire === true;
+  const circuitBoard = preset?.decorations?.circuitBoard === true;
 
   return (
     <>
@@ -141,6 +143,8 @@ ${fontDecls}
       <article
         data-theme-scope={scopeId}
         data-preset-grain={filmGrain ? 'true' : undefined}
+        data-preset-electric-fire={electricFire ? 'true' : undefined}
+        data-preset-circuit-board={circuitBoard ? 'true' : undefined}
         className="bg-bg text-text"
       >
         {order.map((key) => (

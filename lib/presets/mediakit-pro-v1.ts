@@ -29,6 +29,8 @@ export const mediakitProV1: Preset = {
     bio: 'split-image-text',
     services: 'rail-cards',
     gallery: 'editorial-grid',
+    featuredTrack: 'classic',
+    instagram: 'classic',
     socialLinks: 'icon-list',
     pressKit: 'square-panel',
     contact: 'dark-panel',

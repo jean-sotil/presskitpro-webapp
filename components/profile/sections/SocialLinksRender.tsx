@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import type { SocialVariant } from '@/lib/presets';
 
+import { SocialLinksGlowButtons } from './SocialLinksRender.glow-buttons';
 import { SocialLinksIconList } from './SocialLinksRender.icon-list';
 import { SocialLinksPlatformStats } from './SocialLinksRender.platform-stats';
 import { TrackedSocialLink } from './TrackedSocialLink';
@@ -30,6 +31,9 @@ export function SocialLinksRender({
   }
   if (variant === 'platform-stats') {
     return <SocialLinksPlatformStats bundle={bundle} />;
+  }
+  if (variant === 'glow-buttons') {
+    return <SocialLinksGlowButtons bundle={bundle} />;
   }
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
   if (!raw.length) return null;

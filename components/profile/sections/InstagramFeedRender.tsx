@@ -1,5 +1,7 @@
 import type { EditorBundle } from '@/lib/editor/bundle';
+import type { InstagramVariant } from '@/lib/presets';
 
+import { InstagramGlowFeed } from './InstagramFeedRender.glow-feed';
 import { LazyEmbed } from './LazyEmbed';
 
 type InstagramPostRow = {
@@ -9,7 +11,16 @@ type InstagramPostRow = {
   displayOrder?: number;
 };
 
-export function InstagramFeedRender({ bundle }: { bundle: EditorBundle }) {
+export function InstagramFeedRender({
+  bundle,
+  variant,
+}: {
+  bundle: EditorBundle;
+  variant?: InstagramVariant;
+}) {
+  if (variant === 'glow-feed') {
+    return <InstagramGlowFeed bundle={bundle} />;
+  }
   const raw = (bundle.instagramPosts ?? []) as unknown as InstagramPostRow[];
   const posts = [...raw].sort(
     (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),

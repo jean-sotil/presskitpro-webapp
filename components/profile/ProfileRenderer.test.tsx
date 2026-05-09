@@ -102,4 +102,39 @@ describe('ProfileRenderer', () => {
       screen.getByRole('heading', { level: 2, name: /about/i }),
     ).toBeInTheDocument();
   });
+
+  it('emits data-preset-electric-fire on the article when the active preset opts in', async () => {
+    const { container } = await renderAsync(
+      ProfileRenderer({
+        mode: 'preview',
+        bundle: makeBundle({
+          theme: {
+            id: 5,
+            profile: 1,
+            presetId: 'electric-fire-techno',
+          },
+        }),
+      }),
+    );
+    const article = container.querySelector('article');
+    expect(article).not.toBeNull();
+    expect(article!.getAttribute('data-preset-electric-fire')).toBe('true');
+  });
+
+  it('does not emit data-preset-electric-fire for presets that do not opt in', async () => {
+    const { container } = await renderAsync(
+      ProfileRenderer({
+        mode: 'preview',
+        bundle: makeBundle({
+          theme: {
+            id: 5,
+            profile: 1,
+            presetId: 'editorial-nightlife-v1',
+          },
+        }),
+      }),
+    );
+    const article = container.querySelector('article');
+    expect(article!.hasAttribute('data-preset-electric-fire')).toBe(false);
+  });
 });

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import type { ServicesVariant } from '@/lib/presets';
 
+import { ServicesFireCards } from './ServicesRender.fire-cards';
 import { ServicesOrangeCards } from './ServicesRender.orange-cards';
 import { ServicesRailCards } from './ServicesRender.rail-cards';
 
@@ -21,6 +22,9 @@ export function ServicesRender({
   }
   if (variant === 'orange-cards') {
     return <ServicesOrangeCards bundle={bundle} />;
+  }
+  if (variant === 'fire-cards') {
+    return <ServicesFireCards bundle={bundle} />;
   }
   const services = (bundle.content?.services as
     | Array<{ title: string; description?: string }>

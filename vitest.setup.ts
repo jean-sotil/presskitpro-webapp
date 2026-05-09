@@ -48,13 +48,41 @@ vi.mock('next-intl/server', () => ({
   getMessages: vi.fn(async () => enMessages),
 }));
 
+/**
+ * Resolve a dot-path key against the EN catalog and return the raw
+ * value (string, array, or object). Mirrors next-intl's `t.raw`. Used
+ * for components that render arrays via `t.raw('items')`.
+ */
+function rawTranslate(
+  catalog: unknown,
+  namespace: string | undefined,
+  key: string,
+): unknown {
+  const fullPath = namespace ? `${namespace}.${key}` : key;
+  const segments = fullPath.split('.');
+  let node: unknown = catalog;
+  for (const segment of segments) {
+    if (node && typeof node === 'object' && segment in (node as object)) {
+      node = (node as Record<string, unknown>)[segment];
+    } else {
+      return fullPath;
+    }
+  }
+  return node;
+}
+
 vi.mock('next-intl', async (importOriginal) => {
   const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
     useTranslations: vi.fn((namespace?: string) => {
-      return (key: string, values?: Record<string, unknown>) =>
+      // The next-intl `t` is callable AND has a `.raw` method. Mirror
+      // both so components can use either form in tests.
+      const fn = (key: string, values?: Record<string, unknown>) =>
         translate(enMessages, namespace, key, values);
+      (fn as unknown as { raw: (k: string) => unknown }).raw = (key: string) =>
+        rawTranslate(enMessages, namespace, key);
+      return fn;
     }),
     useLocale: vi.fn(() => 'en'),
   };

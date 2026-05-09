@@ -7,6 +7,7 @@ import type { PressKitProvider } from '@/lib/payload/hooks/derive-press-kit-prov
 import type { PressKitVariant } from '@/lib/presets';
 
 import { PressKitLinkCursorCta } from './PressKitLinkRender.cursor-cta';
+import { PressKitLinkFireCta } from './PressKitLinkRender.fire-cta';
 import { PressKitLinkSquarePanel } from './PressKitLinkRender.square-panel';
 import { TrackedPressKitAnchor } from './TrackedPressKitAnchor';
 
@@ -24,6 +25,9 @@ export function PressKitLinkRender({
   }
   if (variant === 'cursor-cta') {
     return <PressKitLinkCursorCta bundle={bundle} />;
+  }
+  if (variant === 'fire-cta') {
+    return <PressKitLinkFireCta bundle={bundle} />;
   }
   const url = (bundle.profile.pressKitUrl as string | undefined) ?? null;
   if (!url) return null;

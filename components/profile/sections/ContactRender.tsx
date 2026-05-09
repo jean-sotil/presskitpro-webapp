@@ -6,6 +6,7 @@ import type { EditorBundle } from '@/lib/editor/bundle';
 import type { ContactVariant } from '@/lib/presets';
 
 import { ContactDarkPanel } from './ContactRender.dark-panel';
+import { ContactFireFooter } from './ContactRender.fire-footer';
 import { ContactTwoColumnFooter } from './ContactRender.two-column-footer';
 import { ContactForm } from './ContactForm';
 import { TrackedContactCta } from './TrackedContactCta';
@@ -29,6 +30,9 @@ export function ContactRender({
   }
   if (variant === 'two-column-footer') {
     return <ContactTwoColumnFooter bundle={bundle} />;
+  }
+  if (variant === 'fire-footer') {
+    return <ContactFireFooter bundle={bundle} />;
   }
   const profile = bundle.profile as ProfileWithContact;
   const whatsapp = profile.contactWhatsapp?.trim() ?? '';

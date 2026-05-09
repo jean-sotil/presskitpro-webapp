@@ -17,6 +17,8 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
+import { useTranslations } from 'next-intl';
+
 import { cn } from '@/lib/utils/cn';
 import { reorderSection, type SectionKey } from '@/lib/editor/section-order';
 
@@ -43,6 +45,7 @@ export function SectionRail({
   onSelect,
   onReorder,
 }: SectionRailProps) {
+  const t = useTranslations('editor.rail');
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 6 } }),
@@ -58,7 +61,7 @@ export function SectionRail({
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <SortableContext items={order} strategy={verticalListSortingStrategy}>
-        <ol aria-label="Seções do perfil" className="flex flex-col gap-2">
+        <ol aria-label={t('ariaLabel')} className="flex flex-col gap-2">
           {order.map((key) => (
             <SortableItem
               key={key}
@@ -66,6 +69,7 @@ export function SectionRail({
               label={labels[key]}
               active={key === active}
               onSelect={() => onSelect(key)}
+              reorderLabel={t('reorderItem', { label: labels[key] })}
             />
           ))}
         </ol>
@@ -79,11 +83,13 @@ function SortableItem({
   label,
   active,
   onSelect,
+  reorderLabel,
 }: {
   keyId: SectionKey;
   label: string;
   active: boolean;
   onSelect: () => void;
+  reorderLabel: string;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: keyId });
@@ -114,7 +120,7 @@ function SortableItem({
       </button>
       <button
         type="button"
-        aria-label={`Reordenar ${label}`}
+        aria-label={reorderLabel}
         {...attributes}
         {...listeners}
         className="grid w-8 cursor-grab place-items-center border-l border-border text-text-muted hover:text-text active:cursor-grabbing"

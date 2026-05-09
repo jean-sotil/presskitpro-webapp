@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { parseAndCanonicalize } from '@/lib/editor/social-link-validate';
@@ -19,6 +20,8 @@ type ProfileWithContact = EditorBundle['profile'] & {
 };
 
 export function ContactEditCard({ bundle, onMutate }: ContactEditCardProps) {
+  const t = useTranslations('editor.cards.contact');
+  const tCommon = useTranslations('editor.common');
   const profile = bundle.profile as ProfileWithContact;
   const [whatsapp, setWhatsapp] = useState(profile.contactWhatsapp ?? '');
   const [email, setEmail] = useState(profile.contactEmail ?? '');
@@ -95,78 +98,77 @@ export function ContactEditCard({ bundle, onMutate }: ContactEditCardProps) {
     <div className="flex flex-col gap-6 border border-border bg-surface p-6">
       <header>
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
-          Editando · Contato
+          {tCommon('editingPrefix')} {t('label')}
         </p>
         <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">
-          Contato
+          {t('heading')}
         </h2>
       </header>
 
       <label className="flex flex-col gap-1">
         <span className="text-xs uppercase tracking-wider text-text-muted">
-          WhatsApp
+          {t('whatsappLabel')}
         </span>
         <input
           type="text"
           value={whatsapp}
           onChange={(e) => setWhatsapp(e.target.value)}
           onBlur={commitWhatsapp}
-          placeholder="+55 11 99999-9999"
+          placeholder={t('whatsappPlaceholder')}
           aria-invalid={!whatsappValidation.ok}
-          aria-label="WhatsApp"
+          aria-label={t('whatsappLabel')}
           className="h-9 border border-border bg-bg px-3 text-sm outline-none focus:border-accent"
         />
         {!whatsappValidation.ok ? (
           <span role="alert" className="text-xs text-text-muted">
-            Digite o número com código do país (ex.: +55 para Brasil).
+            {t('whatsappError')}
           </span>
         ) : (
           <span className="text-xs text-text-muted">
-            Aceita @ formato BR (+55) ou URL wa.me. Renderiza como botão na
-            página pública.
+            {t('whatsappHint')}
           </span>
         )}
       </label>
 
       <label className="flex flex-col gap-1">
         <span className="text-xs uppercase tracking-wider text-text-muted">
-          E-mail
+          {t('emailLabel')}
         </span>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           onBlur={commitEmail}
-          placeholder="contato@seu-dominio.com"
+          placeholder={t('emailPlaceholder')}
           aria-invalid={!emailValidation.ok}
-          aria-label="E-mail"
+          aria-label={t('emailLabel')}
           className="h-9 border border-border bg-bg px-3 text-sm outline-none focus:border-accent"
         />
         {!emailValidation.ok ? (
           <span role="alert" className="text-xs text-text-muted">
-            E-mail inválido.
+            {t('emailError')}
           </span>
         ) : null}
       </label>
 
       <fieldset className="flex flex-col gap-3 border border-border p-4">
         <legend className="px-2 text-xs uppercase tracking-wider text-text-muted">
-          Formulário de contato
+          {t('formLegend')}
         </legend>
         <label className="inline-flex cursor-pointer items-center gap-2 text-sm">
           <input
             type="checkbox"
             checked={Boolean(profile.contactFormEnabled)}
             onChange={(e) => toggleForm(e.target.checked)}
-            aria-label="Ativar formulário de contato"
+            aria-label={t('formToggleAriaLabel')}
             className="h-4 w-4"
           />
-          Ativar formulário na página pública
+          {t('formToggle')}
         </label>
         {profile.contactFormEnabled ? (
           <label className="flex flex-col gap-1">
             <span className="text-xs uppercase tracking-wider text-text-muted">
-              Destino das mensagens
+              {t('destinationLabel')}
             </span>
             <input
               type="email"
@@ -175,14 +177,14 @@ export function ContactEditCard({ bundle, onMutate }: ContactEditCardProps) {
               onBlur={commitDestination}
               placeholder={
                 profile.contactEmail
-                  ? `Padrão: ${profile.contactEmail}`
-                  : 'contato@seu-dominio.com'
+                  ? t('destinationPlaceholderWithDefault', { email: profile.contactEmail })
+                  : t('emailPlaceholder')
               }
-              aria-label="Destino das mensagens"
+              aria-label={t('destinationLabel')}
               className="h-9 border border-border bg-bg px-3 text-sm outline-none focus:border-accent"
             />
             <span className="text-xs text-text-muted">
-              Em branco, usa o e-mail acima.
+              {t('destinationHint')}
             </span>
           </label>
         ) : null}

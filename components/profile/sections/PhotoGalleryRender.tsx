@@ -9,6 +9,7 @@ import type { GalleryVariant } from '@/lib/presets';
 
 import { PhotoGalleryEditorialGrid } from './PhotoGalleryRender.editorial-grid';
 import { PhotoGalleryFilmStrip } from './PhotoGalleryRender.film-strip';
+import { PhotoGalleryGlowGrid } from './PhotoGalleryRender.glow-grid';
 
 type GalleryEntry = {
   id: number;
@@ -33,6 +34,9 @@ export function PhotoGalleryRender({
   }
   if (variant === 'film-strip') {
     return <PhotoGalleryFilmStrip bundle={bundle} />;
+  }
+  if (variant === 'glow-grid') {
+    return <PhotoGalleryGlowGrid bundle={bundle} />;
   }
   const raw = bundle.profile.gallery as Array<GalleryEntry | number> | undefined;
   const items = Array.isArray(raw)

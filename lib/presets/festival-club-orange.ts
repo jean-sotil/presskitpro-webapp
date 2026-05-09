@@ -37,6 +37,8 @@ export const festivalClubOrange: Preset = {
     bio: 'split-image-text',
     services: 'orange-cards',
     gallery: 'film-strip',
+    featuredTrack: 'classic',
+    instagram: 'classic',
     socialLinks: 'platform-stats',
     pressKit: 'cursor-cta',
     contact: 'two-column-footer',

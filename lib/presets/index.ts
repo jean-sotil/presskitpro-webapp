@@ -1,4 +1,5 @@
 import { editorialNightlifeV1 } from './editorial-nightlife-v1';
+import { electricFireTechno } from './electric-fire-techno';
 import { festivalClubOrange } from './festival-club-orange';
 import { mediakitProV1 } from './mediakit-pro-v1';
 import type { Preset } from './types';
@@ -6,8 +7,10 @@ import type { Preset } from './types';
 export type {
   BioVariant,
   ContactVariant,
+  FeaturedTrackVariant,
   GalleryVariant,
   HeroVariant,
+  InstagramVariant,
   Preset,
   PresetDecorations,
   PresetSections,
@@ -24,6 +27,7 @@ export type {
 export const PRESETS: readonly Preset[] = [
   mediakitProV1,
   festivalClubOrange,
+  electricFireTechno,
   editorialNightlifeV1,
 ] as const;
 

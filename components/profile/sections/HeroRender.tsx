@@ -8,6 +8,7 @@ import { mediaUrl } from '@/lib/media/url';
 import type { HeroVariant } from '@/lib/presets';
 
 import { HeroCutoutLayered } from './HeroRender.cutout-layered';
+import { HeroFireTechno } from './HeroRender.fire-techno';
 import { HeroTitleOverlayBroken } from './HeroRender.title-overlay-broken';
 
 type HeroStyle = 'full-bleed-portrait' | 'split-portrait-text' | 'centered-logo';
@@ -35,6 +36,9 @@ export function HeroRender({
   }
   if (variant === 'cutout-layered') {
     return <HeroCutoutLayered bundle={bundle} />;
+  }
+  if (variant === 'fire-techno') {
+    return <HeroFireTechno bundle={bundle} />;
   }
   const { profile, content } = bundle;
   const fallback = (bundle.theme?.heroStyle as HeroStyle | undefined) ?? 'full-bleed-portrait';

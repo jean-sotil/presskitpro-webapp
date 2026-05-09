@@ -63,20 +63,20 @@ describe('ContactEditCard', () => {
     const { rerender } = render(
       <ContactEditCard bundle={makeBundle()} onMutate={vi.fn()} />,
     );
-    expect(screen.queryByLabelText(/destino das mensagens/i)).toBeNull();
+    expect(screen.queryByLabelText(/message destination/i)).toBeNull();
     rerender(
       <ContactEditCard
         bundle={makeBundle({ contactFormEnabled: true })}
         onMutate={vi.fn()}
       />,
     );
-    expect(screen.getByLabelText(/destino das mensagens/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/message destination/i)).toBeInTheDocument();
   });
 
   it('toggles the contact form on/off via the checkbox', () => {
     const onMutate = vi.fn();
     render(<ContactEditCard bundle={makeBundle()} onMutate={onMutate} />);
-    fireEvent.click(screen.getByLabelText(/ativar formulário/i));
+    fireEvent.click(screen.getByLabelText(/enable contact form/i));
     expect(onMutate).toHaveBeenLastCalledWith('profile', {
       contactFormEnabled: true,
     });
@@ -92,7 +92,7 @@ describe('ContactEditCard', () => {
         onMutate={vi.fn()}
       />,
     );
-    const dest = screen.getByLabelText(/destino das mensagens/i);
+    const dest = screen.getByLabelText(/message destination/i);
     expect(dest).toHaveAttribute('placeholder', expect.stringMatching(/artist@example\.com/));
   });
 });

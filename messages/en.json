@@ -155,6 +155,14 @@
       "label": "Gallery",
       "heading": "Live frames"
     },
+    "featuredTrack": {
+      "label": "Featured track",
+      "heading": "On rotation",
+      "openExternal": "Open track"
+    },
+    "instagram": {
+      "label": "Instagram"
+    },
     "pressKit": {
       "label": "Press kit",
       "heading": "Download\npress kit",
@@ -271,6 +279,49 @@
     }
   },
   "editor": {
+    "common": {
+      "editingPrefix": "Editing ·"
+    },
+    "rail": {
+      "ariaLabel": "Profile sections",
+      "reorderItem": "Reorder {label}"
+    },
+    "cards": {
+      "about": {
+        "label": "About",
+        "heading": "Bio",
+        "promptsIntro": "Not sure where to start?",
+        "prompts": [
+          "How do you describe your music?",
+          "Where have you played?",
+          "Which projects define your work?"
+        ],
+        "bioAriaLabel": "Bio in PT-BR",
+        "bioLoadingAriaLabel": "Loading bio editor"
+      },
+      "contact": {
+        "label": "Contact",
+        "heading": "Contact",
+        "whatsappLabel": "WhatsApp",
+        "whatsappPlaceholder": "+1 555 555 5555",
+        "whatsappError": "Enter the number with country code (e.g. +55 for Brazil).",
+        "whatsappHint": "Accepts BR format (+55) or wa.me URL. Rendered as a button on the public page.",
+        "emailLabel": "Email",
+        "emailPlaceholder": "contact@your-domain.com",
+        "emailError": "Invalid email.",
+        "formLegend": "Contact form",
+        "formToggle": "Enable form on the public page",
+        "formToggleAriaLabel": "Enable contact form",
+        "destinationLabel": "Message destination",
+        "destinationPlaceholderWithDefault": "Default: {email}",
+        "destinationHint": "If empty, uses the email above."
+      }
+    },
+    "tabs": {
+      "ariaLabel": "Editor modes",
+      "sections": "Sections",
+      "theme": "Theme"
+    },
     "design": {
       "tabLabel": "Design",
       "heading": "Pick a design preset",

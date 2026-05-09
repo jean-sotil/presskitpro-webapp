@@ -26,9 +26,11 @@ function makeBundle(overrides: Partial<EditorBundle> = {}): EditorBundle {
 
 describe('AboutEditCard', () => {
   it('shows the empty-state prompts when bio is empty', () => {
+    // Test setup mocks `useTranslations` to read en.json — assert against
+    // the EN strings in messages/en.json under `editor.cards.about`.
     render(<AboutEditCard bundle={makeBundle()} onMutate={vi.fn()} />);
-    expect(screen.getByText(/não sabe por onde começar/i)).toBeInTheDocument();
-    expect(screen.getByText(/como você descreve/i)).toBeInTheDocument();
+    expect(screen.getByText(/not sure where to start/i)).toBeInTheDocument();
+    expect(screen.getByText(/how do you describe/i)).toBeInTheDocument();
   });
 
   it('hides the prompts when bio has content', () => {
@@ -45,7 +47,7 @@ describe('AboutEditCard', () => {
         onMutate={vi.fn()}
       />,
     );
-    expect(screen.queryByText(/não sabe por onde começar/i)).toBeNull();
+    expect(screen.queryByText(/not sure where to start/i)).toBeNull();
   });
 
   it('always renders the BioEditor', () => {

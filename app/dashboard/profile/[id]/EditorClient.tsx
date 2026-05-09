@@ -77,6 +77,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     'sections',
   );
   const tDesign = useTranslations('editor.design');
+  const tTabs = useTranslations('editor.tabs');
 
   const [saveState, setSaveState] = useState<SaveStatusState>({
     kind: 'idle',
@@ -279,7 +280,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
   );
 
   const tabStrip = (
-    <div role="tablist" className="flex border-b border-border" aria-label="Modos do editor">
+    <div role="tablist" className="flex border-b border-border" aria-label={tTabs('ariaLabel')}>
       <button
         type="button"
         role="tab"
@@ -291,7 +292,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
             : 'border-transparent text-text-muted'
         }`}
       >
-        Seções
+        {tTabs('sections')}
       </button>
       <button
         type="button"
@@ -304,7 +305,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
             : 'border-transparent text-text-muted'
         }`}
       >
-        Tema
+        {tTabs('theme')}
       </button>
       <button
         type="button"

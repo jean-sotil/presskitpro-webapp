@@ -173,4 +173,203 @@
     75%  { transform: translate(-1px, 2px); }
     100% { transform: translate(2px, -1px); }
   }
+
+  /* Task-35 — Electric Fire Techno effect bundle. Scoped to the article
+     via `[data-preset-electric-fire]` so it only runs when the preset
+     opts in (see lib/presets/types.ts → PresetDecorations.electricFire).
+     Pure CSS — GPU composited, no JS. Non-content chrome, decorative
+     only: aria/screen reader users see nothing.
+
+     Effects:
+       1. CRT scanlines — fixed overlay, 1px lines at 3px repeat
+       2. Fire-edge gradients — radial glow on hero left/right edges
+       3. Display gradient — gold→amber→fire on h1/h2 headings
+       4. Neon-pulse CTA glow — scoped to anchor children of pressKit
+          (animated box-shadow targeting CTA-style anchors).
+     Reduced-motion users get the static visual without the pulses. */
+
+  [data-preset-electric-fire]::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9997;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.32) 0px,
+      rgba(0, 0, 0, 0.32) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: multiply;
+  }
+
+  /* Fire-edge gradients on the hero. The HeroRender variants render the
+     hero as `<header>` (the first child of the article). Using
+     `:first-of-type` so a sibling order shuffle from Themes.sectionOrder
+     can't accidentally apply the fire to a non-hero section. */
+  [data-preset-electric-fire] > header:first-of-type {
+    position: relative;
+    isolation: isolate;
+  }
+  [data-preset-electric-fire] > header:first-of-type::before,
+  [data-preset-electric-fire] > header:first-of-type::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 35%;
+    pointer-events: none;
+    z-index: 0;
+    /* Behind the hero content (Image, h1, CTA) which sits at z>=1 by
+       default flow; the absolute pseudo creates its own stacking context
+       above the body bg but below the hero content. */
+  }
+  [data-preset-electric-fire] > header:first-of-type::before {
+    left: 0;
+    background: radial-gradient(
+      ellipse at left bottom,
+      rgba(255, 69, 0, 0.45) 0%,
+      rgba(255, 140, 0, 0.18) 35%,
+      transparent 70%
+    );
+  }
+  [data-preset-electric-fire] > header:first-of-type::after {
+    right: 0;
+    background: radial-gradient(
+      ellipse at right bottom,
+      rgba(255, 140, 0, 0.35) 0%,
+      rgba(255, 69, 0, 0.15) 35%,
+      transparent 70%
+    );
+  }
+  /* Lift the hero's actual content above the fire pseudo-elements. */
+  [data-preset-electric-fire] > header:first-of-type > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Display gradient on hero title + section titles. Background-clip:
+     text gives the gold→amber→fire pour described in the JSON spec.
+     Falls back to the inherited `--text` color when a browser refuses
+     transparent text-fill. */
+  [data-preset-electric-fire] h1,
+  [data-preset-electric-fire] h2 {
+    background: linear-gradient(
+      180deg,
+      #FFD700 0%,
+      #FF8C00 45%,
+      #FF4500 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    /* Makes the gradient feel like it's burning — soft outer glow at
+       display sizes only. */
+    filter: drop-shadow(0 0 24px rgba(255, 85, 0, 0.35));
+  }
+
+  /* Neon pulse on the press-kit CTA. PressKitLinkRender variants wrap
+     in `<section id="press-kit">`; the anchor inside is the CTA. */
+  [data-preset-electric-fire] section#press-kit a {
+    box-shadow:
+      0 0 6px rgba(255, 85, 0, 0.95),
+      0 0 20px rgba(255, 85, 0, 0.55),
+      inset 0 0 16px rgba(255, 85, 0, 0.12);
+    animation: electric-fire-neon-pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes electric-fire-neon-pulse {
+    0%, 100% {
+      box-shadow:
+        0 0 6px rgba(255, 85, 0, 0.95),
+        0 0 20px rgba(255, 85, 0, 0.55),
+        inset 0 0 16px rgba(255, 85, 0, 0.12);
+    }
+    50% {
+      box-shadow:
+        0 0 12px rgba(255, 85, 0, 1),
+        0 0 36px rgba(255, 85, 0, 0.75),
+        inset 0 0 22px rgba(255, 85, 0, 0.22);
+    }
+  }
+
+  /* Chromatic-aberration RGB-split on the hero portrait. Two
+     drop-shadow layers fake the red/cyan channel split without
+     loading the image multiple times. */
+  [data-preset-electric-fire] [data-fire-hero-portrait] {
+    filter:
+      drop-shadow(2.5px 0 0 rgba(255, 0, 60, 0.55))
+      drop-shadow(-2.5px 0 0 rgba(0, 191, 255, 0.55));
+  }
+
+  /* Cyan glow border on glow-grid cards (gallery). */
+  [data-preset-electric-fire] [data-glow-grid] li {
+    border-color: rgba(0, 191, 255, 0.55);
+    box-shadow:
+      0 0 6px rgba(0, 191, 255, 0.55),
+      0 0 18px rgba(0, 191, 255, 0.25),
+      inset 0 0 8px rgba(0, 191, 255, 0.06);
+  }
+  [data-preset-electric-fire] [data-glow-grid] li:hover {
+    border-color: rgba(0, 191, 255, 0.95);
+    box-shadow:
+      0 0 12px rgba(0, 191, 255, 0.9),
+      0 0 32px rgba(0, 191, 255, 0.45),
+      0 18px 40px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Cyan-glow buttons in the social section. */
+  [data-preset-electric-fire] [data-glow-buttons] a {
+    border-color: rgba(0, 191, 255, 0.7);
+    box-shadow: 0 0 10px rgba(0, 191, 255, 0.35);
+  }
+  [data-preset-electric-fire] [data-glow-buttons] a:hover {
+    background-color: rgba(0, 191, 255, 0.12);
+    border-color: rgba(0, 191, 255, 1);
+    box-shadow:
+      0 0 16px rgba(0, 191, 255, 0.7),
+      inset 0 0 8px rgba(0, 191, 255, 0.1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-preset-electric-fire] section#press-kit a {
+      animation: none;
+    }
+  }
+
+  /* Task-35 — circuit-board background texture (Electric Fire Techno).
+     Inline SVG repeating-tile painted at very low opacity so it sits
+     beneath all content without competing. The pattern combines a
+     hairline cyan grid (60×60 cells) with stub traces and a couple of
+     "via" dots per tile to read like a faint motherboard etch.
+     Applied to BOTH the article AND every descendant section/header
+     because section variants paint their own solid `bg-bg` color
+     which would otherwise hide the article-level texture. The SVG is
+     mostly transparent so the solid bg-color still shows through.
+     `background-attachment: fixed` keeps the texture stationary while
+     the page scrolls — gives a subtle parallax-like feel. */
+  [data-preset-circuit-board],
+  [data-preset-circuit-board] header,
+  [data-preset-circuit-board] section {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'><g fill='none' stroke='%2300BFFF' stroke-width='0.5' stroke-opacity='0.18'><path d='M0 30h60M30 0v60'/><path d='M0 15h15v15M30 15h15M45 0v15M15 45h15v15M30 45h15v-15'/></g><g fill='%2300BFFF' fill-opacity='0.28'><circle cx='15' cy='30' r='1.2'/><circle cx='45' cy='30' r='1.2'/><circle cx='30' cy='15' r='1.2'/><circle cx='30' cy='45' r='1.2'/></g></svg>");
+    background-repeat: repeat;
+    background-size: 60px 60px;
+    background-attachment: fixed;
+  }
+
+  /* Equalizer bars on the FeaturedTrack glow-track variant. Each bar
+     pulses on a staggered delay (set via inline `animation-delay`) so
+     the row reads as live audio without Web Audio or canvas. */
+  @keyframes equalizer-bar {
+    0%   { transform: scaleY(0.25); }
+    50%  { transform: scaleY(1.0); }
+    100% { transform: scaleY(0.4); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-glow-track] [aria-hidden='true'] span {
+      animation: none !important;
+      transform: scaleY(0.6);
+    }
+  }
 }
