@@ -3,13 +3,8 @@
 import { useTranslations } from 'next-intl';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
-import type { Preset } from '@/lib/presets';
 
-import { SocialLinksEditorialNightlifeV1 } from './editorial-nightlife-v1/SocialLinksRender.editorial-nightlife-v1';
-import { SocialLinksElectricFireTechno } from './electric-fire-techno/SocialLinksRender.electric-fire-techno';
-import { SocialLinksFestivalClubOrange } from './festival-club-orange/SocialLinksRender.festival-club-orange';
-import { SocialLinksMediakitProV1 } from './mediakit-pro-v1/SocialLinksRender.mediakit-pro-v1';
-import { TrackedSocialLink } from './TrackedSocialLink';
+import { TrackedSocialLink } from '../TrackedSocialLink';
 
 type LinkRow = {
   id: number | string;
@@ -18,29 +13,22 @@ type LinkRow = {
   displayOrder?: number;
 };
 
-export function SocialLinksRender({
-  bundle,
-  preset,
-}: {
-  bundle: EditorBundle;
-  preset?: Preset | null;
-}) {
+/**
+ * Editorial Nightlife v1 social links — the "pill-list" rendering
+ * extracted from the root dispatcher's default branch. Each platform
+ * gets a thin-bordered pill carrying the localized label; click is
+ * tracked through `<TrackedSocialLink>`.
+ */
+export function SocialLinksEditorialNightlifeV1({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.social');
   const tPlatforms = useTranslations('profile.social.platforms');
-
-  // Folder-owned preset dispatch.
-  if (preset?.id === 'electric-fire-techno') return <SocialLinksElectricFireTechno bundle={bundle} />;
-  if (preset?.id === 'mediakit-pro-v1') return <SocialLinksMediakitProV1 bundle={bundle} />;
-  if (preset?.id === 'festival-club-orange') return <SocialLinksFestivalClubOrange bundle={bundle} />;
-  if (preset?.id === 'editorial-nightlife-v1') return <SocialLinksEditorialNightlifeV1 bundle={bundle} />;
-
-  // No preset → unstyled pill-list fallback for legacy profiles.
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
   if (!raw.length) return null;
   const links = [...raw].sort(
     (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
   );
   const profileSlug = bundle.profile.slug;
+
   return (
     <section className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">
@@ -77,9 +65,6 @@ export function SocialLinksRender({
   );
 }
 
-/** The canonical URL stored by the editor is already in the right shape
- *  (`mailto:...`, `https://wa.me/...`, etc.) — but data from older saves
- *  or admin tweaks might not be, so we coerce defensively. */
 function hrefFor(link: LinkRow): string {
   if (link.platform === 'email') {
     return link.url.startsWith('mailto:') ? link.url : `mailto:${link.url}`;

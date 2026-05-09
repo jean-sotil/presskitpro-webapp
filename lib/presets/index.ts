@@ -4,21 +4,7 @@ import { festivalClubOrange } from './festival-club-orange';
 import { mediakitProV1 } from './mediakit-pro-v1';
 import type { Preset } from './types';
 
-export type {
-  BioVariant,
-  ContactVariant,
-  FeaturedTrackVariant,
-  GalleryVariant,
-  HeroVariant,
-  InstagramVariant,
-  Preset,
-  PresetDecorations,
-  PresetSections,
-  PresetTheme,
-  PressKitVariant,
-  ServicesVariant,
-  SocialVariant,
-} from './types';
+export type { Preset, PresetDecorations, PresetTheme } from './types';
 
 /**
  * Order is load-bearing for the editor's Design tab — the first card the

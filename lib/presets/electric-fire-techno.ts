@@ -7,14 +7,13 @@ import type { Preset } from './types';
  * ladder. Designed for techno / industrial-techno / hard-bass /
  * power-noise artists.
  *
- * Visual signature (within the registry's variant vocabulary):
- *   - Split hero: portrait left, two-line title right.
- *   - Centered bio.
- *   - 3-up uniform gallery grid.
- *   - Icon-list socials.
- *   - Cursor-CTA press kit (the spec's "retro hand cursor SVG" lands
- *     directly on `cursor-cta`'s built-in cursor element).
- *   - Dark-panel contact footer.
+ * Section dispatch shape: `ownedSections: true`. The 9 section
+ * components live as a self-contained suite under
+ * `components/profile/sections/electric-fire-techno/<Section>Render.electric-fire-techno.tsx`.
+ * The root dispatchers (e.g. `AboutRender.tsx`) route on `preset.id`
+ * when the active preset is folder-owned. Adding a new section here
+ * means dropping a 10th file into that folder and adding one branch
+ * to the matching root dispatcher.
  *
  * Token notes:
  *   - `bgPresetId: 'blueprint'` is the closest curated dark-with-blue
@@ -26,13 +25,6 @@ import type { Preset } from './types';
  *     direct match for the spec's display face. Body face in the spec
  *     was Rajdhani; Space Mono is the closest sci-fi sibling already
  *     loaded by `lib/design/fonts.ts`.
- *
- * Effects punted to a follow-up (would each need a new decoration
- * type or variant component to render): chromatic aberration on the
- * portrait, fire-particle edges, lightning-bolt SVGs, scanline
- * overlay, neon-pulse on the press kit CTA, circuit-board background
- * texture, corner metadata strings. The `filmGrain` decoration is
- * enabled as the closest existing match to the spec's grain layer.
  */
 export const electricFireTechno: Preset = {
   id: 'electric-fire-techno',
@@ -47,17 +39,7 @@ export const electricFireTechno: Preset = {
     text: '#FFFFFF',
     fontPairId: 'retro-future',
   },
-  sections: {
-    hero: 'fire-techno',
-    bio: 'fire-frame',
-    services: 'fire-cards',
-    gallery: 'glow-grid',
-    featuredTrack: 'glow-track',
-    instagram: 'glow-feed',
-    socialLinks: 'glow-buttons',
-    pressKit: 'fire-cta',
-    contact: 'fire-footer',
-  },
+  ownedSections: true,
   decorations: {
     marquee: { source: 'displayName' },
     filmGrain: true,

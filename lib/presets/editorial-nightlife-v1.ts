@@ -21,16 +21,6 @@ export const editorialNightlifeV1: Preset = {
     text: '#f0ede6',
     fontPairId: 'editorial-nightlife',
   },
-  sections: {
-    hero: 'full-bleed-portrait',
-    bio: 'classic',
-    services: 'classic',
-    gallery: 'mosaic',
-    featuredTrack: 'classic',
-    instagram: 'classic',
-    socialLinks: 'pill-list',
-    pressKit: 'inline-cta',
-    contact: 'inline-cta',
-  },
+  ownedSections: true,
   thumbnail: '/presets/editorial-nightlife-v1/thumb.jpg',
 };

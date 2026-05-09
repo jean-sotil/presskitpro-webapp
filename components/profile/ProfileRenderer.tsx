@@ -27,19 +27,16 @@ import { ServicesRender } from './sections/ServicesRender';
 import { SocialLinksRender } from './sections/SocialLinksRender';
 
 /**
- * Resolves each section key to a renderer that accepts the bundle plus
- * (optionally) a preset-derived `variant` prop. Returns `null` rather
- * than rendering anything when the bundle has no data for the section.
+ * Resolves each section key to a rendered ReactNode. Section
+ * components are client components (they call `useTranslations` from
+ * next-intl) so the renderer itself stays sync — works under both
+ * server-side render (public profile) and client-side render (editor
+ * PreviewPane).
  *
- * The variant prop is only passed when a preset is active; otherwise
- * each component falls back to its legacy `Themes.heroStyle` /
- * `Themes.galleryLayout` reads, preserving pre-task-35 behavior.
- */
-/**
- * Resolves each section key to a rendered ReactNode. Section components
- * are client components (they call `useTranslations` from next-intl) so
- * the renderer itself stays sync — works under both server-side render
- * (public profile) and client-side render (editor PreviewPane).
+ * Every preset is folder-owned (`Preset.ownedSections: true`); each
+ * dispatcher receives the `preset` object and short-circuits on
+ * `preset.id`. When no preset is active, the dispatcher falls back to
+ * its legacy `Themes.heroStyle` / `Themes.galleryLayout` rendering.
  */
 function renderSection(
   key: SectionKey,
@@ -48,23 +45,23 @@ function renderSection(
 ): React.ReactNode {
   switch (key) {
     case 'hero':
-      return <HeroRender bundle={bundle} variant={preset?.sections.hero} />;
+      return <HeroRender bundle={bundle} preset={preset} />;
     case 'about':
-      return <AboutRender bundle={bundle} variant={preset?.sections.bio} />;
+      return <AboutRender bundle={bundle} preset={preset} />;
     case 'services':
-      return <ServicesRender bundle={bundle} variant={preset?.sections.services} />;
+      return <ServicesRender bundle={bundle} preset={preset} />;
     case 'featuredTrack':
-      return <FeaturedTrackRender bundle={bundle} variant={preset?.sections.featuredTrack} />;
+      return <FeaturedTrackRender bundle={bundle} preset={preset} />;
     case 'instagramFeed':
-      return <InstagramFeedRender bundle={bundle} variant={preset?.sections.instagram} />;
+      return <InstagramFeedRender bundle={bundle} preset={preset} />;
     case 'photoGallery':
-      return <PhotoGalleryRender bundle={bundle} variant={preset?.sections.gallery} />;
+      return <PhotoGalleryRender bundle={bundle} preset={preset} />;
     case 'pressKitLink':
-      return <PressKitLinkRender bundle={bundle} variant={preset?.sections.pressKit} />;
+      return <PressKitLinkRender bundle={bundle} preset={preset} />;
     case 'socialLinks':
-      return <SocialLinksRender bundle={bundle} variant={preset?.sections.socialLinks} />;
+      return <SocialLinksRender bundle={bundle} preset={preset} />;
     case 'contact':
-      return <ContactRender bundle={bundle} variant={preset?.sections.contact} />;
+      return <ContactRender bundle={bundle} preset={preset} />;
   }
 }
 

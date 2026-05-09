@@ -32,17 +32,7 @@ export const festivalClubOrange: Preset = {
     text: '#0E0E0E',
     fontPairId: 'industrial',
   },
-  sections: {
-    hero: 'cutout-layered',
-    bio: 'split-image-text',
-    services: 'orange-cards',
-    gallery: 'film-strip',
-    featuredTrack: 'classic',
-    instagram: 'classic',
-    socialLinks: 'platform-stats',
-    pressKit: 'cursor-cta',
-    contact: 'two-column-footer',
-  },
+  ownedSections: true,
   decorations: {
     marquee: { source: 'displayName' },
     filmGrain: true,

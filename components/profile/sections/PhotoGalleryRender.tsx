@@ -5,11 +5,12 @@ import Image from 'next/image';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
-import type { GalleryVariant } from '@/lib/presets';
+import type { Preset } from '@/lib/presets';
 
-import { PhotoGalleryEditorialGrid } from './PhotoGalleryRender.editorial-grid';
-import { PhotoGalleryFilmStrip } from './PhotoGalleryRender.film-strip';
-import { PhotoGalleryGlowGrid } from './PhotoGalleryRender.glow-grid';
+import { PhotoGalleryEditorialNightlifeV1 } from './editorial-nightlife-v1/PhotoGalleryRender.editorial-nightlife-v1';
+import { PhotoGalleryElectricFireTechno } from './electric-fire-techno/PhotoGalleryRender.electric-fire-techno';
+import { PhotoGalleryFestivalClubOrange } from './festival-club-orange/PhotoGalleryRender.festival-club-orange';
+import { PhotoGalleryMediakitProV1 } from './mediakit-pro-v1/PhotoGalleryRender.mediakit-pro-v1';
 
 type GalleryEntry = {
   id: number;
@@ -19,33 +20,36 @@ type GalleryEntry = {
   decorative?: boolean;
 };
 
+/**
+ * Legacy `Themes.galleryLayout` values; kept here as the no-preset
+ * fallback so legacy profiles still render until they're backfilled
+ * onto a real preset.
+ */
 type GalleryLayout = 'mosaic' | 'uniform-grid' | 'carousel';
 
 export function PhotoGalleryRender({
   bundle,
-  variant,
+  preset,
 }: {
   bundle: EditorBundle;
-  variant?: GalleryVariant;
+  preset?: Preset | null;
 }) {
   const t = useTranslations('profile.gallery');
-  if (variant === 'editorial-grid') {
-    return <PhotoGalleryEditorialGrid bundle={bundle} />;
-  }
-  if (variant === 'film-strip') {
-    return <PhotoGalleryFilmStrip bundle={bundle} />;
-  }
-  if (variant === 'glow-grid') {
-    return <PhotoGalleryGlowGrid bundle={bundle} />;
-  }
+
+  // Folder-owned preset dispatch.
+  if (preset?.id === 'electric-fire-techno') return <PhotoGalleryElectricFireTechno bundle={bundle} />;
+  if (preset?.id === 'mediakit-pro-v1') return <PhotoGalleryMediakitProV1 bundle={bundle} />;
+  if (preset?.id === 'festival-club-orange') return <PhotoGalleryFestivalClubOrange bundle={bundle} />;
+  if (preset?.id === 'editorial-nightlife-v1') return <PhotoGalleryEditorialNightlifeV1 bundle={bundle} />;
+
+  // No preset → unstyled fallback driven by `Themes.galleryLayout`.
   const raw = bundle.profile.gallery as Array<GalleryEntry | number> | undefined;
   const items = Array.isArray(raw)
     ? raw.filter((entry): entry is GalleryEntry => typeof entry === 'object' && entry !== null && 'id' in entry)
     : [];
   if (items.length === 0) return null;
 
-  const fallback = (bundle.theme?.galleryLayout as GalleryLayout | undefined) ?? 'mosaic';
-  const layout: GalleryLayout = variant ?? fallback;
+  const layout = (bundle.theme?.galleryLayout as GalleryLayout | undefined) ?? 'mosaic';
 
   return (
     <section id="galeria" className="border-b border-border px-6 py-16 md:px-12">

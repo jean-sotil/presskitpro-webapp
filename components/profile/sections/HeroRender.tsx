@@ -5,12 +5,22 @@ import Image from 'next/image';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
-import type { HeroVariant } from '@/lib/presets';
+import type { Preset } from '@/lib/presets';
 
-import { HeroCutoutLayered } from './HeroRender.cutout-layered';
-import { HeroFireTechno } from './HeroRender.fire-techno';
-import { HeroTitleOverlayBroken } from './HeroRender.title-overlay-broken';
+import { HeroEditorialNightlifeV1 } from './editorial-nightlife-v1/HeroRender.editorial-nightlife-v1';
+import { HeroElectricFireTechno } from './electric-fire-techno/HeroRender.electric-fire-techno';
+import { HeroFestivalClubOrange } from './festival-club-orange/HeroRender.festival-club-orange';
+import { HeroMediakitProV1 } from './mediakit-pro-v1/HeroRender.mediakit-pro-v1';
 
+/**
+ * Legacy `Themes.heroStyle` values, kept around so no-preset profiles
+ * still render predictably until the editor backfills them onto a real
+ * preset. The full-bleed-portrait branch is also what `editorial-
+ * nightlife-v1` ships in its preset folder; the duplication is
+ * intentional (any future tweak to the preset doesn't touch legacy
+ * profiles, and any tweak to the legacy fallback doesn't touch the
+ * preset).
+ */
 type HeroStyle = 'full-bleed-portrait' | 'split-portrait-text' | 'centered-logo';
 
 type PortraitMedia = {
@@ -23,44 +33,33 @@ type PortraitMedia = {
 
 export function HeroRender({
   bundle,
-  variant,
+  preset,
 }: {
   bundle: EditorBundle;
-  /** Preset-driven variant. When set, wins over the legacy `heroStyle`
-   *  field — task-35 plumbs this from `ProfileRenderer`. */
-  variant?: HeroVariant;
+  preset?: Preset | null;
 }) {
   const t = useTranslations('profile');
-  if (variant === 'title-overlay-broken') {
-    return <HeroTitleOverlayBroken bundle={bundle} />;
-  }
-  if (variant === 'cutout-layered') {
-    return <HeroCutoutLayered bundle={bundle} />;
-  }
-  if (variant === 'fire-techno') {
-    return <HeroFireTechno bundle={bundle} />;
-  }
+
+  // Folder-owned preset dispatch — all four presets ship their own
+  // 9-section suite under `sections/<preset.id>/`.
+  if (preset?.id === 'electric-fire-techno') return <HeroElectricFireTechno bundle={bundle} />;
+  if (preset?.id === 'mediakit-pro-v1') return <HeroMediakitProV1 bundle={bundle} />;
+  if (preset?.id === 'festival-club-orange') return <HeroFestivalClubOrange bundle={bundle} />;
+  if (preset?.id === 'editorial-nightlife-v1') return <HeroEditorialNightlifeV1 bundle={bundle} />;
+
+  // No preset → fall back to the legacy `Themes.heroStyle` switch.
   const { profile, content } = bundle;
-  const fallback = (bundle.theme?.heroStyle as HeroStyle | undefined) ?? 'full-bleed-portrait';
-  const style: HeroStyle = variant ?? fallback;
+  const style = (bundle.theme?.heroStyle as HeroStyle | undefined) ?? 'full-bleed-portrait';
   const tagline = (content?.tagline as string | undefined) ?? null;
   const ctaLabel = (content?.ctaLabel as string | undefined) ?? null;
   const ctaUrl = (content?.ctaUrl as string | undefined) ?? null;
 
   const portraitMedia = profile.portrait as PortraitMedia | null | undefined;
-  const logoMedia = profile.logo as
-    | { bucket: string; path: string; alt?: string; width?: number | null; height?: number | null }
-    | null
-    | undefined;
+  const logoMedia = profile.logo as PortraitMedia | null | undefined;
   const portraitUrl = mediaUrl(portraitMedia ?? null);
   const logoUrl = mediaUrl(logoMedia ?? null);
-  // Width/height come from `Media`'s exif fields when available; fall
-  // back to a 3:4 portrait aspect when missing so `next/image` still
-  // reserves space and avoids CLS.
   const portraitWidth = (portraitMedia?.width ?? 1200) || 1200;
   const portraitHeight = (portraitMedia?.height ?? 1600) || 1600;
-  // Logos vary wildly in aspect; default to a horizontal 3:1 box when
-  // the upstream Media doc lacks dimensions. CSS sizes the rendered img.
   const logoWidth = (logoMedia?.width ?? 480) || 480;
   const logoHeight = (logoMedia?.height ?? 160) || 160;
 

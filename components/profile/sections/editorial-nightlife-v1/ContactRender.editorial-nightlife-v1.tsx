@@ -3,14 +3,9 @@
 import { useTranslations } from 'next-intl';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
-import type { Preset } from '@/lib/presets';
 
-import { ContactEditorialNightlifeV1 } from './editorial-nightlife-v1/ContactRender.editorial-nightlife-v1';
-import { ContactElectricFireTechno } from './electric-fire-techno/ContactRender.electric-fire-techno';
-import { ContactFestivalClubOrange } from './festival-club-orange/ContactRender.festival-club-orange';
-import { ContactMediakitProV1 } from './mediakit-pro-v1/ContactRender.mediakit-pro-v1';
-import { ContactForm } from './ContactForm';
-import { TrackedContactCta } from './TrackedContactCta';
+import { ContactForm } from '../ContactForm';
+import { TrackedContactCta } from '../TrackedContactCta';
 
 type ProfileWithContact = EditorBundle['profile'] & {
   contactWhatsapp?: string;
@@ -18,22 +13,14 @@ type ProfileWithContact = EditorBundle['profile'] & {
   contactFormEnabled?: boolean;
 };
 
-export function ContactRender({
-  bundle,
-  preset,
-}: {
-  bundle: EditorBundle;
-  preset?: Preset | null;
-}) {
+/**
+ * Editorial Nightlife v1 contact — the "inline-cta" rendering
+ * extracted from the root dispatcher's default branch. Whatsapp +
+ * email render as parallel CTAs; the embedded form mounts when
+ * enabled on the profile.
+ */
+export function ContactEditorialNightlifeV1({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.contact');
-
-  // Folder-owned preset dispatch.
-  if (preset?.id === 'electric-fire-techno') return <ContactElectricFireTechno bundle={bundle} />;
-  if (preset?.id === 'mediakit-pro-v1') return <ContactMediakitProV1 bundle={bundle} />;
-  if (preset?.id === 'festival-club-orange') return <ContactFestivalClubOrange bundle={bundle} />;
-  if (preset?.id === 'editorial-nightlife-v1') return <ContactEditorialNightlifeV1 bundle={bundle} />;
-
-  // No preset → unstyled inline-cta fallback for legacy profiles.
   const profile = bundle.profile as ProfileWithContact;
   const whatsapp = profile.contactWhatsapp?.trim() ?? '';
   const email = profile.contactEmail?.trim() ?? '';

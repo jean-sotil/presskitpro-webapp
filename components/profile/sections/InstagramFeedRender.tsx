@@ -1,7 +1,10 @@
 import type { EditorBundle } from '@/lib/editor/bundle';
-import type { InstagramVariant } from '@/lib/presets';
+import type { Preset } from '@/lib/presets';
 
-import { InstagramGlowFeed } from './InstagramFeedRender.glow-feed';
+import { InstagramFeedEditorialNightlifeV1 } from './editorial-nightlife-v1/InstagramFeedRender.editorial-nightlife-v1';
+import { InstagramElectricFireTechno } from './electric-fire-techno/InstagramFeedRender.electric-fire-techno';
+import { InstagramFeedFestivalClubOrange } from './festival-club-orange/InstagramFeedRender.festival-club-orange';
+import { InstagramFeedMediakitProV1 } from './mediakit-pro-v1/InstagramFeedRender.mediakit-pro-v1';
 import { LazyEmbed } from './LazyEmbed';
 
 type InstagramPostRow = {
@@ -13,14 +16,18 @@ type InstagramPostRow = {
 
 export function InstagramFeedRender({
   bundle,
-  variant,
+  preset,
 }: {
   bundle: EditorBundle;
-  variant?: InstagramVariant;
+  preset?: Preset | null;
 }) {
-  if (variant === 'glow-feed') {
-    return <InstagramGlowFeed bundle={bundle} />;
-  }
+  // Folder-owned preset dispatch.
+  if (preset?.id === 'electric-fire-techno') return <InstagramElectricFireTechno bundle={bundle} />;
+  if (preset?.id === 'mediakit-pro-v1') return <InstagramFeedMediakitProV1 bundle={bundle} />;
+  if (preset?.id === 'festival-club-orange') return <InstagramFeedFestivalClubOrange bundle={bundle} />;
+  if (preset?.id === 'editorial-nightlife-v1') return <InstagramFeedEditorialNightlifeV1 bundle={bundle} />;
+
+  // No preset → unstyled "classic" fallback for legacy profiles.
   const raw = (bundle.instagramPosts ?? []) as unknown as InstagramPostRow[];
   const posts = [...raw].sort(
     (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),

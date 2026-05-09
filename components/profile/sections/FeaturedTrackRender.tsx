@@ -3,22 +3,30 @@
 import { useTranslations } from 'next-intl';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
-import type { FeaturedTrackVariant } from '@/lib/presets';
+import type { Preset } from '@/lib/presets';
 
-import { FeaturedTrackGlowTrack } from './FeaturedTrackRender.glow-track';
+import { FeaturedTrackEditorialNightlifeV1 } from './editorial-nightlife-v1/FeaturedTrackRender.editorial-nightlife-v1';
+import { FeaturedTrackElectricFireTechno } from './electric-fire-techno/FeaturedTrackRender.electric-fire-techno';
+import { FeaturedTrackFestivalClubOrange } from './festival-club-orange/FeaturedTrackRender.festival-club-orange';
+import { FeaturedTrackMediakitProV1 } from './mediakit-pro-v1/FeaturedTrackRender.mediakit-pro-v1';
 import { LazyIframe } from './LazyIframe';
 
 export function FeaturedTrackRender({
   bundle,
-  variant,
+  preset,
 }: {
   bundle: EditorBundle;
-  variant?: FeaturedTrackVariant;
+  preset?: Preset | null;
 }) {
   const t = useTranslations('profile.featuredTrack');
-  if (variant === 'glow-track') {
-    return <FeaturedTrackGlowTrack bundle={bundle} />;
-  }
+
+  // Folder-owned preset dispatch.
+  if (preset?.id === 'electric-fire-techno') return <FeaturedTrackElectricFireTechno bundle={bundle} />;
+  if (preset?.id === 'mediakit-pro-v1') return <FeaturedTrackMediakitProV1 bundle={bundle} />;
+  if (preset?.id === 'festival-club-orange') return <FeaturedTrackFestivalClubOrange bundle={bundle} />;
+  if (preset?.id === 'editorial-nightlife-v1') return <FeaturedTrackEditorialNightlifeV1 bundle={bundle} />;
+
+  // No preset → unstyled "classic" fallback for legacy profiles.
   const track = bundle.featuredTrack as
     | { url?: string; oembedHtml?: string | null }
     | null;

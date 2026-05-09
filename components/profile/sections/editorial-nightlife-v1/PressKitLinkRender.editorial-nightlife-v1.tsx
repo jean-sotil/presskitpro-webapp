@@ -4,35 +4,21 @@ import { useTranslations } from 'next-intl';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import type { PressKitProvider } from '@/lib/payload/hooks/derive-press-kit-provider';
-import type { Preset } from '@/lib/presets';
 
-import { PressKitLinkEditorialNightlifeV1 } from './editorial-nightlife-v1/PressKitLinkRender.editorial-nightlife-v1';
-import { PressKitLinkElectricFireTechno } from './electric-fire-techno/PressKitLinkRender.electric-fire-techno';
-import { PressKitLinkFestivalClubOrange } from './festival-club-orange/PressKitLinkRender.festival-club-orange';
-import { PressKitLinkMediakitProV1 } from './mediakit-pro-v1/PressKitLinkRender.mediakit-pro-v1';
-import { TrackedPressKitAnchor } from './TrackedPressKitAnchor';
+import { TrackedPressKitAnchor } from '../TrackedPressKitAnchor';
 
-export function PressKitLinkRender({
-  bundle,
-  preset,
-}: {
-  bundle: EditorBundle;
-  preset?: Preset | null;
-}) {
+/**
+ * Editorial Nightlife v1 press-kit link — the "inline-cta" rendering
+ * extracted from the root dispatcher's default branch. The provider
+ * badge ("Hosted on Notion / Drive / …") only surfaces for recognized
+ * providers. Hides the section when health is `broken` (task-30 cron
+ * flag after 3 consecutive 4xx/5xx).
+ */
+export function PressKitLinkEditorialNightlifeV1({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.pressKit');
   const tProviders = useTranslations('profile.pressKit.providers');
-
-  // Folder-owned preset dispatch.
-  if (preset?.id === 'electric-fire-techno') return <PressKitLinkElectricFireTechno bundle={bundle} />;
-  if (preset?.id === 'mediakit-pro-v1') return <PressKitLinkMediakitProV1 bundle={bundle} />;
-  if (preset?.id === 'festival-club-orange') return <PressKitLinkFestivalClubOrange bundle={bundle} />;
-  if (preset?.id === 'editorial-nightlife-v1') return <PressKitLinkEditorialNightlifeV1 bundle={bundle} />;
-
-  // No preset → unstyled inline-cta fallback for legacy profiles.
   const url = (bundle.profile.pressKitUrl as string | undefined) ?? null;
   if (!url) return null;
-  // Task-30 — hide the public CTA when the daily cron has flipped the
-  // health status to `broken` (3 consecutive failures).
   const health = (bundle.profile.pressKitHealthStatus ?? 'unknown') as
     | 'unknown'
     | 'healthy'
@@ -65,8 +51,6 @@ export function PressKitLinkRender({
   );
 }
 
-/** Returns the localized "Hosted on …" badge for known providers,
- *  null for `unknown` / `other` / unrecognized values. */
 function providerBadge(
   t: (key: string) => string,
   provider: PressKitProvider,

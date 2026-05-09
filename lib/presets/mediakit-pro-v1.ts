@@ -24,17 +24,7 @@ export const mediakitProV1: Preset = {
     text: '#ffffff',
     fontPairId: 'retro-future',
   },
-  sections: {
-    hero: 'title-overlay-broken',
-    bio: 'split-image-text',
-    services: 'rail-cards',
-    gallery: 'editorial-grid',
-    featuredTrack: 'classic',
-    instagram: 'classic',
-    socialLinks: 'icon-list',
-    pressKit: 'square-panel',
-    contact: 'dark-panel',
-  },
+  ownedSections: true,
   decorations: {
     marquee: { source: 'displayName' },
     filmGrain: true,

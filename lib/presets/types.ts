@@ -1,62 +1,28 @@
 import type { FontPairId } from '@/lib/design/tokens';
 
 /**
- * A design preset bundles theme tokens with section-variant choices and
- * preset-owned decorations (chrome the artist doesn't configure). The
- * renderer resolves a profile's `Themes.presetId` to one of these and
- * dispatches each section's render to the matching variant.
+ * A design preset bundles theme tokens with preset-owned decorations
+ * (chrome the artist doesn't configure). The renderer resolves a
+ * profile's `Themes.presetId` to one of these and dispatches each
+ * section's render to the matching component.
  *
- * Per task-35 plan: code-defined registry (not Payload-stored) so the
- * variant strings are type-safe and rendered output is reviewable in
- * PR diffs. Adding a new variant string forces the renderer's switch
- * to handle it — TypeScript fails the build if it doesn't.
+ * Section dispatch shape: every preset is folder-owned. Each preset
+ * ships nine section components in
+ * `components/profile/sections/<preset.id>/<Section>Render.<preset.id>.tsx`.
+ * The root dispatchers (`AboutRender.tsx`, `HeroRender.tsx`, …) route
+ * on `preset.id`. Adding a new preset means dropping a folder under
+ * `sections/`, registering the preset config in `lib/presets/`, and
+ * adding one branch to each of the nine root dispatchers.
+ *
+ * Scaffold a new preset from `components/profile/sections/_template-preset/`.
+ *
+ * The legacy library-variant shape (`Preset.sections` map +
+ * `<Section>Render.<variant>.tsx` files at the top of `sections/`) was
+ * removed when all four bundled presets migrated to folder-owned. The
+ * variant-string types and the `sections` field are gone from this
+ * schema — re-introduce them only if a future preset genuinely needs
+ * to mix variants from a shared pool.
  */
-
-export type HeroVariant =
-  | 'full-bleed-portrait'
-  | 'split-portrait-text'
-  | 'centered-logo'
-  | 'title-overlay-broken'
-  | 'cutout-layered'
-  | 'fire-techno';
-
-export type BioVariant = 'classic' | 'split-image-text' | 'fire-frame';
-
-export type GalleryVariant =
-  | 'mosaic'
-  | 'uniform-grid'
-  | 'carousel'
-  | 'editorial-grid'
-  | 'film-strip'
-  | 'glow-grid';
-
-export type ServicesVariant =
-  | 'classic'
-  | 'rail-cards'
-  | 'orange-cards'
-  | 'fire-cards';
-
-export type InstagramVariant = 'classic' | 'glow-feed';
-
-export type FeaturedTrackVariant = 'classic' | 'glow-track';
-
-export type SocialVariant =
-  | 'pill-list'
-  | 'icon-list'
-  | 'platform-stats'
-  | 'glow-buttons';
-
-export type PressKitVariant =
-  | 'inline-cta'
-  | 'square-panel'
-  | 'cursor-cta'
-  | 'fire-cta';
-
-export type ContactVariant =
-  | 'inline-cta'
-  | 'dark-panel'
-  | 'two-column-footer'
-  | 'fire-footer';
 
 export type PresetTheme = {
   /** `bgPresets[*].id` — populates `Themes.colorPresetId` on apply. */
@@ -70,18 +36,6 @@ export type PresetTheme = {
   /** Hex value mirrored into `Themes.text`; omit to auto-derive from bg. */
   text?: string;
   fontPairId: FontPairId;
-};
-
-export type PresetSections = {
-  hero: HeroVariant;
-  bio: BioVariant;
-  services: ServicesVariant;
-  gallery: GalleryVariant;
-  featuredTrack: FeaturedTrackVariant;
-  instagram: InstagramVariant;
-  socialLinks: SocialVariant;
-  pressKit: PressKitVariant;
-  contact: ContactVariant;
 };
 
 /**
@@ -120,7 +74,14 @@ export type Preset = {
   /** PT-BR tagline; same fallback posture as `name`. */
   tagline: string;
   theme: PresetTheme;
-  sections: PresetSections;
+  /**
+   * Required marker confirming this preset's nine section components
+   * live as a self-contained suite under
+   * `components/profile/sections/<preset.id>/`. Always `true` for
+   * registered presets — the field exists so future opt-out shapes
+   * can be added without churning every preset config at once.
+   */
+  ownedSections: true;
   decorations?: PresetDecorations;
   /** Public path to a static thumbnail (4:3, ~50 KB). */
   thumbnail: string;

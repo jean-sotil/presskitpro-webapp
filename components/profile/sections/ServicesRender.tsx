@@ -3,29 +3,29 @@
 import { useTranslations } from 'next-intl';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
-import type { ServicesVariant } from '@/lib/presets';
+import type { Preset } from '@/lib/presets';
 
-import { ServicesFireCards } from './ServicesRender.fire-cards';
-import { ServicesOrangeCards } from './ServicesRender.orange-cards';
-import { ServicesRailCards } from './ServicesRender.rail-cards';
+import { ServicesEditorialNightlifeV1 } from './editorial-nightlife-v1/ServicesRender.editorial-nightlife-v1';
+import { ServicesElectricFireTechno } from './electric-fire-techno/ServicesRender.electric-fire-techno';
+import { ServicesFestivalClubOrange } from './festival-club-orange/ServicesRender.festival-club-orange';
+import { ServicesMediakitProV1 } from './mediakit-pro-v1/ServicesRender.mediakit-pro-v1';
 
 export function ServicesRender({
   bundle,
-  variant,
+  preset,
 }: {
   bundle: EditorBundle;
-  variant?: ServicesVariant;
+  preset?: Preset | null;
 }) {
   const t = useTranslations('profile.services');
-  if (variant === 'rail-cards') {
-    return <ServicesRailCards bundle={bundle} />;
-  }
-  if (variant === 'orange-cards') {
-    return <ServicesOrangeCards bundle={bundle} />;
-  }
-  if (variant === 'fire-cards') {
-    return <ServicesFireCards bundle={bundle} />;
-  }
+
+  // Folder-owned preset dispatch.
+  if (preset?.id === 'electric-fire-techno') return <ServicesElectricFireTechno bundle={bundle} />;
+  if (preset?.id === 'mediakit-pro-v1') return <ServicesMediakitProV1 bundle={bundle} />;
+  if (preset?.id === 'festival-club-orange') return <ServicesFestivalClubOrange bundle={bundle} />;
+  if (preset?.id === 'editorial-nightlife-v1') return <ServicesEditorialNightlifeV1 bundle={bundle} />;
+
+  // No preset → unstyled "classic" fallback for legacy profiles.
   const services = (bundle.content?.services as
     | Array<{ title: string; description?: string }>
     | undefined) ?? [];
