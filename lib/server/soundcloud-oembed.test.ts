@@ -57,9 +57,7 @@ describe('fetchSoundcloudOembed', () => {
   });
 
   it('accepts on-soundcloud subdomains (m.soundcloud.com)', async () => {
-    const fetchMock = vi.fn(async () =>
-      jsonResponse({ html: validIframeHtml, title: 't' }),
-    );
+    const fetchMock = vi.fn(async () => jsonResponse({ html: validIframeHtml, title: 't' }));
     const r = await fetchSoundcloudOembed({
       url: 'https://m.soundcloud.com/artist/track',
       fetch: fetchMock,

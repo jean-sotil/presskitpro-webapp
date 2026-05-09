@@ -15,9 +15,10 @@ describe('validateContactForm', () => {
   });
 
   it('flags the honeypot as caught (separate from validation failure)', () => {
-    expect(
-      validateContactForm({ ...valid, honeypot: 'i-am-a-bot' }),
-    ).toEqual({ ok: false, reason: 'honeypot' });
+    expect(validateContactForm({ ...valid, honeypot: 'i-am-a-bot' })).toEqual({
+      ok: false,
+      reason: 'honeypot',
+    });
   });
 
   it('rejects an empty name', () => {
@@ -28,15 +29,17 @@ describe('validateContactForm', () => {
   });
 
   it('rejects an oversized name', () => {
-    expect(
-      validateContactForm({ ...valid, name: 'x'.repeat(120) }),
-    ).toEqual({ ok: false, reason: 'name-too-long' });
+    expect(validateContactForm({ ...valid, name: 'x'.repeat(120) })).toEqual({
+      ok: false,
+      reason: 'name-too-long',
+    });
   });
 
   it('rejects an invalid email', () => {
-    expect(
-      validateContactForm({ ...valid, email: 'not-an-email' }),
-    ).toEqual({ ok: false, reason: 'email-invalid' });
+    expect(validateContactForm({ ...valid, email: 'not-an-email' })).toEqual({
+      ok: false,
+      reason: 'email-invalid',
+    });
   });
 
   it('rejects an empty message', () => {
@@ -47,8 +50,9 @@ describe('validateContactForm', () => {
   });
 
   it('rejects an oversized message', () => {
-    expect(
-      validateContactForm({ ...valid, message: 'x'.repeat(2001) }),
-    ).toEqual({ ok: false, reason: 'message-too-long' });
+    expect(validateContactForm({ ...valid, message: 'x'.repeat(2001) })).toEqual({
+      ok: false,
+      reason: 'message-too-long',
+    });
   });
 });

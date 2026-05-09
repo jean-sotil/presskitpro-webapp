@@ -22,9 +22,7 @@ test.describe('Social links full ladder @full', () => {
     const profileId = process.env.EDITOR_E2E_PROFILE_ID!;
     await page.goto(`/dashboard/profile/${profileId}`);
     await page.getByRole('button', { name: 'Redes sociais' }).click();
-    await expect(
-      page.getByRole('heading', { level: 2, name: /redes sociais/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: /redes sociais/i })).toBeVisible();
 
     // Add a row, type an invalid URL, expect inline error.
     await page.getByRole('button', { name: /adicionar link/i }).click();

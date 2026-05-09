@@ -15,11 +15,7 @@ import { setActiveProfileAction } from '@/lib/dashboard/active-profile-actions';
  * an RSC mutation and trips the guard. A client `useEffect` triggers
  * the action in a Server Action context and the cookie write succeeds.
  */
-export function ActiveProfileTracker({
-  profileId,
-}: {
-  profileId: number | string;
-}) {
+export function ActiveProfileTracker({ profileId }: { profileId: number | string }) {
   useEffect(() => {
     void setActiveProfileAction(profileId);
   }, [profileId]);

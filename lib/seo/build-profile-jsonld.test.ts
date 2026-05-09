@@ -4,12 +4,14 @@ import type { EditorBundle } from '@/lib/editor/bundle';
 
 import { buildProfileJsonLd } from './build-profile-jsonld';
 
-function makeBundle(overrides: {
-  profile?: Partial<EditorBundle['profile']>;
-  content?: Partial<NonNullable<EditorBundle['content']>>;
-  socialLinks?: EditorBundle['socialLinks'];
-  featuredTrack?: EditorBundle['featuredTrack'];
-} = {}): EditorBundle {
+function makeBundle(
+  overrides: {
+    profile?: Partial<EditorBundle['profile']>;
+    content?: Partial<NonNullable<EditorBundle['content']>>;
+    socialLinks?: EditorBundle['socialLinks'];
+    featuredTrack?: EditorBundle['featuredTrack'];
+  } = {},
+): EditorBundle {
   return {
     profile: {
       id: 1,
@@ -101,8 +103,6 @@ describe('buildProfileJsonLd', () => {
       'https://presskit.pro',
       { imageUrl: 'https://abc.supabase.co/storage/v1/object/public/avatars/sb-1/foo.jpg' },
     );
-    expect(ld.image).toBe(
-      'https://abc.supabase.co/storage/v1/object/public/avatars/sb-1/foo.jpg',
-    );
+    expect(ld.image).toBe('https://abc.supabase.co/storage/v1/object/public/avatars/sb-1/foo.jpg');
   });
 });

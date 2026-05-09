@@ -3,10 +3,7 @@
 import { useState, useTransition } from 'react';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
-import {
-  bindCompressDeps,
-  compressImage,
-} from '@/lib/editor/image-compress';
+import { bindCompressDeps, compressImage } from '@/lib/editor/image-compress';
 import { isValidCtaUrl, normalizeCtaUrl } from '@/lib/editor/cta-url';
 import { MAX_UPLOAD_BYTES, liveUploadDeps, uploadMedia } from '@/lib/editor/media-upload';
 import { humanizeUploadError } from '@/lib/editor/upload-error-message';
@@ -66,10 +63,10 @@ export function HeroEditCard({ bundle, supabaseUserId, onMutate }: HeroEditCardP
     ctaLabel === 'Contato para shows'
       ? 'contato-shows'
       : ctaLabel === 'Book now'
-      ? 'book-now'
-      : ctaLabel
-      ? 'custom'
-      : 'contato-shows',
+        ? 'book-now'
+        : ctaLabel
+          ? 'custom'
+          : 'contato-shows',
   );
   const [, startTransition] = useTransition();
 
@@ -82,11 +79,7 @@ export function HeroEditCard({ bundle, supabaseUserId, onMutate }: HeroEditCardP
     try {
       const compressed = SVG_TYPES.has(file.type)
         ? file
-        : await compressImage(
-            file,
-            { targetMaxBytes: MAX_UPLOAD_BYTES },
-            bindCompressDeps(file),
-          );
+        : await compressImage(file, { targetMaxBytes: MAX_UPLOAD_BYTES }, bindCompressDeps(file));
       const result = await uploadMedia(liveUploadDeps, {
         file: compressed,
         bucket: 'avatars',
@@ -133,9 +126,7 @@ export function HeroEditCard({ bundle, supabaseUserId, onMutate }: HeroEditCardP
 
       {/* Portrait */}
       <fieldset className="flex flex-col gap-3">
-        <legend className="text-xs uppercase tracking-wider text-text-muted">
-          Foto principal
-        </legend>
+        <legend className="text-xs uppercase tracking-wider text-text-muted">Foto principal</legend>
         <Dropzone
           accept={RASTER_ACCEPT}
           uploading={portraitState.uploading}
@@ -198,26 +189,20 @@ export function HeroEditCard({ bundle, supabaseUserId, onMutate }: HeroEditCardP
 
       {/* Tagline */}
       <label className="flex flex-col gap-2">
-        <span className="text-xs uppercase tracking-wider text-text-muted">
-          Tagline (PT-BR)
-        </span>
+        <span className="text-xs uppercase tracking-wider text-text-muted">Tagline (PT-BR)</span>
         <input
           value={tagline}
           maxLength={140}
           onChange={(e) => onMutate('content', { tagline: e.target.value })}
           className="h-10 border border-border bg-bg px-3 text-sm outline-none focus:border-accent"
         />
-        <span className="text-xs text-text-muted">
-          {140 - tagline.length} caracteres restantes
-        </span>
+        <span className="text-xs text-text-muted">{140 - tagline.length} caracteres restantes</span>
       </label>
 
       {/* CTA */}
       <div className="grid gap-3 md:grid-cols-2">
         <label className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-wider text-text-muted">
-            Botão principal
-          </span>
+          <span className="text-xs uppercase tracking-wider text-text-muted">Botão principal</span>
           <select
             value={ctaPreset}
             onChange={(e) => onCtaPresetChange(e.target.value)}
@@ -241,9 +226,7 @@ export function HeroEditCard({ bundle, supabaseUserId, onMutate }: HeroEditCardP
         </label>
 
         <label className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-wider text-text-muted">
-            URL ou contato
-          </span>
+          <span className="text-xs uppercase tracking-wider text-text-muted">URL ou contato</span>
           <input
             value={ctaUrl}
             placeholder="https://wa.me/55... · mailto:press@... · https://..."
@@ -262,9 +245,7 @@ export function HeroEditCard({ bundle, supabaseUserId, onMutate }: HeroEditCardP
 
       {/* Hero style */}
       <fieldset>
-        <legend className="text-xs uppercase tracking-wider text-text-muted">
-          Estilo do hero
-        </legend>
+        <legend className="text-xs uppercase tracking-wider text-text-muted">Estilo do hero</legend>
         <div role="radiogroup" className="mt-3 grid gap-2 md:grid-cols-3">
           {HERO_STYLES.map((style) => {
             const checked = heroStyle === style.value;

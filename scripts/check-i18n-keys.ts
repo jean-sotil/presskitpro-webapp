@@ -110,16 +110,11 @@ async function main(): Promise<void> {
   const result = diffMessageKeys({ reference, locales });
   if (result.ok) {
     const counts = Object.fromEntries(
-      Object.entries(locales).map(([loc, cat]) => [
-        loc,
-        collectKeys(cat).length,
-      ]),
+      Object.entries(locales).map(([loc, cat]) => [loc, collectKeys(cat).length]),
     );
     const refCount = collectKeys(reference).length;
     console.log(
-      `[i18n:check] OK — ${REFERENCE_LOCALE}=${refCount} keys; ${Object.entries(
-        counts,
-      )
+      `[i18n:check] OK — ${REFERENCE_LOCALE}=${refCount} keys; ${Object.entries(counts)
         .map(([l, n]) => `${l}=${n}`)
         .join(', ')}.`,
     );
@@ -129,15 +124,12 @@ async function main(): Promise<void> {
     const verb = p.kind === 'missing' ? 'MISSING' : 'EXTRA  ';
     console.error(`[i18n:check] ${verb} ${p.locale}: ${p.key}`);
   }
-  console.error(
-    `[i18n:check] FAIL — ${result.problems.length} key parity violation(s).`,
-  );
+  console.error(`[i18n:check] FAIL — ${result.problems.length} key parity violation(s).`);
   process.exit(1);
 }
 
 const invokedDirectly =
-  !!process.argv[1] &&
-  fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
+  !!process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
 
 if (invokedDirectly) {
   void main();

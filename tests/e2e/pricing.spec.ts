@@ -10,9 +10,7 @@ test.describe('Pricing page', () => {
     page,
   }) => {
     await page.goto('/pricing');
-    await expect(
-      page.getByRole('heading', { level: 1, name: /comece grátis/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /comece grátis/i })).toBeVisible();
 
     // Three tier cards.
     await expect(page.getByRole('heading', { level: 2, name: /^trial$/i })).toBeVisible();
@@ -21,10 +19,7 @@ test.describe('Pricing page', () => {
 
     // Pro CTA, logged-out → /login?next=/checkout/pro-monthly.
     const proCta = page.getByRole('link', { name: /continuar com pro/i });
-    await expect(proCta).toHaveAttribute(
-      'href',
-      '/login?next=%2Fcheckout%2Fpro-monthly',
-    );
+    await expect(proCta).toHaveAttribute('href', '/login?next=%2Fcheckout%2Fpro-monthly');
 
     // Trial CTA always points to /signup.
     await expect(page.getByRole('link', { name: /começar grátis/i })).toHaveAttribute(
@@ -33,9 +28,7 @@ test.describe('Pricing page', () => {
     );
 
     // FAQ accordion.
-    const firstFaq = page
-      .getByText(/posso cancelar a qualquer momento/i)
-      .first();
+    const firstFaq = page.getByText(/posso cancelar a qualquer momento/i).first();
     await expect(firstFaq).toBeVisible();
   });
 

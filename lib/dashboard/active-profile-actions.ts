@@ -15,9 +15,7 @@ const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
  * SameSite, root path, 1 year. No HttpOnly: server-only access via
  * Next's `cookies()` API; client never reads it.
  */
-export async function setActiveProfileAction(
-  profileId: number | string,
-): Promise<void> {
+export async function setActiveProfileAction(profileId: number | string): Promise<void> {
   const id = String(profileId);
   if (!id) return;
   const store = await cookies();

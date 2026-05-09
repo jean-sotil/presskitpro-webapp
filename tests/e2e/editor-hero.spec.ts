@@ -31,9 +31,9 @@ test.describe('Hero editor full ladder @full', () => {
 
     // Save status flips pending → idle within 10s.
     await expect(page.locator('[role="status"]', { hasText: /salvando/i })).toBeVisible();
-    await expect(
-      page.locator('[role="status"]', { hasText: /salvo/i }),
-    ).toBeVisible({ timeout: 10_000 });
+    await expect(page.locator('[role="status"]', { hasText: /salvo/i })).toBeVisible({
+      timeout: 10_000,
+    });
   });
 
   test('CTA url validation flags an invalid value inline', async ({ page }) => {
@@ -47,8 +47,6 @@ test.describe('Hero editor full ladder @full', () => {
     const profileId = process.env.EDITOR_E2E_PROFILE_ID!;
     await page.goto(`/dashboard/profile/${profileId}`);
     await page.getByLabel(/url ou contato/i).fill('javascript:alert(1)');
-    await expect(
-      page.locator('[role="alert"]', { hasText: /url precisa começar/i }),
-    ).toBeVisible();
+    await expect(page.locator('[role="alert"]', { hasText: /url precisa começar/i })).toBeVisible();
   });
 });

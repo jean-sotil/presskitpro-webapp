@@ -21,21 +21,14 @@ export type StartTrialTimerDeps = {
   findUserById: (
     id: number | string,
   ) => Promise<{ id: number | string; trialEndsAt: string | null } | null>;
-  updateUser: (
-    id: number | string,
-    patch: { trialEndsAt: string },
-  ) => Promise<void>;
+  updateUser: (id: number | string, patch: { trialEndsAt: string }) => Promise<void>;
 };
 
-export async function handleStartTrialTimer(
-  args: Args,
-  deps: StartTrialTimerDeps,
-): Promise<void> {
+export async function handleStartTrialTimer(args: Args, deps: StartTrialTimerDeps): Promise<void> {
   if (args.operation !== 'create') return;
   const ownerRef = args.doc?.owner;
   if (ownerRef === undefined || ownerRef === null) return;
-  const ownerId =
-    typeof ownerRef === 'object' && ownerRef !== null ? ownerRef.id : ownerRef;
+  const ownerId = typeof ownerRef === 'object' && ownerRef !== null ? ownerRef.id : ownerRef;
 
   const owner = await deps.findUserById(ownerId);
   if (!owner) return;

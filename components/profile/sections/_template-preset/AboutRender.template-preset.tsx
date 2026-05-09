@@ -23,7 +23,7 @@ import { isEmptyLexicalState } from '@/lib/editor/rich-text/is-empty';
  *   - Return null if no content exists
  *   - Use `<RichTextRender>` to render the bio Lexical state
  */
-export function Bio_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
+export function About_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.about');
   const tagline = (bundle.content?.tagline as string | undefined) ?? null;
   const bio = (bundle.content?.bio as never) ?? null;
@@ -32,10 +32,7 @@ export function Bio_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   if (!tagline && !hasBio) return null;
 
   return (
-    <section
-      id="sobre"
-      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
-    >
+    <section id="sobre" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
       <div className="mx-auto max-w-3xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           01 — {t('label')}
@@ -47,9 +44,7 @@ export function Bio_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
           {t('heading')}
         </h2>
         {tagline ? (
-          <p className="mt-6 max-w-prose text-base leading-relaxed text-text">
-            {tagline}
-          </p>
+          <p className="mt-6 max-w-prose text-base leading-relaxed text-text">{tagline}</p>
         ) : null}
         {hasBio ? (
           <RichTextRender

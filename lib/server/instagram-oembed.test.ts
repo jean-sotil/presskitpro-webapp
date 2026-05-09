@@ -34,9 +34,7 @@ describe('fetchInstagramOembed', () => {
       if (result.ok) {
         expect(result.oembedHtml).toContain('class="instagram-media"');
         expect(result.oembedHtml).toContain(POST_URL);
-        expect(result.fetchedAt).toBe(
-          new Date(1_700_000_000_000).toISOString(),
-        );
+        expect(result.fetchedAt).toBe(new Date(1_700_000_000_000).toISOString());
         expect(result.source).toBe('blockquote-fallback');
       }
       expect(fetchMock).not.toHaveBeenCalled();
@@ -90,9 +88,7 @@ describe('fetchInstagramOembed', () => {
     });
 
     it('falls back when the graph response is malformed', async () => {
-      const fetchMock = vi.fn(async () =>
-        jsonResponse({ author_name: 'no html field' }),
-      );
+      const fetchMock = vi.fn(async () => jsonResponse({ author_name: 'no html field' }));
       const result = await fetchInstagramOembed({
         url: POST_URL,
         fetch: fetchMock,

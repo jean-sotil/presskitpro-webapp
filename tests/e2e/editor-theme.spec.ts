@@ -22,9 +22,7 @@ test.describe('Theme tab full ladder @full', () => {
     await page.goto(`/dashboard/profile/${profileId}`);
 
     await page.getByRole('tab', { name: /tema/i }).click();
-    await expect(
-      page.getByRole('heading', { name: /cores, tipografia e layout/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /cores, tipografia e layout/i })).toBeVisible();
 
     await page.getByRole('button', { name: /^paper white$/i }).click();
     await page.getByRole('button', { name: /^cobalt$/i }).click();

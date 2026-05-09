@@ -19,9 +19,8 @@ export function PausedTemplate({ slug }: { slug: string }) {
           Este press kit está em pausa.
         </h1>
         <p className="mt-8 max-w-xl text-lg text-text-muted">
-          O artista responsável por <strong>presskit.pro/{slug}</strong> ainda
-          não retomou a assinatura. Volte em breve — a página estará no ar
-          assim que o plano for reativado.
+          O artista responsável por <strong>presskit.pro/{slug}</strong> ainda não retomou a
+          assinatura. Volte em breve — a página estará no ar assim que o plano for reativado.
         </p>
         <p className="mt-6 max-w-xl text-base text-text-muted">
           É você o dono deste perfil?{' '}

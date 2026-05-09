@@ -23,8 +23,6 @@ export default async function OnboardingRoot() {
     limit: 1,
     depth: 0,
   });
-  const progress = (result.docs[0]?.onboardingProgress ?? null) as
-    | OnboardingProgress
-    | null;
+  const progress = (result.docs[0]?.onboardingProgress ?? null) as OnboardingProgress | null;
   redirect(`/onboarding/${resumeStep(progress)}`);
 }

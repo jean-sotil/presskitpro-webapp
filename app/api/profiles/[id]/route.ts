@@ -21,10 +21,7 @@ const PATCHABLE_FIELDS = new Set([
   'contactFormDestination',
 ]);
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const profileId = parseProfileId(id);
   if (profileId === null) {

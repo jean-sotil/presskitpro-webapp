@@ -22,9 +22,7 @@ test.describe('Press kit full ladder @full', () => {
     const profileId = process.env.EDITOR_E2E_PROFILE_ID!;
     await page.goto(`/dashboard/profile/${profileId}`);
     await page.getByRole('button', { name: 'Press kit' }).click();
-    await expect(
-      page.getByRole('heading', { level: 2, name: /^press kit$/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: /^press kit$/i })).toBeVisible();
 
     // Bad URL → inline error, no save.
     const input = page.getByLabel(/url do press kit/i);

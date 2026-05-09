@@ -35,17 +35,18 @@ export function buildProfileMetadata(
     defaultLocale?: string;
     localesAvailable?: string[];
   };
-  const content = bundle.content as
-    | { metaTitle?: string; metaDescription?: string; tagline?: string }
-    | null;
+  const content = bundle.content as {
+    metaTitle?: string;
+    metaDescription?: string;
+    tagline?: string;
+  } | null;
 
   const cleanOrigin = origin.replace(/\/$/, '');
   const canonical = `${cleanOrigin}/${profile.slug}`;
   const displayName = displayFromSlug(profile.slug);
   const titleSuffix = options.titleSuffix ?? 'Press Kit & EPK';
   const title = content?.metaTitle?.trim() || `${displayName} — ${titleSuffix}`;
-  const description =
-    content?.metaDescription?.trim() || content?.tagline?.trim() || undefined;
+  const description = content?.metaDescription?.trim() || content?.tagline?.trim() || undefined;
   const image = options.imageUrl;
 
   const locales = profile.localesAvailable ?? [profile.defaultLocale ?? 'pt-BR'];

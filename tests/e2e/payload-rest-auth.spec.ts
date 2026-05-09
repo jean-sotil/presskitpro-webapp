@@ -50,7 +50,7 @@ test.describe('Payload REST auth — cross-user @full', () => {
     'Set E2E_USER_A_COOKIE / E2E_USER_B_COOKIE (Supabase sessions for two seeded demo users) to run.',
   );
 
-  test('403 — user A cannot read user B\'s row', async ({ request }) => {
+  test("403 — user A cannot read user B's row", async ({ request }) => {
     const userA = process.env.E2E_USER_A_COOKIE!;
     const userBId = process.env.E2E_USER_B_ID!;
     const res = await request.get(`/api/users/${userBId}`, {
@@ -70,7 +70,7 @@ test.describe('Payload REST auth — cross-user @full', () => {
     expect(body.id).toBe(Number(userAId));
   });
 
-  test('403 — user A cannot update user B\'s profile', async ({ request }) => {
+  test("403 — user A cannot update user B's profile", async ({ request }) => {
     const userA = process.env.E2E_USER_A_COOKIE!;
     const userBProfileId = process.env.E2E_USER_B_PROFILE_ID!;
     const res = await request.patch(`/api/profiles/${userBProfileId}`, {

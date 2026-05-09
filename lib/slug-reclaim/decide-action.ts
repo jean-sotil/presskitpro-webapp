@@ -47,11 +47,7 @@ export function decideReclaimAction(input: DecideInput): ReclaimAction {
     return elapsed >= SOFT_RELEASE_TO_FINALIZE_GAP_MS ? 'finalize' : 'skip';
   }
 
-  const lastActivity = mostRecent([
-    input.profile.updatedAt,
-    input.lastSignInAt,
-    input.lastEventAt,
-  ]);
+  const lastActivity = mostRecent([input.profile.updatedAt, input.lastSignInAt, input.lastEventAt]);
   const daysSinceActivity = daysBetween(input.now, lastActivity);
 
   if (daysSinceActivity < WARN_AT_DAYS) return 'skip';
@@ -60,8 +56,7 @@ export function decideReclaimAction(input: DecideInput): ReclaimAction {
   if (
     daysSinceActivity >= RELEASE_AT_DAYS &&
     input.profile.slugReclaimWarningAt &&
-    input.now.getTime() - input.profile.slugReclaimWarningAt.getTime() >=
-      WARN_TO_RELEASE_GAP_MS
+    input.now.getTime() - input.profile.slugReclaimWarningAt.getTime() >= WARN_TO_RELEASE_GAP_MS
   ) {
     return 'release';
   }
@@ -69,8 +64,7 @@ export function decideReclaimAction(input: DecideInput): ReclaimAction {
   // No warning yet → send one. (If a warning was sent within the last
   // 7 days, we wait — the warn-to-release gap protects against re-warns.)
   if (input.profile.slugReclaimWarningAt) {
-    const sinceWarn =
-      input.now.getTime() - input.profile.slugReclaimWarningAt.getTime();
+    const sinceWarn = input.now.getTime() - input.profile.slugReclaimWarningAt.getTime();
     if (sinceWarn < WARN_TO_RELEASE_GAP_MS) return 'skip';
   }
   return 'warn';

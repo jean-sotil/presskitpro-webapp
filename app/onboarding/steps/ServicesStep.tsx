@@ -14,10 +14,7 @@ export interface ServicesStepProps {
   initialCustom?: string[];
 }
 
-export function ServicesStep({
-  initialSelected = [],
-  initialCustom = [],
-}: ServicesStepProps) {
+export function ServicesStep({ initialSelected = [], initialCustom = [] }: ServicesStepProps) {
   const router = useRouter();
   const [selected, setSelected] = useState<string[]>(initialSelected);
   const [customs, setCustoms] = useState<string[]>(initialCustom);
@@ -115,9 +112,7 @@ export function ServicesStep({
 
       <div className="flex items-end gap-2">
         <label className="flex flex-1 flex-col gap-1">
-          <span className="text-xs uppercase tracking-wider text-text-muted">
-            Adicionar outro
-          </span>
+          <span className="text-xs uppercase tracking-wider text-text-muted">Adicionar outro</span>
           <input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}

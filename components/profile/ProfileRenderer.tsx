@@ -2,17 +2,9 @@ import { Fragment } from 'react';
 
 import { deriveThemeTokens } from '@/lib/design/derive-theme-tokens';
 import { fontPairCssVars } from '@/lib/design/font-pair-css-vars';
-import {
-  DEFAULT_FONT_PAIR,
-  fontPairs,
-  type FontPairId,
-} from '@/lib/design/tokens';
+import { DEFAULT_FONT_PAIR, fontPairs, type FontPairId } from '@/lib/design/tokens';
 import type { EditorBundle } from '@/lib/editor/bundle';
-import {
-  DEFAULT_SECTION_ORDER,
-  mergeOrder,
-  type SectionKey,
-} from '@/lib/editor/section-order';
+import { DEFAULT_SECTION_ORDER, mergeOrder, type SectionKey } from '@/lib/editor/section-order';
 import { getPresetById, type Preset } from '@/lib/presets';
 
 import { Marquee } from './sections/decorations/Marquee';
@@ -89,17 +81,14 @@ export interface ProfileRendererProps {
  * reconciled with the registry defaults.
  */
 export function ProfileRenderer({ bundle, mode: _mode, nonce }: ProfileRendererProps) {
-  const persisted = bundle.theme?.sectionOrder as
-    | Array<{ key: string }>
-    | undefined;
+  const persisted = bundle.theme?.sectionOrder as Array<{ key: string }> | undefined;
   const order = mergeOrder(
     persisted?.map((entry) => entry.key as SectionKey) ?? [...DEFAULT_SECTION_ORDER],
   );
 
   // Task-35 — resolve the active preset (null = legacy row, falls back
   // to Themes.heroStyle/galleryLayout via each section's own logic).
-  const presetId = (bundle.theme as { presetId?: string | null } | null)
-    ?.presetId;
+  const presetId = (bundle.theme as { presetId?: string | null } | null)?.presetId;
   const preset = getPresetById(presetId ?? null);
   const marquee = preset?.decorations?.marquee ?? null;
 
@@ -110,11 +99,8 @@ export function ProfileRenderer({ bundle, mode: _mode, nonce }: ProfileRendererP
   // values must be bare OKLCH triplets ("L C H") — not hex.
   const scopeId = `pp-${String(bundle.profile.id ?? 'preview')}`;
 
-  const rawFontPairId = (bundle.theme as { fontPairId?: string } | null)
-    ?.fontPairId;
-  const fontPairId: FontPairId = (
-    fontPairs as readonly string[]
-  ).includes(rawFontPairId ?? '')
+  const rawFontPairId = (bundle.theme as { fontPairId?: string } | null)?.fontPairId;
+  const fontPairId: FontPairId = (fontPairs as readonly string[]).includes(rawFontPairId ?? '')
     ? (rawFontPairId as FontPairId)
     : DEFAULT_FONT_PAIR;
   const fontVars = fontPairCssVars[fontPairId];
@@ -133,23 +119,25 @@ ${fontDecls}
   const filmGrain = preset?.decorations?.filmGrain === true;
   const electricFire = preset?.decorations?.electricFire === true;
   const circuitBoard = preset?.decorations?.circuitBoard === true;
+  const deadSignalBg = preset?.decorations?.deadSignalBg === true;
 
   return (
     <>
-      <style data-theme-scope={scopeId} nonce={nonce}>{themeCss}</style>
+      <style data-theme-scope={scopeId} nonce={nonce}>
+        {themeCss}
+      </style>
       <article
         data-theme-scope={scopeId}
         data-preset-grain={filmGrain ? 'true' : undefined}
         data-preset-electric-fire={electricFire ? 'true' : undefined}
         data-preset-circuit-board={circuitBoard ? 'true' : undefined}
+        data-preset-dead-signal-bg={deadSignalBg ? 'true' : undefined}
         className="bg-bg text-text"
       >
         {order.map((key) => (
           <Fragment key={key}>
             {renderSection(key, bundle, preset)}
-            {key === 'hero' && marquee ? (
-              <Marquee bundle={bundle} source={marquee.source} />
-            ) : null}
+            {key === 'hero' && marquee ? <Marquee bundle={bundle} source={marquee.source} /> : null}
           </Fragment>
         ))}
       </article>

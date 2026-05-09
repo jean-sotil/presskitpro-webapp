@@ -13,12 +13,10 @@ const baseClasses =
   'inline-flex items-center justify-center font-display uppercase tracking-wider transition-colors duration-quick disabled:opacity-50 disabled:pointer-events-none active:scale-[0.97] motion-reduce:active:scale-100';
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary:
-    'bg-accent text-accent-contrast hover:brightness-110 focus-visible:outline-offset-4',
+  primary: 'bg-accent text-accent-contrast hover:brightness-110 focus-visible:outline-offset-4',
   ghost:
     'bg-transparent text-text border border-border hover:bg-surface focus-visible:outline-offset-2',
-  link:
-    'bg-transparent text-accent underline underline-offset-4 hover:underline-offset-2 px-0 py-0 h-auto',
+  link: 'bg-transparent text-accent underline underline-offset-4 hover:underline-offset-2 px-0 py-0 h-auto',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

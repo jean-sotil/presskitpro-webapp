@@ -31,9 +31,7 @@ type InstagramPostRow = {
  */
 export function InstagramFeed_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   const raw = (bundle.instagramPosts ?? []) as unknown as InstagramPostRow[];
-  const posts = [...raw].sort(
-    (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
-  );
+  const posts = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
 
   if (posts.length === 0) return null;
 

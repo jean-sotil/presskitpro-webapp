@@ -7,14 +7,9 @@
  * at the edges, never doubled, length 2..30.
  */
 
-export type ValidationReason =
-  | 'too-short'
-  | 'too-long'
-  | 'invalid-chars';
+export type ValidationReason = 'too-short' | 'too-long' | 'invalid-chars';
 
-export type ValidationResult =
-  | { ok: true }
-  | { ok: false; reason: ValidationReason };
+export type ValidationResult = { ok: true } | { ok: false; reason: ValidationReason };
 
 const MIN_LEN = 2;
 const MAX_LEN = 30;

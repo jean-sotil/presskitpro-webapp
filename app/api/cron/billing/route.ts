@@ -19,10 +19,7 @@ const TWO_DAYS_MS = 2 * 24 * 60 * 60 * 1000;
 export async function POST(req: Request) {
   const expected = process.env.CRON_SECRET;
   if (!expected) {
-    return NextResponse.json(
-      { error: 'cron not configured' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'cron not configured' }, { status: 500 });
   }
 
   const auth = req.headers.get('authorization') ?? '';
@@ -63,7 +60,7 @@ export async function POST(req: Request) {
           trialEndsAt:
             typeof doc.trialEndsAt === 'string'
               ? doc.trialEndsAt
-              : (doc.trialEndsAt as Date | null)?.toISOString() ?? new Date(0).toISOString(),
+              : ((doc.trialEndsAt as Date | null)?.toISOString() ?? new Date(0).toISOString()),
         }));
       },
       findReminderCandidates: async (n) => {
@@ -94,7 +91,7 @@ export async function POST(req: Request) {
           trialEndsAt:
             typeof doc.trialEndsAt === 'string'
               ? doc.trialEndsAt
-              : (doc.trialEndsAt as Date | null)?.toISOString() ?? new Date(0).toISOString(),
+              : ((doc.trialEndsAt as Date | null)?.toISOString() ?? new Date(0).toISOString()),
         }));
       },
       pauseUserProfiles: async (userId) => {

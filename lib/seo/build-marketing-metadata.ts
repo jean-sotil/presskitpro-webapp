@@ -44,15 +44,11 @@ export interface BuildMarketingMetadataInput {
  * same canonical URL. Same-URL hreflang is valid per Google when the
  * server respects `Vary` headers — middleware does (task-29 PR-B).
  */
-export function buildMarketingMetadata(
-  input: BuildMarketingMetadataInput,
-): Metadata {
+export function buildMarketingMetadata(input: BuildMarketingMetadataInput): Metadata {
   const cleanOrigin = input.origin.replace(/\/$/, '');
   const url = `${cleanOrigin}${input.path}`;
   const imagePath = input.imagePath ?? '/og-image.png';
-  const fullImage = imagePath.startsWith('http')
-    ? imagePath
-    : `${cleanOrigin}${imagePath}`;
+  const fullImage = imagePath.startsWith('http') ? imagePath : `${cleanOrigin}${imagePath}`;
 
   const languages: Record<string, string> = {};
   for (const loc of SUPPORTED_LOCALES) {
@@ -60,9 +56,9 @@ export function buildMarketingMetadata(
   }
   languages['x-default'] = url;
 
-  const alternateLocale = SUPPORTED_LOCALES
-    .filter((l) => l !== input.locale)
-    .map((l) => OG_LOCALES[l]);
+  const alternateLocale = SUPPORTED_LOCALES.filter((l) => l !== input.locale).map(
+    (l) => OG_LOCALES[l],
+  );
 
   const brandedTitle = `${input.title} | ${BRAND_SUFFIX}`;
 

@@ -36,9 +36,7 @@ export type OembedDeps = {
   abortSignal?: AbortSignal;
 };
 
-export async function fetchSoundcloudOembed(
-  deps: OembedDeps,
-): Promise<OembedResult> {
+export async function fetchSoundcloudOembed(deps: OembedDeps): Promise<OembedResult> {
   const fetchFn = deps.fetch ?? globalThis.fetch;
   const now = deps.now ?? Date.now;
 
@@ -53,10 +51,7 @@ export async function fetchSoundcloudOembed(
   }
   // Accept the bare domain or any subdomain (m.soundcloud.com,
   // soundcloud.com — but not foo.soundcloud.evil.com).
-  if (
-    parsed.host !== 'soundcloud.com' &&
-    !parsed.host.endsWith('.soundcloud.com')
-  ) {
+  if (parsed.host !== 'soundcloud.com' && !parsed.host.endsWith('.soundcloud.com')) {
     return { ok: false, reason: 'invalid-host' };
   }
 

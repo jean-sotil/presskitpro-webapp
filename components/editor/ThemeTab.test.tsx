@@ -43,25 +43,16 @@ describe('ThemeTab', () => {
   });
 
   it('marks the active bg preset with aria-pressed', () => {
-    render(
-      <ThemeTab
-        bundle={makeBundle({ colorPresetId: 'paper-white' })}
-        onMutate={vi.fn()}
-      />,
+    render(<ThemeTab bundle={makeBundle({ colorPresetId: 'paper-white' })} onMutate={vi.fn()} />);
+    expect(screen.getByRole('button', { name: /paper white/i })).toHaveAttribute(
+      'aria-pressed',
+      'true',
     );
-    expect(
-      screen.getByRole('button', { name: /paper white/i }),
-    ).toHaveAttribute('aria-pressed', 'true');
   });
 
   it('clears bg hex override when a preset is selected', () => {
     const onMutate = vi.fn();
-    render(
-      <ThemeTab
-        bundle={makeBundle({ bg: '#ababab' })}
-        onMutate={onMutate}
-      />,
-    );
+    render(<ThemeTab bundle={makeBundle({ bg: '#ababab' })} onMutate={onMutate} />);
     fireEvent.click(screen.getByRole('button', { name: /paper white/i }));
     expect(onMutate).toHaveBeenCalledWith('theme', {
       colorPresetId: 'paper-white',
@@ -77,12 +68,7 @@ describe('ThemeTab', () => {
   });
 
   it('surfaces a contrast failure when text/bg is too low', () => {
-    render(
-      <ThemeTab
-        bundle={makeBundle({ bg: '#ffffff', text: '#cccccc' })}
-        onMutate={vi.fn()}
-      />,
-    );
+    render(<ThemeTab bundle={makeBundle({ bg: '#ffffff', text: '#cccccc' })} onMutate={vi.fn()} />);
     const banner = screen.getByRole('alert');
     expect(banner).toHaveTextContent(/contraste insuficiente/i);
   });

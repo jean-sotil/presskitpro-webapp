@@ -79,9 +79,7 @@ export async function recordSlugChange(
   supabase: SupabaseClient,
   args: { oldSlug: string; newSlug: string },
 ): Promise<void> {
-  const expiresAt = new Date(
-    Date.now() + REDIRECT_TTL_DAYS * 24 * 60 * 60 * 1000,
-  ).toISOString();
+  const expiresAt = new Date(Date.now() + REDIRECT_TTL_DAYS * 24 * 60 * 60 * 1000).toISOString();
 
   // Idempotent: if the same `old_slug` already redirects, refresh its target
   // and TTL. Don't accidentally chain redirects (old → mid → new) — the

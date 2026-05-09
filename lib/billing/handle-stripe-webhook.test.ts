@@ -111,10 +111,13 @@ describe('handleStripeWebhook', () => {
         deps,
       });
       expect(result.kind).toBe('handled');
-      expect(deps.updateUser).toHaveBeenCalledWith(7, expect.objectContaining({
-        plan: 'pro',
-        stripeCustomerId: 'cus_new',
-      }));
+      expect(deps.updateUser).toHaveBeenCalledWith(
+        7,
+        expect.objectContaining({
+          plan: 'pro',
+          stripeCustomerId: 'cus_new',
+        }),
+      );
     });
 
     it('returns `ignored` and logs when no user can be matched (Stripe will retry)', async () => {

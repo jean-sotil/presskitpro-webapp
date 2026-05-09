@@ -38,10 +38,7 @@ export function handleProfileRevalidate(args: Args, deps: Deps = {}): void {
       // is best-effort here — the next public request will populate the
       // cache fresh, so we swallow that specific error and re-throw
       // anything else.
-      if (
-        !(err instanceof Error) ||
-        !err.message.includes('static generation store')
-      ) {
+      if (!(err instanceof Error) || !err.message.includes('static generation store')) {
         throw err;
       }
     }

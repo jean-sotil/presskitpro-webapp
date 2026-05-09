@@ -43,17 +43,17 @@ Each file exports one component. The export name is `<Section><PresetSlug>`
 in PascalCase. For `electric-fire-techno`, `<PresetSlug>` is
 `ElectricFireTechno`:
 
-| File                                 | Export name                       |
-| ------------------------------------ | --------------------------------- |
-| `HeroRender.<id>.tsx`                | `Hero<PresetSlug>`                |
-| `AboutRender.<id>.tsx`               | `About<PresetSlug>`               |
-| `ServicesRender.<id>.tsx`            | `Services<PresetSlug>`            |
-| `PhotoGalleryRender.<id>.tsx`        | `PhotoGallery<PresetSlug>`        |
-| `FeaturedTrackRender.<id>.tsx`       | `FeaturedTrack<PresetSlug>`       |
-| `InstagramFeedRender.<id>.tsx`       | `Instagram<PresetSlug>` *or* `InstagramFeed<PresetSlug>` |
-| `SocialLinksRender.<id>.tsx`         | `SocialLinks<PresetSlug>`         |
-| `PressKitLinkRender.<id>.tsx`        | `PressKitLink<PresetSlug>`        |
-| `ContactRender.<id>.tsx`             | `Contact<PresetSlug>`             |
+| File                           | Export name                                              |
+| ------------------------------ | -------------------------------------------------------- |
+| `HeroRender.<id>.tsx`          | `Hero<PresetSlug>`                                       |
+| `AboutRender.<id>.tsx`         | `About<PresetSlug>`                                      |
+| `ServicesRender.<id>.tsx`      | `Services<PresetSlug>`                                   |
+| `PhotoGalleryRender.<id>.tsx`  | `PhotoGallery<PresetSlug>`                               |
+| `FeaturedTrackRender.<id>.tsx` | `FeaturedTrack<PresetSlug>`                              |
+| `InstagramFeedRender.<id>.tsx` | `Instagram<PresetSlug>` _or_ `InstagramFeed<PresetSlug>` |
+| `SocialLinksRender.<id>.tsx`   | `SocialLinks<PresetSlug>`                                |
+| `PressKitLinkRender.<id>.tsx`  | `PressKitLink<PresetSlug>`                               |
+| `ContactRender.<id>.tsx`       | `Contact<PresetSlug>`                                    |
 
 `Instagram*` vs. `InstagramFeed*` is the only spot where existing
 presets diverge — both forms are used in the registered presets. Pick
@@ -109,6 +109,6 @@ All four bundled presets follow this convention. See:
 - [`../mediakit-pro-v1/`](../mediakit-pro-v1/) — brutalist editorial
   suite (the registry's default for new profiles).
 - [`../festival-club-orange/`](../festival-club-orange/) — light cream
-  + electric orange festival aesthetic.
+  - electric orange festival aesthetic.
 - [`../editorial-nightlife-v1/`](../editorial-nightlife-v1/) — the
   baseline classic look that legacy profiles get backfilled to.

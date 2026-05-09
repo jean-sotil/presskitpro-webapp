@@ -8,9 +8,7 @@ import { expect, test } from '@playwright/test';
  */
 
 test.describe('SEO foundation @full', () => {
-  test('robots.txt disallows the dashboard and points at the sitemap', async ({
-    request,
-  }) => {
+  test('robots.txt disallows the dashboard and points at the sitemap', async ({ request }) => {
     const res = await request.get('/robots.txt');
     expect(res.status()).toBe(200);
     const body = await res.text();

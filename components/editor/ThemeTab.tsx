@@ -4,16 +4,8 @@ import { useMemo, useState } from 'react';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import type { MutationScope } from '@/app/dashboard/profile/[id]/EditorClient';
-import {
-  accentPresets,
-  bgPresets,
-  fontPairs,
-  type FontPairId,
-} from '@/lib/design/tokens';
-import {
-  deriveThemeTokens,
-  type DerivedTokens,
-} from '@/lib/design/derive-theme-tokens';
+import { accentPresets, bgPresets, fontPairs, type FontPairId } from '@/lib/design/tokens';
+import { deriveThemeTokens, type DerivedTokens } from '@/lib/design/derive-theme-tokens';
 import { validateThemeContrast } from '@/lib/design/validate-theme-contrast';
 
 const HERO_STYLES = [
@@ -56,23 +48,20 @@ type ThemeRow = {
 };
 
 export function ThemeTab({ bundle, onMutate }: ThemeTabProps) {
-  const theme = (bundle.theme ?? {}) as ThemeRow;
+  const theme = useMemo(() => (bundle.theme ?? {}) as ThemeRow, [bundle.theme]);
   const tokens = useMemo(() => deriveThemeTokens(theme as never), [theme]);
   const contrast = useMemo(() => validateThemeContrast(tokens), [tokens]);
 
   return (
     <div className="flex flex-col gap-8 border border-border bg-surface p-6">
       <header>
-        <p className="font-display text-xs uppercase tracking-widest text-text-muted">
-          Tema
-        </p>
+        <p className="font-display text-xs uppercase tracking-widest text-text-muted">Tema</p>
         <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">
           Cores, tipografia e layout
         </h2>
         <p className="mt-3 text-sm text-text-muted">
-          Mudanças aparecem no preview em tempo real. Publicar exige
-          contraste WCAG AA — qualquer combinação validada nos últimos
-          30 dias libera o botão de publicar.
+          Mudanças aparecem no preview em tempo real. Publicar exige contraste WCAG AA — qualquer
+          combinação validada nos últimos 30 dias libera o botão de publicar.
         </p>
       </header>
 
@@ -129,21 +118,14 @@ function ContrastIndicator({
         <span className="uppercase tracking-wider text-text-muted">Contraste</span>
         <span>
           text / bg:{' '}
-          <strong
-            className={
-              contrast.failures.includes('text-bg')
-                ? 'text-text'
-                : 'text-text'
-            }
-          >
+          <strong className={contrast.failures.includes('text-bg') ? 'text-text' : 'text-text'}>
             {fmt(contrast.ratios.textBg)}
           </strong>{' '}
           ({contrast.failures.includes('text-bg') ? 'falha · mín. 4.5:1' : 'AA'})
         </span>
         <span>
-          accent / bg:{' '}
-          <strong>{fmt(contrast.ratios.accentBg)}</strong>{' '}
-          ({contrast.failures.includes('accent-bg') ? 'falha · mín. 3:1' : 'AA'})
+          accent / bg: <strong>{fmt(contrast.ratios.accentBg)}</strong> (
+          {contrast.failures.includes('accent-bg') ? 'falha · mín. 3:1' : 'AA'})
         </span>
       </div>
       <div className="flex items-center gap-2 text-xs text-text-muted">
@@ -153,8 +135,8 @@ function ContrastIndicator({
       </div>
       {!contrast.ok ? (
         <p role="alert" className="text-sm text-text">
-          Contraste insuficiente. Ajuste os valores acima ou escolha um
-          preset que cumpra WCAG AA — senão a publicação fica bloqueada.
+          Contraste insuficiente. Ajuste os valores acima ou escolha um preset que cumpra WCAG AA —
+          senão a publicação fica bloqueada.
         </p>
       ) : null}
     </div>
@@ -187,9 +169,7 @@ function BgSection({
 }) {
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="font-display text-xs uppercase tracking-widest text-text-muted">
-        BG (fundo)
-      </h3>
+      <h3 className="font-display text-xs uppercase tracking-widest text-text-muted">BG (fundo)</h3>
       <div className="grid grid-cols-3 gap-2 md:grid-cols-6">
         {bgPresets.map((preset) => (
           <button
@@ -236,9 +216,7 @@ function AccentSection({
 }) {
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="font-display text-xs uppercase tracking-widest text-text-muted">
-        Accent
-      </h3>
+      <h3 className="font-display text-xs uppercase tracking-widest text-text-muted">Accent</h3>
       <div className="grid grid-cols-3 gap-2 md:grid-cols-6">
         {accentPresets.map((preset) => (
           <button
@@ -246,9 +224,7 @@ function AccentSection({
             type="button"
             aria-label={preset.label}
             aria-pressed={active === preset.id}
-            onClick={() =>
-              onMutate('theme', { accentPresetId: preset.id, accent: '' })
-            }
+            onClick={() => onMutate('theme', { accentPresetId: preset.id, accent: '' })}
             className={`flex flex-col items-stretch border bg-bg p-2 text-xs ${
               active === preset.id ? 'border-accent' : 'border-border'
             }`}
@@ -270,9 +246,7 @@ function AccentSection({
       <CustomHexRow
         label="accent"
         value={customHex}
-        onCommit={(hex) =>
-          onMutate('theme', { accentPresetId: '', accent: hex })
-        }
+        onCommit={(hex) => onMutate('theme', { accentPresetId: '', accent: hex })}
       />
     </section>
   );
@@ -291,8 +265,8 @@ function CustomTextSection({
         Text (override)
       </h3>
       <p className="text-xs text-text-muted">
-        Por padrão, a cor do texto é derivada do BG. Defina apenas se quiser
-        forçar um valor específico.
+        Por padrão, a cor do texto é derivada do BG. Defina apenas se quiser forçar um valor
+        específico.
       </p>
       <CustomHexRow
         label="text"
@@ -323,9 +297,7 @@ function CustomHexRow({
 
   return (
     <label className="flex flex-wrap items-center gap-3 text-sm">
-      <span className="text-xs uppercase tracking-wider text-text-muted">
-        {label} (hex)
-      </span>
+      <span className="text-xs uppercase tracking-wider text-text-muted">{label} (hex)</span>
       <input
         type="color"
         value={draft.length === 7 ? draft : '#000000'}
@@ -358,9 +330,7 @@ function FontSection({
 }) {
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="font-display text-xs uppercase tracking-widest text-text-muted">
-        Tipografia
-      </h3>
+      <h3 className="font-display text-xs uppercase tracking-widest text-text-muted">Tipografia</h3>
       <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
         {fontPairs.map((id) => (
           <button

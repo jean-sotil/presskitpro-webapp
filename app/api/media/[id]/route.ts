@@ -13,10 +13,7 @@ const PATCHABLE = new Set(['alt', 'decorative']);
 /** Confirms the user has a path to this Media doc — either as the
  *  `Media.owner` (covers portrait/logo on their own profile) OR as
  *  the gallery-list owner of any profile that references it. */
-async function userOwnsMedia(args: {
-  mediaId: number;
-  userId: number | string;
-}): Promise<boolean> {
+async function userOwnsMedia(args: { mediaId: number; userId: number | string }): Promise<boolean> {
   const p = await getPayloadInstance();
   // Direct ownership.
   const direct = await p.find({
@@ -32,10 +29,7 @@ async function userOwnsMedia(args: {
   const viaGallery = await p.find({
     collection: 'profiles',
     where: {
-      and: [
-        { owner: { equals: args.userId } },
-        { gallery: { in: [args.mediaId] } },
-      ],
+      and: [{ owner: { equals: args.userId } }, { gallery: { in: [args.mediaId] } }],
     },
     limit: 1,
     depth: 0,
@@ -43,10 +37,7 @@ async function userOwnsMedia(args: {
   return viaGallery.totalDocs > 0;
 }
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const mediaId = Number.parseInt(id, 10);
   if (!Number.isInteger(mediaId) || mediaId <= 0) {
@@ -98,10 +89,7 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  _req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const mediaId = Number.parseInt(id, 10);
   if (!Number.isInteger(mediaId) || mediaId <= 0) {

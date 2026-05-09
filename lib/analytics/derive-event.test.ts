@@ -17,7 +17,15 @@ describe('deriveProfileSlugFromPath', () => {
   });
 
   it('returns null for known reserved app paths', () => {
-    for (const p of ['/api/track', '/dashboard', '/login', '/signup', '/onboarding', '/checkout', '/pricing']) {
+    for (const p of [
+      '/api/track',
+      '/dashboard',
+      '/login',
+      '/signup',
+      '/onboarding',
+      '/checkout',
+      '/pricing',
+    ]) {
       expect(deriveProfileSlugFromPath(p)).toBe(null);
     }
   });
@@ -50,9 +58,9 @@ describe('deriveReferrerHost', () => {
   });
 
   it('returns null when the referrer is the same host as the page (self-link)', () => {
-    expect(
-      deriveReferrerHost('https://presskit.pro/marketing', { selfHost: 'presskit.pro' }),
-    ).toBe(null);
+    expect(deriveReferrerHost('https://presskit.pro/marketing', { selfHost: 'presskit.pro' })).toBe(
+      null,
+    );
   });
 });
 

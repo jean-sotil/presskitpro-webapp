@@ -35,18 +35,16 @@ export function PhotoGallery_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle 
   const t = useTranslations('profile.gallery');
   const raw = bundle.profile.gallery as Array<GalleryEntry | number> | undefined;
   const items = Array.isArray(raw)
-    ? raw.filter((entry): entry is GalleryEntry =>
-        typeof entry === 'object' && entry !== null && 'id' in entry,
+    ? raw.filter(
+        (entry): entry is GalleryEntry =>
+          typeof entry === 'object' && entry !== null && 'id' in entry,
       )
     : [];
 
   if (items.length === 0) return null;
 
   return (
-    <section
-      id="galeria"
-      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
-    >
+    <section id="galeria" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
       <div className="mx-auto max-w-6xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           02 — {t('label')}
@@ -61,7 +59,7 @@ export function PhotoGallery_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle 
           {items.map((item) => {
             const src = mediaUrl({ bucket: item.bucket, path: item.path });
             if (!src) return null;
-            const alt = item.decorative ? '' : item.alt ?? '';
+            const alt = item.decorative ? '' : (item.alt ?? '');
             return (
               <li
                 key={item.id}

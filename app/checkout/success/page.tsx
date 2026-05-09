@@ -20,8 +20,8 @@ export default function CheckoutSuccessPage() {
           Pronto. Seu plano está ativo.
         </h1>
         <p className="mt-8 max-w-xl text-lg text-text-muted">
-          O pagamento foi confirmado e o seu press kit segue público sem
-          interrupções. Continue de onde parou.
+          O pagamento foi confirmado e o seu press kit segue público sem interrupções. Continue de
+          onde parou.
         </p>
         <div className="mt-12 flex flex-wrap gap-4">
           <Link

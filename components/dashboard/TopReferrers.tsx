@@ -2,11 +2,7 @@
  * Top-5 referrers across the rollup window. Pre-aggregated by the
  * dashboard page (counts merged across the 14 days, top-5 by total).
  */
-export function TopReferrers({
-  rows,
-}: {
-  rows: Array<{ host: string; count: number }>;
-}) {
+export function TopReferrers({ rows }: { rows: Array<{ host: string; count: number }> }) {
   if (rows.length === 0) {
     return (
       <p className="text-sm text-text-muted">

@@ -13,8 +13,7 @@ export const pricingCopy = {
   hero: {
     eyebrow: 'Planos & preços',
     title: 'Comece grátis. Pague quando converter.',
-    body:
-      'Tudo o que você precisa para um press kit profissional, desde o teste grátis até a conta de agência.',
+    body: 'Tudo o que você precisa para um press kit profissional, desde o teste grátis até a conta de agência.',
   },
   toggle: {
     monthly: 'Mensal',

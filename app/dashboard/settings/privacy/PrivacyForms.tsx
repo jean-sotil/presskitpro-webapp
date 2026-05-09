@@ -3,10 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useActionState, useState, useTransition } from 'react';
 
-import {
-  deleteAccountAction,
-  type DeleteAccountState,
-} from './actions';
+import { deleteAccountAction, type DeleteAccountState } from './actions';
 
 export interface PrivacyFormsProps {
   /** Current user's email; pre-filled placeholder for the typed-email
@@ -41,9 +38,7 @@ export function PrivacyForms({ userEmail }: PrivacyFormsProps) {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <section className="border border-border bg-surface p-6 md:p-8">
-        <h2 className="font-display text-2xl uppercase tracking-tight">
-          {t('export.title')}
-        </h2>
+        <h2 className="font-display text-2xl uppercase tracking-tight">{t('export.title')}</h2>
         <p className="mt-3 text-sm text-text-muted">{t('export.body')}</p>
         <button
           type="button"
@@ -54,24 +49,19 @@ export function PrivacyForms({ userEmail }: PrivacyFormsProps) {
           {t('export.cta')}
         </button>
         {exportQueued ? (
-          <p
-            role="status"
-            className="mt-4 text-xs uppercase tracking-wider text-text-muted"
-          >
+          <p role="status" className="mt-4 text-xs uppercase tracking-wider text-text-muted">
             {t('export.pending')}
           </p>
         ) : null}
       </section>
 
       <section className="border border-border bg-surface p-6 md:p-8">
-        <h2 className="font-display text-2xl uppercase tracking-tight">
-          {t('delete.title')}
-        </h2>
+        <h2 className="font-display text-2xl uppercase tracking-tight">{t('delete.title')}</h2>
         <p className="mt-3 text-sm text-text-muted">{t('delete.body')}</p>
         <button
           type="button"
           onClick={() => setDeleteOpen(true)}
-          className="mt-6 inline-flex h-10 items-center border border-error bg-transparent px-5 text-xs uppercase tracking-wider text-error hover:bg-error hover:text-bg"
+          className="border-error text-error hover:bg-error mt-6 inline-flex h-10 items-center border bg-transparent px-5 text-xs uppercase tracking-wider hover:text-bg"
         >
           {t('delete.cta')}
         </button>
@@ -85,19 +75,11 @@ export function PrivacyForms({ userEmail }: PrivacyFormsProps) {
           className="fixed inset-0 z-50 flex items-center justify-center bg-bg/80 p-4"
         >
           <div className="w-full max-w-md border border-border bg-surface p-6 md:p-8">
-            <h3
-              id="delete-modal-title"
-              className="font-display text-xl uppercase tracking-tight"
-            >
+            <h3 id="delete-modal-title" className="font-display text-xl uppercase tracking-tight">
               {t('delete.confirmTitle')}
             </h3>
-            <p className="mt-3 text-sm text-text-muted">
-              {t('delete.confirmBody')}
-            </p>
-            <form
-              action={deleteFormAction}
-              className="mt-6 flex flex-col gap-3"
-            >
+            <p className="mt-3 text-sm text-text-muted">{t('delete.confirmBody')}</p>
+            <form action={deleteFormAction} className="mt-6 flex flex-col gap-3">
               <label className="flex flex-col gap-1 text-xs uppercase tracking-wider text-text-muted">
                 {t('delete.confirmInputLabel')}
                 <input
@@ -111,7 +93,7 @@ export function PrivacyForms({ userEmail }: PrivacyFormsProps) {
                 />
               </label>
               {!deleteState.ok && deleteState.reason === 'email-mismatch' ? (
-                <p role="alert" className="text-xs text-error">
+                <p role="alert" className="text-error text-xs">
                   {t('delete.errorEmail')}
                 </p>
               ) : null}
@@ -119,7 +101,7 @@ export function PrivacyForms({ userEmail }: PrivacyFormsProps) {
                 <button
                   type="submit"
                   disabled={deletePending || confirmEmail.trim() === ''}
-                  className="inline-flex h-10 items-center border border-error bg-error px-5 text-xs uppercase tracking-wider text-bg disabled:opacity-50"
+                  className="border-error bg-error inline-flex h-10 items-center border px-5 text-xs uppercase tracking-wider text-bg disabled:opacity-50"
                 >
                   {t('delete.confirmDestructive')}
                 </button>

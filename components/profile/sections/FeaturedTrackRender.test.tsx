@@ -13,9 +13,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-function makeBundle(
-  overrides: Partial<{ url: string; oembedHtml: string }>,
-): EditorBundle {
+function makeBundle(overrides: Partial<{ url: string; oembedHtml: string }>): EditorBundle {
   return {
     profile: {
       id: 1,
@@ -44,9 +42,7 @@ function makeBundle(
 
 describe('FeaturedTrackRender', () => {
   it('renders nothing when there is no track', () => {
-    const { container } = render(
-      <FeaturedTrackRender bundle={makeBundle({})} />,
-    );
+    const { container } = render(<FeaturedTrackRender bundle={makeBundle({})} />);
     expect(container).toBeEmptyDOMElement();
   });
 
@@ -67,11 +63,7 @@ describe('FeaturedTrackRender', () => {
   });
 
   it('falls back to a plain link when oembedHtml is missing', () => {
-    render(
-      <FeaturedTrackRender
-        bundle={makeBundle({ url: 'https://soundcloud.com/x/y' })}
-      />,
-    );
+    render(<FeaturedTrackRender bundle={makeBundle({ url: 'https://soundcloud.com/x/y' })} />);
     const link = screen.getByRole('link', { name: /soundcloud\.com/i });
     expect(link).toHaveAttribute('href', 'https://soundcloud.com/x/y');
     expect(link).toHaveAttribute('target', '_blank');

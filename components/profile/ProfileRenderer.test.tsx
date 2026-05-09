@@ -28,9 +28,7 @@ function makeBundle(overrides: Partial<EditorBundle> = {}): EditorBundle {
 describe('ProfileRenderer', () => {
   it('renders the hero from slug alone (other sections silent without data)', async () => {
     await renderAsync(ProfileRenderer({ bundle: makeBundle(), mode: 'preview' }));
-    expect(
-      screen.getByRole('heading', { level: 1, name: /mariana luz/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /mariana luz/i })).toBeInTheDocument();
     // Other sections shouldn't surface H2s when data is missing.
     expect(screen.queryByRole('heading', { level: 2 })).toBeNull();
   });
@@ -48,9 +46,7 @@ describe('ProfileRenderer', () => {
         }),
       }),
     );
-    expect(
-      screen.getByRole('heading', { level: 2, name: /services/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: /services/i })).toBeInTheDocument();
     expect(screen.getByText('DJ Set')).toBeInTheDocument();
   });
 
@@ -70,10 +66,7 @@ describe('ProfileRenderer', () => {
           theme: {
             id: 2,
             profile: 1,
-            sectionOrder: [
-              { key: 'contact' },
-              { key: 'hero' },
-            ],
+            sectionOrder: [{ key: 'contact' }, { key: 'hero' }],
           },
           content: { id: 9, profile: 1, tagline: 'House' },
         }),
@@ -95,12 +88,8 @@ describe('ProfileRenderer', () => {
         }),
       }),
     );
-    expect(
-      screen.getByRole('heading', { level: 1, name: /mariana luz/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 2, name: /about/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /mariana luz/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: /about/i })).toBeInTheDocument();
   });
 
   it('emits data-preset-electric-fire on the article when the active preset opts in', async () => {

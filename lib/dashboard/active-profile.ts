@@ -12,9 +12,7 @@
 export const ACTIVE_PROFILE_COOKIE_NAME = 'pkp_active_profile';
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
-export function parseActiveProfileCookie(
-  cookieHeader: string | null | undefined,
-): string | null {
+export function parseActiveProfileCookie(cookieHeader: string | null | undefined): string | null {
   if (!cookieHeader) return null;
   const prefix = `${ACTIVE_PROFILE_COOKIE_NAME}=`;
   for (const raw of cookieHeader.split(';')) {
@@ -29,12 +27,7 @@ export function parseActiveProfileCookie(
 
 export function serializeActiveProfileCookie(profileId: string): string {
   if (!profileId) {
-    return [
-      `${ACTIVE_PROFILE_COOKIE_NAME}=`,
-      'Path=/',
-      'Max-Age=0',
-      'SameSite=Lax',
-    ].join('; ');
+    return [`${ACTIVE_PROFILE_COOKIE_NAME}=`, 'Path=/', 'Max-Age=0', 'SameSite=Lax'].join('; ');
   }
   return [
     `${ACTIVE_PROFILE_COOKIE_NAME}=${profileId}`,

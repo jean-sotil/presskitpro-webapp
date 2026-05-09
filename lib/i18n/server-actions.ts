@@ -3,11 +3,7 @@
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 
-import {
-  LOCALE_COOKIE_NAME,
-  isSupportedLocale,
-  type SupportedLocale,
-} from './locale';
+import { LOCALE_COOKIE_NAME, isSupportedLocale, type SupportedLocale } from './locale';
 
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 

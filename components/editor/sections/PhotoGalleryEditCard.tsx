@@ -19,32 +19,17 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 
 import { Button } from '@/components/ui/Button';
 import { PublishDialog } from '@/components/editor/PublishDialog';
-import {
-  GALLERY_HARD_CAP,
-  GALLERY_SOFT_CAP,
-  validateGallery,
-} from '@/lib/editor/gallery-validate';
-import {
-  bindCompressDeps,
-  compressImage,
-} from '@/lib/editor/image-compress';
+import { GALLERY_HARD_CAP, GALLERY_SOFT_CAP, validateGallery } from '@/lib/editor/gallery-validate';
+import { bindCompressDeps, compressImage } from '@/lib/editor/image-compress';
 import { MAX_UPLOAD_BYTES, liveUploadDeps, uploadMedia } from '@/lib/editor/media-upload';
 import { runParallel } from '@/lib/editor/parallel-upload';
 import { humanizeUploadError } from '@/lib/editor/upload-error-message';
-import {
-  type UploadPhase,
-} from '@/lib/editor/upload-phase';
+import { type UploadPhase } from '@/lib/editor/upload-phase';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import type { MutationScope } from '@/app/dashboard/profile/[id]/EditorClient';
 
-import {
-  GalleryItem,
-  type GalleryEditItem,
-} from '../gallery/GalleryItem';
-import {
-  UploadQueue,
-  type QueueRow,
-} from '../gallery/UploadQueue';
+import { GalleryItem, type GalleryEditItem } from '../gallery/GalleryItem';
+import { UploadQueue, type QueueRow } from '../gallery/UploadQueue';
 
 const ACCEPT = 'image/jpeg,image/png,image/webp,image/avif';
 
@@ -81,10 +66,7 @@ export function PhotoGalleryEditCard({
 }: PhotoGalleryEditCardProps) {
   const qc = useQueryClient();
   const profileId = bundle.profile.id;
-  const items = useMemo(
-    () => normalizeGallery(bundle.profile.gallery),
-    [bundle.profile.gallery],
-  );
+  const items = useMemo(() => normalizeGallery(bundle.profile.gallery), [bundle.profile.gallery]);
 
   const patchGalleryItemInCache = useCallback(
     (id: number, patch: Partial<GalleryEditItem>) => {
@@ -132,9 +114,7 @@ export function PhotoGalleryEditCard({
   const validation = validateGallery(items);
 
   function setQueuePhase(rowId: string, phase: UploadPhase, errorMessage?: string) {
-    setQueue((rows) =>
-      rows.map((r) => (r.id === rowId ? { ...r, phase, errorMessage } : r)),
-    );
+    setQueue((rows) => rows.map((r) => (r.id === rowId ? { ...r, phase, errorMessage } : r)));
   }
 
   function handleFiles(files: FileList | File[]) {
@@ -142,9 +122,7 @@ export function PhotoGalleryEditCard({
     if (list.length === 0) return;
     if (items.length + list.length > GALLERY_HARD_CAP) {
       // eslint-disable-next-line no-alert
-      window.alert(
-        `Limite de ${GALLERY_HARD_CAP} fotos. Remova algumas antes de enviar mais.`,
-      );
+      window.alert(`Limite de ${GALLERY_HARD_CAP} fotos. Remova algumas antes de enviar mais.`);
       return;
     }
 
@@ -247,9 +225,7 @@ export function PhotoGalleryEditCard({
     onMutate('profile', {
       gallery: items.filter((it) => !selected.has(it.id)).map((it) => it.id),
     });
-    Promise.all(
-      ids.map((id) => fetch(`/api/media/${id}`, { method: 'DELETE' })),
-    ).catch(() => {});
+    Promise.all(ids.map((id) => fetch(`/api/media/${id}`, { method: 'DELETE' }))).catch(() => {});
     setSelected(new Set());
     setBulkDialogOpen(false);
   }, [items, onMutate, selected]);
@@ -260,15 +236,13 @@ export function PhotoGalleryEditCard({
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
           Editando · Galeria
         </p>
-        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">
-          Galeria de fotos
-        </h2>
+        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">Galeria de fotos</h2>
       </header>
 
       {!validation.ok && validation.reason === 'missing-alt' ? (
         <p role="alert" className="border border-border bg-bg p-3 text-sm text-text">
-          Imagens sem texto alternativo: {validation.indices.map((i) => i + 1).join(', ')}.
-          Preencha ou marque como decorativa.
+          Imagens sem texto alternativo: {validation.indices.map((i) => i + 1).join(', ')}. Preencha
+          ou marque como decorativa.
         </p>
       ) : null}
       {validation.ok && validation.warning === 'soft-cap' ? (
@@ -282,22 +256,12 @@ export function PhotoGalleryEditCard({
         </p>
       ) : null}
 
-      <Dropzone
-        accept={ACCEPT}
-        disabled={items.length >= GALLERY_HARD_CAP}
-        onPick={handleFiles}
-      />
-      <UploadQueue
-        rows={queue}
-        onClear={() => setQueue([])}
-      />
+      <Dropzone accept={ACCEPT} disabled={items.length >= GALLERY_HARD_CAP} onPick={handleFiles} />
+      <UploadQueue rows={queue} onClear={() => setQueue([])} />
 
       {items.length > 0 ? (
         <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-          <SortableContext
-            items={items.map((it) => `g-${it.id}`)}
-            strategy={rectSortingStrategy}
-          >
+          <SortableContext items={items.map((it) => `g-${it.id}`)} strategy={rectSortingStrategy}>
             <ol className="grid grid-cols-2 gap-3 md:grid-cols-3">
               {items.map((item) => (
                 <GalleryItem
@@ -385,8 +349,8 @@ function Dropzone({
         disabled
           ? 'cursor-not-allowed border-border opacity-50'
           : hover
-          ? 'border-accent'
-          : 'border-border hover:border-accent'
+            ? 'border-accent'
+            : 'border-border hover:border-accent'
       }`}
     >
       <span className="font-display text-xs uppercase tracking-wider text-text-muted">

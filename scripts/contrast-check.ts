@@ -69,9 +69,7 @@ function main() {
     process.exit(0);
   }
 
-  console.error(
-    `✗ ${failures.length} of ${totalCombos} preset combos fail WCAG AA:\n`,
-  );
+  console.error(`✗ ${failures.length} of ${totalCombos} preset combos fail WCAG AA:\n`);
   for (const f of failures) {
     console.error(
       `  bg=${f.bg.padEnd(18)} ${f.pair.padEnd(40)} ratio=${f.actual.toFixed(2)} (need ≥ ${f.required})`,

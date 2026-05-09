@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  $getSelection,
-  $isRangeSelection,
-  FORMAT_TEXT_COMMAND,
-  type LexicalEditor,
-} from 'lexical';
+import { $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND, type LexicalEditor } from 'lexical';
 import { $setBlocksType } from '@lexical/selection';
 import { $createHeadingNode } from '@lexical/rich-text';
 import type { HeadingTagType } from '@lexical/rich-text';
@@ -67,7 +62,11 @@ export function Toolbar() {
   }
 
   return (
-    <div role="toolbar" aria-label="Formatação" className="flex flex-wrap gap-1 border-b border-border bg-bg p-2">
+    <div
+      role="toolbar"
+      aria-label="Formatação"
+      className="flex flex-wrap gap-1 border-b border-border bg-bg p-2"
+    >
       {TEXT_BUTTONS.map((btn) => (
         <ToolbarButton key={btn.label} onClick={() => btn.onClick(editor)}>
           {btn.label}
@@ -84,14 +83,10 @@ export function Toolbar() {
       >
         • Lista
       </ToolbarButton>
-      <ToolbarButton
-        onClick={() => editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)}
-      >
+      <ToolbarButton onClick={() => editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)}>
         1. Lista
       </ToolbarButton>
-      <ToolbarButton
-        onClick={() => editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)}
-      >
+      <ToolbarButton onClick={() => editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)}>
         ✕ Lista
       </ToolbarButton>
       <ToolbarButton onClick={insertLink}>Link</ToolbarButton>

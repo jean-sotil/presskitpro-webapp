@@ -18,10 +18,7 @@ export type SendEmailArgs = {
 export async function sendEmail(args: SendEmailArgs): Promise<{ ok: boolean }> {
   const key = process.env.RESEND_API_KEY;
   if (!key) {
-    console.warn(
-      '[email] RESEND_API_KEY unset — message NOT delivered:',
-      args,
-    );
+    console.warn('[email] RESEND_API_KEY unset — message NOT delivered:', args);
     return { ok: true };
   }
   try {

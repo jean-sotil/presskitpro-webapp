@@ -14,11 +14,7 @@ import { getPlan } from '../pricing/plans';
  * annual → monthly issues a credit applied to the next bill.
  */
 
-export type SwitchPlanKey =
-  | 'pro-monthly'
-  | 'pro-annual'
-  | 'agency-monthly'
-  | 'agency-annual';
+export type SwitchPlanKey = 'pro-monthly' | 'pro-annual' | 'agency-monthly' | 'agency-annual';
 
 export type SwitchPlanDeps = {
   findUser(id: number | string): Promise<{
@@ -79,9 +75,7 @@ export async function switchPlan(args: {
   }
 
   try {
-    const subscription = await args.deps.stripe.subscriptions.retrieve(
-      user.stripeSubscriptionId,
-    );
+    const subscription = await args.deps.stripe.subscriptions.retrieve(user.stripeSubscriptionId);
     const itemId = readFirstItemId(subscription);
     if (!itemId) {
       return {
@@ -90,13 +84,10 @@ export async function switchPlan(args: {
         message: 'Subscription has no line items',
       };
     }
-    const updated = await args.deps.stripe.subscriptions.update(
-      user.stripeSubscriptionId,
-      {
-        items: [{ id: itemId, price: priceId }],
-        proration_behavior: 'create_prorations',
-      },
-    );
+    const updated = await args.deps.stripe.subscriptions.update(user.stripeSubscriptionId, {
+      items: [{ id: itemId, price: priceId }],
+      proration_behavior: 'create_prorations',
+    });
     return {
       ok: true,
       subscriptionId: String((updated as { id?: string }).id ?? user.stripeSubscriptionId),
@@ -129,11 +120,7 @@ function resolvePriceForKey(key: SwitchPlanKey): string | 'unknown' | null {
     }
     case 'agency-monthly': {
       const env = getPlan('agency')?.stripePriceIdEnv;
-      return (
-        (env ? process.env[env] : null) ??
-        process.env.STRIPE_PRICE_ID_AGENCY ??
-        null
-      );
+      return (env ? process.env[env] : null) ?? process.env.STRIPE_PRICE_ID_AGENCY ?? null;
     }
     case 'agency-annual': {
       const env = getPlan('agency')?.stripePriceIdAnnualEnv;

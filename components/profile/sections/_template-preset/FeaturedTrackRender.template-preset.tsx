@@ -28,19 +28,14 @@ import { LazyIframe } from '../LazyIframe';
  */
 export function FeaturedTrack_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.featuredTrack');
-  const track = bundle.featuredTrack as
-    | { url?: string; oembedHtml?: string | null }
-    | null;
+  const track = bundle.featuredTrack as { url?: string; oembedHtml?: string | null } | null;
   const url = track?.url ?? null;
   const oembedHtml = track?.oembedHtml ?? null;
 
   if (!url) return null;
 
   return (
-    <section
-      id="faixa"
-      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
-    >
+    <section id="faixa" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
       <div className="mx-auto max-w-3xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           07 — {t('heading')}
@@ -56,12 +51,7 @@ export function FeaturedTrack_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle
             <LazyIframe html={oembedHtml} />
           ) : (
             <p className="break-all p-6 text-center text-sm text-text-muted">
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
+              <a href={url} target="_blank" rel="noopener noreferrer" className="underline">
                 {t('openExternal')} ↗
               </a>
             </p>

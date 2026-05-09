@@ -31,21 +31,17 @@ describe('decideReclaimAction', () => {
   });
 
   it('skips when the profile is in the paused-grace window (90-day handled elsewhere)', () => {
-    expect(
-      decideReclaimAction(
-        base({ profile: { ...base().profile, status: 'paused' } }),
-      ),
-    ).toBe('skip');
+    expect(decideReclaimAction(base({ profile: { ...base().profile, status: 'paused' } }))).toBe(
+      'skip',
+    );
   });
 
   it('skips when the most-recent activity is within 30 days', () => {
     expect(decideReclaimAction(base({ lastSignInAt: days(10) }))).toBe('skip');
     expect(decideReclaimAction(base({ lastEventAt: days(5) }))).toBe('skip');
-    expect(
-      decideReclaimAction(
-        base({ profile: { ...base().profile, updatedAt: days(20) } }),
-      ),
-    ).toBe('skip');
+    expect(decideReclaimAction(base({ profile: { ...base().profile, updatedAt: days(20) } }))).toBe(
+      'skip',
+    );
   });
 
   it('warns at Day-23 when no warning has been sent and inactivity > 23 days', () => {

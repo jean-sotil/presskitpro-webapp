@@ -47,8 +47,7 @@ export async function verifySupabaseSession(
   try {
     const client = factory(url, anonKey, {
       cookies: {
-        getAll: () =>
-          parsed.map(({ name, value }) => ({ name, value })),
+        getAll: () => parsed.map(({ name, value }) => ({ name, value })),
         setAll: (_: { name: string; value: string; options?: CookieOptions }[]) => {
           // Payload strategies don't write response cookies on the auth path —
           // session refresh happens through the Next.js middleware client.

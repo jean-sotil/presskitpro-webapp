@@ -72,9 +72,7 @@ export function HeroEditorialNightlifeV1({ bundle }: { bundle: EditorBundle }) {
         <h1 className="mt-4 font-display text-5xl uppercase tracking-tight md:text-7xl">
           {displayName}
         </h1>
-        {tagline ? (
-          <p className="mt-6 max-w-prose text-lg text-text-muted">{tagline}</p>
-        ) : null}
+        {tagline ? <p className="mt-6 max-w-prose text-lg text-text-muted">{tagline}</p> : null}
         {ctaUrl ? (
           <p className="mt-8">
             <a

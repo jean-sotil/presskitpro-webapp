@@ -2,11 +2,7 @@ import { cookies, headers } from 'next/headers';
 import type { AbstractIntlMessages } from 'next-intl';
 import { getRequestConfig } from 'next-intl/server';
 
-import {
-  LOCALE_COOKIE_NAME,
-  negotiateLocale,
-  type SupportedLocale,
-} from '@/lib/i18n/locale';
+import { LOCALE_COOKIE_NAME, negotiateLocale, type SupportedLocale } from '@/lib/i18n/locale';
 
 /**
  * next-intl request config (task-29 PR-A).

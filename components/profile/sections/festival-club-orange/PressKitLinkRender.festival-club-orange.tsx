@@ -51,7 +51,11 @@ export function PressKitLinkFestivalClubOrange({ bundle }: { bundle: EditorBundl
     provider === 'unknown' || provider === 'other'
       ? null
       : (() => {
-          try { return tProviders(provider); } catch { return null; }
+          try {
+            return tProviders(provider);
+          } catch {
+            return null;
+          }
         })();
 
   const photos = pickPhotos(bundle);
@@ -73,9 +77,7 @@ export function PressKitLinkFestivalClubOrange({ bundle }: { bundle: EditorBundl
             {t('pressKit.heading')}
           </h2>
           {badge ? (
-            <p className="mt-6 text-xs uppercase tracking-[0.18em] text-text-muted">
-              {badge}
-            </p>
+            <p className="mt-6 text-xs uppercase tracking-[0.18em] text-text-muted">{badge}</p>
           ) : null}
           <div className="mt-10 flex items-center gap-4">
             <CursorPointer className="h-10 w-10 -rotate-12 text-accent motion-safe:animate-[cursor-wiggle_1.5s_ease-in-out_infinite]" />
@@ -119,8 +121,8 @@ function ScatteredPhotos({ photos }: { photos: ImageMedia[] }) {
   if (photos.length === 0) return null;
   const layouts = [
     { rotate: '-4deg', translate: '0% 0%', z: 30 },
-    { rotate: '6deg',  translate: '20% -8%', z: 20 },
-    { rotate: '-2deg', translate: '40% 6%',  z: 10 },
+    { rotate: '6deg', translate: '20% -8%', z: 20 },
+    { rotate: '-2deg', translate: '40% 6%', z: 10 },
   ];
   return (
     <div className="relative aspect-[4/3] w-full">
@@ -170,7 +172,12 @@ function CursorPointer({ className }: { className?: string }) {
       className={className}
     >
       <path d="M30 8v30" />
-      <path d="M20 38c0-3 4-6 12-6s12 3 12 6v18c0 3-3 4-6 4H26c-3 0-6-1-6-4z" fill="currentColor" stroke="none" opacity="0.95" />
+      <path
+        d="M20 38c0-3 4-6 12-6s12 3 12 6v18c0 3-3 4-6 4H26c-3 0-6-1-6-4z"
+        fill="currentColor"
+        stroke="none"
+        opacity="0.95"
+      />
       <path d="M26 42v14M30 42v14M34 42v14M38 42v14" stroke="#1A1A1A" strokeWidth="1.5" />
     </svg>
   );

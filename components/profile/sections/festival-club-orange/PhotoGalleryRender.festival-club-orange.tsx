@@ -47,7 +47,7 @@ export function PhotoGalleryFestivalClubOrange({ bundle }: { bundle: EditorBundl
       {
         id: entry.id,
         src,
-        alt: entry.decorative ? '' : entry.alt ?? '',
+        alt: entry.decorative ? '' : (entry.alt ?? ''),
         width: entry.width ?? null,
         height: entry.height ?? null,
       },
@@ -56,10 +56,7 @@ export function PhotoGalleryFestivalClubOrange({ bundle }: { bundle: EditorBundl
   if (items.length === 0) return null;
 
   return (
-    <section
-      id="galeria"
-      className="border-y border-border bg-bg px-6 py-20 md:px-12 md:py-28"
-    >
+    <section id="galeria" className="border-y border-border bg-bg px-6 py-20 md:px-12 md:py-28">
       <header className="mb-10 flex items-end justify-between gap-6 md:mb-14">
         <div>
           <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">
@@ -81,9 +78,7 @@ export function PhotoGalleryFestivalClubOrange({ bundle }: { bundle: EditorBundl
           <GalleryLightbox
             items={items}
             gridClassName="flex snap-x snap-mandatory gap-2"
-            tileClassName={() =>
-              'aspect-[2/3] shrink-0 snap-start [width:min(72vw,320px)]'
-            }
+            tileClassName={() => 'aspect-[2/3] shrink-0 snap-start [width:min(72vw,320px)]'}
           />
         </div>
       </div>

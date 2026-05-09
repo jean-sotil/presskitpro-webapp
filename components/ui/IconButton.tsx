@@ -1,8 +1,7 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactElement, cloneElement } from 'react';
 import { cn } from '@/lib/utils/cn';
 
-export interface IconButtonProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
+export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   /** Required accessible label — naked icons are banned (frontend-design protocol). */
   label: string;
   children: ReactElement;
@@ -27,7 +26,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       type={type}
       aria-label={label}
       className={cn(
-        'inline-flex h-11 w-11 items-center justify-center bg-transparent text-text border border-border hover:bg-surface transition-colors duration-quick disabled:opacity-50 disabled:pointer-events-none active:scale-[0.97] motion-reduce:active:scale-100',
+        'inline-flex h-11 w-11 items-center justify-center border border-border bg-transparent text-text transition-colors duration-quick hover:bg-surface active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 motion-reduce:active:scale-100',
         className,
       )}
       {...props}

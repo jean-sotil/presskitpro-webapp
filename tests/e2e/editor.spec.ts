@@ -16,10 +16,7 @@ test.describe('Editor gate @smoke', () => {
   });
 
   test('invalid id (/dashboard/profile/abc) renders not-found page', async ({ page }) => {
-    test.skip(
-      !process.env.EDITOR_E2E_COOKIE,
-      'Set EDITOR_E2E_COOKIE for the auth-gated 404 case.',
-    );
+    test.skip(!process.env.EDITOR_E2E_COOKIE, 'Set EDITOR_E2E_COOKIE for the auth-gated 404 case.');
     await page.context().addCookies([
       {
         name: 'sb-session',
@@ -35,10 +32,12 @@ test.describe('Editor gate @smoke', () => {
 test.describe('Editor full ladder @full', () => {
   test.skip(
     !process.env.EDITOR_E2E_COOKIE || !process.env.EDITOR_E2E_PROFILE_ID,
-    'Set EDITOR_E2E_COOKIE + EDITOR_E2E_PROFILE_ID (a profile owned by the cookie\'s user).',
+    "Set EDITOR_E2E_COOKIE + EDITOR_E2E_PROFILE_ID (a profile owned by the cookie's user).",
   );
 
-  test('edit slug → autosave fires → preview reflects → publish → public route renders', async ({ page }) => {
+  test('edit slug → autosave fires → preview reflects → publish → public route renders', async ({
+    page,
+  }) => {
     await page.context().addCookies([
       {
         name: 'sb-session',
@@ -54,16 +53,19 @@ test.describe('Editor full ladder @full', () => {
     // Edit slug → autosave fires within 6s.
     await page.getByLabel(/url pública/i).fill(newSlug);
     await expect(page.locator('[role="status"]', { hasText: /salvando/i })).toBeVisible();
-    await expect(
-      page.locator('[role="status"]', { hasText: /salvo/i }),
-    ).toBeVisible({ timeout: 10_000 });
+    await expect(page.locator('[role="status"]', { hasText: /salvo/i })).toBeVisible({
+      timeout: 10_000,
+    });
 
     // Preview shows the new slug.
     await expect(page.getByText(`presskit.pro/${newSlug}`)).toBeVisible();
 
     // Publish via the dialog.
     await page.getByRole('button', { name: /^publicar$/i }).click();
-    await page.getByRole('button', { name: /^publicar$/i }).last().click();
+    await page
+      .getByRole('button', { name: /^publicar$/i })
+      .last()
+      .click();
 
     // Public route should render within the cache window.
     await page.waitForTimeout(1500); // give ISR a moment

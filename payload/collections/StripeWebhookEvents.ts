@@ -15,15 +15,13 @@ export const StripeWebhookEvents: CollectionConfig = {
   slug: 'stripe-webhook-events',
   admin: {
     useAsTitle: 'eventId',
-    description:
-      'Stripe webhook idempotency log. Read-only — written by /api/webhooks/stripe.',
+    description: 'Stripe webhook idempotency log. Read-only — written by /api/webhooks/stripe.',
     defaultColumns: ['eventId', 'eventType', 'processedAt'],
   },
   access: {
     // Only admins can read in the admin UI; service-role webhook writes
     // bypass access via `overrideAccess: true`.
-    read: ({ req }) =>
-      Boolean(req.user) && req.user!.collection === 'admins',
+    read: ({ req }) => Boolean(req.user) && req.user!.collection === 'admins',
     create: () => false,
     update: () => false,
     delete: () => false,

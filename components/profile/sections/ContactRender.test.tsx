@@ -54,9 +54,7 @@ describe('ContactRender', () => {
   });
 
   it('renders the email button as mailto', async () => {
-    await renderAsync(
-      ContactRender({ bundle: makeBundle({ contactEmail: 'a@b.com' }) }),
-    );
+    await renderAsync(ContactRender({ bundle: makeBundle({ contactEmail: 'a@b.com' }) }));
     expect(screen.getByRole('link', { name: /(send email|e-mail)/i })).toHaveAttribute(
       'href',
       'mailto:a@b.com',

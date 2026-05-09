@@ -1,9 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  signKeepSlugToken,
-  verifyKeepSlugToken,
-} from './keep-slug-token';
+import { signKeepSlugToken, verifyKeepSlugToken } from './keep-slug-token';
 
 describe('keep-slug-token', () => {
   beforeEach(() => {
@@ -37,8 +34,9 @@ describe('keep-slug-token', () => {
 
   it('throws when the env secret is unset (configuration error)', () => {
     vi.stubEnv('KEEP_SLUG_TOKEN_SECRET', '');
-    expect(() => signKeepSlugToken({ profileId: 1, warningAt: '2026-05-01T00:00:00Z' }))
-      .toThrowError(/KEEP_SLUG_TOKEN_SECRET/);
+    expect(() =>
+      signKeepSlugToken({ profileId: 1, warningAt: '2026-05-01T00:00:00Z' }),
+    ).toThrowError(/KEEP_SLUG_TOKEN_SECRET/);
   });
 
   it('rejects when env secret is rotated mid-flight', () => {

@@ -8,10 +8,7 @@ import { publishProfile } from '@/lib/editor/bundle';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-export async function POST(
-  _req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const profileId = Number.parseInt(id, 10);
   if (!Number.isInteger(profileId) || profileId <= 0) {
@@ -29,8 +26,7 @@ export async function POST(
       return NextResponse.json(
         {
           error: 'contrast-stale',
-          message:
-            'O tema precisa ser revalidado (contraste WCAG) antes de publicar.',
+          message: 'O tema precisa ser revalidado (contraste WCAG) antes de publicar.',
           validatedAt: result.refusal.validatedAt,
         },
         { status: 422 },

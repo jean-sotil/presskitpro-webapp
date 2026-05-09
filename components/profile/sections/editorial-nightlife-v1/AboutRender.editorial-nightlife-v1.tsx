@@ -23,9 +23,7 @@ export function AboutEditorialNightlifeV1({ bundle }: { bundle: EditorBundle }) 
     <section id="sobre" className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
       {tagline ? <p className="mt-4 max-w-prose text-text">{tagline}</p> : null}
-      {hasBio ? (
-        <RichTextRender state={bio} className="mt-6 max-w-prose text-text" />
-      ) : null}
+      {hasBio ? <RichTextRender state={bio} className="mt-6 max-w-prose text-text" /> : null}
     </section>
   );
 }

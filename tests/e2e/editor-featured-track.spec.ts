@@ -27,9 +27,7 @@ test.describe('Featured track full ladder @full', () => {
     ).toBeVisible();
 
     // Paste a public SoundCloud URL → save → preview iframe appears.
-    await page.getByLabel(/url do soundcloud/i).fill(
-      'https://soundcloud.com/forss/flickermood',
-    );
+    await page.getByLabel(/url do soundcloud/i).fill('https://soundcloud.com/forss/flickermood');
     await page.getByRole('button', { name: /^salvar$/i }).click();
     await expect(page.locator('iframe[src*="w.soundcloud.com"]').first()).toBeVisible({
       timeout: 5_000,

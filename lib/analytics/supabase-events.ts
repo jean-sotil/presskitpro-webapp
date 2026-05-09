@@ -125,11 +125,7 @@ export async function getOrCreateSaltForDay(
   supabase: SupabaseClient,
   day: string,
 ): Promise<Buffer | null> {
-  const found = await supabase
-    .from('analytics_salts')
-    .select('salt')
-    .eq('day', day)
-    .maybeSingle();
+  const found = await supabase.from('analytics_salts').select('salt').eq('day', day).maybeSingle();
   if (found.data?.salt) return decodeBytea(found.data.salt);
 
   const fresh = randomBytes(32);
@@ -141,11 +137,7 @@ export async function getOrCreateSaltForDay(
   if (insert.data?.salt) return decodeBytea(insert.data.salt);
 
   // Lost the race — re-read.
-  const after = await supabase
-    .from('analytics_salts')
-    .select('salt')
-    .eq('day', day)
-    .maybeSingle();
+  const after = await supabase.from('analytics_salts').select('salt').eq('day', day).maybeSingle();
   return after.data?.salt ? decodeBytea(after.data.salt) : null;
 }
 

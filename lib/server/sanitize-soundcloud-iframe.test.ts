@@ -23,29 +23,23 @@ describe('extractSafeIframe', () => {
   it('escapes HTML in the title to prevent injection', () => {
     const result = extractSafeIframe(validHtml, 'Naughty <img onerror=hax>"');
     expect(result).not.toBeNull();
-    expect(result!).toContain(
-      'title="Naughty &lt;img onerror=hax&gt;&quot;"',
-    );
+    expect(result!).toContain('title="Naughty &lt;img onerror=hax&gt;&quot;"');
     // Raw payload must not appear unescaped.
     expect(result!).not.toContain('<img onerror');
   });
 
   it('rejects an iframe whose src is not w.soundcloud.com', () => {
-    const html =
-      '<iframe src="https://evil.example.com/player/?url=foo"></iframe>';
+    const html = '<iframe src="https://evil.example.com/player/?url=foo"></iframe>';
     expect(extractSafeIframe(html, 'x')).toBeNull();
   });
 
   it('rejects an iframe with an http (non-https) src', () => {
-    const html =
-      '<iframe src="http://w.soundcloud.com/player/?url=foo"></iframe>';
+    const html = '<iframe src="http://w.soundcloud.com/player/?url=foo"></iframe>';
     expect(extractSafeIframe(html, 'x')).toBeNull();
   });
 
   it('rejects markup that is not an iframe at all', () => {
-    expect(
-      extractSafeIframe('<script>alert(1)</script>', 'x'),
-    ).toBeNull();
+    expect(extractSafeIframe('<script>alert(1)</script>', 'x')).toBeNull();
   });
 
   it('rejects empty html', () => {

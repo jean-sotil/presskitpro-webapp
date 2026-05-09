@@ -20,10 +20,7 @@ const PATCHABLE = new Set([
   'ogImage',
 ]);
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const profileId = Number.parseInt(id, 10);
   if (!Number.isInteger(profileId) || profileId <= 0) {

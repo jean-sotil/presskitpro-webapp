@@ -30,10 +30,7 @@ export function Services_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   if (services.length === 0) return null;
 
   return (
-    <section
-      id="servicos"
-      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
-    >
+    <section id="servicos" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
       <div className="mx-auto max-w-6xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           03 — {t('label')}
@@ -58,7 +55,7 @@ export function Services_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
                 {service.title}
               </h3>
               {service.description ? (
-                <p className="mt-3 text-sm leading-relaxed text-text-muted line-clamp-3">
+                <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-text-muted">
                   {service.description}
                 </p>
               ) : null}

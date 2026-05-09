@@ -99,8 +99,7 @@ export async function handleContactSubmit(args: {
     return { status: 400, body: { error: 'captcha' } };
   }
 
-  const destination =
-    profile.contactFormDestination?.trim() || profile.contactEmail?.trim() || '';
+  const destination = profile.contactFormDestination?.trim() || profile.contactEmail?.trim() || '';
   if (!destination) {
     return { status: 400, body: { error: 'no-destination' } };
   }
@@ -118,9 +117,5 @@ export async function handleContactSubmit(args: {
 }
 
 function renderEmailBody(body: ContactSubmitBody): string {
-  return [
-    `De: ${body.name} <${body.email}>`,
-    '',
-    body.message,
-  ].join('\n');
+  return [`De: ${body.name} <${body.email}>`, '', body.message].join('\n');
 }

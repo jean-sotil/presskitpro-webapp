@@ -16,10 +16,7 @@ type Slot = {
   fetchedAt?: string | null;
 };
 
-type Status =
-  | { kind: 'idle' }
-  | { kind: 'pending' }
-  | { kind: 'error'; message: string };
+type Status = { kind: 'idle' } | { kind: 'pending' } | { kind: 'error'; message: string };
 
 export interface InstagramPostsEditCardProps {
   bundle: EditorBundle;
@@ -43,9 +40,7 @@ function snapshotFromBundle(bundle: EditorBundle): Slot[] {
     }));
 }
 
-export function InstagramPostsEditCard({
-  bundle,
-}: InstagramPostsEditCardProps) {
+export function InstagramPostsEditCard({ bundle }: InstagramPostsEditCardProps) {
   const qc = useQueryClient();
   const profileId = bundle.profile.id;
   const [slots, setSlots] = useState<Slot[]>(() => snapshotFromBundle(bundle));
@@ -127,13 +122,10 @@ export function InstagramPostsEditCard({
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
           Editando · Instagram
         </p>
-        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">
-          Instagram
-        </h2>
+        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">Instagram</h2>
         <p className="mt-3 text-sm text-text-muted">
-          Cole até {MAX_POSTS} URLs de posts/reels. Atualize mensalmente —
-          o Instagram troca os tokens dos embeds e posts antigos podem deixar
-          de carregar.
+          Cole até {MAX_POSTS} URLs de posts/reels. Atualize mensalmente — o Instagram troca os
+          tokens dos embeds e posts antigos podem deixar de carregar.
         </p>
       </header>
 
@@ -145,8 +137,7 @@ export function InstagramPostsEditCard({
         <ol className="flex flex-col gap-3">
           {slots.map((slot, i) => {
             const stale =
-              slot.fetchedAt &&
-              Date.now() - new Date(slot.fetchedAt).getTime() > STALE_AFTER_MS;
+              slot.fetchedAt && Date.now() - new Date(slot.fetchedAt).getTime() > STALE_AFTER_MS;
             return (
               <li
                 key={`${slot.id ?? 'new'}-${i}`}
@@ -159,9 +150,7 @@ export function InstagramPostsEditCard({
                   <input
                     type="url"
                     value={slot.url}
-                    onChange={(e) =>
-                      setSlotAt(i, { ...slot, url: e.target.value })
-                    }
+                    onChange={(e) => setSlotAt(i, { ...slot, url: e.target.value })}
                     placeholder="https://www.instagram.com/p/CxYzAbc123/"
                     aria-label={`URL do post #${i + 1}`}
                     className="h-9 border border-border bg-bg px-3 text-sm outline-none focus:border-accent"
@@ -222,8 +211,7 @@ export function InstagramPostsEditCard({
 }
 
 function friendlyError(reason: string | undefined, index: number | undefined): string {
-  const slot =
-    typeof index === 'number' ? `Post #${index + 1}: ` : '';
+  const slot = typeof index === 'number' ? `Post #${index + 1}: ` : '';
   switch (reason) {
     case 'wrong-host':
       return `${slot}apenas links do instagram.com são aceitos.`;

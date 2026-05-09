@@ -55,9 +55,7 @@ function makeBundle(
 describe('InstagramPostsEditCard', () => {
   it('shows the empty-state when no posts', () => {
     render(withQueryClient(<InstagramPostsEditCard bundle={makeBundle()} />));
-    expect(
-      screen.getByText(/nenhum post adicionado/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/nenhum post adicionado/i)).toBeInTheDocument();
   });
 
   it('adds an empty slot on "Adicionar post"', () => {
@@ -73,31 +71,27 @@ describe('InstagramPostsEditCard', () => {
       url: `https://www.instagram.com/p/abc${i}/`,
     }));
     render(withQueryClient(<InstagramPostsEditCard bundle={makeBundle(posts)} />));
-    expect(
-      screen.getByRole('button', { name: /adicionar post/i }),
-    ).toBeDisabled();
+    expect(screen.getByRole('button', { name: /adicionar post/i })).toBeDisabled();
   });
 
   it('saves all slots via PUT and the route returns the persisted list', async () => {
-    const fetchMock = vi
-      .spyOn(globalThis, 'fetch')
-      .mockResolvedValue(
-        new Response(
-          JSON.stringify({
-            ok: true,
-            posts: [
-              {
-                id: 1,
-                url: 'https://www.instagram.com/p/abc/',
-                oembedHtml: '<blockquote class="instagram-media"></blockquote>',
-                fetchedAt: new Date().toISOString(),
-                displayOrder: 0,
-              },
-            ],
-          }),
-          { status: 200 },
-        ),
-      );
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          ok: true,
+          posts: [
+            {
+              id: 1,
+              url: 'https://www.instagram.com/p/abc/',
+              oembedHtml: '<blockquote class="instagram-media"></blockquote>',
+              fetchedAt: new Date().toISOString(),
+              displayOrder: 0,
+            },
+          ],
+        }),
+        { status: 200 },
+      ),
+    );
     render(withQueryClient(<InstagramPostsEditCard bundle={makeBundle()} />));
     fireEvent.click(screen.getByRole('button', { name: /adicionar post/i }));
     fireEvent.change(screen.getByLabelText(/url do post/i), {
@@ -110,20 +104,15 @@ describe('InstagramPostsEditCard', () => {
         expect.objectContaining({ method: 'PUT' }),
       ),
     );
-    const sent = JSON.parse(
-      (fetchMock.mock.calls[0]![1] as RequestInit).body as string,
-    );
-    expect(sent.posts).toEqual([
-      { url: 'https://www.instagram.com/p/abc/' },
-    ]);
+    const sent = JSON.parse((fetchMock.mock.calls[0]![1] as RequestInit).body as string);
+    expect(sent.posts).toEqual([{ url: 'https://www.instagram.com/p/abc/' }]);
   });
 
   it('surfaces a friendly error when the route rejects an URL', async () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-      new Response(
-        JSON.stringify({ error: 'invalid post', index: 0, reason: 'wrong-host' }),
-        { status: 400 },
-      ),
+      new Response(JSON.stringify({ error: 'invalid post', index: 0, reason: 'wrong-host' }), {
+        status: 400,
+      }),
     );
     render(withQueryClient(<InstagramPostsEditCard bundle={makeBundle()} />));
     fireEvent.click(screen.getByRole('button', { name: /adicionar post/i }));
@@ -131,9 +120,7 @@ describe('InstagramPostsEditCard', () => {
       target: { value: 'https://example.com/p/abc/' },
     });
     fireEvent.click(screen.getByRole('button', { name: /^salvar$/i }));
-    await waitFor(() =>
-      expect(screen.getByRole('alert')).toHaveTextContent(/instagram\.com/i),
-    );
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/instagram\.com/i));
   });
 
   it('flags posts with fetchedAt > 7d as stale', () => {
@@ -156,9 +143,9 @@ describe('InstagramPostsEditCard', () => {
   });
 
   it('sends force=true when "Atualizar" is clicked', async () => {
-    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-      new Response(JSON.stringify({ ok: true, posts: [] }), { status: 200 }),
-    );
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(new Response(JSON.stringify({ ok: true, posts: [] }), { status: 200 }));
     render(
       withQueryClient(
         <InstagramPostsEditCard

@@ -20,8 +20,8 @@ export default function CheckoutCanceledPage() {
           Sem cobrança. Quando quiser, é só voltar.
         </h1>
         <p className="mt-8 max-w-xl text-lg text-text-muted">
-          Seu período de avaliação continua rodando normalmente. Você pode
-          retomar a assinatura na página de planos a qualquer momento.
+          Seu período de avaliação continua rodando normalmente. Você pode retomar a assinatura na
+          página de planos a qualquer momento.
         </p>
         <div className="mt-12 flex flex-wrap gap-4">
           <Link

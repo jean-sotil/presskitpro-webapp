@@ -29,10 +29,7 @@ describe('SectionRail', () => {
     );
     // 9 select buttons + 9 reorder handles = 18 buttons.
     expect(screen.getAllByRole('button').length).toBe(18);
-    expect(screen.getByRole('button', { name: 'Hero' })).toHaveAttribute(
-      'aria-current',
-      'true',
-    );
+    expect(screen.getByRole('button', { name: 'Hero' })).toHaveAttribute('aria-current', 'true');
   });
 
   it('fires onSelect with the clicked key', () => {

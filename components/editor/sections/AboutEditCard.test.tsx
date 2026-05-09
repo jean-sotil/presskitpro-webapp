@@ -36,9 +36,7 @@ describe('AboutEditCard', () => {
   it('hides the prompts when bio has content', () => {
     const bio = {
       root: {
-        children: [
-          { type: 'paragraph', children: [{ type: 'text', text: 'já tinha bio' }] },
-        ],
+        children: [{ type: 'paragraph', children: [{ type: 'text', text: 'já tinha bio' }] }],
       },
     };
     render(

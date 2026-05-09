@@ -18,10 +18,7 @@ export function UploadQueue({ rows, onClear }: UploadQueueProps) {
   if (rows.length === 0) return null;
   const allDone = rows.every((r) => isTerminalPhase(r.phase));
   return (
-    <section
-      aria-label="Fila de uploads"
-      className="border border-border bg-bg p-4"
-    >
+    <section aria-label="Fila de uploads" className="border border-border bg-bg p-4">
       <header className="flex items-center justify-between">
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
           {rows.length} arquivo{rows.length > 1 ? 's' : ''}

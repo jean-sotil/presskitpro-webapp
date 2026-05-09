@@ -18,10 +18,6 @@ export function contrastRatio(a: ColorString, b: ColorString): number {
  * `true` if the contrast ratio passes the requested WCAG AA threshold.
  * Defaults to 4.5 (normal text); pass `3` for large text / non-text UI.
  */
-export function passesAA(
-  bg: ColorString,
-  fg: ColorString,
-  threshold: 4.5 | 3 = 4.5,
-): boolean {
+export function passesAA(bg: ColorString, fg: ColorString, threshold: 4.5 | 3 = 4.5): boolean {
   return contrastRatio(bg, fg) >= threshold;
 }

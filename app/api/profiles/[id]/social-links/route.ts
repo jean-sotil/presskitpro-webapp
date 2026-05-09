@@ -23,10 +23,7 @@ type IncomingBody = {
   links?: Array<{ id?: number; platform?: string; url?: string }>;
 };
 
-export async function PUT(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const profileId = Number.parseInt(id, 10);
   if (!Number.isInteger(profileId) || profileId <= 0) {
@@ -59,10 +56,7 @@ export async function PUT(
   for (let i = 0; i < incoming.length; i++) {
     const item = incoming[i]!;
     if (!item.platform || !PLATFORMS.includes(item.platform as Platform)) {
-      return NextResponse.json(
-        { error: 'invalid platform', index: i },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'invalid platform', index: i }, { status: 400 });
     }
     normalized.push({
       id: typeof item.id === 'number' ? item.id : undefined,
@@ -75,10 +69,7 @@ export async function PUT(
   // url string — rebuild every entry from parsed parts.
   const validation = validateLinks(normalized);
   if (!validation.ok) {
-    return NextResponse.json(
-      { error: 'validation failed', detail: validation },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: 'validation failed', detail: validation }, { status: 400 });
   }
   const canonicalized = normalized.map((item) => {
     const parsed = parseAndCanonicalize(item.platform, item.url);
@@ -153,9 +144,7 @@ function liveDeps(
         profile: profileId,
         platform: String((created as { platform: unknown }).platform),
         url: String((created as { url: unknown }).url),
-        displayOrder: Number(
-          (created as { displayOrder?: unknown }).displayOrder ?? 0,
-        ),
+        displayOrder: Number((created as { displayOrder?: unknown }).displayOrder ?? 0),
       };
     },
   };

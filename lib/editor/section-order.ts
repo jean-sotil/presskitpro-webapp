@@ -25,9 +25,7 @@ export type SectionKey = (typeof DEFAULT_SECTION_ORDER)[number];
 
 const REGISTRY: ReadonlySet<SectionKey> = new Set(DEFAULT_SECTION_ORDER);
 
-export function mergeOrder(
-  persisted: SectionKey[] | null | undefined,
-): SectionKey[] {
+export function mergeOrder(persisted: SectionKey[] | null | undefined): SectionKey[] {
   if (!persisted || persisted.length === 0) {
     return [...DEFAULT_SECTION_ORDER];
   }

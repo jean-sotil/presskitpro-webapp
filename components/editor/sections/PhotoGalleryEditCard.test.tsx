@@ -19,7 +19,11 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-function makeBundle(items: Array<Partial<{ id: number; bucket: string; path: string; alt: string; decorative: boolean }>> = []): EditorBundle {
+function makeBundle(
+  items: Array<
+    Partial<{ id: number; bucket: string; path: string; alt: string; decorative: boolean }>
+  > = [],
+): EditorBundle {
   return {
     profile: {
       id: 1,
@@ -48,11 +52,7 @@ describe('PhotoGalleryEditCard', () => {
   it('shows the empty-state when no items', () => {
     render(
       withQueryClient(
-        <PhotoGalleryEditCard
-          bundle={makeBundle()}
-          supabaseUserId="sb-1"
-          onMutate={vi.fn()}
-        />,
+        <PhotoGalleryEditCard bundle={makeBundle()} supabaseUserId="sb-1" onMutate={vi.fn()} />,
       ),
     );
     expect(screen.getByText(/arraste ou clique/i)).toBeInTheDocument();

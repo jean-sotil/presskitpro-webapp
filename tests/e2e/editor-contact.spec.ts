@@ -11,9 +11,7 @@ test.describe('Contact full ladder @full', () => {
     'Set EDITOR_E2E_COOKIE + EDITOR_E2E_PROFILE_ID.',
   );
 
-  test('rail item opens the contact editor and reveals the destination input', async ({
-    page,
-  }) => {
+  test('rail item opens the contact editor and reveals the destination input', async ({ page }) => {
     await page.context().addCookies([
       {
         name: 'sb-session',
@@ -24,9 +22,7 @@ test.describe('Contact full ladder @full', () => {
     const profileId = process.env.EDITOR_E2E_PROFILE_ID!;
     await page.goto(`/dashboard/profile/${profileId}`);
     await page.getByRole('button', { name: 'Contato' }).click();
-    await expect(
-      page.getByRole('heading', { level: 2, name: /^contato$/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: /^contato$/i })).toBeVisible();
 
     // Toggle the form on; destination input appears.
     await page.getByLabel(/ativar formulário/i).check();

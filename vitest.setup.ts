@@ -53,11 +53,7 @@ vi.mock('next-intl/server', () => ({
  * value (string, array, or object). Mirrors next-intl's `t.raw`. Used
  * for components that render arrays via `t.raw('items')`.
  */
-function rawTranslate(
-  catalog: unknown,
-  namespace: string | undefined,
-  key: string,
-): unknown {
+function rawTranslate(catalog: unknown, namespace: string | undefined, key: string): unknown {
   const fullPath = namespace ? `${namespace}.${key}` : key;
   const segments = fullPath.split('.');
   let node: unknown = catalog;

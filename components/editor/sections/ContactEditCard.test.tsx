@@ -53,22 +53,14 @@ describe('ContactEditCard', () => {
         onMutate={vi.fn()}
       />,
     );
-    expect(screen.getByLabelText(/whatsapp/i)).toHaveAttribute(
-      'aria-invalid',
-      'true',
-    );
+    expect(screen.getByLabelText(/whatsapp/i)).toHaveAttribute('aria-invalid', 'true');
   });
 
   it('reveals destination input when the form toggle is enabled', () => {
-    const { rerender } = render(
-      <ContactEditCard bundle={makeBundle()} onMutate={vi.fn()} />,
-    );
+    const { rerender } = render(<ContactEditCard bundle={makeBundle()} onMutate={vi.fn()} />);
     expect(screen.queryByLabelText(/message destination/i)).toBeNull();
     rerender(
-      <ContactEditCard
-        bundle={makeBundle({ contactFormEnabled: true })}
-        onMutate={vi.fn()}
-      />,
+      <ContactEditCard bundle={makeBundle({ contactFormEnabled: true })} onMutate={vi.fn()} />,
     );
     expect(screen.getByLabelText(/message destination/i)).toBeInTheDocument();
   });

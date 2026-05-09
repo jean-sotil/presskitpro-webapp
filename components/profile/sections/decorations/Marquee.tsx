@@ -51,10 +51,7 @@ export function Marquee({
   );
 }
 
-function resolveText(
-  bundle: EditorBundle,
-  source: 'displayName' | 'tagline',
-): string | null {
+function resolveText(bundle: EditorBundle, source: 'displayName' | 'tagline'): string | null {
   if (source === 'displayName') {
     const slug = String(bundle.profile.slug ?? '');
     return slug ? slug.replace(/-/g, ' ') : null;

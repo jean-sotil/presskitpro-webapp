@@ -29,9 +29,7 @@ describe('checkSlugAvailability', () => {
     const deps: SlugCheckDeps = {
       ...baseDeps,
       findReservation: async (slug) =>
-        slug === 'admin'
-          ? { type: 'reserved', held_by_user_id: null, expires_at: null }
-          : null,
+        slug === 'admin' ? { type: 'reserved', held_by_user_id: null, expires_at: null } : null,
     };
     const r = await checkSlugAvailability({ slug: 'admin' }, deps);
     expect(r).toEqual({ available: false, reason: 'reserved' });
@@ -46,10 +44,7 @@ describe('checkSlugAvailability', () => {
         expires_at: new Date(Date.now() + 60_000).toISOString(),
       }),
     };
-    const r = await checkSlugAvailability(
-      { slug: 'taken', requestingUserId: 'me' },
-      deps,
-    );
+    const r = await checkSlugAvailability({ slug: 'taken', requestingUserId: 'me' }, deps);
     expect(r).toEqual({ available: false, reason: 'taken' });
   });
 
@@ -75,18 +70,14 @@ describe('checkSlugAvailability', () => {
         expires_at: new Date(Date.now() + 60_000).toISOString(),
       }),
     };
-    const r = await checkSlugAvailability(
-      { slug: 'my-own-hold', requestingUserId: 'me' },
-      deps,
-    );
+    const r = await checkSlugAvailability({ slug: 'my-own-hold', requestingUserId: 'me' }, deps);
     expect(r).toEqual({ available: true });
   });
 
   it('rejects when an existing profile owns the slug', async () => {
     const deps: SlugCheckDeps = {
       ...baseDeps,
-      findProfileBySlug: async (slug) =>
-        slug === 'taken-by-profile' ? { id: 'p1' } : null,
+      findProfileBySlug: async (slug) => (slug === 'taken-by-profile' ? { id: 'p1' } : null),
     };
     const r = await checkSlugAvailability({ slug: 'taken-by-profile' }, deps);
     expect(r).toEqual({ available: false, reason: 'taken' });

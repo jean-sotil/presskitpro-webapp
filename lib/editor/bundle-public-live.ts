@@ -22,10 +22,7 @@ export function livePublicBundleDeps(): PublicBundleDeps {
       const result = await p.find({
         collection: 'profiles',
         where: {
-          and: [
-            { slug: { equals: slug } },
-            { status: { equals: 'published' } },
-          ],
+          and: [{ slug: { equals: slug } }, { status: { equals: 'published' } }],
         },
         limit: 1,
         depth: 1,

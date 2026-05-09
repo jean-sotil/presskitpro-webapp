@@ -34,16 +34,12 @@ export function AboutEditCard({ bundle, onMutate }: AboutEditCardProps) {
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
           {tCommon('editingPrefix')} {t('label')}
         </p>
-        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">
-          {t('heading')}
-        </h2>
+        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">{t('heading')}</h2>
       </header>
 
       {showPrompts ? (
         <div className="border border-dashed border-border bg-bg p-4">
-          <p className="text-xs uppercase tracking-wider text-text-muted">
-            {t('promptsIntro')}
-          </p>
+          <p className="text-xs uppercase tracking-wider text-text-muted">{t('promptsIntro')}</p>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-text-muted">
             {prompts.map((prompt) => (
               <li key={prompt}>{prompt}</li>
@@ -67,10 +63,6 @@ function BioPlaceholder() {
   // already-loaded fallback string. Worst case: unlocalized "loading…"
   // for a frame; far better than a hook crash inside `dynamic({ssr:false,loading})`.
   return (
-    <div
-      role="status"
-      aria-label="…"
-      className="h-56 animate-pulse border border-border bg-bg"
-    />
+    <div role="status" aria-label="…" className="h-56 animate-pulse border border-border bg-bg" />
   );
 }

@@ -1,11 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import {
-  canCreateForOwnedProfile,
-  ownsProfile,
-  ownsSelf,
-  ownsViaProfile,
-} from './predicates';
+import { canCreateForOwnedProfile, ownsProfile, ownsSelf, ownsViaProfile } from './predicates';
 
 const adminReq = { user: { id: 1, collection: 'admins' } } as never;
 const userReq = { user: { id: 42, collection: 'users' } } as never;
@@ -71,32 +66,24 @@ describe('canCreateForOwnedProfile (create-time guard for child collections)', (
 
   it('denies anonymous', async () => {
     const req = makeReq(null);
-    expect(
-      await canCreateForOwnedProfile({ req: req as never, data: { profile: 9 } }),
-    ).toBe(false);
+    expect(await canCreateForOwnedProfile({ req: req as never, data: { profile: 9 } })).toBe(false);
   });
 
   it('admins always allowed', async () => {
     const req = makeReq({ id: 1, collection: 'admins' });
-    expect(
-      await canCreateForOwnedProfile({ req: req as never, data: { profile: 9 } }),
-    ).toBe(true);
+    expect(await canCreateForOwnedProfile({ req: req as never, data: { profile: 9 } })).toBe(true);
     expect(req.payload.find).not.toHaveBeenCalled();
   });
 
   it('denies when no `profile` field on the body', async () => {
     const req = makeReq({ id: 42, collection: 'users' });
-    expect(
-      await canCreateForOwnedProfile({ req: req as never, data: {} }),
-    ).toBe(false);
+    expect(await canCreateForOwnedProfile({ req: req as never, data: {} })).toBe(false);
   });
 
   it('denies when the referenced profile is owned by someone else', async () => {
     const req = makeReq({ id: 42, collection: 'users' });
     req.payload.find.mockResolvedValueOnce({ totalDocs: 0, docs: [] });
-    expect(
-      await canCreateForOwnedProfile({ req: req as never, data: { profile: 9 } }),
-    ).toBe(false);
+    expect(await canCreateForOwnedProfile({ req: req as never, data: { profile: 9 } })).toBe(false);
     expect(req.payload.find).toHaveBeenCalledWith({
       collection: 'profiles',
       where: {
@@ -110,9 +97,7 @@ describe('canCreateForOwnedProfile (create-time guard for child collections)', (
   it('allows when the user owns the referenced profile', async () => {
     const req = makeReq({ id: 42, collection: 'users' });
     req.payload.find.mockResolvedValueOnce({ totalDocs: 1, docs: [{ id: 9 }] });
-    expect(
-      await canCreateForOwnedProfile({ req: req as never, data: { profile: 9 } }),
-    ).toBe(true);
+    expect(await canCreateForOwnedProfile({ req: req as never, data: { profile: 9 } })).toBe(true);
   });
 
   it('handles a relationship object (Payload may pass {id, ...})', async () => {

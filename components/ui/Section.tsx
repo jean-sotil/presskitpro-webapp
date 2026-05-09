@@ -14,7 +14,7 @@ export const Section = forwardRef<HTMLElement, SectionProps>(function Section(
   return (
     <section
       ref={ref}
-      className={cn('py-16 md:py-24 px-6 md:px-12 max-w-screen-2xl mx-auto w-full', className)}
+      className={cn('mx-auto w-full max-w-screen-2xl px-6 py-16 md:px-12 md:py-24', className)}
       {...props}
     >
       {children}

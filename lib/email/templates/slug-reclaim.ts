@@ -2,10 +2,7 @@ import 'server-only';
 
 import { getTranslations } from 'next-intl/server';
 
-import {
-  fromPayloadLocale,
-  type SupportedLocale,
-} from '@/lib/i18n/locale';
+import { fromPayloadLocale, type SupportedLocale } from '@/lib/i18n/locale';
 
 /**
  * Slug-reclaim email templates (task-32). Renders the Day-23 warning

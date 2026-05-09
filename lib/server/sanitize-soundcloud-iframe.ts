@@ -21,10 +21,7 @@ const PLAYER_HOST = 'w.soundcloud.com';
 
 const IFRAME_HEIGHT = 166;
 
-export function extractSafeIframe(
-  rawHtml: string,
-  title: string,
-): string | null {
+export function extractSafeIframe(rawHtml: string, title: string): string | null {
   if (!rawHtml || typeof rawHtml !== 'string') return null;
   const match = IFRAME_RE.exec(rawHtml);
   if (!match) return null;
@@ -40,9 +37,7 @@ export function extractSafeIframe(
 
   // Rebuild from parsed parts. Single quotes, escape everything.
   const safeSrc = escapeAttr(src.toString());
-  const safeTitle = escapeAttr(
-    (title ?? 'Faixa em destaque').slice(0, 200),
-  );
+  const safeTitle = escapeAttr((title ?? 'Faixa em destaque').slice(0, 200));
   return [
     `<iframe`,
     ` src="${safeSrc}"`,

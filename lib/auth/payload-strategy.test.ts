@@ -27,9 +27,7 @@ describe('supabaseStrategy', () => {
   });
 
   it('returns null when no Payload Users row matches the supabaseUserId (mirror lag)', async () => {
-    const verifySession = vi
-      .fn()
-      .mockResolvedValue({ supabaseUserId: 'uuid-x', email: 'a@b.com' });
+    const verifySession = vi.fn().mockResolvedValue({ supabaseUserId: 'uuid-x', email: 'a@b.com' });
     const payload = makePayload({ docs: [], totalDocs: 0 });
     const strategy = supabaseStrategy({ verifySession });
     const result = await strategy.authenticate({
@@ -46,9 +44,7 @@ describe('supabaseStrategy', () => {
   });
 
   it('returns the Payload user with collection + _strategy stamps when matched', async () => {
-    const verifySession = vi
-      .fn()
-      .mockResolvedValue({ supabaseUserId: 'uuid-y', email: 'a@b.com' });
+    const verifySession = vi.fn().mockResolvedValue({ supabaseUserId: 'uuid-y', email: 'a@b.com' });
     const userDoc = { id: 42, email: 'a@b.com', supabaseUserId: 'uuid-y', role: 'user' };
     const strategy = supabaseStrategy({ verifySession });
     const result = await strategy.authenticate({

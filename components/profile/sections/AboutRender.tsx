@@ -11,17 +11,13 @@ import { AboutEditorialNightlifeV1 } from './editorial-nightlife-v1/AboutRender.
 import { AboutElectricFireTechno } from './electric-fire-techno/AboutRender.electric-fire-techno';
 import { AboutFestivalClubOrange } from './festival-club-orange/AboutRender.festival-club-orange';
 import { AboutMediakitProV1 } from './mediakit-pro-v1/AboutRender.mediakit-pro-v1';
+import { AboutDeadSignal } from './dead-signal/AboutRender.dead-signal';
 
-export function AboutRender({
-  bundle,
-  preset,
-}: {
-  bundle: EditorBundle;
-  preset?: Preset | null;
-}) {
+export function AboutRender({ bundle, preset }: { bundle: EditorBundle; preset?: Preset | null }) {
   const t = useTranslations('profile.about');
 
   // Folder-owned preset dispatch.
+  if (preset?.id === 'dead-signal') return <AboutDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno') return <AboutElectricFireTechno bundle={bundle} />;
   if (preset?.id === 'mediakit-pro-v1') return <AboutMediakitProV1 bundle={bundle} />;
   if (preset?.id === 'festival-club-orange') return <AboutFestivalClubOrange bundle={bundle} />;
@@ -36,9 +32,7 @@ export function AboutRender({
     <section id="sobre" className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
       {tagline ? <p className="mt-4 max-w-prose text-text">{tagline}</p> : null}
-      {hasBio ? (
-        <RichTextRender state={bio} className="mt-6 max-w-prose text-text" />
-      ) : null}
+      {hasBio ? <RichTextRender state={bio} className="mt-6 max-w-prose text-text" /> : null}
     </section>
   );
 }

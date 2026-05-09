@@ -2,11 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { checkSlugAvailability } from '@/lib/slug/check';
-import {
-  makeFindProfileBySlug,
-  makeFindReservation,
-  reserveSlug,
-} from '@/lib/slug/operations';
+import { makeFindProfileBySlug, makeFindReservation, reserveSlug } from '@/lib/slug/operations';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

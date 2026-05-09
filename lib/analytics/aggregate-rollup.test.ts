@@ -4,8 +4,7 @@ import { aggregateRollup, type RawEvent } from './aggregate-rollup';
 
 const day = '2026-05-05';
 const dayStart = new Date(`${day}T00:00:00Z`);
-const at = (h: number, m = 0) =>
-  new Date(dayStart.getTime() + (h * 60 + m) * 60_000).toISOString();
+const at = (h: number, m = 0) => new Date(dayStart.getTime() + (h * 60 + m) * 60_000).toISOString();
 
 const mk = (over: Partial<RawEvent>): RawEvent => ({
   profileId: 1,
@@ -41,10 +40,7 @@ describe('aggregateRollup', () => {
 
   it('splits rows by event_type', () => {
     const rows = aggregateRollup({
-      events: [
-        mk({ eventType: 'page_view' }),
-        mk({ eventType: 'press_kit_click' }),
-      ],
+      events: [mk({ eventType: 'page_view' }), mk({ eventType: 'press_kit_click' })],
       day,
     });
     expect(rows).toHaveLength(2);
@@ -86,11 +82,7 @@ describe('aggregateRollup', () => {
 
   it('treats missing visitorHash as a single anonymous visitor (does not boost unique count)', () => {
     const rows = aggregateRollup({
-      events: [
-        mk({ visitorHash: null }),
-        mk({ visitorHash: null }),
-        mk({ visitorHash: null }),
-      ],
+      events: [mk({ visitorHash: null }), mk({ visitorHash: null }), mk({ visitorHash: null })],
       day,
     });
     expect(rows[0]!.count).toBe(3);

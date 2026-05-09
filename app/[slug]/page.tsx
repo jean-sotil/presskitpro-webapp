@@ -27,10 +27,7 @@ async function findPausedProfileBySlug(slug: string): Promise<boolean> {
   const result = await p.find({
     collection: 'profiles',
     where: {
-      and: [
-        { slug: { equals: slug } },
-        { status: { equals: 'paused' } },
-      ],
+      and: [{ slug: { equals: slug } }, { status: { equals: 'paused' } }],
     },
     limit: 1,
     depth: 1,
@@ -51,8 +48,7 @@ async function findPausedProfileBySlug(slug: string): Promise<boolean> {
   return true;
 }
 
-const SITE_ORIGIN =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
+const SITE_ORIGIN = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
 
 // Task-29 PR-B — locale negotiation per request makes the public
 // profile dynamic. ISR (revalidate) was a cross-locale cache trap: the
@@ -70,12 +66,10 @@ function resolveImageUrl(bundle: ReturnType<typeof Object.assign>): string | und
   // Order: profile-content `ogImage` > profile `portrait`. Both go
   // through `mediaUrl` which expects `{ bucket, path }`. Returns
   // undefined if neither is present (Twitter falls back to summary).
-  const content = (bundle.content ?? null) as
-    | { ogImage?: { bucket?: string; path?: string } | null }
-    | null;
-  const portrait = bundle.profile.portrait as
-    | { bucket?: string; path?: string }
-    | null;
+  const content = (bundle.content ?? null) as {
+    ogImage?: { bucket?: string; path?: string } | null;
+  } | null;
+  const portrait = bundle.profile.portrait as { bucket?: string; path?: string } | null;
   const og = content?.ogImage ?? portrait ?? null;
   if (!og?.bucket || !og?.path) return undefined;
   return mediaUrl({ bucket: og.bucket, path: og.path }) ?? undefined;
@@ -106,9 +100,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     alternates: {
       canonical,
       languages: {
-        ...Object.fromEntries(
-          localesAvailable.map((l) => [toBcp47(l), canonical]),
-        ),
+        ...Object.fromEntries(localesAvailable.map((l) => [toBcp47(l), canonical])),
         'x-default': canonical,
       },
     },
@@ -161,8 +153,7 @@ export default async function PublicProfilePage({ params }: PageParams) {
       String((bundle.profile as { defaultLocale?: string }).defaultLocale ?? 'pt-BR'),
     ) ?? 'pt';
   const showFallbackBanner =
-    !localesAvailable.includes(requestedLocale) &&
-    requestedLocale !== profileDefaultLocale;
+    !localesAvailable.includes(requestedLocale) && requestedLocale !== profileDefaultLocale;
   const t = await getTranslations('profile');
 
   return (

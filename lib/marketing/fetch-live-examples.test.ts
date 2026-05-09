@@ -36,8 +36,6 @@ describe('loadLiveExamples', () => {
   it('caps the limit at a reasonable max (16) so a runaway caller cannot DOS the page', async () => {
     const find = vi.fn(async () => ({ docs: [] }));
     await loadLiveExamples({ find, limit: 999 });
-    expect(find).toHaveBeenCalledWith(
-      expect.objectContaining({ limit: 16 }),
-    );
+    expect(find).toHaveBeenCalledWith(expect.objectContaining({ limit: 16 }));
   });
 });

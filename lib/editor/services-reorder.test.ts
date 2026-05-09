@@ -2,12 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { reorderServices } from './services-reorder';
 
-const items = [
-  { title: 'A' },
-  { title: 'B' },
-  { title: 'C' },
-  { title: 'D' },
-];
+const items = [{ title: 'A' }, { title: 'B' }, { title: 'C' }, { title: 'D' }];
 
 describe('reorderServices', () => {
   it('moves an item from index to a higher index', () => {

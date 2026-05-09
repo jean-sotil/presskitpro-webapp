@@ -13,10 +13,8 @@ describe('sanitizePastedHtml', () => {
     expect(out).toBe('<p>hi</p>');
   });
 
-  it('removes <style> blocks entirely (CSS shouldn\'t survive paste)', () => {
-    const out = sanitizePastedHtml(
-      '<style>p { color: red }</style><p>hi</p>',
-    );
+  it("removes <style> blocks entirely (CSS shouldn't survive paste)", () => {
+    const out = sanitizePastedHtml('<style>p { color: red }</style><p>hi</p>');
     expect(out).not.toContain('<style');
     expect(out).toContain('<p>hi</p>');
   });
@@ -41,7 +39,7 @@ describe('sanitizePastedHtml', () => {
     expect(out).not.toContain('supportLists');
   });
 
-  it('strips MS Office mso-* style tokens (defensive — they shouldn\'t exist after style= strip but pasted spans are weird)', () => {
+  it("strips MS Office mso-* style tokens (defensive — they shouldn't exist after style= strip but pasted spans are weird)", () => {
     const out = sanitizePastedHtml(
       '<p style="mso-fareast-language:EN-US;mso-list:l0 level1 lfo1">hi</p>',
     );

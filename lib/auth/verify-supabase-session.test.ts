@@ -51,9 +51,7 @@ describe('verifySupabaseSession', () => {
   });
 
   it('returns null when getUser succeeds but user is null', async () => {
-    const getUser = vi
-      .fn()
-      .mockResolvedValue({ data: { user: null }, error: null });
+    const getUser = vi.fn().mockResolvedValue({ data: { user: null }, error: null });
     const result = await verifySupabaseSession(makeHeaders('sb-access-token=abc'), {
       createClient: () => ({ auth: { getUser } }) as never,
     });
@@ -76,15 +74,12 @@ describe('verifySupabaseSession', () => {
     const getUser = vi
       .fn()
       .mockResolvedValue({ data: { user: { id: 'u1', email: null } }, error: null });
-    await verifySupabaseSession(
-      makeHeaders('sb-access-token=tok; sb-refresh-token=ref; foo=bar'),
-      {
-        createClient: (_url, _key, opts) => {
-          captured = (opts as { cookies: { getAll: () => typeof captured } }).cookies.getAll();
-          return { auth: { getUser } } as never;
-        },
+    await verifySupabaseSession(makeHeaders('sb-access-token=tok; sb-refresh-token=ref; foo=bar'), {
+      createClient: (_url, _key, opts) => {
+        captured = (opts as { cookies: { getAll: () => typeof captured } }).cookies.getAll();
+        return { auth: { getUser } } as never;
       },
-    );
+    });
     expect(captured).toEqual([
       { name: 'sb-access-token', value: 'tok' },
       { name: 'sb-refresh-token', value: 'ref' },

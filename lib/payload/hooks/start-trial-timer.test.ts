@@ -19,20 +19,14 @@ function makeDeps(opts: { ownerTrialEndsAt?: string | null } = {}) {
 describe('handleStartTrialTimer', () => {
   it('sets `trialEndsAt = now + 14d` on the owner when a profile is first created and the user has no timer', async () => {
     const deps = makeDeps();
-    await handleStartTrialTimer(
-      { operation: 'create', doc: { owner: 1 } },
-      deps,
-    );
+    await handleStartTrialTimer({ operation: 'create', doc: { owner: 1 } }, deps);
     const expected = new Date(NOW.getTime() + FOURTEEN_DAYS_MS).toISOString();
     expect(deps.updateUser).toHaveBeenCalledWith(1, { trialEndsAt: expected });
   });
 
   it('is a no-op on update', async () => {
     const deps = makeDeps();
-    await handleStartTrialTimer(
-      { operation: 'update', doc: { owner: 1 } },
-      deps,
-    );
+    await handleStartTrialTimer({ operation: 'update', doc: { owner: 1 } }, deps);
     expect(deps.updateUser).not.toHaveBeenCalled();
   });
 
@@ -40,19 +34,13 @@ describe('handleStartTrialTimer', () => {
     const deps = makeDeps({
       ownerTrialEndsAt: '2026-05-20T12:00:00Z',
     });
-    await handleStartTrialTimer(
-      { operation: 'create', doc: { owner: 1 } },
-      deps,
-    );
+    await handleStartTrialTimer({ operation: 'create', doc: { owner: 1 } }, deps);
     expect(deps.updateUser).not.toHaveBeenCalled();
   });
 
   it('accepts owner as an object reference (`{ id: 1 }`) — Payload sometimes passes populated docs', async () => {
     const deps = makeDeps();
-    await handleStartTrialTimer(
-      { operation: 'create', doc: { owner: { id: 1 } } },
-      deps,
-    );
+    await handleStartTrialTimer({ operation: 'create', doc: { owner: { id: 1 } } }, deps);
     expect(deps.updateUser).toHaveBeenCalledWith(1, expect.any(Object));
   });
 

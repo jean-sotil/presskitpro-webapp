@@ -30,9 +30,7 @@ export type ContactFormReason =
   | 'message-required'
   | 'message-too-long';
 
-export type ContactFormResult =
-  | { ok: true }
-  | { ok: false; reason: ContactFormReason };
+export type ContactFormResult = { ok: true } | { ok: false; reason: ContactFormReason };
 
 export function validateContactForm(input: ContactFormInput): ContactFormResult {
   if (input.honeypot && input.honeypot.trim().length > 0) {

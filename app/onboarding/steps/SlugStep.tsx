@@ -7,9 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { advanceStep } from '../actions';
 import { validateSlugFormat } from '@/lib/slug/format';
 
-type CheckResult =
-  | { available: true }
-  | { available: false; reason: string };
+type CheckResult = { available: true } | { available: false; reason: string };
 
 type Status =
   | { kind: 'idle' }
@@ -44,9 +42,7 @@ export function SlugStep({ initialSlug, debounceMs = 300 }: SlugStepProps) {
     setStatus({ kind: 'checking' });
     const id = setTimeout(async () => {
       try {
-        const res = await fetch(
-          `/api/slug/check?slug=${encodeURIComponent(slug)}`,
-        );
+        const res = await fetch(`/api/slug/check?slug=${encodeURIComponent(slug)}`);
         if (!res.ok) {
           const text = await res.text().catch(() => '');
           throw new Error(`HTTP ${res.status}${text ? ` — ${text.slice(0, 200)}` : ''}`);
@@ -108,17 +104,10 @@ export function SlugStep({ initialSlug, debounceMs = 300 }: SlugStepProps) {
           aria-invalid={status.kind === 'unavailable' || status.kind === 'error'}
         />
       </div>
-      <p
-        id="slug-hint"
-        role="status"
-        aria-live="polite"
-        className="min-h-[1.25rem] text-sm"
-      >
+      <p id="slug-hint" role="status" aria-live="polite" className="min-h-[1.25rem] text-sm">
         {status.kind === 'idle' && 'Letras minúsculas, números e hífens. 2 a 30 caracteres.'}
         {status.kind === 'checking' && 'Verificando...'}
-        {status.kind === 'available' && (
-          <span className="text-accent">Disponível ✓</span>
-        )}
+        {status.kind === 'available' && <span className="text-accent">Disponível ✓</span>}
         {status.kind === 'unavailable' && (
           <span className="text-text-muted">{labelFor(status.reason)}</span>
         )}
@@ -141,12 +130,19 @@ export function SlugStep({ initialSlug, debounceMs = 300 }: SlugStepProps) {
 
 function labelFor(reason: string): string {
   switch (reason) {
-    case 'too-short':   return 'Muito curto (mínimo 2 caracteres).';
-    case 'too-long':    return 'Muito longo (máximo 30 caracteres).';
-    case 'invalid-chars': return 'Use apenas letras minúsculas, números e hífens.';
-    case 'reserved':    return 'Esta URL é reservada.';
-    case 'profane':     return 'Esta URL não é permitida.';
-    case 'taken':       return 'Esta URL já está em uso.';
-    default:            return 'Indisponível.';
+    case 'too-short':
+      return 'Muito curto (mínimo 2 caracteres).';
+    case 'too-long':
+      return 'Muito longo (máximo 30 caracteres).';
+    case 'invalid-chars':
+      return 'Use apenas letras minúsculas, números e hífens.';
+    case 'reserved':
+      return 'Esta URL é reservada.';
+    case 'profane':
+      return 'Esta URL não é permitida.';
+    case 'taken':
+      return 'Esta URL já está em uso.';
+    default:
+      return 'Indisponível.';
   }
 }

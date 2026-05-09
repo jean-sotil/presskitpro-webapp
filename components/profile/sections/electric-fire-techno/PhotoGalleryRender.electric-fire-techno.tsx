@@ -32,8 +32,9 @@ export function PhotoGalleryElectricFireTechno({ bundle }: { bundle: EditorBundl
   const t = useTranslations('profile.gallery');
   const raw = bundle.profile.gallery as Array<GalleryEntry | number> | undefined;
   const items = Array.isArray(raw)
-    ? raw.filter((entry): entry is GalleryEntry =>
-        typeof entry === 'object' && entry !== null && 'id' in entry,
+    ? raw.filter(
+        (entry): entry is GalleryEntry =>
+          typeof entry === 'object' && entry !== null && 'id' in entry,
       )
     : [];
   if (items.length === 0) return null;
@@ -75,7 +76,7 @@ export function PhotoGalleryElectricFireTechno({ bundle }: { bundle: EditorBundl
           {items.map((item) => {
             const src = mediaUrl({ bucket: item.bucket, path: item.path });
             if (!src) return null;
-            const alt = item.decorative ? '' : item.alt ?? '';
+            const alt = item.decorative ? '' : (item.alt ?? '');
             return (
               <li
                 key={item.id}
@@ -94,9 +95,7 @@ export function PhotoGalleryElectricFireTechno({ bundle }: { bundle: EditorBundl
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-bg/85 to-transparent"
                 />
-                <CornerBolt
-                  className="pointer-events-none absolute right-2 top-2 h-5 w-5"
-                />
+                <CornerBolt className="pointer-events-none absolute right-2 top-2 h-5 w-5" />
               </li>
             );
           })}

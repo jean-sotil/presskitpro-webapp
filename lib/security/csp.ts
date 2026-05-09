@@ -52,10 +52,7 @@ export function buildCspHeader({ nonce }: CspOptions): string {
     ],
     ['font-src', ["'self'", 'data:']],
     ['connect-src', ["'self'", '*.supabase.co', 'api.stripe.com']],
-    [
-      'frame-src',
-      ['www.instagram.com', 'w.soundcloud.com', 'js.stripe.com', 'hooks.stripe.com'],
-    ],
+    ['frame-src', ['www.instagram.com', 'w.soundcloud.com', 'js.stripe.com', 'hooks.stripe.com']],
     ['media-src', ["'self'", 'blob:', '*.supabase.co']],
     ['object-src', ["'none'"]],
     ['base-uri', ["'self'"]],
@@ -63,7 +60,5 @@ export function buildCspHeader({ nonce }: CspOptions): string {
     ['frame-ancestors', ["'none'"]],
   ];
 
-  return directives
-    .map(([key, values]) => `${key} ${values.join(' ')}`)
-    .join('; ');
+  return directives.map(([key, values]) => `${key} ${values.join(' ')}`).join('; ');
 }

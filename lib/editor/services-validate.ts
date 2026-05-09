@@ -14,10 +14,7 @@ export const MAX_SERVICES = 8;
 const TITLE_MAX = 80;
 const DESCRIPTION_MAX = 240;
 
-export type ItemReason =
-  | 'title-required'
-  | 'title-too-long'
-  | 'description-too-long';
+export type ItemReason = 'title-required' | 'title-too-long' | 'description-too-long';
 
 type ItemResult = { ok: true } | { ok: false; reason: ItemReason };
 

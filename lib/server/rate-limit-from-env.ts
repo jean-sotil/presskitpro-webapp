@@ -1,9 +1,5 @@
 import { createRateLimiter } from './rate-limit';
-import {
-  createKvRateLimiter,
-  type AsyncRateLimiter,
-  type KvAdapter,
-} from './rate-limit-kv';
+import { createKvRateLimiter, type AsyncRateLimiter, type KvAdapter } from './rate-limit-kv';
 
 /**
  * Env-aware factory.
@@ -30,8 +26,7 @@ export type FromEnvDeps = {
 };
 
 export function createRateLimiterFromEnv(deps: FromEnvDeps): AsyncRateLimiter {
-  const adapter =
-    deps.kvAdapter === undefined ? autoDetectKv() : deps.kvAdapter;
+  const adapter = deps.kvAdapter === undefined ? autoDetectKv() : deps.kvAdapter;
 
   if (adapter) {
     return createKvRateLimiter({

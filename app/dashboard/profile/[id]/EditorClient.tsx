@@ -17,11 +17,7 @@ import { ThemeTab } from '@/components/editor/ThemeTab';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { createAutosave } from '@/lib/editor/autosave';
-import {
-  DEFAULT_SECTION_ORDER,
-  mergeOrder,
-  type SectionKey,
-} from '@/lib/editor/section-order';
+import { DEFAULT_SECTION_ORDER, mergeOrder, type SectionKey } from '@/lib/editor/section-order';
 import { sectionLabels } from '@/lib/editor/sections';
 
 import { DesignTab } from './DesignTab';
@@ -73,9 +69,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     return mergeOrder(persisted ?? [...DEFAULT_SECTION_ORDER]);
   }, [bundle.theme]);
   const [active, setActive] = useState<SectionKey>(sectionOrder[0]!);
-  const [editorTab, setEditorTab] = useState<'sections' | 'theme' | 'design'>(
-    'sections',
-  );
+  const [editorTab, setEditorTab] = useState<'sections' | 'theme' | 'design'>('sections');
   const tDesign = useTranslations('editor.design');
   const tTabs = useTranslations('editor.tabs');
 
@@ -92,10 +86,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
   const dirtyTheme = useRef<Record<string, unknown>>({});
   const dirtySocialLinks = useRef<Record<string, unknown>>({});
 
-  function patchScope(
-    scope: MutationScope,
-    data: Record<string, unknown>,
-  ): Promise<Response> {
+  function patchScope(scope: MutationScope, data: Record<string, unknown>): Promise<Response> {
     return fetch(ROUTE_FOR[scope](bundle.profile.id), {
       method: METHOD_FOR[scope],
       headers: { 'content-type': 'application/json' },
@@ -125,9 +116,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
 
     setSaveState({ kind: 'pending' });
     try {
-      const responses = await Promise.all(
-        buffers.map(([scope, data]) => patchScope(scope, data)),
-      );
+      const responses = await Promise.all(buffers.map(([scope, data]) => patchScope(scope, data)));
       const failed = responses.find((r) => !r.ok);
       if (failed) {
         const body = (await failed.json().catch(() => ({}))) as { error?: string };
@@ -201,10 +190,10 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
       scope === 'profile'
         ? dirtyProfile
         : scope === 'content'
-        ? dirtyContent
-        : scope === 'theme'
-        ? dirtyTheme
-        : dirtySocialLinks;
+          ? dirtyContent
+          : scope === 'theme'
+            ? dirtyTheme
+            : dirtySocialLinks;
     buffer.current = { ...buffer.current, ...patch };
     autosaveRef.current.schedule();
   }
@@ -253,7 +242,10 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
   const headerBar = (
     <header className="flex flex-wrap items-center justify-between gap-4 border-b border-border bg-bg px-6 py-4 md:px-12">
       <div className="flex items-center gap-6">
-        <Link href="/dashboard" className="text-xs uppercase tracking-wider text-text-muted hover:text-text">
+        <Link
+          href="/dashboard"
+          className="text-xs uppercase tracking-wider text-text-muted hover:text-text"
+        >
           ← Painel
         </Link>
         <p className="font-display text-sm uppercase tracking-wider">
@@ -263,11 +255,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
       <div className="flex items-center gap-4">
         <SaveStatus state={saveState} />
         {bundle.profile.status === 'published' ? (
-          <Button
-            variant="ghost"
-            type="button"
-            onClick={() => setDialogIntent('unpublish')}
-          >
+          <Button variant="ghost" type="button" onClick={() => setDialogIntent('unpublish')}>
             Despublicar
           </Button>
         ) : (
@@ -300,9 +288,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
         aria-selected={editorTab === 'theme'}
         onClick={() => setEditorTab('theme')}
         className={`flex-1 border-b-2 px-3 py-2 text-xs uppercase tracking-wider ${
-          editorTab === 'theme'
-            ? 'border-accent text-text'
-            : 'border-transparent text-text-muted'
+          editorTab === 'theme' ? 'border-accent text-text' : 'border-transparent text-text-muted'
         }`}
       >
         {tTabs('theme')}
@@ -313,9 +299,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
         aria-selected={editorTab === 'design'}
         onClick={() => setEditorTab('design')}
         className={`flex-1 border-b-2 px-3 py-2 text-xs uppercase tracking-wider ${
-          editorTab === 'design'
-            ? 'border-accent text-text'
-            : 'border-transparent text-text-muted'
+          editorTab === 'design' ? 'border-accent text-text' : 'border-transparent text-text-muted'
         }`}
       >
         {tDesign('tabLabel')}
@@ -342,7 +326,9 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
           <EditorPane
             active={active}
             bundle={bundle}
-            supabaseUserId={(bundle.profile.owner as unknown as { supabaseUserId?: string })?.supabaseUserId ?? ''}
+            supabaseUserId={
+              (bundle.profile.owner as unknown as { supabaseUserId?: string })?.supabaseUserId ?? ''
+            }
             onMutate={applyMutation}
           />
         </>
@@ -352,9 +338,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
         <DesignTab
           profileId={Number(bundle.profile.id)}
           profileSlug={String(bundle.profile.slug ?? '')}
-          activePresetId={
-            ((bundle.theme as { presetId?: string | null } | null)?.presetId) ?? null
-          }
+          activePresetId={(bundle.theme as { presetId?: string | null } | null)?.presetId ?? null}
         />
       )}
     </div>

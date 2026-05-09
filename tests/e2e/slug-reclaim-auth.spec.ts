@@ -39,9 +39,7 @@ test.describe('Slug reclaim auth @smoke', () => {
 
   test('keep-slug route rejects a tampered token', async ({ request }) => {
     // base64url-ish payload + bogus signature; valid shape, bad HMAC.
-    const res = await request.get(
-      '/api/slug/keep?token=aGVsbG8.bm90LXJlYWwtc2lnbmF0dXJl',
-    );
+    const res = await request.get('/api/slug/keep?token=aGVsbG8.bm90LXJlYWwtc2lnbmF0dXJl');
     expect(res.status()).toBe(401);
   });
 });

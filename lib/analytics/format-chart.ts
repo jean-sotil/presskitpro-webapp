@@ -57,11 +57,7 @@ export function formatChart(args: {
 
 function buildDayWindow(today: Date): string[] {
   const out: string[] = [];
-  const baseUtc = Date.UTC(
-    today.getUTCFullYear(),
-    today.getUTCMonth(),
-    today.getUTCDate(),
-  );
+  const baseUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
   for (let i = WINDOW_DAYS - 1; i >= 0; i -= 1) {
     const d = new Date(baseUtc - i * 24 * 60 * 60 * 1000);
     out.push(toYmd(d));

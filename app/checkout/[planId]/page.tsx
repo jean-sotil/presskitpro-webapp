@@ -40,11 +40,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function CheckoutPage({
-  params,
-}: {
-  params: Promise<Params>;
-}) {
+export default async function CheckoutPage({ params }: { params: Promise<Params> }) {
   const { planId } = await params;
   const meta = PLAN_LABELS[planId];
   if (!meta) notFound();
@@ -58,11 +54,7 @@ export default async function CheckoutPage({
   return (
     <main id="main">
       <Section className="max-w-3xl">
-        <CheckoutCard
-          planId={planId}
-          planLabel={meta.label}
-          priceCopy={meta.priceCopy}
-        />
+        <CheckoutCard planId={planId} planLabel={meta.label} priceCopy={meta.priceCopy} />
       </Section>
     </main>
   );

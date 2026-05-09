@@ -26,10 +26,7 @@ type IncomingPost = { id?: number; url?: unknown };
  * `displayOrder` is rewritten from incoming array index. IDs are
  * preserved across saves so the editor's optimistic state doesn't churn.
  */
-export async function PUT(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const profileId = Number.parseInt(id, 10);
   if (!Number.isInteger(profileId) || profileId <= 0) {
@@ -53,10 +50,7 @@ export async function PUT(
 
   const incoming = Array.isArray(body.posts) ? (body.posts as IncomingPost[]) : null;
   if (!incoming) {
-    return NextResponse.json(
-      { error: 'posts must be an array' },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: 'posts must be an array' }, { status: 400 });
   }
   if (incoming.length > MAX_POSTS) {
     return NextResponse.json({ error: 'too-many', max: MAX_POSTS }, { status: 400 });
@@ -124,8 +118,7 @@ export async function PUT(
     const item = validated[i]!;
     const prior = item.id ? existing.find((e) => e.id === item.id) : undefined;
     const fresh =
-      prior?.fetchedAt &&
-      Date.now() - new Date(prior.fetchedAt).getTime() < STALE_AFTER_MS;
+      prior?.fetchedAt && Date.now() - new Date(prior.fetchedAt).getTime() < STALE_AFTER_MS;
     const sameUrl = prior?.url === item.canonical;
     const skipFetch = !force && prior && sameUrl && fresh && prior.oembedHtml;
 

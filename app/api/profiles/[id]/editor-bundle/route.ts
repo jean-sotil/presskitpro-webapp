@@ -8,10 +8,7 @@ import { loadBundle } from '@/lib/editor/bundle';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-export async function GET(
-  _req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const profileId = parseProfileId(id);
   if (profileId === null) {

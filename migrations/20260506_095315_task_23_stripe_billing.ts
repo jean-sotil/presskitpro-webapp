@@ -1,4 +1,4 @@
-import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres';
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
@@ -21,7 +21,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "stripe_webhook_events_updated_at_idx" ON "payload"."stripe_webhook_events" USING btree ("updated_at");
   CREATE INDEX "stripe_webhook_events_created_at_idx" ON "payload"."stripe_webhook_events" USING btree ("created_at");
   ALTER TABLE "payload"."payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_stripe_webhook_events_fk" FOREIGN KEY ("stripe_webhook_events_id") REFERENCES "payload"."stripe_webhook_events"("id") ON DELETE cascade ON UPDATE no action;
-  CREATE INDEX "payload_locked_documents_rels_stripe_webhook_events_id_idx" ON "payload"."payload_locked_documents_rels" USING btree ("stripe_webhook_events_id");`)
+  CREATE INDEX "payload_locked_documents_rels_stripe_webhook_events_id_idx" ON "payload"."payload_locked_documents_rels" USING btree ("stripe_webhook_events_id");`);
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
@@ -41,5 +41,5 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   ALTER TABLE "payload"."users" DROP COLUMN "stripe_subscription_id";
   ALTER TABLE "payload"."users" DROP COLUMN "stripe_subscription_status";
   ALTER TABLE "payload"."payload_locked_documents_rels" DROP COLUMN "stripe_webhook_events_id";
-  DROP TYPE "payload"."enum_users_stripe_subscription_status";`)
+  DROP TYPE "payload"."enum_users_stripe_subscription_status";`);
 }

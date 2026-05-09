@@ -1,9 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import {
-  canCreateForOwnedProfile,
-  ownsViaProfile,
-} from '../../lib/payload/access/predicates';
+import { canCreateForOwnedProfile, ownsViaProfile } from '../../lib/payload/access/predicates';
 
 /**
  * Localized content for each Profile (1:1).
@@ -54,7 +51,7 @@ export const ProfileContent: CollectionConfig = {
       localized: true,
       labels: { singular: 'Service', plural: 'Services' },
       fields: [
-        { name: 'title',       type: 'text', required: true, maxLength: 80 },
+        { name: 'title', type: 'text', required: true, maxLength: 80 },
         { name: 'description', type: 'textarea', maxLength: 240 },
       ],
     },

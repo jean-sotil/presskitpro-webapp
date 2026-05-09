@@ -70,8 +70,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'missing id or email' }, { status: 400 });
   }
 
-  const displayName =
-    rec.raw_user_meta_data?.full_name ?? rec.raw_user_meta_data?.name ?? null;
+  const displayName = rec.raw_user_meta_data?.full_name ?? rec.raw_user_meta_data?.name ?? null;
 
   const existing = await p.find({
     collection: 'users',

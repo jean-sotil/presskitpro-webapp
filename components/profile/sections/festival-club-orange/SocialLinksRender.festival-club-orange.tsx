@@ -34,9 +34,7 @@ export function SocialLinksFestivalClubOrange({ bundle }: { bundle: EditorBundle
   const tPlatforms = useTranslations('profile.social.platforms');
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
   if (!raw.length) return null;
-  const links = [...raw].sort(
-    (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
-  );
+  const links = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   const profileSlug = bundle.profile.slug;
 
   return (
@@ -65,13 +63,9 @@ export function SocialLinksFestivalClubOrange({ bundle }: { bundle: EditorBundle
               } catch {
                 label = link.platform;
               }
-              const external =
-                link.platform !== 'email' && link.platform !== 'whatsapp';
+              const external = link.platform !== 'email' && link.platform !== 'whatsapp';
               return (
-                <li
-                  key={String(link.id)}
-                  className="border-t border-border last:border-b"
-                >
+                <li key={String(link.id)} className="border-t border-border last:border-b">
                   <TrackedSocialLink
                     href={href}
                     platform={link.platform}
@@ -138,16 +132,27 @@ function PhoneFrame({ slug }: { slug: string }) {
       className="relative mx-auto w-full max-w-[260px] motion-safe:animate-[phone-float_3s_ease-in-out_infinite]"
       style={{ transform: 'rotate(-6deg)' }}
     >
-      <svg
-        viewBox="0 0 220 440"
-        className="h-auto w-full"
-        role="img"
-        aria-label=""
-      >
-        <rect x="6" y="6" width="208" height="428" rx="32" fill="#1A1A1A" stroke="#2A2A2A" strokeWidth="2" />
+      <svg viewBox="0 0 220 440" className="h-auto w-full" role="img" aria-label="">
+        <rect
+          x="6"
+          y="6"
+          width="208"
+          height="428"
+          rx="32"
+          fill="#1A1A1A"
+          stroke="#2A2A2A"
+          strokeWidth="2"
+        />
         <rect x="14" y="14" width="192" height="412" rx="26" fill="#0E0E0E" />
         <rect x="80" y="22" width="60" height="14" rx="7" fill="#2A2A2A" />
-        <text x="22" y="64" fontFamily="ui-monospace, monospace" fontSize="9" fill="#FFFFFF" letterSpacing="1">
+        <text
+          x="22"
+          y="64"
+          fontFamily="ui-monospace, monospace"
+          fontSize="9"
+          fill="#FFFFFF"
+          letterSpacing="1"
+        >
           @{slug}
         </text>
         <rect x="22" y="74" width="42" height="42" rx="21" fill="#FF5500" />

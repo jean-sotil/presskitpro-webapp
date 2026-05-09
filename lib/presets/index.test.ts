@@ -2,12 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { fontPairs } from '@/lib/design/tokens';
 
-import {
-  DEFAULT_PRESET_ID,
-  PRESETS,
-  getDefaultPreset,
-  getPresetById,
-} from './index';
+import { DEFAULT_PRESET_ID, PRESETS, getDefaultPreset, getPresetById } from './index';
 
 describe('preset registry', () => {
   it('ships at least the two POC presets', () => {

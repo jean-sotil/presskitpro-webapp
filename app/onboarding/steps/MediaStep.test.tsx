@@ -75,11 +75,7 @@ describe('MediaStep', () => {
       ),
     );
     await waitFor(() =>
-      expect(globalThis.fetch).toHaveBeenNthCalledWith(
-        3,
-        '/api/media',
-        expect.any(Object),
-      ),
+      expect(globalThis.fetch).toHaveBeenNthCalledWith(3, '/api/media', expect.any(Object)),
     );
 
     fireEvent.click(screen.getByRole('button', { name: /continuar/i }));
@@ -98,8 +94,6 @@ describe('MediaStep', () => {
     fireEvent.change(document.querySelector('input[type="file"]')!, {
       target: { files: [file] },
     });
-    await waitFor(() =>
-      expect(screen.getByRole('status')).toHaveTextContent(/upload-sign-failed/),
-    );
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/upload-sign-failed/));
   });
 });

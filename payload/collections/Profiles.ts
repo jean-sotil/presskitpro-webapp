@@ -1,9 +1,6 @@
 import type { CollectionAfterChangeHook, CollectionConfig } from 'payload';
 
-import {
-  canCreateProfileWithCap,
-  ownsProfile,
-} from '../../lib/payload/access/predicates';
+import { canCreateProfileWithCap, ownsProfile } from '../../lib/payload/access/predicates';
 import { derivePressKitProviderHook } from '../../lib/payload/hooks/derive-press-kit-provider';
 import { handleProfileRevalidate } from '../../lib/payload/hooks/profile-revalidate';
 import { handleSlugChange } from '../../lib/payload/hooks/profile-slug-changed';
@@ -14,8 +11,7 @@ import { handleStartTrialTimer } from '../../lib/payload/hooks/start-trial-timer
 // build-time but the Payload CLI (tsx) cannot resolve. Loading it lazily
 // inside the hook keeps `pnpm payload generate:types` / `migrate:create`
 // working while preserving the runtime guard inside the Next app.
-const loadSupabaseAdmin = async () =>
-  (await import('../../lib/supabase/admin')).supabaseAdmin();
+const loadSupabaseAdmin = async () => (await import('../../lib/supabase/admin')).supabaseAdmin();
 
 /**
  * Per PRD §7. Press-kit fields are derived from the URL by a beforeChange
@@ -75,9 +71,7 @@ const profileAfterChange: CollectionAfterChangeHook = async ({
   handleProfileRevalidate({
     operation,
     doc: { slug: doc?.slug, status: doc?.status },
-    previousDoc: previousDoc
-      ? { slug: previousDoc.slug, status: previousDoc.status }
-      : undefined,
+    previousDoc: previousDoc ? { slug: previousDoc.slug, status: previousDoc.status } : undefined,
   });
   return doc;
 };
@@ -175,8 +169,7 @@ export const Profiles: CollectionConfig = {
       hasMany: true,
       maxRows: 50,
       admin: {
-        description:
-          'Gallery photos (drag-reorder in the editor). Max 50 (soft warn at 24).',
+        description: 'Gallery photos (drag-reorder in the editor). Max 50 (soft warn at 24).',
       },
     },
 

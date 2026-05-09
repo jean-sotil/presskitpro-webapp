@@ -12,11 +12,7 @@ import { supabaseServer } from '@/lib/supabase/server';
  * check, the actual security boundary) and short-circuit users who have
  * already completed onboarding.
  */
-export default async function OnboardingLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function OnboardingLayout({ children }: { children: React.ReactNode }) {
   const sb = await supabaseServer();
   const {
     data: { user },
@@ -33,9 +29,7 @@ export default async function OnboardingLayout({
     limit: 1,
     depth: 0,
   });
-  const progress = (result.docs[0]?.onboardingProgress ?? null) as
-    | OnboardingProgress
-    | null;
+  const progress = (result.docs[0]?.onboardingProgress ?? null) as OnboardingProgress | null;
   if (isComplete(progress)) {
     redirect('/dashboard');
   }

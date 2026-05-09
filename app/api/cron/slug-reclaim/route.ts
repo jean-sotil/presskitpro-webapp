@@ -4,20 +4,14 @@ import { timingSafeEqual } from 'node:crypto';
 import { sendEmail } from '@/lib/email/send';
 import { renderSlugReclaimEmail } from '@/lib/email/templates/slug-reclaim';
 import { payload } from '@/lib/payload';
-import {
-  signKeepSlugToken,
-} from '@/lib/slug-reclaim/keep-slug-token';
-import {
-  sweepInactiveSlugs,
-  type SweepCandidate,
-} from '@/lib/slug-reclaim/sweep';
+import { signKeepSlugToken } from '@/lib/slug-reclaim/keep-slug-token';
+import { sweepInactiveSlugs, type SweepCandidate } from '@/lib/slug-reclaim/sweep';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const FROM_ADDRESS = process.env.HEALTH_EMAIL_FROM ?? 'noreply@presskit.pro';
-const APP_URL =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
 
 function constantTimeEqual(a: string, b: string): boolean {
   const ab = Buffer.from(a);
@@ -29,10 +23,7 @@ function constantTimeEqual(a: string, b: string): boolean {
 export async function POST(req: Request) {
   const expected = process.env.CRON_SECRET;
   if (!expected) {
-    return NextResponse.json(
-      { error: 'cron not configured' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'cron not configured' }, { status: 500 });
   }
 
   const auth = req.headers.get('authorization') ?? '';
@@ -75,7 +66,13 @@ export async function POST(req: Request) {
 
       const out: SweepCandidate[] = [];
       for (const doc of found.docs) {
-        const owner = (doc as { owner?: number | { id?: number; email?: string; stripeSubscriptionStatus?: string | null } }).owner;
+        const owner = (
+          doc as {
+            owner?:
+              | number
+              | { id?: number; email?: string; stripeSubscriptionStatus?: string | null };
+          }
+        ).owner;
         const ownerEmail =
           typeof owner === 'object' && owner !== null
             ? String((owner as { email?: string }).email ?? '')
@@ -83,32 +80,25 @@ export async function POST(req: Request) {
         if (!ownerEmail) continue;
         const subStatus =
           typeof owner === 'object' && owner !== null
-            ? ((owner as { stripeSubscriptionStatus?: string | null })
-                .stripeSubscriptionStatus ?? null)
+            ? ((owner as { stripeSubscriptionStatus?: string | null }).stripeSubscriptionStatus ??
+              null)
             : null;
         out.push({
           profileId: (doc as { id?: number | string }).id!,
           slug: String((doc as { slug?: string }).slug ?? ''),
-          status:
-            ((doc as { status?: string }).status as SweepCandidate['status']) ??
-            'draft',
-          profileUpdatedAt: parseDate(
-            (doc as { updatedAt?: string }).updatedAt,
-          ),
+          status: ((doc as { status?: string }).status as SweepCandidate['status']) ?? 'draft',
+          profileUpdatedAt: parseDate((doc as { updatedAt?: string }).updatedAt),
           ownerEmail,
-          ownerLocale:
-            (doc as { defaultLocale?: string }).defaultLocale ?? 'pt-BR',
+          ownerLocale: (doc as { defaultLocale?: string }).defaultLocale ?? 'pt-BR',
           // Last sign-in lives in Supabase auth; we don't query it here
           // for v1 — the cron runs against profile + analytics activity
           // signals only. Adding the auth join is a follow-up once the
           // perf cost is measured.
           lastSignInAt: null,
           lastEventAt: null,
-          hasActiveSubscription:
-            subStatus === 'active' || subStatus === 'past_due',
+          hasActiveSubscription: subStatus === 'active' || subStatus === 'past_due',
           slugReclaimWarningAt: parseDate(
-            (doc as { slugReclaimWarningAt?: string })
-              .slugReclaimWarningAt,
+            (doc as { slugReclaimWarningAt?: string }).slugReclaimWarningAt,
           ),
           slugSoftReleasedAt: parseDate(
             (doc as { slugSoftReleasedAt?: string }).slugSoftReleasedAt,

@@ -9,9 +9,7 @@ export type SlugCheckReason =
   | 'profane'
   | 'taken';
 
-export type SlugCheckResult =
-  | { available: true }
-  | { available: false; reason: SlugCheckReason };
+export type SlugCheckResult = { available: true } | { available: false; reason: SlugCheckReason };
 
 export type ReservationRow = {
   type: string;
@@ -54,8 +52,7 @@ export async function checkSlugAvailability(
     }
     if (reservation.type === 'soft_hold') {
       const stillActive =
-        reservation.expires_at &&
-        new Date(reservation.expires_at).getTime() > Date.now();
+        reservation.expires_at && new Date(reservation.expires_at).getTime() > Date.now();
       if (stillActive && reservation.held_by_user_id !== args.requestingUserId) {
         return { available: false, reason: 'taken' };
       }

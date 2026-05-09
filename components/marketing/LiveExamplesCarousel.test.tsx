@@ -40,8 +40,7 @@ function stubMatchMedia(reduce: boolean) {
   vi.stubGlobal(
     'matchMedia',
     vi.fn((query: string) => ({
-      matches:
-        query === '(prefers-reduced-motion: reduce)' ? reduce : !reduce,
+      matches: query === '(prefers-reduced-motion: reduce)' ? reduce : !reduce,
       media: query,
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
@@ -64,10 +63,7 @@ describe('LiveExamplesCarousel', () => {
     stubMatchMedia(false);
     renderWithIntl(<LiveExamplesCarousel examples={EXAMPLES} />);
     expect(screen.getAllByRole('link')).toHaveLength(EXAMPLES.length);
-    expect(screen.getByRole('link', { name: /dj 1/i })).toHaveAttribute(
-      'href',
-      '/dj-1',
-    );
+    expect(screen.getByRole('link', { name: /dj 1/i })).toHaveAttribute('href', '/dj-1');
   });
 
   it('autoplays only when prefers-reduced-motion is no-preference', () => {

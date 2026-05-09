@@ -4,17 +4,13 @@ import { timingSafeEqual } from 'node:crypto';
 import { sendEmail } from '@/lib/email/send';
 import { renderPressKitEmail } from '@/lib/email/templates/press-kit';
 import { checkPressKitUrl } from '@/lib/health-check/check-press-kit-url';
-import {
-  sweepPressKitHealth,
-  type SweepProfile,
-} from '@/lib/health-check/sweep';
+import { sweepPressKitHealth, type SweepProfile } from '@/lib/health-check/sweep';
 import { payload } from '@/lib/payload';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const FROM_ADDRESS =
-  process.env.HEALTH_EMAIL_FROM ?? 'noreply@presskit.pro';
+const FROM_ADDRESS = process.env.HEALTH_EMAIL_FROM ?? 'noreply@presskit.pro';
 
 function constantTimeEqual(a: string, b: string): boolean {
   const ab = Buffer.from(a);
@@ -26,10 +22,7 @@ function constantTimeEqual(a: string, b: string): boolean {
 export async function POST(req: Request) {
   const expected = process.env.CRON_SECRET;
   if (!expected) {
-    return NextResponse.json(
-      { error: 'cron not configured' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'cron not configured' }, { status: 500 });
   }
 
   const auth = req.headers.get('authorization') ?? '';
@@ -63,8 +56,7 @@ export async function POST(req: Request) {
           const slug = (doc as { slug?: string }).slug ?? '';
           const url = (doc as { pressKitUrl?: string }).pressKitUrl ?? '';
           if (id === undefined || !url) return null;
-          const owner = (doc as { owner?: number | { id?: number; email?: string } })
-            .owner;
+          const owner = (doc as { owner?: number | { id?: number; email?: string } }).owner;
           const ownerEmail =
             typeof owner === 'object' && owner !== null
               ? String((owner as { email?: string }).email ?? '')
@@ -82,11 +74,9 @@ export async function POST(req: Request) {
                 | 'broken') ?? 'unknown',
             pressKitConsecutiveFails:
               Number(
-                (doc as { pressKitConsecutiveFails?: number })
-                  .pressKitConsecutiveFails ?? 0,
+                (doc as { pressKitConsecutiveFails?: number }).pressKitConsecutiveFails ?? 0,
               ) || 0,
-            defaultLocale:
-              (doc as { defaultLocale?: string }).defaultLocale ?? 'pt-BR',
+            defaultLocale: (doc as { defaultLocale?: string }).defaultLocale ?? 'pt-BR',
             ownerEmail,
           };
         })

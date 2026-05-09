@@ -11,6 +11,7 @@ import { PhotoGalleryEditorialNightlifeV1 } from './editorial-nightlife-v1/Photo
 import { PhotoGalleryElectricFireTechno } from './electric-fire-techno/PhotoGalleryRender.electric-fire-techno';
 import { PhotoGalleryFestivalClubOrange } from './festival-club-orange/PhotoGalleryRender.festival-club-orange';
 import { PhotoGalleryMediakitProV1 } from './mediakit-pro-v1/PhotoGalleryRender.mediakit-pro-v1';
+import { PhotoGalleryDeadSignal } from './dead-signal/PhotoGalleryRender.dead-signal';
 
 type GalleryEntry = {
   id: number;
@@ -37,15 +38,22 @@ export function PhotoGalleryRender({
   const t = useTranslations('profile.gallery');
 
   // Folder-owned preset dispatch.
-  if (preset?.id === 'electric-fire-techno') return <PhotoGalleryElectricFireTechno bundle={bundle} />;
+  if (preset?.id === 'dead-signal') return <PhotoGalleryDeadSignal bundle={bundle} />;
+  if (preset?.id === 'electric-fire-techno')
+    return <PhotoGalleryElectricFireTechno bundle={bundle} />;
   if (preset?.id === 'mediakit-pro-v1') return <PhotoGalleryMediakitProV1 bundle={bundle} />;
-  if (preset?.id === 'festival-club-orange') return <PhotoGalleryFestivalClubOrange bundle={bundle} />;
-  if (preset?.id === 'editorial-nightlife-v1') return <PhotoGalleryEditorialNightlifeV1 bundle={bundle} />;
+  if (preset?.id === 'festival-club-orange')
+    return <PhotoGalleryFestivalClubOrange bundle={bundle} />;
+  if (preset?.id === 'editorial-nightlife-v1')
+    return <PhotoGalleryEditorialNightlifeV1 bundle={bundle} />;
 
   // No preset → unstyled fallback driven by `Themes.galleryLayout`.
   const raw = bundle.profile.gallery as Array<GalleryEntry | number> | undefined;
   const items = Array.isArray(raw)
-    ? raw.filter((entry): entry is GalleryEntry => typeof entry === 'object' && entry !== null && 'id' in entry)
+    ? raw.filter(
+        (entry): entry is GalleryEntry =>
+          typeof entry === 'object' && entry !== null && 'id' in entry,
+      )
     : [];
   if (items.length === 0) return null;
 
@@ -58,7 +66,7 @@ export function PhotoGalleryRender({
         {items.map((item) => {
           const src = mediaUrl({ bucket: item.bucket, path: item.path });
           if (!src) return null;
-          const alt = item.decorative ? '' : item.alt ?? '';
+          const alt = item.decorative ? '' : (item.alt ?? '');
           return (
             <li key={item.id} className={itemClassFor(layout)}>
               <Image

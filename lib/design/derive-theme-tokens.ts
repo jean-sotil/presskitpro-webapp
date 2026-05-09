@@ -64,12 +64,10 @@ export function deriveThemeTokens(theme: RawTheme | null | undefined): DerivedTo
   const fallbackBgHex = defaultTokens.bg?.hex ?? '#030303';
   const fallbackAccentHex = defaultTokens.accent?.hex ?? '#018A00';
   const bgHex = normalizeHex(safe.bg) ?? bgPreset?.hex ?? fallbackBgHex;
-  const accentHex =
-    normalizeHex(safe.accent) ?? accentPreset?.hex ?? fallbackAccentHex;
+  const accentHex = normalizeHex(safe.accent) ?? accentPreset?.hex ?? fallbackAccentHex;
 
   const bgMode = detectBgMode(bgHex);
-  const textHex =
-    normalizeHex(safe.text) ?? autoText[bgMode].hex;
+  const textHex = normalizeHex(safe.text) ?? autoText[bgMode].hex;
 
   // Accent-contrast: pick black/white for whichever has more contrast against
   // the accent. Used by buttons that bg-color === accent.

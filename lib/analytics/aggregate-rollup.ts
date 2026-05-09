@@ -37,13 +37,16 @@ export function aggregateRollup(args: {
   const dayEnd = dayStart + 24 * 60 * 60 * 1000;
 
   // (profileId, eventType) → bucket
-  const buckets = new Map<string, {
-    profileId: number;
-    eventType: EventType;
-    count: number;
-    uniqueHashes: Set<string>;
-    referrerCounts: Map<string, number>;
-  }>();
+  const buckets = new Map<
+    string,
+    {
+      profileId: number;
+      eventType: EventType;
+      count: number;
+      uniqueHashes: Set<string>;
+      referrerCounts: Map<string, number>;
+    }
+  >();
 
   for (const ev of args.events) {
     const t = Date.parse(ev.occurredAt);

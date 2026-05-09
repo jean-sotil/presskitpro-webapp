@@ -1,21 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  type UploadPhase,
-  isTerminalPhase,
-  phaseLabel,
-  PHASE_ORDER,
-} from './upload-phase';
+import { type UploadPhase, isTerminalPhase, phaseLabel, PHASE_ORDER } from './upload-phase';
 
 describe('PHASE_ORDER', () => {
   it('lists every phase the upload pipeline emits, in order', () => {
-    expect(PHASE_ORDER).toEqual([
-      'queued',
-      'compressing',
-      'uploading',
-      'registering',
-      'done',
-    ]);
+    expect(PHASE_ORDER).toEqual(['queued', 'compressing', 'uploading', 'registering', 'done']);
   });
 });
 

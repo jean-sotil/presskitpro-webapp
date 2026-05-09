@@ -28,10 +28,7 @@ export function ServicesFestivalClubOrange({ bundle }: { bundle: EditorBundle })
   const padded = String(services.length).padStart(2, '0');
 
   return (
-    <section
-      id="servicos"
-      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-28"
-    >
+    <section id="servicos" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-28">
       <header className="mb-10 flex items-end justify-between gap-6 md:mb-14">
         <div>
           <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">

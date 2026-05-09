@@ -5,8 +5,7 @@ import { collectPublishedProfiles } from '@/lib/seo/collect-published-profiles';
 
 export const dynamic = 'force-dynamic';
 
-const SITE_ORIGIN =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
+const SITE_ORIGIN = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
 
 /**
  * Static marketing routes — homepage + commercial + legal. Listed first
@@ -16,10 +15,10 @@ const SITE_ORIGIN =
  * the hreflang fan-out via `alternates.languages`.
  */
 const STATIC_ROUTES: MetadataRoute.Sitemap = [
-  { url: `${SITE_ORIGIN}/`,        changeFrequency: 'weekly',  priority: 1.0 },
+  { url: `${SITE_ORIGIN}/`, changeFrequency: 'weekly', priority: 1.0 },
   { url: `${SITE_ORIGIN}/pricing`, changeFrequency: 'monthly', priority: 0.8 },
-  { url: `${SITE_ORIGIN}/privacy`, changeFrequency: 'yearly',  priority: 0.3 },
-  { url: `${SITE_ORIGIN}/terms`,   changeFrequency: 'yearly',  priority: 0.3 },
+  { url: `${SITE_ORIGIN}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
+  { url: `${SITE_ORIGIN}/terms`, changeFrequency: 'yearly', priority: 0.3 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -41,9 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return {
         docs: result.docs.map((d) => ({
           slug: String((d as { slug: string }).slug),
-          updatedAt: String(
-            (d as { updatedAt?: string }).updatedAt ?? new Date(0).toISOString(),
-          ),
+          updatedAt: String((d as { updatedAt?: string }).updatedAt ?? new Date(0).toISOString()),
         })),
         totalPages: result.totalPages,
         page: result.page ?? 1,

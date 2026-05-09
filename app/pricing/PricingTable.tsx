@@ -4,12 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { pricingCopy } from '@/lib/marketing/pricing-copy';
-import {
-  PLANS,
-  priceForBilling,
-  type BillingCycle,
-  type PlanConfig,
-} from '@/lib/pricing/plans';
+import { PLANS, priceForBilling, type BillingCycle, type PlanConfig } from '@/lib/pricing/plans';
 
 import { AnnualToggle } from './AnnualToggle';
 
@@ -63,9 +58,7 @@ export function PricingTable({ loggedIn }: PricingTableProps) {
                 </p>
               ) : null}
               <div>
-                <h2 className="font-display text-3xl uppercase tracking-tight">
-                  {c.name}
-                </h2>
+                <h2 className="font-display text-3xl uppercase tracking-tight">{c.name}</h2>
                 <p className="mt-2 text-sm text-text-muted">{c.tagline}</p>
               </div>
               <p className="font-display text-4xl tracking-tight">
@@ -74,9 +67,7 @@ export function PricingTable({ loggedIn }: PricingTableProps) {
                 ) : (
                   <>
                     <span>${price}</span>
-                    <span className="ml-1 text-base text-text-muted">
-                      {pricingCopy.perMonth}
-                    </span>
+                    <span className="ml-1 text-base text-text-muted">{pricingCopy.perMonth}</span>
                   </>
                 )}
               </p>

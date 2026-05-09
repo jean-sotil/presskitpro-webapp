@@ -25,7 +25,10 @@ describe('buildApplyPresetPatch', () => {
 
   it('passes through text when defined, null otherwise', () => {
     expect(buildApplyPresetPatch(mediakitProV1).text).toBe(mediakitProV1.theme.text);
-    const noText = { ...editorialNightlifeV1, theme: { ...editorialNightlifeV1.theme, text: undefined } };
+    const noText = {
+      ...editorialNightlifeV1,
+      theme: { ...editorialNightlifeV1.theme, text: undefined },
+    };
     expect(buildApplyPresetPatch(noText).text).toBeNull();
   });
 

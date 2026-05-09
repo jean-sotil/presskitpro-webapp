@@ -22,9 +22,7 @@ const KEY_LEN = 32;
 function decodeKey(keyB64: string): Buffer {
   const buf = Buffer.from(keyB64, 'base64');
   if (buf.length !== KEY_LEN) {
-    throw new Error(
-      `symmetric: key must be ${KEY_LEN} bytes (base64-encoded); got ${buf.length}`,
-    );
+    throw new Error(`symmetric: key must be ${KEY_LEN} bytes (base64-encoded); got ${buf.length}`);
   }
   return buf;
 }

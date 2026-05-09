@@ -25,10 +25,13 @@ export function RevealStagger({ children }: RevealStaggerProps) {
           ['--reveal-index' as string]: String(index),
         };
 
-        return cloneElement(child as React.ReactElement<{ style?: CSSProperties; 'data-reveal'?: string }>, {
-          'data-reveal': '',
-          style: mergedStyle,
-        });
+        return cloneElement(
+          child as React.ReactElement<{ style?: CSSProperties; 'data-reveal'?: string }>,
+          {
+            'data-reveal': '',
+            style: mergedStyle,
+          },
+        );
       })}
     </>
   );

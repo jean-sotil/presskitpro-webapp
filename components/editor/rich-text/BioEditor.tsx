@@ -11,10 +11,7 @@ import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { HeadingNode } from '@lexical/rich-text';
-import {
-  type EditorState,
-  type SerializedEditorState,
-} from 'lexical';
+import { type EditorState, type SerializedEditorState } from 'lexical';
 import { useRef } from 'react';
 
 import { PastePlugin } from './PastePlugin';
@@ -64,14 +61,10 @@ export function BioEditor({ initialState, onChange, ariaLabel }: BioEditorProps)
       console.error('[Lexical]', error);
     },
     editorState:
-      initialState !== null && initialState !== undefined
-        ? JSON.stringify(initialState)
-        : null,
+      initialState !== null && initialState !== undefined ? JSON.stringify(initialState) : null,
   };
 
-  const lastSerialized = useRef<string | null>(
-    initialState ? JSON.stringify(initialState) : null,
-  );
+  const lastSerialized = useRef<string | null>(initialState ? JSON.stringify(initialState) : null);
 
   function handleChange(editorState: EditorState) {
     editorState.read(() => {

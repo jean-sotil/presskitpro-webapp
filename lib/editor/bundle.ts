@@ -21,23 +21,21 @@ export type EditorBundle = {
   theme: { id: number | string; profile: number | string; [key: string]: unknown } | null;
   socialLinks: Array<{ id: number | string; profile: number | string; [key: string]: unknown }>;
   featuredTrack: { id: number | string; profile: number | string; [key: string]: unknown } | null;
-  instagramConnection: { id: number | string; profile: number | string; [key: string]: unknown } | null;
+  instagramConnection: {
+    id: number | string;
+    profile: number | string;
+    [key: string]: unknown;
+  } | null;
   instagramPosts: Array<{ id: number | string; profile: number | string; [key: string]: unknown }>;
 };
 
 export type BundleDeps = {
-  findProfileById(
-    id: number | string,
-    user: PayloadUserDoc,
-  ): Promise<ProfileLite | null>;
+  findProfileById(id: number | string, user: PayloadUserDoc): Promise<ProfileLite | null>;
   findProfileContent(
     profileId: number | string,
     user: PayloadUserDoc,
   ): Promise<EditorBundle['content']>;
-  findTheme(
-    profileId: number | string,
-    user: PayloadUserDoc,
-  ): Promise<EditorBundle['theme']>;
+  findTheme(profileId: number | string, user: PayloadUserDoc): Promise<EditorBundle['theme']>;
   findSocialLinks(
     profileId: number | string,
     user: PayloadUserDoc,
@@ -67,21 +65,15 @@ export async function loadBundle(
 ): Promise<EditorBundle | null> {
   const profile = await deps.findProfileById(args.profileId, args.user);
   if (!profile) return null;
-  const [
-    content,
-    theme,
-    socialLinks,
-    featuredTrack,
-    instagramConnection,
-    instagramPosts,
-  ] = await Promise.all([
-    deps.findProfileContent(profile.id, args.user),
-    deps.findTheme(profile.id, args.user),
-    deps.findSocialLinks(profile.id, args.user),
-    deps.findFeaturedTrack(profile.id, args.user),
-    deps.findInstagramConnection(profile.id, args.user),
-    deps.findInstagramPosts(profile.id, args.user),
-  ]);
+  const [content, theme, socialLinks, featuredTrack, instagramConnection, instagramPosts] =
+    await Promise.all([
+      deps.findProfileContent(profile.id, args.user),
+      deps.findTheme(profile.id, args.user),
+      deps.findSocialLinks(profile.id, args.user),
+      deps.findFeaturedTrack(profile.id, args.user),
+      deps.findInstagramConnection(profile.id, args.user),
+      deps.findInstagramPosts(profile.id, args.user),
+    ]);
   return {
     profile,
     content,
@@ -107,20 +99,11 @@ export async function loadBundle(
  */
 export type PublicBundleDeps = {
   findPublishedProfileBySlug(slug: string): Promise<ProfileLite | null>;
-  findProfileContent(
-    profileId: number | string,
-    locale?: string,
-  ): Promise<EditorBundle['content']>;
+  findProfileContent(profileId: number | string, locale?: string): Promise<EditorBundle['content']>;
   findTheme(profileId: number | string): Promise<EditorBundle['theme']>;
-  findSocialLinks(
-    profileId: number | string,
-  ): Promise<EditorBundle['socialLinks']>;
-  findFeaturedTrack(
-    profileId: number | string,
-  ): Promise<EditorBundle['featuredTrack']>;
-  findInstagramPosts(
-    profileId: number | string,
-  ): Promise<EditorBundle['instagramPosts']>;
+  findSocialLinks(profileId: number | string): Promise<EditorBundle['socialLinks']>;
+  findFeaturedTrack(profileId: number | string): Promise<EditorBundle['featuredTrack']>;
+  findInstagramPosts(profileId: number | string): Promise<EditorBundle['instagramPosts']>;
 };
 
 export async function loadPublicBundle(
@@ -129,21 +112,20 @@ export async function loadPublicBundle(
 ): Promise<EditorBundle | null> {
   const profile = await deps.findPublishedProfileBySlug(args.slug);
   if (!profile) return null;
-  const [content, theme, socialLinks, featuredTrack, instagramPosts] =
-    await Promise.all([
-      // Only ProfileContent has localized fields today (tagline, bio,
-      // services). Other relations (theme, socialLinks, featuredTrack,
-      // instagramPosts) are locale-agnostic. The locale arg is omitted
-      // when undefined so callers/tests that don't care about i18n get
-      // the legacy single-arg signature.
-      args.locale !== undefined
-        ? deps.findProfileContent(profile.id, args.locale)
-        : deps.findProfileContent(profile.id),
-      deps.findTheme(profile.id),
-      deps.findSocialLinks(profile.id),
-      deps.findFeaturedTrack(profile.id),
-      deps.findInstagramPosts(profile.id),
-    ]);
+  const [content, theme, socialLinks, featuredTrack, instagramPosts] = await Promise.all([
+    // Only ProfileContent has localized fields today (tagline, bio,
+    // services). Other relations (theme, socialLinks, featuredTrack,
+    // instagramPosts) are locale-agnostic. The locale arg is omitted
+    // when undefined so callers/tests that don't care about i18n get
+    // the legacy single-arg signature.
+    args.locale !== undefined
+      ? deps.findProfileContent(profile.id, args.locale)
+      : deps.findProfileContent(profile.id),
+    deps.findTheme(profile.id),
+    deps.findSocialLinks(profile.id),
+    deps.findFeaturedTrack(profile.id),
+    deps.findInstagramPosts(profile.id),
+  ]);
   return {
     profile,
     content,
@@ -170,8 +152,7 @@ export async function publishProfile(
   deps: BundleDeps,
   args: { profileId: number | string; user: PayloadUserDoc; now?: () => number },
 ): Promise<
-  | { ok: true; profile: ProfileLite; publicPath: string }
-  | { ok: false; refusal: PublishRefusal }
+  { ok: true; profile: ProfileLite; publicPath: string } | { ok: false; refusal: PublishRefusal }
 > {
   const existing = await deps.findProfileById(args.profileId, args.user);
   if (!existing) return { ok: false, refusal: { kind: 'not-found' } };
@@ -181,9 +162,7 @@ export async function publishProfile(
     ?.contrastValidatedAt;
   const validatedAt = typeof validatedAtRaw === 'string' ? validatedAtRaw : null;
   const now = args.now ? args.now() : Date.now();
-  const fresh =
-    validatedAt &&
-    now - new Date(validatedAt).getTime() < CONTRAST_STALE_AFTER_MS;
+  const fresh = validatedAt && now - new Date(validatedAt).getTime() < CONTRAST_STALE_AFTER_MS;
   if (!fresh) {
     return {
       ok: false,

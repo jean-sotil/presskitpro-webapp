@@ -2,7 +2,9 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { checkPressKitUrl, type CheckDeps } from './check-press-kit-url';
 
-function fakeFetch(plan: Array<{ method?: string; status?: number; throw?: unknown; delayMs?: number }>): CheckDeps['fetch'] {
+function fakeFetch(
+  plan: Array<{ method?: string; status?: number; throw?: unknown; delayMs?: number }>,
+): CheckDeps['fetch'] {
   let i = 0;
   return vi.fn(async (_url: string | URL, init?: RequestInit) => {
     const step = plan[i++];

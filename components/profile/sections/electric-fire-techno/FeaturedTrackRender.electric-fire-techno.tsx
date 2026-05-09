@@ -21,9 +21,7 @@ import { LazyIframe } from '../LazyIframe';
  */
 export function FeaturedTrackElectricFireTechno({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.featuredTrack');
-  const track = bundle.featuredTrack as
-    | { url?: string; oembedHtml?: string | null }
-    | null;
+  const track = bundle.featuredTrack as { url?: string; oembedHtml?: string | null } | null;
   const url = track?.url ?? null;
   const oembedHtml = track?.oembedHtml ?? null;
   if (!url) return null;
@@ -65,20 +63,12 @@ export function FeaturedTrackElectricFireTechno({ bundle }: { bundle: EditorBund
         >
           {t('label')}
         </h2>
-        <div
-          data-glow-track-frame
-          className="relative mt-12 overflow-hidden border bg-surface p-1"
-        >
+        <div data-glow-track-frame className="relative mt-12 overflow-hidden border bg-surface p-1">
           {oembedHtml ? (
             <LazyIframe html={oembedHtml} />
           ) : (
             <p className="break-all p-6 text-center text-sm text-text-muted">
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline"
-              >
+              <a href={url} target="_blank" rel="noopener noreferrer" className="underline">
                 {t('openExternal')} ↗
               </a>
             </p>

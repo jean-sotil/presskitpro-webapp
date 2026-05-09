@@ -20,10 +20,7 @@ type Deps = {
   recordSlugChange?: typeof recordSlugChangeDefault;
 };
 
-export async function handleSlugChange(
-  args: Args,
-  deps: Deps,
-): Promise<void> {
+export async function handleSlugChange(args: Args, deps: Deps): Promise<void> {
   if (args.operation !== 'update') return;
   const oldSlug = args.previousDoc?.slug;
   const newSlug = args.doc?.slug;

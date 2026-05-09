@@ -71,7 +71,7 @@ export const migrations = [
   {
     up: migration_20260508_203914_task_35_festival_orange_preset.up,
     down: migration_20260508_203914_task_35_festival_orange_preset.down,
-    name: '20260508_203914_task_35_festival_orange_preset'
+    name: '20260508_203914_task_35_festival_orange_preset',
   },
   {
     up: migration_20260508_175156_task_35_electric_fire_techno_preset.up,

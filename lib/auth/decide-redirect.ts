@@ -9,17 +9,13 @@ export type RedirectInput = {
   currentNext?: string | null;
 };
 
-export type RedirectDecision =
-  | { kind: 'allow' }
-  | { kind: 'redirect'; to: string };
+export type RedirectDecision = { kind: 'allow' } | { kind: 'redirect'; to: string };
 
 const PROTECTED_PREFIXES = ['/dashboard', '/admin', '/onboarding'];
 const AUTH_PAGES = new Set(['/login', '/signup']);
 
 function isProtected(pathname: string) {
-  return PROTECTED_PREFIXES.some(
-    (p) => pathname === p || pathname.startsWith(`${p}/`),
-  );
+  return PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }
 
 /**

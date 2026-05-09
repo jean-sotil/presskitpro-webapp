@@ -86,7 +86,8 @@ export const Users: CollectionConfig = {
       name: 'trialEndsAt',
       type: 'date',
       admin: {
-        description: 'Set on first profile creation; consumed by the trial-expiration cron (task-23).',
+        description:
+          'Set on first profile creation; consumed by the trial-expiration cron (task-23).',
       },
     },
 
@@ -116,7 +117,8 @@ export const Users: CollectionConfig = {
       type: 'text',
       admin: {
         readOnly: true,
-        description: 'Set by `checkout.session.completed`; cleared by `customer.subscription.deleted`.',
+        description:
+          'Set by `checkout.session.completed`; cleared by `customer.subscription.deleted`.',
       },
     },
     {
@@ -129,7 +131,8 @@ export const Users: CollectionConfig = {
       ],
       admin: {
         readOnly: true,
-        description: 'Mirrored from Stripe webhooks. Null when no subscription has ever been created.',
+        description:
+          'Mirrored from Stripe webhooks. Null when no subscription has ever been created.',
       },
     },
 

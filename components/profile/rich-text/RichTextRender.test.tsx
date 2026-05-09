@@ -63,9 +63,7 @@ describe('RichTextRender', () => {
               {
                 type: 'list',
                 listType: 'number',
-                children: [
-                  { type: 'listitem', children: [{ type: 'text', text: 'first' }] },
-                ],
+                children: [{ type: 'listitem', children: [{ type: 'text', text: 'first' }] }],
               },
             ],
           },

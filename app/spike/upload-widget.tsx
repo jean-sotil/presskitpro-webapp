@@ -22,7 +22,9 @@ export function UploadWidget() {
     const { data: session } = await sb.auth.getUser();
     if (!session.user) {
       setStatus('error');
-      setMessage('Sign in via Supabase Auth first (Studio → Authentication → create user → copy magic link).');
+      setMessage(
+        'Sign in via Supabase Auth first (Studio → Authentication → create user → copy magic link).',
+      );
       return;
     }
     const ownerSupabaseId = session.user.id;

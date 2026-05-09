@@ -72,16 +72,14 @@ export function HeroElectricFireTechno({ bundle }: { bundle: EditorBundle }) {
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-bg via-bg/70 to-transparent"
         />
-        <LightningBolt
-          className="pointer-events-none absolute right-[8%] top-[12%] h-20 w-20 rotate-[-12deg] md:h-28 md:w-28"
-        />
+        <LightningBolt className="pointer-events-none absolute right-[8%] top-[12%] h-20 w-20 rotate-[-12deg] md:h-28 md:w-28" />
         <LightningBolt
           variant="small"
           className="pointer-events-none absolute left-[10%] top-[22%] h-10 w-10 rotate-[18deg] opacity-80"
         />
         <LightningBolt
           variant="small"
-          className="pointer-events-none absolute right-[18%] bottom-[40%] h-8 w-8 rotate-[-26deg] opacity-70"
+          className="pointer-events-none absolute bottom-[40%] right-[18%] h-8 w-8 rotate-[-26deg] opacity-70"
         />
         {/* Sci-fi corner metadata strings — purely decorative. */}
         <span
@@ -92,7 +90,7 @@ export function HeroElectricFireTechno({ bundle }: { bundle: EditorBundle }) {
         </span>
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute right-4 bottom-4 font-mono text-[9px] uppercase tracking-[0.2em] text-text-muted opacity-50"
+          className="pointer-events-none absolute bottom-4 right-4 font-mono text-[9px] uppercase tracking-[0.2em] text-text-muted opacity-50"
         >
           {`LAT 23°33'S · LON 46°38'W`}
         </span>

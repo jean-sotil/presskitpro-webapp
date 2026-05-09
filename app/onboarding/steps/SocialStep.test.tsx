@@ -65,9 +65,7 @@ describe('SocialStep', () => {
       target: { value: 'not a url' },
     });
     fireEvent.submit(screen.getByLabelText(/url ou contato/i).closest('form')!);
-    await waitFor(() =>
-      expect(screen.getByRole('alert')).toHaveTextContent(/url inválida/i),
-    );
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/url inválida/i));
   });
 
   it('surfaces an "incomplete" error if completeWizard says so', async () => {
@@ -81,8 +79,6 @@ describe('SocialStep', () => {
       target: { value: 'https://instagram.com/x' },
     });
     fireEvent.submit(screen.getByLabelText(/url ou contato/i).closest('form')!);
-    await waitFor(() =>
-      expect(screen.getByRole('alert')).toHaveTextContent(/incompleto/i),
-    );
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/incompleto/i));
   });
 });

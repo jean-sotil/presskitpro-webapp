@@ -78,9 +78,7 @@ describe('handleProfileRevalidate', () => {
 
   it('swallows "static generation store missing" — revalidatePath outside a Next request (seed scripts, crons)', () => {
     const revalidatePath = vi.fn(() => {
-      throw new Error(
-        'Invariant: static generation store missing in revalidatePath /mariana',
-      );
+      throw new Error('Invariant: static generation store missing in revalidatePath /mariana');
     });
     expect(() =>
       handleProfileRevalidate(

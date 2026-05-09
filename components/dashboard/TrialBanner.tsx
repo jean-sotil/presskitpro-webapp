@@ -19,16 +19,11 @@ export function TrialBanner({ user }: { user: TrialUser }) {
 
   if (status.kind === 'expired') {
     return (
-      <aside
-        role="status"
-        className="border border-border bg-bg p-6 text-text"
-      >
-        <p className="font-display text-xs uppercase tracking-widest">
-          Período de teste encerrado
-        </p>
+      <aside role="status" className="border border-border bg-bg p-6 text-text">
+        <p className="font-display text-xs uppercase tracking-widest">Período de teste encerrado</p>
         <p className="mt-3 max-w-prose text-base">
-          Seu press kit foi pausado automaticamente. Reative a assinatura
-          para voltar ao ar — o link público continua reservado.
+          Seu press kit foi pausado automaticamente. Reative a assinatura para voltar ao ar — o link
+          público continua reservado.
         </p>
         <Link
           href="/checkout/pro-monthly"

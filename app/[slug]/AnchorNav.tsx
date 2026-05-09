@@ -1,9 +1,5 @@
 import type { EditorBundle } from '@/lib/editor/bundle';
-import {
-  DEFAULT_SECTION_ORDER,
-  mergeOrder,
-  type SectionKey,
-} from '@/lib/editor/section-order';
+import { DEFAULT_SECTION_ORDER, mergeOrder, type SectionKey } from '@/lib/editor/section-order';
 import { SECTIONS } from '@/lib/editor/sections';
 
 /**
@@ -25,9 +21,7 @@ const ANCHOR_KEYS: SectionKey[] = [
 ];
 
 function hasContent(bundle: EditorBundle, key: SectionKey): boolean {
-  const c = bundle.content as
-    | { bio?: unknown; services?: unknown[]; tagline?: unknown }
-    | null;
+  const c = bundle.content as { bio?: unknown; services?: unknown[]; tagline?: unknown } | null;
   switch (key) {
     case 'about':
       return Boolean(c?.bio);
@@ -55,8 +49,9 @@ function hasContent(bundle: EditorBundle, key: SectionKey): boolean {
 }
 
 export function AnchorNav({ bundle }: { bundle: EditorBundle }) {
-  const persisted = (bundle.theme?.sectionOrder as Array<{ key: string }> | undefined)
-    ?.map((entry) => entry.key as SectionKey);
+  const persisted = (bundle.theme?.sectionOrder as Array<{ key: string }> | undefined)?.map(
+    (entry) => entry.key as SectionKey,
+  );
   const order = mergeOrder(persisted ?? [...DEFAULT_SECTION_ORDER]);
   const labels = sectionLabels();
 
@@ -74,10 +69,7 @@ export function AnchorNav({ bundle }: { bundle: EditorBundle }) {
       <ul className="flex flex-wrap gap-x-6 gap-y-2 text-xs uppercase tracking-wider">
         {items.map((key) => (
           <li key={key}>
-            <a
-              href={`#${anchorIdFor(key)}`}
-              className="text-text-muted hover:text-text"
-            >
+            <a href={`#${anchorIdFor(key)}`} className="text-text-muted hover:text-text">
               {labels[key]}
             </a>
           </li>

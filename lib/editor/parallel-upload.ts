@@ -14,9 +14,7 @@
  * `uploadMedia` calls.
  */
 
-export type ItemOutcome<T> =
-  | { ok: true; value: T }
-  | { ok: false; error: Error };
+export type ItemOutcome<T> = { ok: true; value: T } | { ok: false; error: Error };
 
 export type RunParallelArgs<I, T> = {
   items: I[];
@@ -49,10 +47,7 @@ export async function runParallel<I, T>({
     }
   }
 
-  const workers = Array.from(
-    { length: Math.min(concurrency, items.length) },
-    () => worker(),
-  );
+  const workers = Array.from({ length: Math.min(concurrency, items.length) }, () => worker());
   await Promise.all(workers);
   return results;
 }

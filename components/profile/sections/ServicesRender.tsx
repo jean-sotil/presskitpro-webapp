@@ -9,6 +9,7 @@ import { ServicesEditorialNightlifeV1 } from './editorial-nightlife-v1/ServicesR
 import { ServicesElectricFireTechno } from './electric-fire-techno/ServicesRender.electric-fire-techno';
 import { ServicesFestivalClubOrange } from './festival-club-orange/ServicesRender.festival-club-orange';
 import { ServicesMediakitProV1 } from './mediakit-pro-v1/ServicesRender.mediakit-pro-v1';
+import { ServicesDeadSignal } from './dead-signal/ServicesRender.dead-signal';
 
 export function ServicesRender({
   bundle,
@@ -20,15 +21,16 @@ export function ServicesRender({
   const t = useTranslations('profile.services');
 
   // Folder-owned preset dispatch.
+  if (preset?.id === 'dead-signal') return <ServicesDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno') return <ServicesElectricFireTechno bundle={bundle} />;
   if (preset?.id === 'mediakit-pro-v1') return <ServicesMediakitProV1 bundle={bundle} />;
   if (preset?.id === 'festival-club-orange') return <ServicesFestivalClubOrange bundle={bundle} />;
-  if (preset?.id === 'editorial-nightlife-v1') return <ServicesEditorialNightlifeV1 bundle={bundle} />;
+  if (preset?.id === 'editorial-nightlife-v1')
+    return <ServicesEditorialNightlifeV1 bundle={bundle} />;
 
   // No preset → unstyled "classic" fallback for legacy profiles.
-  const services = (bundle.content?.services as
-    | Array<{ title: string; description?: string }>
-    | undefined) ?? [];
+  const services =
+    (bundle.content?.services as Array<{ title: string; description?: string }> | undefined) ?? [];
   if (services.length === 0) return null;
   return (
     <section id="servicos" className="border-b border-border px-6 py-16 md:px-12">
@@ -37,9 +39,7 @@ export function ServicesRender({
         {services.map((s, i) => (
           <li key={`${s.title}-${i}`} className="border border-border p-4">
             <p className="font-display uppercase tracking-wide">{s.title}</p>
-            {s.description ? (
-              <p className="mt-2 text-sm text-text-muted">{s.description}</p>
-            ) : null}
+            {s.description ? <p className="mt-2 text-sm text-text-muted">{s.description}</p> : null}
           </li>
         ))}
       </ul>

@@ -4,9 +4,7 @@ import { humanizeUploadError } from './upload-error-message';
 
 describe('humanizeUploadError', () => {
   it('translates alt-required', () => {
-    expect(humanizeUploadError({ ok: false, reason: 'alt-required' })).toMatch(
-      /alternativo/i,
-    );
+    expect(humanizeUploadError({ ok: false, reason: 'alt-required' })).toMatch(/alternativo/i);
   });
 
   it('translates the client pre-flight too-large with the size detail', () => {
@@ -55,8 +53,6 @@ describe('humanizeUploadError', () => {
 
   it('translates put-failed and register-failed to retry hints', () => {
     expect(humanizeUploadError({ ok: false, reason: 'put-failed' })).toMatch(/conexão/i);
-    expect(humanizeUploadError({ ok: false, reason: 'register-failed' })).toMatch(
-      /tente/i,
-    );
+    expect(humanizeUploadError({ ok: false, reason: 'register-failed' })).toMatch(/tente/i);
   });
 });

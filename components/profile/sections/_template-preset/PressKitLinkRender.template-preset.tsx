@@ -44,10 +44,7 @@ export function PressKitLink_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle 
   const badge = providerBadge(tProviders, provider);
 
   return (
-    <section
-      id="press-kit"
-      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
-    >
+    <section id="press-kit" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
       <div className="mx-auto max-w-2xl text-center">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           07 — {t('label')}
@@ -78,10 +75,7 @@ export function PressKitLink_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle 
   );
 }
 
-function providerBadge(
-  t: (key: string) => string,
-  provider: PressKitProvider,
-): string | null {
+function providerBadge(t: (key: string) => string, provider: PressKitProvider): string | null {
   if (provider === 'unknown' || provider === 'other') return null;
   try {
     return t(provider);

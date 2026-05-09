@@ -29,16 +29,12 @@ describe('ContactForm', () => {
   it('posts to the contact-submit endpoint and shows the success state', async () => {
     const fetchMock = vi
       .spyOn(globalThis, 'fetch')
-      .mockResolvedValue(
-        new Response(JSON.stringify({ ok: true }), { status: 200 }),
-      );
+      .mockResolvedValue(new Response(JSON.stringify({ ok: true }), { status: 200 }));
     render(<ContactForm profileId={42} />);
     fillForm();
     fireEvent.click(screen.getByRole('button', { name: /enviar mensagem/i }));
 
-    await waitFor(() =>
-      expect(screen.getByRole('status')).toHaveTextContent(/mensagem enviada/i),
-    );
+    await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/mensagem enviada/i));
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0]!;
     expect(url).toBe('/api/profiles/42/contact-submit');
@@ -53,17 +49,14 @@ describe('ContactForm', () => {
 
   it('renders a friendly error from the server reason', async () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-      new Response(
-        JSON.stringify({ error: 'validation', reason: 'email-invalid' }),
-        { status: 400 },
-      ),
+      new Response(JSON.stringify({ error: 'validation', reason: 'email-invalid' }), {
+        status: 400,
+      }),
     );
     render(<ContactForm profileId={1} />);
     fillForm();
     fireEvent.click(screen.getByRole('button', { name: /enviar mensagem/i }));
-    await waitFor(() =>
-      expect(screen.getByRole('alert')).toHaveTextContent(/e-mail inválido/i),
-    );
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/e-mail inválido/i));
   });
 
   it('disables submit until a Turnstile token arrives when the site key is set', async () => {
@@ -82,9 +75,7 @@ describe('ContactForm', () => {
     render(<ContactForm profileId={1} />);
     fillForm();
     fireEvent.click(screen.getByRole('button', { name: /enviar mensagem/i }));
-    await waitFor(() =>
-      expect(screen.getByRole('alert')).toHaveTextContent(/captcha/i),
-    );
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/captcha/i));
   });
 
   it('surfaces the rate-limit retry-after header', async () => {
@@ -97,8 +88,6 @@ describe('ContactForm', () => {
     render(<ContactForm profileId={1} />);
     fillForm();
     fireEvent.click(screen.getByRole('button', { name: /enviar mensagem/i }));
-    await waitFor(() =>
-      expect(screen.getByRole('alert')).toHaveTextContent(/120s/),
-    );
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/120s/));
   });
 });

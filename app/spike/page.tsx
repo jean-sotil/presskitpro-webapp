@@ -47,7 +47,9 @@ export default async function SpikePage({ searchParams }: { searchParams: Search
             <tbody>
               {users.docs.map((u) => (
                 <tr key={String(u.id)} style={{ borderTop: '1px solid #eee' }}>
-                  <td><code>{u.supabaseUserId}</code></td>
+                  <td>
+                    <code>{u.supabaseUserId}</code>
+                  </td>
                   <td>{u.email}</td>
                   <td>{u.role}</td>
                   <td>{u.plan}</td>
@@ -71,7 +73,10 @@ export default async function SpikePage({ searchParams }: { searchParams: Search
           <ul>
             {media.docs.map((m) => (
               <li key={String(m.id)}>
-                <code>{m.bucket}/{m.path}</code> · {m.mimeType} · {m.size} bytes · alt=&quot;{m.alt}&quot;
+                <code>
+                  {m.bucket}/{m.path}
+                </code>{' '}
+                · {m.mimeType} · {m.size} bytes · alt=&quot;{m.alt}&quot;
               </li>
             ))}
           </ul>

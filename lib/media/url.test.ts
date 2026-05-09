@@ -27,9 +27,9 @@ describe('mediaUrl', () => {
   });
 
   it('handles paths with subdirectories', () => {
-    expect(
-      mediaUrl({ bucket: 'gallery', path: 'sb-1/2026/03/holi.jpg' }),
-    ).toMatch(/gallery\/sb-1\/2026\/03\/holi\.jpg$/);
+    expect(mediaUrl({ bucket: 'gallery', path: 'sb-1/2026/03/holi.jpg' })).toMatch(
+      /gallery\/sb-1\/2026\/03\/holi\.jpg$/,
+    );
   });
 
   it('returns null on missing fields (defensive)', () => {

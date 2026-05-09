@@ -31,9 +31,7 @@ export interface CollectDeps {
   pageSize?: number;
 }
 
-export async function collectPublishedProfiles(
-  deps: CollectDeps,
-): Promise<ProfileSitemapEntry[]> {
+export async function collectPublishedProfiles(deps: CollectDeps): Promise<ProfileSitemapEntry[]> {
   const pageSize = deps.pageSize ?? 1000;
   const out: ProfileSitemapEntry[] = [];
   for (let page = 1; ; page++) {

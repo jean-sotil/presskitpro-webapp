@@ -22,10 +22,7 @@ const rateLimiter = createRateLimiterFromEnv({
   prefix: 'rl:contact',
 });
 
-export async function POST(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const profileId = Number.parseInt(id, 10);
   if (!Number.isInteger(profileId) || profileId <= 0) {
@@ -76,9 +73,7 @@ function liveDeps(): ContactSubmitDeps {
         if (!doc) return null;
         return {
           contactEmail: String((doc as { contactEmail?: string }).contactEmail ?? ''),
-          contactFormEnabled: Boolean(
-            (doc as { contactFormEnabled?: boolean }).contactFormEnabled,
-          ),
+          contactFormEnabled: Boolean((doc as { contactFormEnabled?: boolean }).contactFormEnabled),
           contactFormDestination: String(
             (doc as { contactFormDestination?: string }).contactFormDestination ?? '',
           ),
@@ -107,14 +102,11 @@ async function verifyCaptcha(token: string): Promise<{ ok: boolean }> {
   }
   if (!token) return { ok: false };
   try {
-    const res = await fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      {
-        method: 'POST',
-        headers: { 'content-type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ secret, response: token }),
-      },
-    );
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ secret, response: token }),
+    });
     const body = (await res.json()) as { success?: boolean };
     return { ok: Boolean(body.success) };
   } catch {

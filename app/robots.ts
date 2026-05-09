@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-const SITE_ORIGIN =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
+const SITE_ORIGIN = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
 
 /**
  * `/robots.txt` — public profiles are crawlable; everything app-shell

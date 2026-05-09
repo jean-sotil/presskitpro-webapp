@@ -6,13 +6,7 @@
  * Pure module; safe to import from server + client.
  */
 
-export type UploadPhase =
-  | 'queued'
-  | 'compressing'
-  | 'uploading'
-  | 'registering'
-  | 'done'
-  | 'error';
+export type UploadPhase = 'queued' | 'compressing' | 'uploading' | 'registering' | 'done' | 'error';
 
 export const PHASE_ORDER: UploadPhase[] = [
   'queued',

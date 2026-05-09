@@ -28,15 +28,10 @@ export type WizardDeps = {
   } | null>;
 
   // Persistence
-  saveProgress(
-    userId: number | string,
-    progress: OnboardingProgress | null,
-  ): Promise<void>;
+  saveProgress(userId: number | string, progress: OnboardingProgress | null): Promise<void>;
 
   // Profile lifecycle
-  findExistingProfile(
-    ownerId: number | string,
-  ): Promise<{ id: number | string } | null>;
+  findExistingProfile(ownerId: number | string): Promise<{ id: number | string } | null>;
   createProfileBundle(args: {
     ownerId: number | string;
     slug: string;
@@ -65,12 +60,13 @@ type AdvanceArgs = {
 
 export type AdvanceResult =
   | { ok: true; nextStep: WizardStep }
-  | ({ ok: false } & ({ reason: 'auth-required' | 'mirror-pending' } | (ValidateResult & { ok: false }) | { reason: 'reservation-failed'; field: 'slug' }));
+  | ({ ok: false } & (
+      | { reason: 'auth-required' | 'mirror-pending' }
+      | (ValidateResult & { ok: false })
+      | { reason: 'reservation-failed'; field: 'slug' }
+    ));
 
-export async function advanceStepImpl(
-  deps: WizardDeps,
-  args: AdvanceArgs,
-): Promise<AdvanceResult> {
+export async function advanceStepImpl(deps: WizardDeps, args: AdvanceArgs): Promise<AdvanceResult> {
   const sbUser = await deps.getSupabaseUser();
   if (!sbUser) return { ok: false, reason: 'auth-required' };
 
@@ -118,9 +114,7 @@ export type CompleteResult =
   | { ok: true; profileId: number | string; alreadyExisted?: true }
   | { ok: false; reason: 'auth-required' | 'mirror-pending' | 'incomplete' };
 
-export async function completeWizardImpl(
-  deps: WizardDeps,
-): Promise<CompleteResult> {
+export async function completeWizardImpl(deps: WizardDeps): Promise<CompleteResult> {
   const sbUser = await deps.getSupabaseUser();
   if (!sbUser) return { ok: false, reason: 'auth-required' };
 

@@ -20,7 +20,7 @@ function readKey(): string {
   if (!key) {
     throw new Error(
       'INSTAGRAM_TOKEN_ENCRYPTION_KEY is required to encrypt IG access tokens. ' +
-        'Generate with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'base64\'))"',
+        "Generate with: node -e \"console.log(require('crypto').randomBytes(32).toString('base64'))\"",
     );
   }
   return key;

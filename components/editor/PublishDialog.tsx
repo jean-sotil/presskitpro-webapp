@@ -47,8 +47,7 @@ export function PublishDialog({
     return () => el.removeEventListener('close', handler);
   }, [onClose]);
 
-  const title =
-    intent === 'publish' ? 'Publicar perfil?' : 'Despublicar perfil?';
+  const title = intent === 'publish' ? 'Publicar perfil?' : 'Despublicar perfil?';
   const helper =
     intent === 'publish'
       ? `Seu perfil ficará visível em presskit.pro/${slug}.`
@@ -62,33 +61,17 @@ export function PublishDialog({
     >
       <form method="dialog" className="flex flex-col gap-6 p-6">
         <div>
-          <h2
-            id="publish-dialog-title"
-            className="font-display text-2xl uppercase tracking-tight"
-          >
+          <h2 id="publish-dialog-title" className="font-display text-2xl uppercase tracking-tight">
             {title}
           </h2>
           <p className="mt-3 text-sm text-text-muted">{helper}</p>
         </div>
         <div className="flex flex-wrap items-center justify-end gap-3">
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={onClose}
-            disabled={pending}
-          >
+          <Button type="button" variant="ghost" onClick={onClose} disabled={pending}>
             Cancelar
           </Button>
-          <Button
-            type="button"
-            onClick={onConfirm}
-            disabled={pending}
-          >
-            {pending
-              ? 'Aguarde...'
-              : intent === 'publish'
-              ? 'Publicar'
-              : 'Despublicar'}
+          <Button type="button" onClick={onConfirm} disabled={pending}>
+            {pending ? 'Aguarde...' : intent === 'publish' ? 'Publicar' : 'Despublicar'}
           </Button>
         </div>
       </form>

@@ -16,9 +16,7 @@ export type RateLimitDeps = {
   now?: () => number;
 };
 
-export type RateLimitResult =
-  | { ok: true }
-  | { ok: false; retryAfterSec: number };
+export type RateLimitResult = { ok: true } | { ok: false; retryAfterSec: number };
 
 export type RateLimiter = {
   check(key: string): RateLimitResult;
@@ -41,10 +39,7 @@ export function createRateLimiter(deps: RateLimitDeps): RateLimiter {
       const fresh = i > 0 ? queue.slice(i) : queue;
       if (fresh.length >= max) {
         const oldest = fresh[0]!;
-        const retryAfterSec = Math.max(
-          1,
-          Math.ceil((oldest + windowMs - t) / 1000),
-        );
+        const retryAfterSec = Math.max(1, Math.ceil((oldest + windowMs - t) / 1000));
         // Persist the truncation so we don't keep walking dead entries.
         buckets.set(key, fresh);
         return { ok: false, retryAfterSec };

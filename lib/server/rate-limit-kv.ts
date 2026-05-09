@@ -54,10 +54,7 @@ export function createKvRateLimiter(deps: KvRateLimitDeps): AsyncRateLimiter {
         if (count >= deps.max) {
           const oldestScoreStr = range[1];
           const oldestT = oldestScoreStr ? Number(oldestScoreStr) : t;
-          const retryAfterSec = Math.max(
-            1,
-            Math.ceil((oldestT + deps.windowMs - t) / 1000),
-          );
+          const retryAfterSec = Math.max(1, Math.ceil((oldestT + deps.windowMs - t) / 1000));
           return { ok: false, retryAfterSec };
         }
         // Member must be unique within the window — append a random

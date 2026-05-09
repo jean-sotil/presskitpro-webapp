@@ -32,20 +32,15 @@ export default async function PrivacySettingsPage() {
     depth: 0,
   });
   const userDoc = userResult.docs[0];
-  const email =
-    typeof userDoc?.email === 'string' ? userDoc.email : supabaseUser.email ?? '';
+  const email = typeof userDoc?.email === 'string' ? userDoc.email : (supabaseUser.email ?? '');
 
   const t = await getTranslations('privacySettings');
 
   return (
     <main id="main">
       <Section className="max-w-4xl">
-        <h1 className="font-display text-4xl uppercase tracking-tight md:text-5xl">
-          {t('title')}
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm text-text-muted md:text-base">
-          {t('intro')}
-        </p>
+        <h1 className="font-display text-4xl uppercase tracking-tight md:text-5xl">{t('title')}</h1>
+        <p className="mt-3 max-w-2xl text-sm text-text-muted md:text-base">{t('intro')}</p>
         <div className="mt-10">
           <PrivacyForms userEmail={email} />
         </div>

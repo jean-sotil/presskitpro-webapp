@@ -30,10 +30,7 @@ export type CronDeps = {
 
 export type CronResult = { paused: number; reminded: number; errors: number };
 
-export async function pauseExpiredTrials(args: {
-  now: Date;
-  deps: CronDeps;
-}): Promise<CronResult> {
+export async function pauseExpiredTrials(args: { now: Date; deps: CronDeps }): Promise<CronResult> {
   const { now, deps } = args;
   let paused = 0;
   let reminded = 0;
@@ -57,9 +54,10 @@ export async function pauseExpiredTrials(args: {
   const reminders = await deps.findReminderCandidates(now);
   for (const candidate of reminders) {
     try {
-      const ends = candidate.trialEndsAt instanceof Date
-        ? candidate.trialEndsAt
-        : new Date(candidate.trialEndsAt);
+      const ends =
+        candidate.trialEndsAt instanceof Date
+          ? candidate.trialEndsAt
+          : new Date(candidate.trialEndsAt);
       const daysRemaining = Math.max(
         0,
         Math.ceil((ends.getTime() - now.getTime()) / (24 * 60 * 60 * 1000)),

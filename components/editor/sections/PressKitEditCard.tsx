@@ -42,20 +42,14 @@ export function PressKitEditCard({ bundle, onMutate }: PressKitEditCardProps) {
 
   const [url, setUrl] = useState(savedUrl);
   const [status, setStatus] = useState<Status>(
-    savedUrl
-      ? { kind: 'valid', provider: savedProvider }
-      : { kind: 'idle' },
+    savedUrl ? { kind: 'valid', provider: savedProvider } : { kind: 'idle' },
   );
 
   // Re-sync local state if the bundle changes from outside (e.g. after a
   // failed autosave invalidates the query and refetches).
   useEffect(() => {
     setUrl(savedUrl);
-    setStatus(
-      savedUrl
-        ? { kind: 'valid', provider: savedProvider }
-        : { kind: 'idle' },
-    );
+    setStatus(savedUrl ? { kind: 'valid', provider: savedProvider } : { kind: 'idle' });
   }, [savedUrl, savedProvider]);
 
   async function validate() {
@@ -103,19 +97,15 @@ export function PressKitEditCard({ bundle, onMutate }: PressKitEditCardProps) {
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
           Editando · Press kit
         </p>
-        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">
-          Press kit
-        </h2>
+        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">Press kit</h2>
         <p className="mt-3 text-sm text-text-muted">
-          Cole o link do seu press kit hospedado no Google Drive, Dropbox,
-          Notion etc. Verifique se está público — não restrito ao seu workspace.
+          Cole o link do seu press kit hospedado no Google Drive, Dropbox, Notion etc. Verifique se
+          está público — não restrito ao seu workspace.
         </p>
       </header>
 
       <label className="flex flex-col gap-1">
-        <span className="text-xs uppercase tracking-wider text-text-muted">
-          URL do press kit
-        </span>
+        <span className="text-xs uppercase tracking-wider text-text-muted">URL do press kit</span>
         <input
           type="url"
           value={url}
@@ -128,11 +118,7 @@ export function PressKitEditCard({ bundle, onMutate }: PressKitEditCardProps) {
       </label>
 
       <div className="flex flex-wrap items-center gap-3">
-        <Button
-          type="button"
-          onClick={validate}
-          disabled={status.kind === 'validating'}
-        >
+        <Button type="button" onClick={validate} disabled={status.kind === 'validating'}>
           {status.kind === 'validating' ? 'Validando...' : 'Validar'}
         </Button>
         {savedUrl ? (
@@ -148,8 +134,8 @@ export function PressKitEditCard({ bundle, onMutate }: PressKitEditCardProps) {
           <span>Link válido — {PROVIDER_LABELS[status.provider]}</span>
           {status.warning === 'restrictive-access' ? (
             <span className="ml-2 border border-border bg-bg px-2 py-1 text-xs text-text-muted">
-              Pode estar restrito a usuários do workspace. Confirme abrindo o
-              link em uma janela anônima.
+              Pode estar restrito a usuários do workspace. Confirme abrindo o link em uma janela
+              anônima.
             </span>
           ) : null}
         </div>

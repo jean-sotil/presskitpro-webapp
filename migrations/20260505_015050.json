@@ -75,12 +75,8 @@
           "tableFrom": "admins_sessions",
           "tableTo": "admins",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -466,12 +462,8 @@
           "tableFrom": "profiles",
           "tableTo": "users",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "owner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["owner_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -624,12 +616,8 @@
           "tableFrom": "media",
           "tableTo": "users",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "owner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["owner_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -938,12 +926,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "payload_locked_documents",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -952,12 +936,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "admins",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "admins_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["admins_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -966,12 +946,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "users",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "users_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["users_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -980,12 +956,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "profiles",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "profiles_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profiles_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -994,12 +966,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "media",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1204,12 +1172,8 @@
           "tableFrom": "payload_preferences_rels",
           "tableTo": "payload_preferences",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1218,12 +1182,8 @@
           "tableFrom": "payload_preferences_rels",
           "tableTo": "admins",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "admins_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["admins_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1315,35 +1275,22 @@
     "payload.enum_users_role": {
       "name": "enum_users_role",
       "schema": "payload",
-      "values": [
-        "user",
-        "admin"
-      ]
+      "values": ["user", "admin"]
     },
     "payload.enum_users_plan": {
       "name": "enum_users_plan",
       "schema": "payload",
-      "values": [
-        "free",
-        "pro"
-      ]
+      "values": ["free", "pro"]
     },
     "payload.enum_profiles_status": {
       "name": "enum_profiles_status",
       "schema": "payload",
-      "values": [
-        "draft",
-        "published",
-        "unpublished"
-      ]
+      "values": ["draft", "published", "unpublished"]
     },
     "payload.enum_media_bucket": {
       "name": "enum_media_bucket",
       "schema": "payload",
-      "values": [
-        "avatars",
-        "gallery"
-      ]
+      "values": ["avatars", "gallery"]
     }
   },
   "schemas": {

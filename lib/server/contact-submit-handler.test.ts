@@ -1,10 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { createRateLimiterFromEnv } from './rate-limit-from-env';
-import {
-  handleContactSubmit,
-  type ContactSubmitDeps,
-} from './contact-submit-handler';
+import { handleContactSubmit, type ContactSubmitDeps } from './contact-submit-handler';
 
 function makeDeps(overrides: Partial<ContactSubmitDeps> = {}): {
   deps: ContactSubmitDeps;

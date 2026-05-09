@@ -38,9 +38,7 @@ function makeBundle(
 
 describe('PressKitLinkRender', () => {
   it('renders nothing when there is no URL', async () => {
-    const { container } = await renderAsync(
-      PressKitLinkRender({ bundle: makeBundle({}) }),
-    );
+    const { container } = await renderAsync(PressKitLinkRender({ bundle: makeBundle({}) }));
     expect(container).toBeEmptyDOMElement();
   });
 

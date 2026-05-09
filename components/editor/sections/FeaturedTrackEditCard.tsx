@@ -10,10 +10,7 @@ export interface FeaturedTrackEditCardProps {
   bundle: EditorBundle;
 }
 
-type Status =
-  | { kind: 'idle' }
-  | { kind: 'pending' }
-  | { kind: 'error'; message: string };
+type Status = { kind: 'idle' } | { kind: 'pending' } | { kind: 'error'; message: string };
 
 type FeaturedTrackRow = {
   id?: number | string;
@@ -112,19 +109,15 @@ export function FeaturedTrackEditCard({ bundle }: FeaturedTrackEditCardProps) {
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
           Editando · Faixa em destaque
         </p>
-        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">
-          Faixa em destaque
-        </h2>
+        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">Faixa em destaque</h2>
         <p className="mt-3 text-sm text-text-muted">
-          Cole a URL de uma faixa ou playlist do SoundCloud. O player aparece
-          embutido na página pública.
+          Cole a URL de uma faixa ou playlist do SoundCloud. O player aparece embutido na página
+          pública.
         </p>
       </header>
 
       <label className="flex flex-col gap-1">
-        <span className="text-xs uppercase tracking-wider text-text-muted">
-          URL do SoundCloud
-        </span>
+        <span className="text-xs uppercase tracking-wider text-text-muted">URL do SoundCloud</span>
         <input
           type="url"
           value={url}
@@ -142,20 +135,10 @@ export function FeaturedTrackEditCard({ bundle }: FeaturedTrackEditCardProps) {
         </Button>
         {oembedHtml ? (
           <>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => save(true)}
-              disabled={pending}
-            >
+            <Button type="button" variant="ghost" onClick={() => save(true)} disabled={pending}>
               Atualizar embed
             </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={remove}
-              disabled={pending}
-            >
+            <Button type="button" variant="ghost" onClick={remove} disabled={pending}>
               Remover
             </Button>
           </>
@@ -170,9 +153,7 @@ export function FeaturedTrackEditCard({ bundle }: FeaturedTrackEditCardProps) {
 
       {oembedHtml ? (
         <div className="border border-border bg-bg p-3">
-          <p className="mb-2 text-xs uppercase tracking-wider text-text-muted">
-            Pré-visualização
-          </p>
+          <p className="mb-2 text-xs uppercase tracking-wider text-text-muted">Pré-visualização</p>
           {/* The oembedHtml has already been sanitized server-side by
               `extractSafeIframe` — we control the entire string. */}
           <div dangerouslySetInnerHTML={{ __html: oembedHtml }} />

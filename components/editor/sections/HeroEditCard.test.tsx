@@ -26,13 +26,7 @@ function makeBundle(overrides: Partial<EditorBundle> = {}): EditorBundle {
 
 describe('HeroEditCard', () => {
   it('renders the hero title + all 3 hero-style options', () => {
-    render(
-      <HeroEditCard
-        bundle={makeBundle()}
-        supabaseUserId="sb-1"
-        onMutate={vi.fn()}
-      />,
-    );
+    render(<HeroEditCard bundle={makeBundle()} supabaseUserId="sb-1" onMutate={vi.fn()} />);
     expect(screen.getByRole('heading', { level: 2, name: /hero/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/retrato em destaque/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/lado a lado/i)).toBeInTheDocument();

@@ -13,18 +13,14 @@ import { expect, test } from '@playwright/test';
  */
 
 test.describe('Cron auth @smoke', () => {
-  test('press-kit-health route returns 401 without bearer token', async ({
-    request,
-  }) => {
+  test('press-kit-health route returns 401 without bearer token', async ({ request }) => {
     const res = await request.post('/api/cron/press-kit-health');
     expect(res.status()).toBe(401);
     const body = await res.json();
     expect(body).toEqual({ error: 'unauthorized' });
   });
 
-  test('press-kit-health route returns 401 with a wrong bearer token', async ({
-    request,
-  }) => {
+  test('press-kit-health route returns 401 with a wrong bearer token', async ({ request }) => {
     const res = await request.post('/api/cron/press-kit-health', {
       headers: { authorization: 'Bearer not-the-secret' },
     });

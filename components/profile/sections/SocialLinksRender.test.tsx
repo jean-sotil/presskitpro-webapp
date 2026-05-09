@@ -28,8 +28,20 @@ describe('SocialLinksRender', () => {
     await renderAsync(
       SocialLinksRender({
         bundle: makeBundle([
-          { id: 1, profile: 1, platform: 'whatsapp', url: 'https://wa.me/5511999999999', displayOrder: 1 },
-          { id: 2, profile: 1, platform: 'instagram', url: 'https://www.instagram.com/dj_x', displayOrder: 0 },
+          {
+            id: 1,
+            profile: 1,
+            platform: 'whatsapp',
+            url: 'https://wa.me/5511999999999',
+            displayOrder: 1,
+          },
+          {
+            id: 2,
+            profile: 1,
+            platform: 'instagram',
+            url: 'https://www.instagram.com/dj_x',
+            displayOrder: 0,
+          },
         ]),
       }),
     );
@@ -80,14 +92,9 @@ describe('SocialLinksRender', () => {
   it('coerces a bare email string into mailto:', async () => {
     await renderAsync(
       SocialLinksRender({
-        bundle: makeBundle([
-          { id: 1, profile: 1, platform: 'email', url: 'dj@example.com' },
-        ]),
+        bundle: makeBundle([{ id: 1, profile: 1, platform: 'email', url: 'dj@example.com' }]),
       }),
     );
-    expect(screen.getByRole('link')).toHaveAttribute(
-      'href',
-      'mailto:dj@example.com',
-    );
+    expect(screen.getByRole('link')).toHaveAttribute('href', 'mailto:dj@example.com');
   });
 });

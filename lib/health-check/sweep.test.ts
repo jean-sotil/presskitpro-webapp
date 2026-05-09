@@ -16,9 +16,7 @@ function makeProfile(overrides: Partial<SweepProfile> = {}): SweepProfile {
   };
 }
 
-function makeDeps(
-  partial: Partial<SweepDeps> & { checkResult?: CheckResult },
-): SweepDeps {
+function makeDeps(partial: Partial<SweepDeps> & { checkResult?: CheckResult }): SweepDeps {
   const fixedNow = new Date('2026-05-07T03:00:00Z');
   return {
     findCandidates: partial.findCandidates ?? (async () => []),

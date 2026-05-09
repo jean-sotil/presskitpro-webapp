@@ -12,43 +12,43 @@ import type { FontPairId } from './tokens';
 
 export const fontPairCssVars: Record<FontPairId, Record<string, string>> = {
   'editorial-nightlife': {
-    '--font-display':   'var(--font-anton)',
-    '--font-body':      'var(--font-manrope)',
+    '--font-display': 'var(--font-anton)',
+    '--font-body': 'var(--font-manrope)',
     '--font-editorial': 'var(--font-fraunces)',
   },
   magazine: {
-    '--font-display':   'var(--font-fraunces)',
-    '--font-body':      'var(--font-manrope)',
+    '--font-display': 'var(--font-fraunces)',
+    '--font-body': 'var(--font-manrope)',
     '--font-editorial': 'var(--font-fraunces)',
   },
   brutalist: {
-    '--font-display':   'var(--font-archivo-black)',
-    '--font-body':      'var(--font-jetbrains)',
+    '--font-display': 'var(--font-archivo-black)',
+    '--font-body': 'var(--font-jetbrains)',
     '--font-editorial': 'var(--font-jetbrains)',
   },
   refined: {
-    '--font-display':   'var(--font-cormorant)',
-    '--font-body':      'var(--font-inter-tight)',
+    '--font-display': 'var(--font-cormorant)',
+    '--font-body': 'var(--font-inter-tight)',
     '--font-editorial': 'var(--font-cormorant)',
   },
   industrial: {
-    '--font-display':   'var(--font-big-shoulders)',
-    '--font-body':      'var(--font-sora)',
+    '--font-display': 'var(--font-big-shoulders)',
+    '--font-body': 'var(--font-sora)',
     '--font-editorial': 'var(--font-sora)',
   },
   'soft-pop': {
-    '--font-display':   'var(--font-outfit)',
-    '--font-body':      'var(--font-dm-sans)',
+    '--font-display': 'var(--font-outfit)',
+    '--font-body': 'var(--font-dm-sans)',
     '--font-editorial': 'var(--font-dm-sans)',
   },
   'retro-future': {
-    '--font-display':   'var(--font-bebas-neue)',
-    '--font-body':      'var(--font-space-mono)',
+    '--font-display': 'var(--font-bebas-neue)',
+    '--font-body': 'var(--font-space-mono)',
     '--font-editorial': 'var(--font-space-mono)',
   },
   'classic-press': {
-    '--font-display':   'var(--font-playfair)',
-    '--font-body':      'var(--font-source-sans)',
+    '--font-display': 'var(--font-playfair)',
+    '--font-body': 'var(--font-source-sans)',
     '--font-editorial': 'var(--font-playfair)',
   },
 };

@@ -21,12 +21,8 @@ export function StepShell({ step, total, title, helper, children }: StepShellPro
       >
         Passo {step} / {total}
       </p>
-      <h1 className="mt-3 font-display text-3xl uppercase tracking-tight md:text-4xl">
-        {title}
-      </h1>
-      {helper ? (
-        <p className="mt-3 max-w-prose text-sm text-text-muted">{helper}</p>
-      ) : null}
+      <h1 className="mt-3 font-display text-3xl uppercase tracking-tight md:text-4xl">{title}</h1>
+      {helper ? <p className="mt-3 max-w-prose text-sm text-text-muted">{helper}</p> : null}
       <div className="mt-8">{children}</div>
     </div>
   );

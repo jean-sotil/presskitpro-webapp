@@ -79,8 +79,7 @@ export function ServicesEditCard({ bundle, onMutate }: ServicesEditCardProps) {
 
       {services.length === 0 ? (
         <p className="border border-dashed border-border p-4 text-sm text-text-muted">
-          Nenhum serviço cadastrado. Adicione o primeiro abaixo (DJ Set, Produção,
-          Mixagem...).
+          Nenhum serviço cadastrado. Adicione o primeiro abaixo (DJ Set, Produção, Mixagem...).
         </p>
       ) : (
         <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
@@ -108,9 +107,7 @@ export function ServicesEditCard({ bundle, onMutate }: ServicesEditCardProps) {
           + Adicionar serviço
         </Button>
         {services.length >= MAX_SERVICES ? (
-          <p className="mt-2 text-xs text-text-muted">
-            Máximo {MAX_SERVICES} serviços por perfil.
-          </p>
+          <p className="mt-2 text-xs text-text-muted">Máximo {MAX_SERVICES} serviços por perfil.</p>
         ) : null}
       </div>
     </div>
@@ -128,15 +125,15 @@ function SortableServiceRow({
   onChange: (partial: Partial<ServiceItem>) => void;
   onRemove: () => void;
 }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+  });
 
   const validation = validateServiceItem(service);
   const titleError = !validation.ok && validation.reason === 'title-required';
   const descError =
     !validation.ok &&
-    (validation.reason === 'title-too-long' ||
-      validation.reason === 'description-too-long');
+    (validation.reason === 'title-too-long' || validation.reason === 'description-too-long');
 
   return (
     <li

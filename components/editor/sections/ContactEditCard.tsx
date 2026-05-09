@@ -25,9 +25,7 @@ export function ContactEditCard({ bundle, onMutate }: ContactEditCardProps) {
   const profile = bundle.profile as ProfileWithContact;
   const [whatsapp, setWhatsapp] = useState(profile.contactWhatsapp ?? '');
   const [email, setEmail] = useState(profile.contactEmail ?? '');
-  const [destination, setDestination] = useState(
-    profile.contactFormDestination ?? '',
-  );
+  const [destination, setDestination] = useState(profile.contactFormDestination ?? '');
 
   // Bundle can be replaced by a refetch (e.g. autosave error invalidate).
   // Re-sync local state when the source value changes from the outside.
@@ -46,9 +44,7 @@ export function ContactEditCard({ bundle, onMutate }: ContactEditCardProps) {
       ? { ok: true as const }
       : parseAndCanonicalize('whatsapp', whatsapp);
   const emailValidation =
-    email.trim().length === 0
-      ? { ok: true as const }
-      : parseAndCanonicalize('email', email);
+    email.trim().length === 0 ? { ok: true as const } : parseAndCanonicalize('email', email);
 
   function commitWhatsapp() {
     if (whatsapp.trim().length === 0) {
@@ -100,9 +96,7 @@ export function ContactEditCard({ bundle, onMutate }: ContactEditCardProps) {
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
           {tCommon('editingPrefix')} {t('label')}
         </p>
-        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">
-          {t('heading')}
-        </h2>
+        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">{t('heading')}</h2>
       </header>
 
       <label className="flex flex-col gap-1">
@@ -124,16 +118,12 @@ export function ContactEditCard({ bundle, onMutate }: ContactEditCardProps) {
             {t('whatsappError')}
           </span>
         ) : (
-          <span className="text-xs text-text-muted">
-            {t('whatsappHint')}
-          </span>
+          <span className="text-xs text-text-muted">{t('whatsappHint')}</span>
         )}
       </label>
 
       <label className="flex flex-col gap-1">
-        <span className="text-xs uppercase tracking-wider text-text-muted">
-          {t('emailLabel')}
-        </span>
+        <span className="text-xs uppercase tracking-wider text-text-muted">{t('emailLabel')}</span>
         <input
           type="email"
           value={email}
@@ -183,9 +173,7 @@ export function ContactEditCard({ bundle, onMutate }: ContactEditCardProps) {
               aria-label={t('destinationLabel')}
               className="h-9 border border-border bg-bg px-3 text-sm outline-none focus:border-accent"
             />
-            <span className="text-xs text-text-muted">
-              {t('destinationHint')}
-            </span>
+            <span className="text-xs text-text-muted">{t('destinationHint')}</span>
           </label>
         ) : null}
       </fieldset>

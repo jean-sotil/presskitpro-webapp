@@ -23,10 +23,7 @@ export type SweepCandidate = {
 };
 
 export type SweepAuditEntry = {
-  event:
-    | 'slug_reclaim_warned'
-    | 'slug_reclaim_soft_released'
-    | 'slug_reclaim_finalized';
+  event: 'slug_reclaim_warned' | 'slug_reclaim_soft_released' | 'slug_reclaim_finalized';
   profileId: number | string;
   slug: string;
   at: string;
@@ -34,23 +31,14 @@ export type SweepAuditEntry = {
 
 export type SweepDeps = {
   findCandidates(): Promise<SweepCandidate[]>;
-  sendWarning(args: {
-    candidate: SweepCandidate;
-    keepUrl: string;
-  }): Promise<void>;
+  sendWarning(args: { candidate: SweepCandidate; keepUrl: string }): Promise<void>;
   sendReleased(args: { candidate: SweepCandidate }): Promise<void>;
   stampWarning(args: { profileId: number | string; at: Date }): Promise<void>;
   softRelease(args: { profileId: number | string; at: Date }): Promise<void>;
-  finalizeRelease(args: {
-    profileId: number | string;
-    currentSlug: string;
-  }): Promise<void>;
+  finalizeRelease(args: { profileId: number | string; currentSlug: string }): Promise<void>;
   audit(entry: SweepAuditEntry): void;
   now(): Date;
-  keepUrlBuilder(args: {
-    profileId: number | string;
-    warningAt: Date;
-  }): string;
+  keepUrlBuilder(args: { profileId: number | string; warningAt: Date }): string;
 };
 
 export type SweepResult = {
@@ -78,10 +66,7 @@ export async function sweepInactiveSlugs(deps: SweepDeps): Promise<SweepResult> 
       await processOne(candidate, deps, result);
     }
   }
-  const workers = Array.from(
-    { length: Math.min(CONCURRENCY, candidates.length) },
-    () => worker(),
-  );
+  const workers = Array.from({ length: Math.min(CONCURRENCY, candidates.length) }, () => worker());
   await Promise.all(workers);
   return result;
 }

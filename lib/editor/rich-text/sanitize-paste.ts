@@ -103,11 +103,22 @@ function stripAttrs(attrs: string): string {
     // Reject unsafe schemes on href / src.
     if (name === 'href' || name === 'src') {
       const value = (m[4] ?? m[5] ?? m[6] ?? '').trim().toLowerCase();
-      if (value.startsWith('javascript:') || value.startsWith('data:') || value.startsWith('vbscript:')) {
+      if (
+        value.startsWith('javascript:') ||
+        value.startsWith('data:') ||
+        value.startsWith('vbscript:')
+      ) {
         continue;
       }
     }
-    if (name === 'href' || name === 'src' || name === 'alt' || name === 'title' || name === 'target' || name === 'rel') {
+    if (
+      name === 'href' ||
+      name === 'src' ||
+      name === 'alt' ||
+      name === 'title' ||
+      name === 'target' ||
+      name === 'rel'
+    ) {
       const raw = m[3] ?? '';
       out.push(raw ? `${name}=${raw}` : name);
     }

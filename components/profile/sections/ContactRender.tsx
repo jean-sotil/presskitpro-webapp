@@ -9,6 +9,7 @@ import { ContactEditorialNightlifeV1 } from './editorial-nightlife-v1/ContactRen
 import { ContactElectricFireTechno } from './electric-fire-techno/ContactRender.electric-fire-techno';
 import { ContactFestivalClubOrange } from './festival-club-orange/ContactRender.festival-club-orange';
 import { ContactMediakitProV1 } from './mediakit-pro-v1/ContactRender.mediakit-pro-v1';
+import { ContactDeadSignal } from './dead-signal/ContactRender.dead-signal';
 import { ContactForm } from './ContactForm';
 import { TrackedContactCta } from './TrackedContactCta';
 
@@ -28,10 +29,12 @@ export function ContactRender({
   const t = useTranslations('profile.contact');
 
   // Folder-owned preset dispatch.
+  if (preset?.id === 'dead-signal') return <ContactDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno') return <ContactElectricFireTechno bundle={bundle} />;
   if (preset?.id === 'mediakit-pro-v1') return <ContactMediakitProV1 bundle={bundle} />;
   if (preset?.id === 'festival-club-orange') return <ContactFestivalClubOrange bundle={bundle} />;
-  if (preset?.id === 'editorial-nightlife-v1') return <ContactEditorialNightlifeV1 bundle={bundle} />;
+  if (preset?.id === 'editorial-nightlife-v1')
+    return <ContactEditorialNightlifeV1 bundle={bundle} />;
 
   // No preset → unstyled inline-cta fallback for legacy profiles.
   const profile = bundle.profile as ProfileWithContact;

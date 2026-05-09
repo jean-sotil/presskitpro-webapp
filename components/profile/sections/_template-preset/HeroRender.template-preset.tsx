@@ -67,9 +67,7 @@ export function Hero_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
           <h1 className="text-center font-display uppercase leading-none tracking-tight text-text">
             {displayName}
           </h1>
-          {tagline ? (
-            <p className="mt-4 max-w-prose text-center text-text">{tagline}</p>
-          ) : null}
+          {tagline ? <p className="mt-4 max-w-prose text-center text-text">{tagline}</p> : null}
           {ctaLabel && ctaUrl ? (
             <a
               href={ctaUrl}

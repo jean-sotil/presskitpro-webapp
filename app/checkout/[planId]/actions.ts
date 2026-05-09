@@ -2,10 +2,7 @@
 
 import { redirect } from 'next/navigation';
 
-import {
-  createCheckoutSession,
-  type CheckoutPlanKey,
-} from '@/lib/billing/create-checkout-session';
+import { createCheckoutSession, type CheckoutPlanKey } from '@/lib/billing/create-checkout-session';
 import { payload } from '@/lib/payload';
 import { supabaseServer } from '@/lib/supabase/server';
 

@@ -93,9 +93,7 @@ describe('PressKitEditCard', () => {
       target: { value: 'https://drive.google.com/file/d/abc/view' },
     });
     fireEvent.click(screen.getByRole('button', { name: /validar/i }));
-    await waitFor(() =>
-      expect(screen.getByText(/pode estar restrito/i)).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByText(/pode estar restrito/i)).toBeInTheDocument());
     expect(onMutate).toHaveBeenCalledWith('profile', {
       pressKitUrl: 'https://drive.google.com/file/d/abc/view',
     });
@@ -108,9 +106,7 @@ describe('PressKitEditCard', () => {
       target: { value: 'https://example.com/slow' },
     });
     fireEvent.click(screen.getByRole('button', { name: /validar/i }));
-    await waitFor(() =>
-      expect(screen.getByRole('alert')).toHaveTextContent(/demor|timeout/i),
-    );
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/demor|timeout/i));
   });
 
   it('shows a "Limpar" button when there is a saved URL', () => {

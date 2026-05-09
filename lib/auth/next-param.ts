@@ -11,10 +11,7 @@
  *
  * Anything else returns the fallback (default `/dashboard`).
  */
-export function safeNext(
-  input: string | null | undefined,
-  fallback = '/dashboard',
-): string {
+export function safeNext(input: string | null | undefined, fallback = '/dashboard'): string {
   if (typeof input !== 'string' || input.length === 0) return fallback;
   if (input[0] !== '/') return fallback;
   if (input.startsWith('//')) return fallback;

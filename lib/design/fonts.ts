@@ -155,13 +155,13 @@ export const fraunces = Fraunces({
  */
 export const fontPairClasses: Record<FontPairId, string> = {
   'editorial-nightlife': `${anton.variable} ${manrope.variable} ${fraunces.variable}`,
-  'magazine':            `${fraunces.variable} ${manrope.variable}`,
-  'brutalist':           `${archivoBlack.variable} ${jetbrainsMono.variable}`,
-  'refined':             `${cormorantGaramond.variable} ${interTight.variable}`,
-  'industrial':          `${bigShouldersDisplay.variable} ${sora.variable}`,
-  'soft-pop':            `${outfit.variable} ${dmSans.variable}`,
-  'retro-future':        `${bebasNeue.variable} ${spaceMono.variable}`,
-  'classic-press':       `${playfairDisplay.variable} ${sourceSans3.variable}`,
+  magazine: `${fraunces.variable} ${manrope.variable}`,
+  brutalist: `${archivoBlack.variable} ${jetbrainsMono.variable}`,
+  refined: `${cormorantGaramond.variable} ${interTight.variable}`,
+  industrial: `${bigShouldersDisplay.variable} ${sora.variable}`,
+  'soft-pop': `${outfit.variable} ${dmSans.variable}`,
+  'retro-future': `${bebasNeue.variable} ${spaceMono.variable}`,
+  'classic-press': `${playfairDisplay.variable} ${sourceSans3.variable}`,
 };
 
 /**

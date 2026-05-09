@@ -1,4 +1,4 @@
-import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres';
 
 /**
  * Task-35 PR-A — adds the `preset_id` column to `payload.themes` plus
@@ -15,11 +15,11 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "payload"."enum_themes_preset_id" AS ENUM('mediakit-pro-v1', 'editorial-nightlife-v1');
-  ALTER TABLE "payload"."themes" ADD COLUMN "preset_id" "payload"."enum_themes_preset_id";`)
+  ALTER TABLE "payload"."themes" ADD COLUMN "preset_id" "payload"."enum_themes_preset_id";`);
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
    ALTER TABLE "payload"."themes" DROP COLUMN "preset_id";
-  DROP TYPE "payload"."enum_themes_preset_id";`)
+  DROP TYPE "payload"."enum_themes_preset_id";`);
 }

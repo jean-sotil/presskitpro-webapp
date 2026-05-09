@@ -13,9 +13,7 @@ describe('parseActiveProfileCookie', () => {
   });
 
   it('extracts the profile id when present', () => {
-    expect(
-      parseActiveProfileCookie(`${ACTIVE_PROFILE_COOKIE_NAME}=42`),
-    ).toBe('42');
+    expect(parseActiveProfileCookie(`${ACTIVE_PROFILE_COOKIE_NAME}=42`)).toBe('42');
   });
 
   it('finds the cookie among many', () => {

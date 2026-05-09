@@ -22,7 +22,7 @@ export const Anchor = forwardRef<HTMLAnchorElement, AnchorProps>(function Anchor
       target={safeTarget}
       rel={safeRel}
       className={cn(
-        'text-accent underline underline-offset-4 hover:underline-offset-2 transition-[text-underline-offset] duration-quick',
+        'text-accent underline underline-offset-4 transition-[text-underline-offset] duration-quick hover:underline-offset-2',
         className,
       )}
       {...props}

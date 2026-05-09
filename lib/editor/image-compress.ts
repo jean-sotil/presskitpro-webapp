@@ -74,11 +74,7 @@ const FILE_EXT: Record<CompressMimeType, string> = {
   'image/jpeg': 'jpg',
 };
 
-export function pickResizeDimensions(
-  width: number,
-  height: number,
-  maxEdge: number,
-): Dimensions {
+export function pickResizeDimensions(width: number, height: number, maxEdge: number): Dimensions {
   const longEdge = Math.max(width, height);
   if (longEdge <= maxEdge) {
     return { width: Math.round(width), height: Math.round(height) };
@@ -97,9 +93,7 @@ export async function compressImage(
 ): Promise<File> {
   if (SVG_TYPES.has(file.type)) return file;
   if (file.size > MAX_INPUT_BYTES) {
-    throw new Error(
-      `compressImage: file too large (${file.size} bytes; max ${MAX_INPUT_BYTES})`,
-    );
+    throw new Error(`compressImage: file too large (${file.size} bytes; max ${MAX_INPUT_BYTES})`);
   }
   const skipUnder = options.skipUnderBytes ?? 1_500_000;
   if (file.size <= skipUnder) return file;
@@ -134,20 +128,14 @@ export async function compressImage(
         break;
       }
       if (!smallest || blob.size < smallest.size) smallest = blob;
-      if (
-        options.targetMaxBytes === undefined ||
-        blob.size <= options.targetMaxBytes
-      ) {
+      if (options.targetMaxBytes === undefined || blob.size <= options.targetMaxBytes) {
         break;
       }
     }
     if (formatUnavailable) continue;
     if (!smallest) continue;
     if (smallest.size >= file.size) continue; // compression made it worse
-    if (
-      options.targetMaxBytes !== undefined &&
-      smallest.size > options.targetMaxBytes
-    ) {
+    if (options.targetMaxBytes !== undefined && smallest.size > options.targetMaxBytes) {
       continue; // doesn't fit budget; try next format
     }
     const newName = swapExtension(file.name, FILE_EXT[mimeType]);
@@ -183,9 +171,7 @@ const liveDeps: CompressDeps = {
     }
   },
   async drawAndExport(_args) {
-    throw new Error(
-      'compressImage.drawAndExport: use bindCompressDeps(file) for live wiring.',
-    );
+    throw new Error('compressImage.drawAndExport: use bindCompressDeps(file) for live wiring.');
   },
 };
 

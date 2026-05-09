@@ -6,11 +6,7 @@ import { CookieConsentBanner } from '@/components/CookieConsentBanner';
 import { LocaleToggle } from '@/components/marketing/LocaleToggle';
 import { SkipToContent } from '@/components/ui/SkipToContent';
 import { fontPairClasses } from '@/lib/design/fonts';
-import {
-  isSupportedLocale,
-  toBcp47,
-  DEFAULT_LOCALE,
-} from '@/lib/i18n/locale';
+import { isSupportedLocale, toBcp47, DEFAULT_LOCALE } from '@/lib/i18n/locale';
 import { buildOrganizationJsonLd } from '@/lib/seo/build-organization-jsonld';
 import { Providers } from './providers';
 import './globals.css';
@@ -34,8 +30,7 @@ const allFontClasses = Object.values(fontPairClasses)
   .filter((c, i, arr) => arr.indexOf(c) === i)
   .join(' ');
 
-const SITE_ORIGIN =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
+const SITE_ORIGIN = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -77,9 +72,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: 'PressKit Pro',
       title: `${siteTitle} | PressKit Pro`,
       description: siteDescription,
-      images: [
-        { url: '/og-image.png', width: 1200, height: 630, alt: 'PressKit Pro' },
-      ],
+      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'PressKit Pro' }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -90,11 +83,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   // Task-29 — locale negotiated in `i18n/request.ts` (cookie wins,
   // Accept-Language fallback, default `pt`). The `<html lang>` mirrors
   // the active locale in BCP-47.
@@ -107,7 +96,7 @@ export default async function RootLayout({
   const orgLd = buildOrganizationJsonLd({ origin: SITE_ORIGIN });
   return (
     <html lang={toBcp47(locale)} className={allFontClasses}>
-      <body className="font-body bg-bg text-text antialiased">
+      <body className="bg-bg font-body text-text antialiased">
         <SkipToContent />
         <script
           type="application/ld+json"

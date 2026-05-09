@@ -9,10 +9,7 @@ import { MarketingHero } from '@/components/marketing/MarketingHero';
 import { PricingTeaser } from '@/components/marketing/PricingTeaser';
 import { WhatIsPressKit } from '@/components/marketing/WhatIsPressKit';
 import { isSupportedLocale, type SupportedLocale } from '@/lib/i18n/locale';
-import {
-  loadLiveExamples,
-  type LiveExample,
-} from '@/lib/marketing/fetch-live-examples';
+import { loadLiveExamples, type LiveExample } from '@/lib/marketing/fetch-live-examples';
 import { payload as getPayloadInstance } from '@/lib/payload';
 import { buildMarketingMetadata } from '@/lib/seo/build-marketing-metadata';
 
@@ -22,8 +19,7 @@ import { buildMarketingMetadata } from '@/lib/seo/build-marketing-metadata';
 // hour). PR-B will introduce per-locale ISR keying.
 export const dynamic = 'force-dynamic';
 
-const SITE_ORIGIN =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
+const SITE_ORIGIN = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
 
 export async function generateMetadata(): Promise<Metadata> {
   const rawLocale = await getLocale();

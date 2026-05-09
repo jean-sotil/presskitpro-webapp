@@ -15,11 +15,7 @@ import 'server-only';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-export {
-  type ValidationReason,
-  type ValidationResult,
-  validateSlugFormat,
-} from './format';
+export { type ValidationReason, type ValidationResult, validateSlugFormat } from './format';
 
 // ---------- profanity ----------------------------------------------------
 

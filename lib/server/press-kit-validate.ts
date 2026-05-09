@@ -46,9 +46,7 @@ export type ValidateDeps = {
   abortSignal?: AbortSignal;
 };
 
-export async function validatePressKitUrl(
-  deps: ValidateDeps,
-): Promise<ValidateResult> {
+export async function validatePressKitUrl(deps: ValidateDeps): Promise<ValidateResult> {
   const fetchFn = deps.fetch ?? globalThis.fetch;
   let parsed: URL;
   try {
@@ -134,9 +132,7 @@ async function safeFetch(
 ): Promise<SafeFetchResult> {
   // Compose caller's abort signal with our own timeout.
   const timeout = AbortSignal.timeout(VALIDATE_TIMEOUT_MS);
-  const signal = init.signal
-    ? anyAbortSignal([init.signal, timeout])
-    : timeout;
+  const signal = init.signal ? anyAbortSignal([init.signal, timeout]) : timeout;
   try {
     const response = await fetchFn(url, { ...init, signal });
     return { ok: true, response };

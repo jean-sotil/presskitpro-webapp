@@ -35,7 +35,7 @@ export function StepRail({ current, highestCompleted }: StepRailProps) {
           const inner = (
             <span
               className={cn(
-                'flex items-center gap-3 px-4 py-3 border transition-colors duration-quick',
+                'flex items-center gap-3 border px-4 py-3 transition-colors duration-quick',
                 status === 'current' && 'border-accent bg-surface text-text',
                 status === 'done' && 'border-border text-text-muted hover:text-text',
                 status === 'locked' && 'border-border text-text-muted/50',
@@ -45,9 +45,7 @@ export function StepRail({ current, highestCompleted }: StepRailProps) {
                 aria-hidden="true"
                 className={cn(
                   'flex h-7 w-7 items-center justify-center font-display text-xs',
-                  status === 'current'
-                    ? 'bg-accent text-accent-contrast'
-                    : 'border border-border',
+                  status === 'current' ? 'bg-accent text-accent-contrast' : 'border border-border',
                 )}
               >
                 {step}

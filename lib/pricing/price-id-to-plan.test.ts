@@ -25,8 +25,7 @@ describe('priceIdToPlan', () => {
   });
 
   it('honors the legacy STRIPE_PRICE_ID_AGENCY env as agency monthly (rolling-deploy fallback)', () => {
-    expect(priceIdToPlan('price_ag_legacy'))
-      .toEqual({ plan: 'agency', cycle: 'monthly' });
+    expect(priceIdToPlan('price_ag_legacy')).toEqual({ plan: 'agency', cycle: 'monthly' });
   });
 
   it('returns null for an unknown price id', () => {

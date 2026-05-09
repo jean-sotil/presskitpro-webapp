@@ -20,11 +20,18 @@ describe('nextStep', () => {
     expect(nextStep({ step: 1, slug: 'mariana-luz' })).toBe(2);
     expect(nextStep({ step: 2, slug: 'mariana-luz' })).toBe(3);
     expect(nextStep({ step: 3, slug: 'mariana-luz', taglinePtBR: 'House SP' })).toBe(4);
-    expect(nextStep({ step: 4, slug: 'mariana-luz', taglinePtBR: 'House SP', services: ['DJ Set'] })).toBe(5);
+    expect(
+      nextStep({ step: 4, slug: 'mariana-luz', taglinePtBR: 'House SP', services: ['DJ Set'] }),
+    ).toBe(5);
   });
 
   it('caps at 5 (last step)', () => {
-    const at5 = { step: 5, slug: 'a', taglinePtBR: 't', services: ['DJ Set'] } as OnboardingProgress;
+    const at5 = {
+      step: 5,
+      slug: 'a',
+      taglinePtBR: 't',
+      services: ['DJ Set'],
+    } as OnboardingProgress;
     expect(nextStep(at5)).toBe(5);
   });
 });
@@ -146,7 +153,9 @@ describe('validateStepData', () => {
       });
     });
     it('accepts a valid tagline', () => {
-      expect(validateStepData(3, { taglinePtBR: 'House melódico de São Paulo' })).toEqual({ ok: true });
+      expect(validateStepData(3, { taglinePtBR: 'House melódico de São Paulo' })).toEqual({
+        ok: true,
+      });
     });
   });
 

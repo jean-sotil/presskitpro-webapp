@@ -17,9 +17,7 @@ export function LegalPage(props: LegalPageProps) {
           {props.draftBadge}
         </p>
       ) : null}
-      <h1 className="font-display text-4xl uppercase tracking-tight md:text-5xl">
-        {props.title}
-      </h1>
+      <h1 className="font-display text-4xl uppercase tracking-tight md:text-5xl">{props.title}</h1>
       <p className="mt-3 text-xs uppercase tracking-wider text-text-muted">
         {props.updatedLabel} {props.updatedAt}
       </p>
@@ -27,9 +25,7 @@ export function LegalPage(props: LegalPageProps) {
       <div className="mt-12 space-y-10">
         {props.sections.map((section) => (
           <section key={section.heading}>
-            <h2 className="font-display text-xl uppercase tracking-tight">
-              {section.heading}
-            </h2>
+            <h2 className="font-display text-xl uppercase tracking-tight">{section.heading}</h2>
             <p className="mt-3 text-base text-text-muted">{section.body}</p>
           </section>
         ))}

@@ -84,10 +84,7 @@ function pickFirstAvailablePlatform(taken: Set<Platform>): Platform {
   return 'website';
 }
 
-export function SocialLinksEditCard({
-  bundle,
-  onMutate,
-}: SocialLinksEditCardProps) {
+export function SocialLinksEditCard({ bundle, onMutate }: SocialLinksEditCardProps) {
   const links = useMemo(() => normalize(bundle.socialLinks), [bundle.socialLinks]);
 
   const sensors = useSensors(
@@ -139,9 +136,7 @@ export function SocialLinksEditCard({
         <p className="font-display text-xs uppercase tracking-widest text-text-muted">
           Editando · Redes sociais
         </p>
-        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">
-          Redes sociais
-        </h2>
+        <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">Redes sociais</h2>
       </header>
 
       {anyInvalid ? (
@@ -177,11 +172,7 @@ export function SocialLinksEditCard({
       )}
 
       <div>
-        <Button
-          type="button"
-          onClick={add}
-          disabled={links.length >= MAX_SOCIAL_LINKS}
-        >
+        <Button type="button" onClick={add} disabled={links.length >= MAX_SOCIAL_LINKS}>
           + Adicionar link
         </Button>
         {links.length >= MAX_SOCIAL_LINKS ? (
@@ -207,16 +198,15 @@ function SortableLinkRow({
   onChange: (partial: Partial<EditableLink>) => void;
   onRemove: () => void;
 }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+  });
 
   return (
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`flex items-stretch border border-border bg-bg ${
-        isDragging ? 'opacity-60' : ''
-      }`}
+      className={`flex items-stretch border border-border bg-bg ${isDragging ? 'opacity-60' : ''}`}
     >
       <button
         type="button"

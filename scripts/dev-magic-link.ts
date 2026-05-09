@@ -33,7 +33,9 @@ async function main() {
   const { email, next, origin } = parseArgs(process.argv.slice(2));
 
   if (!email || !email.includes('@')) {
-    console.error('Usage: bun run dev:magic-link <email> [--next=/dashboard] [--origin=http://localhost:3000]');
+    console.error(
+      'Usage: bun run dev:magic-link <email> [--next=/dashboard] [--origin=http://localhost:3000]',
+    );
     process.exit(2);
   }
 
@@ -57,7 +59,9 @@ async function main() {
   });
 
   if (error || !data?.properties?.action_link) {
-    console.error(`Failed to generate magic link: ${error?.message ?? 'no action_link in response'}`);
+    console.error(
+      `Failed to generate magic link: ${error?.message ?? 'no action_link in response'}`,
+    );
     process.exit(1);
   }
 

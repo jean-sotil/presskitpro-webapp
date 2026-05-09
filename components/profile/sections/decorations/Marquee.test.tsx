@@ -34,21 +34,14 @@ describe('Marquee', () => {
   });
 
   it('renders the tagline when source=tagline', () => {
-    render(
-      <Marquee
-        bundle={makeBundle('hayakawa', 'eletro brutalista')}
-        source="tagline"
-      />,
-    );
+    render(<Marquee bundle={makeBundle('hayakawa', 'eletro brutalista')} source="tagline" />);
     // Track is duplicated 2x for seamless looping, so the tagline
     // appears 2 × repeat times — just assert presence.
     expect(screen.getAllByText(/eletro brutalista/).length).toBeGreaterThan(0);
   });
 
   it('returns null when the source field is empty', () => {
-    const { container } = render(
-      <Marquee bundle={makeBundle('hayakawa')} source="tagline" />,
-    );
+    const { container } = render(<Marquee bundle={makeBundle('hayakawa')} source="tagline" />);
     expect(container).toBeEmptyDOMElement();
   });
 });

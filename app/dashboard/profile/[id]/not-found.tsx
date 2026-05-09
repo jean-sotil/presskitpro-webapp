@@ -2,10 +2,11 @@ import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <main id="main" className="flex min-h-[60vh] flex-col items-center justify-center px-6 text-center">
-      <h1 className="font-display text-3xl uppercase tracking-tight">
-        Perfil não encontrado
-      </h1>
+    <main
+      id="main"
+      className="flex min-h-[60vh] flex-col items-center justify-center px-6 text-center"
+    >
+      <h1 className="font-display text-3xl uppercase tracking-tight">Perfil não encontrado</h1>
       <p className="mt-3 max-w-prose text-sm text-text-muted">
         O perfil pode ter sido removido — ou você não tem acesso a ele.
       </p>

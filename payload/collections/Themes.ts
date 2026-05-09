@@ -1,9 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import {
-  canCreateForOwnedProfile,
-  ownsViaProfile,
-} from '../../lib/payload/access/predicates';
+import { canCreateForOwnedProfile, ownsViaProfile } from '../../lib/payload/access/predicates';
 import { PRESETS } from '../../lib/presets';
 
 /**
@@ -54,8 +51,7 @@ export const Themes: CollectionConfig = {
       name: 'colorPresetId',
       type: 'text',
       admin: {
-        description:
-          "BG preset id (e.g. 'editorial-night'). Empty when overriding via custom hex.",
+        description: "BG preset id (e.g. 'editorial-night'). Empty when overriding via custom hex.",
       },
     },
     {
@@ -66,9 +62,17 @@ export const Themes: CollectionConfig = {
           "Accent preset id (e.g. 'electric-green'). Empty when overriding via custom hex.",
       },
     },
-    { name: 'bg',     type: 'text', admin: { description: 'Hex value, present when overriding the preset bg.' } },
-    { name: 'accent', type: 'text', admin: { description: 'Hex value, present when overriding the preset accent.' } },
-    { name: 'text',   type: 'text', admin: { description: 'Hex value; auto-derived if empty.' } },
+    {
+      name: 'bg',
+      type: 'text',
+      admin: { description: 'Hex value, present when overriding the preset bg.' },
+    },
+    {
+      name: 'accent',
+      type: 'text',
+      admin: { description: 'Hex value, present when overriding the preset accent.' },
+    },
+    { name: 'text', type: 'text', admin: { description: 'Hex value; auto-derived if empty.' } },
 
     // ----- Typography -----
     {
@@ -78,13 +82,13 @@ export const Themes: CollectionConfig = {
       defaultValue: 'editorial-nightlife',
       options: [
         { label: 'Editorial Nightlife', value: 'editorial-nightlife' },
-        { label: 'Magazine',           value: 'magazine'             },
-        { label: 'Brutalist',          value: 'brutalist'            },
-        { label: 'Refined',            value: 'refined'              },
-        { label: 'Industrial',         value: 'industrial'           },
-        { label: 'Soft Pop',           value: 'soft-pop'             },
-        { label: 'Retro Future',       value: 'retro-future'         },
-        { label: 'Classic Press',      value: 'classic-press'        },
+        { label: 'Magazine', value: 'magazine' },
+        { label: 'Brutalist', value: 'brutalist' },
+        { label: 'Refined', value: 'refined' },
+        { label: 'Industrial', value: 'industrial' },
+        { label: 'Soft Pop', value: 'soft-pop' },
+        { label: 'Retro Future', value: 'retro-future' },
+        { label: 'Classic Press', value: 'classic-press' },
       ],
     },
 
@@ -97,7 +101,7 @@ export const Themes: CollectionConfig = {
       options: [
         { label: 'Full-bleed portrait', value: 'full-bleed-portrait' },
         { label: 'Split portrait + text', value: 'split-portrait-text' },
-        { label: 'Centered logo',         value: 'centered-logo'       },
+        { label: 'Centered logo', value: 'centered-logo' },
       ],
     },
     {
@@ -106,9 +110,9 @@ export const Themes: CollectionConfig = {
       required: true,
       defaultValue: 'mosaic',
       options: [
-        { label: 'Mosaic',      value: 'mosaic'        },
+        { label: 'Mosaic', value: 'mosaic' },
         { label: 'Uniform grid', value: 'uniform-grid' },
-        { label: 'Carousel',    value: 'carousel'      },
+        { label: 'Carousel', value: 'carousel' },
       ],
     },
     {
@@ -124,7 +128,8 @@ export const Themes: CollectionConfig = {
       name: 'contrastValidatedAt',
       type: 'date',
       admin: {
-        description: 'Updated by the editor when the contrast gate passes. Profile publish is blocked if null or stale.',
+        description:
+          'Updated by the editor when the contrast gate passes. Profile publish is blocked if null or stale.',
         readOnly: true,
       },
     },

@@ -44,12 +44,8 @@ describe('negotiateLocale', () => {
   });
 
   it('falls back to Accept-Language when cookie is empty', () => {
-    expect(
-      negotiateLocale({ cookie: undefined, acceptLanguage: 'es-ES,es;q=0.9' }),
-    ).toBe('es');
-    expect(
-      negotiateLocale({ cookie: '', acceptLanguage: 'pt-BR,pt;q=0.9' }),
-    ).toBe('pt');
+    expect(negotiateLocale({ cookie: undefined, acceptLanguage: 'es-ES,es;q=0.9' })).toBe('es');
+    expect(negotiateLocale({ cookie: '', acceptLanguage: 'pt-BR,pt;q=0.9' })).toBe('pt');
   });
 
   it('honors the highest-quality supported language in Accept-Language', () => {
@@ -61,21 +57,13 @@ describe('negotiateLocale', () => {
   });
 
   it('matches BCP-47 dialects to their base language', () => {
-    expect(
-      negotiateLocale({ cookie: undefined, acceptLanguage: 'pt-PT' }),
-    ).toBe('pt');
-    expect(
-      negotiateLocale({ cookie: undefined, acceptLanguage: 'es-MX,es-AR' }),
-    ).toBe('es');
+    expect(negotiateLocale({ cookie: undefined, acceptLanguage: 'pt-PT' })).toBe('pt');
+    expect(negotiateLocale({ cookie: undefined, acceptLanguage: 'es-MX,es-AR' })).toBe('es');
   });
 
   it('falls back to the default locale when nothing matches', () => {
-    expect(
-      negotiateLocale({ cookie: undefined, acceptLanguage: 'fr-FR,de;q=0.5' }),
-    ).toBe('pt');
-    expect(
-      negotiateLocale({ cookie: undefined, acceptLanguage: undefined }),
-    ).toBe('pt');
+    expect(negotiateLocale({ cookie: undefined, acceptLanguage: 'fr-FR,de;q=0.5' })).toBe('pt');
+    expect(negotiateLocale({ cookie: undefined, acceptLanguage: undefined })).toBe('pt');
   });
 });
 

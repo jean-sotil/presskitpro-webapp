@@ -62,9 +62,19 @@ const MAX_CUSTOM_SERVICES = 3;
 const TAGLINE_MAX = 140;
 
 const PLATFORMS: SocialPlatform[] = [
-  'instagram', 'tiktok', 'soundcloud', 'spotify', 'youtube',
-  'twitter', 'bandcamp', 'mixcloud', 'apple-music', 'beatport',
-  'whatsapp', 'email', 'website',
+  'instagram',
+  'tiktok',
+  'soundcloud',
+  'spotify',
+  'youtube',
+  'twitter',
+  'bandcamp',
+  'mixcloud',
+  'apple-music',
+  'beatport',
+  'whatsapp',
+  'email',
+  'website',
 ];
 
 // ---------- step navigation ---------------------------------------------

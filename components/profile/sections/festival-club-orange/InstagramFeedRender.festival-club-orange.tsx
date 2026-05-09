@@ -18,9 +18,7 @@ type InstagramPostRow = {
  */
 export function InstagramFeedFestivalClubOrange({ bundle }: { bundle: EditorBundle }) {
   const raw = (bundle.instagramPosts ?? []) as unknown as InstagramPostRow[];
-  const posts = [...raw].sort(
-    (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
-  );
+  const posts = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   if (posts.length === 0) return null;
 
   return (

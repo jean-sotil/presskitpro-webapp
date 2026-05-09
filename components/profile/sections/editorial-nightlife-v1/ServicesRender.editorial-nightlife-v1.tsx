@@ -11,9 +11,8 @@ import type { EditorBundle } from '@/lib/editor/bundle';
  */
 export function ServicesEditorialNightlifeV1({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.services');
-  const services = (bundle.content?.services as
-    | Array<{ title: string; description?: string }>
-    | undefined) ?? [];
+  const services =
+    (bundle.content?.services as Array<{ title: string; description?: string }> | undefined) ?? [];
   if (services.length === 0) return null;
   return (
     <section id="servicos" className="border-b border-border px-6 py-16 md:px-12">
@@ -22,9 +21,7 @@ export function ServicesEditorialNightlifeV1({ bundle }: { bundle: EditorBundle 
         {services.map((s, i) => (
           <li key={`${s.title}-${i}`} className="border border-border p-4">
             <p className="font-display uppercase tracking-wide">{s.title}</p>
-            {s.description ? (
-              <p className="mt-2 text-sm text-text-muted">{s.description}</p>
-            ) : null}
+            {s.description ? <p className="mt-2 text-sm text-text-muted">{s.description}</p> : null}
           </li>
         ))}
       </ul>

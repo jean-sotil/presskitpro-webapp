@@ -20,9 +20,7 @@ function makeDeps(overrides: Partial<WizardDeps> = {}): WizardDeps {
     findExistingProfile: vi.fn().mockResolvedValue(null),
     reserveSlug: vi.fn().mockResolvedValue(undefined),
     releaseSlug: vi.fn().mockResolvedValue(undefined),
-    createProfileBundle: vi
-      .fn()
-      .mockResolvedValue({ id: 99 }),
+    createProfileBundle: vi.fn().mockResolvedValue({ id: 99 }),
     track: vi.fn(),
     ...overrides,
   };

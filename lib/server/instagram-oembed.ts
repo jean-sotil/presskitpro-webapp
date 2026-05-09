@@ -24,11 +24,7 @@ const IFRAME_SRC_RE = /<iframe\b[^>]*\bsrc\s*=\s*["']([^"']+)["'][^>]*>/i;
 
 export type OembedSource = 'graph' | 'blockquote-fallback';
 
-export type InstagramOembedReason =
-  | 'empty'
-  | 'invalid-url'
-  | 'wrong-host'
-  | 'invalid-path';
+export type InstagramOembedReason = 'empty' | 'invalid-url' | 'wrong-host' | 'invalid-path';
 
 export type InstagramOembedResult =
   | {
@@ -122,10 +118,7 @@ function rebuildSafeIframe(rawHtml: string, canonical: string): string | null {
     return null;
   }
   if (src.protocol !== 'https:') return null;
-  if (
-    src.host !== 'www.instagram.com' &&
-    src.host !== 'instagram.com'
-  ) {
+  if (src.host !== 'www.instagram.com' && src.host !== 'instagram.com') {
     return null;
   }
   const safeSrc = escapeAttr(src.toString());

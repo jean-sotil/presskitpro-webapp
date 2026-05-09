@@ -50,10 +50,7 @@ export function ContactFestivalClubOrange({ bundle }: { bundle: EditorBundle }) 
   }
 
   return (
-    <section
-      id="contato"
-      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-28"
-    >
+    <section id="contato" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-28">
       <div className="grid gap-14 md:grid-cols-2 md:gap-16">
         <div>
           <h2
@@ -110,9 +107,7 @@ export function ContactFestivalClubOrange({ bundle }: { bundle: EditorBundle }) 
                   <span className="flex h-12 w-12 items-center justify-center rounded-full border border-border text-text transition-colors duration-quick group-hover:border-accent group-hover:text-accent">
                     <WhatsAppGlyph />
                   </span>
-                  <span className="font-mono tracking-wide">
-                    {formatWhatsapp(whatsapp)}
-                  </span>
+                  <span className="font-mono tracking-wide">{formatWhatsapp(whatsapp)}</span>
                 </TrackedContactCta>
               </li>
             ) : null}

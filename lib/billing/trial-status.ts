@@ -21,20 +21,14 @@ export type TrialUser = {
   stripeSubscriptionStatus?: 'active' | 'past_due' | 'canceled' | null;
 };
 
-export function getTrialStatus(args: {
-  user: TrialUser;
-  now: Date;
-}): TrialStatus {
+export function getTrialStatus(args: { user: TrialUser; now: Date }): TrialStatus {
   const { user, now } = args;
 
   // An `active` or `past_due` subscription supersedes the trial timer.
   // `past_due` is intentionally treated as paid: Stripe is mid-retry and
   // will fire `subscription.deleted` on terminal failure — the cron must
   // not pause until then.
-  if (
-    user.stripeSubscriptionStatus === 'active' ||
-    user.stripeSubscriptionStatus === 'past_due'
-  ) {
+  if (user.stripeSubscriptionStatus === 'active' || user.stripeSubscriptionStatus === 'past_due') {
     return { kind: 'paid', daysRemaining: null };
   }
 
@@ -49,9 +43,7 @@ export function getTrialStatus(args: {
     return { kind: 'pre-trial', daysRemaining: null };
   }
 
-  const ends = user.trialEndsAt instanceof Date
-    ? user.trialEndsAt
-    : new Date(user.trialEndsAt);
+  const ends = user.trialEndsAt instanceof Date ? user.trialEndsAt : new Date(user.trialEndsAt);
   const msRemaining = ends.getTime() - now.getTime();
 
   if (msRemaining <= 0) {

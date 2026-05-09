@@ -20,10 +20,7 @@ export type AnalyticsEvent =
   | 'contact_click'
   | 'social_click';
 
-export type AnalyticsSink = (
-  event: AnalyticsEvent,
-  props?: Record<string, unknown>,
-) => void;
+export type AnalyticsSink = (event: AnalyticsEvent, props?: Record<string, unknown>) => void;
 
 let sink: AnalyticsSink | null = null;
 

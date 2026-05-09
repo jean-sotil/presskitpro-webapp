@@ -25,14 +25,20 @@ test.describe('Pricing cycle CTAs @smoke', () => {
 
     // After the click the Pro CTA targets /checkout/pro-annual and the
     // Agency CTA targets /checkout/agency-annual.
-    await expect.poll(async () =>
-      (await page.locator('a[href*="/checkout/pro-annual"]').count()) +
-      (await page.locator('a[href*="next=%2Fcheckout%2Fpro-annual"]').count()),
-    ).toBeGreaterThan(0);
-    await expect.poll(async () =>
-      (await page.locator('a[href*="/checkout/agency-annual"]').count()) +
-      (await page.locator('a[href*="next=%2Fcheckout%2Fagency-annual"]').count()),
-    ).toBeGreaterThan(0);
+    await expect
+      .poll(
+        async () =>
+          (await page.locator('a[href*="/checkout/pro-annual"]').count()) +
+          (await page.locator('a[href*="next=%2Fcheckout%2Fpro-annual"]').count()),
+      )
+      .toBeGreaterThan(0);
+    await expect
+      .poll(
+        async () =>
+          (await page.locator('a[href*="/checkout/agency-annual"]').count()) +
+          (await page.locator('a[href*="next=%2Fcheckout%2Fagency-annual"]').count()),
+      )
+      .toBeGreaterThan(0);
 
     void proMonthly;
   });

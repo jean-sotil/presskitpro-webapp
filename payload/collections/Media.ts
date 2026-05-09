@@ -34,7 +34,9 @@ export const Media: CollectionConfig = {
       type: 'text',
       required: true,
       index: true,
-      admin: { description: 'Path within the bucket. Combined with bucket → public URL at render time.' },
+      admin: {
+        description: 'Path within the bucket. Combined with bucket → public URL at render time.',
+      },
     },
     {
       name: 'mimeType',

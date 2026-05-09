@@ -48,10 +48,7 @@ export function AboutFestivalClubOrange({ bundle }: { bundle: EditorBundle }) {
   const imgHeight = (bioImage?.height ?? 1500) || 1500;
 
   return (
-    <section
-      id="sobre"
-      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
-    >
+    <section id="sobre" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
       <div className="grid items-start gap-10 md:grid-cols-[40%_1fr] md:gap-16">
         <div className="md:col-start-2 md:row-start-1">
           <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">
@@ -111,12 +108,7 @@ function pickBioImage(bundle: EditorBundle): ImageMedia | null {
 
 function BioInkSplatter({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 200 200"
-      fill="currentColor"
-      aria-hidden="true"
-      className={className}
-    >
+    <svg viewBox="0 0 200 200" fill="currentColor" aria-hidden="true" className={className}>
       <path d="M30 100c-8-10-12-22-10-34 8 8 18 12 28 10-4-12-2-24 6-32 6 10 14 16 24 18-2-12 4-22 14-26 4 12 12 20 22 22-4-12 2-24 12-30 6 14 16 22 28 24-6 12-14 22-24 26 12 4 22 14 26 26-14-2-26 4-34 14 8 8 12 20 8 32-12-6-24-4-32 4-2 12-10 22-22 26-2-14-10-24-22-28-12 8-26 8-38 0 6-12 14-22 24-22z" />
       <circle cx="65" cy="55" r="3" />
       <circle cx="145" cy="65" r="2" />

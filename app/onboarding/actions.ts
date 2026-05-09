@@ -129,9 +129,7 @@ function buildDeps(): WizardDeps {
       } catch (err) {
         // Roll back the partial profile so the wizard can retry without
         // tripping on a unique-slug collision.
-        await p
-          .delete({ collection: 'profiles', id: profile.id })
-          .catch(() => {});
+        await p.delete({ collection: 'profiles', id: profile.id }).catch(() => {});
         throw err;
       }
       return { id: profile.id };

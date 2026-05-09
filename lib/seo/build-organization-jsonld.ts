@@ -26,9 +26,7 @@ export interface BuildOrganizationJsonLdInput {
   sameAs?: string[];
 }
 
-export function buildOrganizationJsonLd(
-  input: BuildOrganizationJsonLdInput,
-): OrganizationJsonLd {
+export function buildOrganizationJsonLd(input: BuildOrganizationJsonLdInput): OrganizationJsonLd {
   const cleanOrigin = input.origin.replace(/\/$/, '');
   const logoPath = input.logoPath ?? '/og-image.png';
   const ld: OrganizationJsonLd = {

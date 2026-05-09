@@ -23,7 +23,8 @@ import type { Preset } from './types';
 export const festivalClubOrange: Preset = {
   id: 'festival-club-orange',
   name: 'Festival Club Orange',
-  tagline: 'Estética festival / club: creme claro, laranja elétrico, hero em camadas e marquee em alta voltagem.',
+  tagline:
+    'Estética festival / club: creme claro, laranja elétrico, hero em camadas e marquee em alta voltagem.',
   theme: {
     bgPresetId: 'paper-white',
     accentPresetId: 'burnt-orange',

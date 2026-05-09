@@ -24,16 +24,12 @@ export function SocialLinksEditorialNightlifeV1({ bundle }: { bundle: EditorBund
   const tPlatforms = useTranslations('profile.social.platforms');
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
   if (!raw.length) return null;
-  const links = [...raw].sort(
-    (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
-  );
+  const links = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   const profileSlug = bundle.profile.slug;
 
   return (
     <section className="border-b border-border px-6 py-16 md:px-12">
-      <h2 className="font-display text-2xl uppercase tracking-tight">
-        {t('label')}
-      </h2>
+      <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
       <ul className="mt-6 flex flex-wrap gap-3">
         {links.map((link) => {
           const href = hrefFor(link);
@@ -43,8 +39,7 @@ export function SocialLinksEditorialNightlifeV1({ bundle }: { bundle: EditorBund
           } catch {
             label = link.platform;
           }
-          const external =
-            link.platform !== 'email' && link.platform !== 'whatsapp';
+          const external = link.platform !== 'email' && link.platform !== 'whatsapp';
           return (
             <li key={String(link.id)}>
               <TrackedSocialLink

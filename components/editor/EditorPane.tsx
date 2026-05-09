@@ -28,35 +28,20 @@ export interface EditorPaneProps {
  * Delegates to the active section's EditCard. Future tasks (11–17) add
  * a case + an import — the placeholder is the default.
  */
-export function EditorPane({
-  active,
-  bundle,
-  supabaseUserId,
-  onMutate,
-}: EditorPaneProps) {
+export function EditorPane({ active, bundle, supabaseUserId, onMutate }: EditorPaneProps) {
   const meta = SECTIONS[active];
   if (!meta.hasEditor) return <PlaceholderEditCard meta={meta} />;
 
   switch (active) {
     case 'hero':
-      return (
-        <HeroEditCard
-          bundle={bundle}
-          supabaseUserId={supabaseUserId}
-          onMutate={onMutate}
-        />
-      );
+      return <HeroEditCard bundle={bundle} supabaseUserId={supabaseUserId} onMutate={onMutate} />;
     case 'about':
       return <AboutEditCard bundle={bundle} onMutate={onMutate} />;
     case 'services':
       return <ServicesEditCard bundle={bundle} onMutate={onMutate} />;
     case 'photoGallery':
       return (
-        <PhotoGalleryEditCard
-          bundle={bundle}
-          supabaseUserId={supabaseUserId}
-          onMutate={onMutate}
-        />
+        <PhotoGalleryEditCard bundle={bundle} supabaseUserId={supabaseUserId} onMutate={onMutate} />
       );
     case 'socialLinks':
       return <SocialLinksEditCard bundle={bundle} onMutate={onMutate} />;

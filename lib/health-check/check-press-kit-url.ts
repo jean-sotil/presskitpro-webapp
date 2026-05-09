@@ -22,16 +22,16 @@ export type CheckResult =
       statusCode?: number;
     };
 
-export async function checkPressKitUrl(
-  url: string,
-  deps: CheckDeps,
-): Promise<CheckResult> {
+export async function checkPressKitUrl(url: string, deps: CheckDeps): Promise<CheckResult> {
   if (typeof url !== 'string' || url.trim() === '') {
     return { ok: false, kind: 'network-error' };
   }
   const timeoutMs = deps.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 
-  const head = await timed(() => deps.fetch(url, { method: 'HEAD', redirect: 'follow' }), timeoutMs);
+  const head = await timed(
+    () => deps.fetch(url, { method: 'HEAD', redirect: 'follow' }),
+    timeoutMs,
+  );
   if (head.kind === 'timeout' || head.kind === 'thrown') {
     return head.kind === 'timeout'
       ? { ok: false, kind: 'timeout' }
@@ -67,10 +67,7 @@ type TimedResult =
   | { kind: 'timeout' }
   | { kind: 'thrown' };
 
-async function timed(
-  task: () => Promise<Response>,
-  timeoutMs: number,
-): Promise<TimedResult> {
+async function timed(task: () => Promise<Response>, timeoutMs: number): Promise<TimedResult> {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   try {
     const response = await Promise.race<Response | { __timeout: true }>([

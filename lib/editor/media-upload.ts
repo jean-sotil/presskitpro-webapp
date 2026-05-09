@@ -22,12 +22,7 @@ export type UploadResult =
   | { ok: true; mediaId: number; path: string; bucket: string }
   | {
       ok: false;
-      reason:
-        | 'alt-required'
-        | 'too-large'
-        | 'sign-failed'
-        | 'put-failed'
-        | 'register-failed';
+      reason: 'alt-required' | 'too-large' | 'sign-failed' | 'put-failed' | 'register-failed';
       detail?: string;
     };
 
@@ -38,8 +33,7 @@ export type UploadDeps = {
     size: number;
     ownerSupabaseId: string;
   }): Promise<
-    | { ok: true; signedUrl: string; path: string; bucket: string }
-    | { ok: false; reason: string }
+    { ok: true; signedUrl: string; path: string; bucket: string } | { ok: false; reason: string }
   >;
   putFile(args: { url: string; file: File }): Promise<{ ok: boolean }>;
   register(args: {
@@ -49,10 +43,7 @@ export type UploadDeps = {
     size: number;
     alt: string;
     ownerSupabaseId: string;
-  }): Promise<
-    | { ok: true; mediaId: number }
-    | { ok: false; status?: number }
-  >;
+  }): Promise<{ ok: true; mediaId: number } | { ok: false; status?: number }>;
 };
 
 export async function uploadMedia(

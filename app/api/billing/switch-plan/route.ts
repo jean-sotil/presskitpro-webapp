@@ -42,10 +42,7 @@ export async function POST(req: Request) {
   }
   const planKey = body.planKey;
   if (!planKey || !VALID_KEYS.has(planKey as SwitchPlanKey)) {
-    return NextResponse.json(
-      { error: 'invalid plan' },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: 'invalid plan' }, { status: 400 });
   }
 
   // 3) Resolve the Payload user that mirrors the Supabase auth user.
@@ -70,10 +67,7 @@ export async function POST(req: Request) {
   try {
     stripe = getStripeClientOrThrow();
   } catch {
-    return NextResponse.json(
-      { error: 'stripe-not-configured' },
-      { status: 503 },
-    );
+    return NextResponse.json({ error: 'stripe-not-configured' }, { status: 503 });
   }
 
   const result = await switchPlan({
@@ -92,14 +86,14 @@ export async function POST(req: Request) {
   });
   if (!result.ok) {
     const status =
-      result.reason === 'no-subscription' ? 409 :
-      result.reason === 'unknown-plan' || result.reason === 'not-configured' ? 400 :
-      result.reason === 'user-not-found' ? 404 :
-      500;
-    return NextResponse.json(
-      { error: result.reason, message: result.message },
-      { status },
-    );
+      result.reason === 'no-subscription'
+        ? 409
+        : result.reason === 'unknown-plan' || result.reason === 'not-configured'
+          ? 400
+          : result.reason === 'user-not-found'
+            ? 404
+            : 500;
+    return NextResponse.json({ error: result.reason, message: result.message }, { status });
   }
   return NextResponse.json({
     ok: true,

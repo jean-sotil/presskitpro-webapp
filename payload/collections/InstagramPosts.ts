@@ -1,9 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import {
-  canCreateForOwnedProfile,
-  ownsViaProfile,
-} from '../../lib/payload/access/predicates';
+import { canCreateForOwnedProfile, ownsViaProfile } from '../../lib/payload/access/predicates';
 
 /**
  * Featured Instagram posts (manual paste flow, task-17).

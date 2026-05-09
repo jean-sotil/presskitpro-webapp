@@ -1,10 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import {
-  compressImage,
-  type CompressDeps,
-  pickResizeDimensions,
-} from './image-compress';
+import { compressImage, type CompressDeps, pickResizeDimensions } from './image-compress';
 
 describe('pickResizeDimensions', () => {
   it('keeps small images at their natural size', () => {
@@ -69,7 +65,10 @@ describe('compressImage', () => {
     expect(out.type).toBe('image/avif');
     expect(out.name).toBe('hero.avif');
     expect(deps.drawAndExport).toHaveBeenCalledTimes(1);
-    expect(deps.drawAndExport).toHaveBeenNthCalledWith(1, expect.objectContaining({ mimeType: 'image/avif' }));
+    expect(deps.drawAndExport).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ mimeType: 'image/avif' }),
+    );
   });
 
   it('falls back to JPEG when AVIF returns null (older Safari, MIME mismatch)', async () => {
@@ -87,7 +86,10 @@ describe('compressImage', () => {
     expect(out.type).toBe('image/jpeg');
     expect(out.name).toBe('hero.jpg');
     expect(drawAndExport).toHaveBeenCalledTimes(2);
-    expect(drawAndExport).toHaveBeenNthCalledWith(2, expect.objectContaining({ mimeType: 'image/jpeg' }));
+    expect(drawAndExport).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ mimeType: 'image/jpeg' }),
+    );
   });
 
   it('returns the original file when every format in the ladder yields null', async () => {
@@ -156,11 +158,7 @@ describe('compressImage', () => {
       loadImage: vi.fn().mockResolvedValue({ width: 1926, height: 2568 }),
       drawAndExport,
     };
-    const out = await compressImage(
-      input,
-      { targetMaxBytes: 10 * 1024 * 1024 },
-      deps,
-    );
+    const out = await compressImage(input, { targetMaxBytes: 10 * 1024 * 1024 }, deps);
     expect(out.type).toBe('image/jpeg');
     expect(out.size).toBe(7 * 1024 * 1024);
   });
@@ -174,11 +172,7 @@ describe('compressImage', () => {
       loadImage: vi.fn().mockResolvedValue({ width: 1926, height: 2568 }),
       drawAndExport: vi.fn().mockResolvedValue(overBudget),
     };
-    const out = await compressImage(
-      input,
-      { targetMaxBytes: 10 * 1024 * 1024 },
-      deps,
-    );
+    const out = await compressImage(input, { targetMaxBytes: 10 * 1024 * 1024 }, deps);
     // The pre-flight in `uploadMedia` will catch this and surface
     // 'too-large' to the user; here we just guarantee no surprise truncation.
     expect(out).toBe(input);
@@ -195,6 +189,9 @@ describe('compressImage', () => {
     const out = await compressImage(input, { formatLadder: ['image/jpeg'] }, deps);
     expect(out.type).toBe('image/jpeg');
     expect(drawAndExport).toHaveBeenCalledTimes(1);
-    expect(drawAndExport).toHaveBeenNthCalledWith(1, expect.objectContaining({ mimeType: 'image/jpeg' }));
+    expect(drawAndExport).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ mimeType: 'image/jpeg' }),
+    );
   });
 });

@@ -49,10 +49,7 @@ export function CookieConsentBanner() {
       <div className="flex flex-col gap-3 text-sm md:flex-row md:items-center md:justify-between">
         <p className="text-text-muted">
           {t('body')}{' '}
-          <Link
-            href={t('learnMoreHref')}
-            className="underline hover:text-text"
-          >
+          <Link href={t('learnMoreHref')} className="underline hover:text-text">
             {t('learnMore')}
           </Link>
           .

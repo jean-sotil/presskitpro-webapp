@@ -11,9 +11,7 @@ export function MarketingHero() {
       <h1 className="mt-6 max-w-4xl font-display text-5xl uppercase tracking-tight md:text-7xl lg:text-8xl">
         {t('title')}
       </h1>
-      <p className="mt-8 max-w-2xl text-lg text-text-muted md:text-xl">
-        {t('tagline')}
-      </p>
+      <p className="mt-8 max-w-2xl text-lg text-text-muted md:text-xl">{t('tagline')}</p>
       <div className="mt-10 flex flex-wrap items-center gap-4">
         <Link
           href="/signup"
@@ -21,9 +19,7 @@ export function MarketingHero() {
         >
           {t('cta')}
         </Link>
-        <span className="text-xs uppercase tracking-wider text-text-muted">
-          {t('ctaHint')}
-        </span>
+        <span className="text-xs uppercase tracking-wider text-text-muted">{t('ctaHint')}</span>
       </div>
     </section>
   );

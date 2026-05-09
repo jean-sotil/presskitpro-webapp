@@ -35,14 +35,9 @@ export const MAX_SOCIAL_LINKS = 10;
 
 export type ParseReason = 'empty' | 'invalid' | 'wrong-host';
 
-export type ParseResult =
-  | { ok: true; canonical: string }
-  | { ok: false; reason: ParseReason };
+export type ParseResult = { ok: true; canonical: string } | { ok: false; reason: ParseReason };
 
-export function parseAndCanonicalize(
-  platform: Platform,
-  raw: string,
-): ParseResult {
+export function parseAndCanonicalize(platform: Platform, raw: string): ParseResult {
   const trimmed = (raw ?? '').trim();
   if (trimmed.length === 0) return { ok: false, reason: 'empty' };
 
@@ -126,10 +121,7 @@ function parseHandleSite(input: string, opts: HandleSiteOpts): ParseResult {
   return { ok: true, canonical: `https://${opts.canonicalHost}${path}` };
 }
 
-type UrlOnlyOpts =
-  | { hostExact: string }
-  | { hostsExact: string[] }
-  | { hostSuffix: string };
+type UrlOnlyOpts = { hostExact: string } | { hostsExact: string[] } | { hostSuffix: string };
 
 function parseUrlOnly(input: string, opts: UrlOnlyOpts): ParseResult {
   const parsed = safeParseUrl(input);

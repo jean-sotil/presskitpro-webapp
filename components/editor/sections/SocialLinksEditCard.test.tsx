@@ -33,9 +33,7 @@ function makeBundle(
 
 describe('SocialLinksEditCard', () => {
   it('shows the empty-state when no links', () => {
-    render(
-      <SocialLinksEditCard bundle={makeBundle()} onMutate={vi.fn()} />,
-    );
+    render(<SocialLinksEditCard bundle={makeBundle()} onMutate={vi.fn()} />);
     expect(screen.getByText(/nenhum link cadastrado/i)).toBeInTheDocument();
   });
 
@@ -69,18 +67,14 @@ describe('SocialLinksEditCard', () => {
       platform: 'instagram',
       url: `https://www.instagram.com/dj_${i}`,
     }));
-    render(
-      <SocialLinksEditCard bundle={makeBundle(items)} onMutate={vi.fn()} />,
-    );
+    render(<SocialLinksEditCard bundle={makeBundle(items)} onMutate={vi.fn()} />);
     expect(screen.getByRole('button', { name: /adicionar link/i })).toBeDisabled();
   });
 
   it('flags an invalid URL with aria-invalid + helper link', () => {
     render(
       <SocialLinksEditCard
-        bundle={makeBundle([
-          { id: 1, platform: 'whatsapp', url: 'not-a-number' },
-        ])}
+        bundle={makeBundle([{ id: 1, platform: 'whatsapp', url: 'not-a-number' }])}
         onMutate={vi.fn()}
       />,
     );
@@ -116,9 +110,7 @@ describe('SocialLinksEditCard', () => {
   it('blocks "Adicionar link" when an existing row is invalid', () => {
     render(
       <SocialLinksEditCard
-        bundle={makeBundle([
-          { id: 1, platform: 'whatsapp', url: 'not-a-number' },
-        ])}
+        bundle={makeBundle([{ id: 1, platform: 'whatsapp', url: 'not-a-number' }])}
         onMutate={vi.fn()}
       />,
     );

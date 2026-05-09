@@ -21,9 +21,7 @@ export default defineConfig({
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
   workers: isCI ? 1 : undefined,
-  reporter: isCI
-    ? [['html', { open: 'never' }], ['list']]
-    : [['list']],
+  reporter: isCI ? [['html', { open: 'never' }], ['list']] : [['list']],
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000',
     // Task-29 — pin the browser locale so `Accept-Language` defaults to

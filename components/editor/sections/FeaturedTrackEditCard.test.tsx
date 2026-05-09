@@ -19,9 +19,7 @@ function withQueryClient(ui: ReactNode) {
   return <QueryClientProvider client={qc}>{ui}</QueryClientProvider>;
 }
 
-function makeBundle(
-  overrides: { url?: string; oembedHtml?: string } = {},
-): EditorBundle {
+function makeBundle(overrides: { url?: string; oembedHtml?: string } = {}): EditorBundle {
   return {
     profile: {
       id: 42,
@@ -82,25 +80,20 @@ describe('FeaturedTrackEditCard', () => {
         expect.objectContaining({ method: 'PUT' }),
       ),
     );
-    expect(
-      JSON.parse((fetchMock.mock.calls[0]![1] as RequestInit).body as string),
-    ).toMatchObject({
+    expect(JSON.parse((fetchMock.mock.calls[0]![1] as RequestInit).body as string)).toMatchObject({
       url: 'https://soundcloud.com/artist/track',
       force: false,
     });
     await waitFor(() =>
-      expect(
-        document.querySelector('iframe[src*="w.soundcloud.com"]'),
-      ).toBeInTheDocument(),
+      expect(document.querySelector('iframe[src*="w.soundcloud.com"]')).toBeInTheDocument(),
     );
   });
 
   it('surfaces a friendly error when oEmbed fails', async () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-      new Response(
-        JSON.stringify({ error: 'oembed-failed', reason: 'not-found' }),
-        { status: 502 },
-      ),
+      new Response(JSON.stringify({ error: 'oembed-failed', reason: 'not-found' }), {
+        status: 502,
+      }),
     );
     render(withQueryClient(<FeaturedTrackEditCard bundle={makeBundle()} />));
     fireEvent.change(screen.getByLabelText(/url do soundcloud/i), {
@@ -124,18 +117,14 @@ describe('FeaturedTrackEditCard', () => {
         />,
       ),
     );
-    expect(
-      screen.getByRole('button', { name: /atualizar embed/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /atualizar embed/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /remover/i })).toBeInTheDocument();
   });
 
   it('removes the track via DELETE on Remover click', async () => {
     const fetchMock = vi
       .spyOn(globalThis, 'fetch')
-      .mockResolvedValue(
-        new Response(JSON.stringify({ ok: true }), { status: 200 }),
-      );
+      .mockResolvedValue(new Response(JSON.stringify({ ok: true }), { status: 200 }));
     render(
       withQueryClient(
         <FeaturedTrackEditCard
@@ -157,12 +146,20 @@ describe('FeaturedTrackEditCard', () => {
   });
 
   it('forces re-fetch on "Atualizar embed"', async () => {
-    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-      new Response(
-        JSON.stringify({ ok: true, track: { url: 'x', oembedHtml: '<iframe src="https://w.soundcloud.com/player/?url=foo"></iframe>' } }),
-        { status: 200 },
-      ),
-    );
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            ok: true,
+            track: {
+              url: 'x',
+              oembedHtml: '<iframe src="https://w.soundcloud.com/player/?url=foo"></iframe>',
+            },
+          }),
+          { status: 200 },
+        ),
+      );
     render(
       withQueryClient(
         <FeaturedTrackEditCard

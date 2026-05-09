@@ -2,10 +2,11 @@ import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <main id="main" className="flex min-h-[100dvh] flex-col items-center justify-center px-6 text-center">
-      <h1 className="font-display text-3xl uppercase tracking-tight">
-        Passo inválido
-      </h1>
+    <main
+      id="main"
+      className="flex min-h-[100dvh] flex-col items-center justify-center px-6 text-center"
+    >
+      <h1 className="font-display text-3xl uppercase tracking-tight">Passo inválido</h1>
       <p className="mt-3 max-w-prose text-sm text-text-muted">
         O onboarding tem 5 passos. Voltar para o início?
       </p>

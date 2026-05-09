@@ -19,9 +19,7 @@ describe('encryptTokenBeforeChange', () => {
   });
 
   it('returns undefined when value is undefined', () => {
-    expect(
-      encryptTokenBeforeChange({ value: undefined, operation: 'create' }),
-    ).toBeUndefined();
+    expect(encryptTokenBeforeChange({ value: undefined, operation: 'create' })).toBeUndefined();
   });
 
   it('passes through a value that is already a v1 ciphertext (idempotent on update)', () => {
@@ -32,9 +30,9 @@ describe('encryptTokenBeforeChange', () => {
 
   it('throws when the env var is missing', () => {
     vi.stubEnv('INSTAGRAM_TOKEN_ENCRYPTION_KEY', '');
-    expect(() =>
-      encryptTokenBeforeChange({ value: 'tok', operation: 'create' }),
-    ).toThrow(/INSTAGRAM_TOKEN_ENCRYPTION_KEY/);
+    expect(() => encryptTokenBeforeChange({ value: 'tok', operation: 'create' })).toThrow(
+      /INSTAGRAM_TOKEN_ENCRYPTION_KEY/,
+    );
   });
 });
 

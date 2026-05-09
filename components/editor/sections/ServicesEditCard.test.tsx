@@ -8,9 +8,7 @@ import { ServicesEditCard } from './ServicesEditCard';
 function makeBundle(services: Array<{ title: string; description?: string }> = []): EditorBundle {
   return {
     profile: { id: 1, owner: 1, slug: 'a', status: 'draft', defaultLocale: 'pt-BR' },
-    content: services.length
-      ? ({ id: 9, profile: 1, services } as never)
-      : null,
+    content: services.length ? ({ id: 9, profile: 1, services } as never) : null,
     theme: null,
     socialLinks: [],
     featuredTrack: null,
@@ -28,10 +26,7 @@ describe('ServicesEditCard', () => {
   it('renders one row per service + drag handle + remove button', () => {
     render(
       <ServicesEditCard
-        bundle={makeBundle([
-          { title: 'DJ Set', description: '60 min' },
-          { title: 'Produção' },
-        ])}
+        bundle={makeBundle([{ title: 'DJ Set', description: '60 min' }, { title: 'Produção' }])}
         onMutate={vi.fn()}
       />,
     );
@@ -40,23 +35,13 @@ describe('ServicesEditCard', () => {
   });
 
   it('flags an empty title with role="alert"', () => {
-    render(
-      <ServicesEditCard
-        bundle={makeBundle([{ title: '' }])}
-        onMutate={vi.fn()}
-      />,
-    );
+    render(<ServicesEditCard bundle={makeBundle([{ title: '' }])} onMutate={vi.fn()} />);
     expect(screen.getByRole('alert')).toHaveTextContent(/título é obrigatório/i);
   });
 
   it('fires onMutate with the patched array on title edit', () => {
     const onMutate = vi.fn();
-    render(
-      <ServicesEditCard
-        bundle={makeBundle([{ title: 'OK' }])}
-        onMutate={onMutate}
-      />,
-    );
+    render(<ServicesEditCard bundle={makeBundle([{ title: 'OK' }])} onMutate={onMutate} />);
     const input = screen.getByPlaceholderText(/título do serviço/i);
     fireEvent.change(input, { target: { value: 'DJ Set' } });
     expect(onMutate).toHaveBeenCalledWith('content', {
@@ -67,9 +52,7 @@ describe('ServicesEditCard', () => {
   it('add button is disabled at MAX_SERVICES', () => {
     render(
       <ServicesEditCard
-        bundle={makeBundle(
-          Array.from({ length: 8 }, (_, i) => ({ title: `S${i}` })),
-        )}
+        bundle={makeBundle(Array.from({ length: 8 }, (_, i) => ({ title: `S${i}` })))}
         onMutate={vi.fn()}
       />,
     );

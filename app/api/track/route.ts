@@ -6,10 +6,7 @@ import {
   deriveProfileSlugFromPath,
   deriveReferrerHost,
 } from '@/lib/analytics/derive-event';
-import {
-  getOrCreateSaltForDay,
-  insertAnalyticsEvent,
-} from '@/lib/analytics/supabase-events';
+import { getOrCreateSaltForDay, insertAnalyticsEvent } from '@/lib/analytics/supabase-events';
 import { payload } from '@/lib/payload';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 
@@ -25,7 +22,8 @@ const ALLOWED_EVENTS = new Set([
 
 const MAX_BODY_BYTES = 2_048;
 
-const BOT_RX = /(bot|crawler|spider|crawling|googlebot|bingbot|slurp|duckduckbot|baiduspider|yandex|facebookexternalhit|twitterbot|whatsapp|preview|headlesschrome|lighthouse)/i;
+const BOT_RX =
+  /(bot|crawler|spider|crawling|googlebot|bingbot|slurp|duckduckbot|baiduspider|yandex|facebookexternalhit|twitterbot|whatsapp|preview|headlesschrome|lighthouse)/i;
 
 /**
  * Public, fire-and-forget event capture endpoint. Returns 204 on every

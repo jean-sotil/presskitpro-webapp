@@ -25,11 +25,7 @@ describe('SaveStatus', () => {
 
   it('renders an alert containing a retry button that calls onRetry', () => {
     const onRetry = vi.fn();
-    render(
-      <SaveStatus
-        state={{ kind: 'error', message: 'network', onRetry }}
-      />,
-    );
+    render(<SaveStatus state={{ kind: 'error', message: 'network', onRetry }} />);
     // The alert region announces the error; the inner button is what
     // the user clicks. Splitting the two roles is required so screen
     // readers don't read "button" as the alert's role.

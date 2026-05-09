@@ -28,7 +28,10 @@ type DemoSpec = {
   pressKitUrl: string;
   tagline: { 'pt-BR': string; en: string };
   bio: { 'pt-BR': string; en: string };
-  services: { 'pt-BR': Array<{ title: string; description: string }>; en: Array<{ title: string; description: string }> };
+  services: {
+    'pt-BR': Array<{ title: string; description: string }>;
+    en: Array<{ title: string; description: string }>;
+  };
   socials: Array<{ platform: string; url: string }>;
   track: string;
   theme: { fontPair: string; hero: string; gallery: string };
@@ -48,8 +51,7 @@ const DEMOS: DemoSpec[] = [
     bio: {
       'pt-BR':
         'DJ e produtora paulistana. Residente em casas como D-Edge e Warung. Lançamentos pela Anjunadeep e Bedrock.',
-      en:
-        'São Paulo–based DJ and producer. Resident at D-Edge and Warung. Releases on Anjunadeep and Bedrock.',
+      en: 'São Paulo–based DJ and producer. Resident at D-Edge and Warung. Releases on Anjunadeep and Bedrock.',
     },
     services: {
       'pt-BR': [
@@ -197,12 +199,7 @@ async function main() {
     });
     const profileIds = profiles.docs.map((p) => p.id);
 
-    for (const slug of [
-      'profile-content',
-      'social-links',
-      'featured-tracks',
-      'themes',
-    ] as const) {
+    for (const slug of ['profile-content', 'social-links', 'featured-tracks', 'themes'] as const) {
       if (profileIds.length === 0) break;
       await payload.delete({
         collection: slug,

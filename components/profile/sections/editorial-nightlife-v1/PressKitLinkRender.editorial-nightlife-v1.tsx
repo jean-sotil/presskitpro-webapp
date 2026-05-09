@@ -42,19 +42,14 @@ export function PressKitLinkEditorialNightlifeV1({ bundle }: { bundle: EditorBun
           {t('ctaLegacy')}
         </TrackedPressKitAnchor>
         {badge ? (
-          <span className="text-xs uppercase tracking-wider text-text-muted">
-            {badge}
-          </span>
+          <span className="text-xs uppercase tracking-wider text-text-muted">{badge}</span>
         ) : null}
       </div>
     </section>
   );
 }
 
-function providerBadge(
-  t: (key: string) => string,
-  provider: PressKitProvider,
-): string | null {
+function providerBadge(t: (key: string) => string, provider: PressKitProvider): string | null {
   if (provider === 'unknown' || provider === 'other') return null;
   try {
     return t(provider);

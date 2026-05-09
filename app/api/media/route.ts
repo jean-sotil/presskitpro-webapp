@@ -25,7 +25,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'invalid json' }, { status: 400 });
   }
 
-  if (!body.bucket || !body.path || !body.mimeType || !body.size || !body.alt || !body.ownerSupabaseId) {
+  if (
+    !body.bucket ||
+    !body.path ||
+    !body.mimeType ||
+    !body.size ||
+    !body.alt ||
+    !body.ownerSupabaseId
+  ) {
     return NextResponse.json({ error: 'missing required fields' }, { status: 400 });
   }
 

@@ -77,8 +77,8 @@ test.describe('Bio + Services full ladder @full', () => {
     await titles.nth(1).fill('Second');
 
     // Save fires; status flips.
-    await expect(
-      page.locator('[role="status"]', { hasText: /salvo/i }),
-    ).toBeVisible({ timeout: 10_000 });
+    await expect(page.locator('[role="status"]', { hasText: /salvo/i })).toBeVisible({
+      timeout: 10_000,
+    });
   });
 });

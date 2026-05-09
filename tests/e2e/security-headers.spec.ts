@@ -10,9 +10,7 @@ import { expect, test } from '@playwright/test';
  */
 
 test.describe('Security headers @smoke', () => {
-  test('home page sets Content-Security-Policy-Report-Only with allowlist', async ({
-    request,
-  }) => {
+  test('home page sets Content-Security-Policy-Report-Only with allowlist', async ({ request }) => {
     const res = await request.get('/');
     const csp = res.headers()['content-security-policy-report-only'] ?? '';
     expect(csp).toContain("default-src 'self'");
@@ -22,22 +20,17 @@ test.describe('Security headers @smoke', () => {
     expect(csp).toContain("frame-ancestors 'none'");
   });
 
-  test('public profile shape sets the same CSP report-only header', async ({
-    request,
-  }) => {
+  test('public profile shape sets the same CSP report-only header', async ({ request }) => {
     const res = await request.get('/perf-cache-probe-task27', { maxRedirects: 0 });
     const csp = res.headers()['content-security-policy-report-only'] ?? '';
     expect(csp).toContain("default-src 'self'");
   });
 
-  test('slug-check endpoint returns 429 with Retry-After when over budget', async ({
-    request,
-  }) => {
+  test('slug-check endpoint returns 429 with Retry-After when over budget', async ({ request }) => {
     // Budget is 30/min/IP. From the test runner the IP is fixed so 31 hits
     // in quick succession should trip it. We only need to confirm the
     // 31st response shape.
-    let firstFailing: { status: number; retryAfter: string | undefined } | null =
-      null;
+    let firstFailing: { status: number; retryAfter: string | undefined } | null = null;
     for (let i = 0; i < 35; i++) {
       const r = await request.get('/api/slug/check?slug=zzz' + i);
       if (r.status() === 429) {

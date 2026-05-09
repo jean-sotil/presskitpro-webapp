@@ -38,13 +38,7 @@ export interface SectionRailProps {
  * coordinates so arrow keys move items per the WAI-ARIA Authoring
  * Practices.
  */
-export function SectionRail({
-  order,
-  active,
-  labels,
-  onSelect,
-  onReorder,
-}: SectionRailProps) {
+export function SectionRail({ order, active, labels, onSelect, onReorder }: SectionRailProps) {
   const t = useTranslations('editor.rail');
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -91,8 +85,9 @@ function SortableItem({
   onSelect: () => void;
   reorderLabel: string;
 }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: keyId });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: keyId,
+  });
 
   return (
     <li

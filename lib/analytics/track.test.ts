@@ -17,10 +17,7 @@ describe('track', () => {
   it('falls back to console.debug when no sink is registered', () => {
     const debugSpy = vi.spyOn(console, 'debug').mockImplementation(() => {});
     track('onboarding_step_completed', { step: 1 });
-    expect(debugSpy).toHaveBeenCalledWith(
-      '[track] onboarding_step_completed',
-      { step: 1 },
-    );
+    expect(debugSpy).toHaveBeenCalledWith('[track] onboarding_step_completed', { step: 1 });
     debugSpy.mockRestore();
   });
 

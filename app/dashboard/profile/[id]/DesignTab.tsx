@@ -39,11 +39,7 @@ export function DesignTab({
     setPendingId(preset.id);
     setErrorId(null);
     startTransition(async () => {
-      const result: ApplyPresetResult = await applyPresetAction(
-        profileId,
-        preset.id,
-        profileSlug,
-      );
+      const result: ApplyPresetResult = await applyPresetAction(profileId, preset.id, profileSlug);
       if (!result.ok) {
         setErrorId(preset.id);
         setPendingId(null);
@@ -62,13 +58,9 @@ export function DesignTab({
   return (
     <div className="px-6 py-10 md:px-12">
       <header className="max-w-prose">
-        <h2 className="font-display text-2xl uppercase tracking-tight">
-          {t('heading')}
-        </h2>
+        <h2 className="font-display text-2xl uppercase tracking-tight">{t('heading')}</h2>
         <p className="mt-3 text-sm text-text-muted">{t('description')}</p>
-        <p className="mt-3 text-xs uppercase tracking-wider text-text-muted">
-          {t('applyHint')}
-        </p>
+        <p className="mt-3 text-xs uppercase tracking-wider text-text-muted">{t('applyHint')}</p>
       </header>
       <ul className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {PRESETS.map((preset) => {
@@ -121,17 +113,13 @@ function PresetCard({
       data-active={isActive ? 'true' : undefined}
       className={cn(
         'flex h-full flex-col border bg-bg transition-colors duration-quick',
-        isActive
-          ? 'border-accent'
-          : 'border-border hover:border-text-muted',
+        isActive ? 'border-accent' : 'border-border hover:border-text-muted',
       )}
     >
       <PresetPreview preset={preset} />
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="font-display text-lg uppercase tracking-tight">
-            {localizedName}
-          </h3>
+          <h3 className="font-display text-lg uppercase tracking-tight">{localizedName}</h3>
           {isActive ? (
             <span className="inline-flex items-center border border-accent px-2 py-0.5 text-xs uppercase tracking-wider text-accent">
               {t('activeBadge')}
@@ -141,11 +129,7 @@ function PresetCard({
         <p className="mt-3 flex-1 text-sm text-text-muted">{localizedTagline}</p>
         <div className="mt-6">
           {isActive ? null : (
-            <Button
-              type="button"
-              onClick={onApply}
-              disabled={disabled || isPending}
-            >
+            <Button type="button" onClick={onApply} disabled={disabled || isPending}>
               {isPending ? t('pendingCta') : t('applyCta')}
             </Button>
           )}
@@ -182,14 +166,8 @@ function PresetPreview({ preset }: { preset: Preset }) {
           presskit.pro/dj
         </p>
         <div>
-          <div
-            className="h-1 w-12"
-            style={{ background: preset.theme.accent }}
-          />
-          <p
-            className="mt-2 font-display text-xl uppercase leading-none"
-            style={{ color: text }}
-          >
+          <div className="h-1 w-12" style={{ background: preset.theme.accent }} />
+          <p className="mt-2 font-display text-xl uppercase leading-none" style={{ color: text }}>
             {preset.name}
           </p>
         </div>

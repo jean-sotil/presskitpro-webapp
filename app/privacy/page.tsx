@@ -5,8 +5,7 @@ import { LegalPage } from '@/components/legal/LegalPage';
 import { isSupportedLocale, type SupportedLocale } from '@/lib/i18n/locale';
 import { buildMarketingMetadata } from '@/lib/seo/build-marketing-metadata';
 
-const SITE_ORIGIN =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
+const SITE_ORIGIN = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
 
 export async function generateMetadata(): Promise<Metadata> {
   const rawLocale = await getLocale();

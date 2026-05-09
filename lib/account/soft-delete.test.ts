@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  decideSoftDelete,
-  normalizeEmailForConfirm,
-} from './soft-delete';
+import { decideSoftDelete, normalizeEmailForConfirm } from './soft-delete';
 
 describe('normalizeEmailForConfirm', () => {
   it('lowercases and trims for case-insensitive comparison', () => {

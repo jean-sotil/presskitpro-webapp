@@ -48,10 +48,7 @@ export function CheckoutCard({ planId, planLabel, priceCopy }: Props) {
       </ul>
 
       {error ? (
-        <p
-          role="alert"
-          className="mt-6 border border-border bg-bg p-4 text-sm text-text"
-        >
+        <p role="alert" className="mt-6 border border-border bg-bg p-4 text-sm text-text">
           {error}
         </p>
       ) : null}

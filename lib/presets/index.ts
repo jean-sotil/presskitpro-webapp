@@ -1,3 +1,4 @@
+import { deadSignal } from './dead-signal';
 import { editorialNightlifeV1 } from './editorial-nightlife-v1';
 import { electricFireTechno } from './electric-fire-techno';
 import { festivalClubOrange } from './festival-club-orange';
@@ -11,6 +12,7 @@ export type { Preset, PresetDecorations, PresetTheme } from './types';
  * artist sees should be the new flagship preset, then the legacy default.
  */
 export const PRESETS: readonly Preset[] = [
+  deadSignal,
   mediakitProV1,
   festivalClubOrange,
   electricFireTechno,

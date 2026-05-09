@@ -135,11 +135,7 @@ export function MediaStep({
           slot={portrait}
           onPick={(f) => uploadFile(f, 'portrait')}
         />
-        <Dropzone
-          label="Logo (opcional)"
-          slot={logo}
-          onPick={(f) => uploadFile(f, 'logo')}
-        />
+        <Dropzone label="Logo (opcional)" slot={logo} onPick={(f) => uploadFile(f, 'logo')} />
       </div>
       {globalError ? (
         <p role="alert" className="text-sm text-text-muted">
@@ -154,12 +150,7 @@ export function MediaStep({
         >
           {submitting ? 'Salvando...' : 'Continuar'}
         </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          onClick={() => advance(true)}
-          disabled={submitting}
-        >
+        <Button type="button" variant="ghost" onClick={() => advance(true)} disabled={submitting}>
           Pular por enquanto
         </Button>
       </div>

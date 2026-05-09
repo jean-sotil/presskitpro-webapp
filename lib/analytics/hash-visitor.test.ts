@@ -38,8 +38,8 @@ describe('hashVisitor', () => {
   });
 
   it('throws when the salt is empty (defensive — never hash without a salt)', () => {
-    expect(() =>
-      hashVisitor({ ip: '1.2.3.4', userAgent: 'x', salt: Buffer.alloc(0) }),
-    ).toThrow(/salt/i);
+    expect(() => hashVisitor({ ip: '1.2.3.4', userAgent: 'x', salt: Buffer.alloc(0) })).toThrow(
+      /salt/i,
+    );
   });
 });

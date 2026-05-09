@@ -11,9 +11,7 @@ export function MarketingFooter() {
     <footer className="px-6 py-12 md:px-12">
       <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
         <div>
-          <p className="font-display text-2xl uppercase tracking-tight">
-            PressKit Pro
-          </p>
+          <p className="font-display text-2xl uppercase tracking-tight">PressKit Pro</p>
           <p className="mt-2 text-sm text-text-muted">{t('tagline')}</p>
         </div>
         <nav aria-label={t('navLabel')}>

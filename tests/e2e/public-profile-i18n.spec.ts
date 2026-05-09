@@ -24,9 +24,7 @@ test.describe('Public profile i18n @smoke', () => {
   // hosting layer (Vercel) — not from a Playwright client. We instead
   // assert the cache header (Cache-Control) survives, since middleware
   // uses `set()` not `append()` for that one.
-  test('public-profile-shape path retains middleware Cache-Control', async ({
-    request,
-  }) => {
+  test('public-profile-shape path retains middleware Cache-Control', async ({ request }) => {
     const res = await request.get('/perf-cache-probe-task29', {
       maxRedirects: 0,
     });

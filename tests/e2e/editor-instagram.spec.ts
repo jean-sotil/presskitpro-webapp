@@ -23,14 +23,10 @@ test.describe('Instagram full ladder @full', () => {
     const profileId = process.env.EDITOR_E2E_PROFILE_ID!;
     await page.goto(`/dashboard/profile/${profileId}`);
     await page.getByRole('button', { name: 'Instagram' }).click();
-    await expect(
-      page.getByRole('heading', { level: 2, name: /^instagram$/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: /^instagram$/i })).toBeVisible();
 
     await page.getByRole('button', { name: /adicionar post/i }).click();
-    await page
-      .getByLabel(/url do post #1/i)
-      .fill('https://www.instagram.com/p/CxYzAbc123/');
+    await page.getByLabel(/url do post #1/i).fill('https://www.instagram.com/p/CxYzAbc123/');
     await page.getByRole('button', { name: /^salvar$/i }).click();
 
     // Either a blockquote (fallback) or an iframe (graph) shows up in the preview pane.

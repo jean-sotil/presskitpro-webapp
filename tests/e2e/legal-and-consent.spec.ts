@@ -1,9 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import {
-  CONSENT_COOKIE_NAME,
-  CONSENT_COOKIE_VALUE,
-} from '@/lib/consent/cookie-consent';
+import { CONSENT_COOKIE_NAME, CONSENT_COOKIE_VALUE } from '@/lib/consent/cookie-consent';
 
 /**
  * Task-27 PR-2 — legal routes + cookie consent banner.
@@ -24,17 +21,12 @@ test.describe('Legal pages @smoke', () => {
 
   test('renders /terms with the terms heading', async ({ page }) => {
     await page.goto('/terms');
-    await expect(
-      page.getByRole('heading', { name: /termos de uso/i, level: 1 }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /termos de uso/i, level: 1 })).toBeVisible();
   });
 });
 
 test.describe('Cookie consent banner @smoke', () => {
-  test('appears for first-time visitors and dismisses on accept', async ({
-    page,
-    context,
-  }) => {
+  test('appears for first-time visitors and dismisses on accept', async ({ page, context }) => {
     // Wipe cookies so the banner appears in a clean state.
     await context.clearCookies();
     await page.goto('/');
@@ -47,10 +39,7 @@ test.describe('Cookie consent banner @smoke', () => {
     expect(set?.value).toBe(CONSENT_COOKIE_VALUE);
   });
 
-  test('does not render when the consent cookie is already set', async ({
-    page,
-    context,
-  }) => {
+  test('does not render when the consent cookie is already set', async ({ page, context }) => {
     await context.addCookies([
       {
         name: CONSENT_COOKIE_NAME,

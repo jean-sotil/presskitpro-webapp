@@ -48,10 +48,7 @@ type CheckoutOutput =
   | { ok: true; url: string; sessionId: string; customerId: string }
   | { ok: false; reason: 'not-configured' | 'unknown-plan'; message: string };
 
-export type PersistCustomerId = (
-  userId: number | string,
-  customerId: string,
-) => Promise<void>;
+export type PersistCustomerId = (userId: number | string, customerId: string) => Promise<void>;
 
 export async function createCheckoutSession(
   input: CheckoutInput,
@@ -127,11 +124,7 @@ function resolvePriceId(planKey: CheckoutPlanKey): string | null {
       if (!plan?.stripePriceIdEnv) return null;
       // Honor the legacy `STRIPE_PRICE_ID_AGENCY` env name as a
       // fallback so a deploy mid-rename doesn't break checkout.
-      return (
-        process.env[plan.stripePriceIdEnv] ??
-        process.env.STRIPE_PRICE_ID_AGENCY ??
-        null
-      );
+      return process.env[plan.stripePriceIdEnv] ?? process.env.STRIPE_PRICE_ID_AGENCY ?? null;
     }
     case 'agency-annual': {
       const plan = getPlan('agency');

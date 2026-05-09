@@ -11,6 +11,7 @@ import { HeroEditorialNightlifeV1 } from './editorial-nightlife-v1/HeroRender.ed
 import { HeroElectricFireTechno } from './electric-fire-techno/HeroRender.electric-fire-techno';
 import { HeroFestivalClubOrange } from './festival-club-orange/HeroRender.festival-club-orange';
 import { HeroMediakitProV1 } from './mediakit-pro-v1/HeroRender.mediakit-pro-v1';
+import { HeroDeadSignal } from './dead-signal/HeroRender.dead-signal';
 
 /**
  * Legacy `Themes.heroStyle` values, kept around so no-preset profiles
@@ -31,17 +32,12 @@ type PortraitMedia = {
   height?: number | null;
 };
 
-export function HeroRender({
-  bundle,
-  preset,
-}: {
-  bundle: EditorBundle;
-  preset?: Preset | null;
-}) {
+export function HeroRender({ bundle, preset }: { bundle: EditorBundle; preset?: Preset | null }) {
   const t = useTranslations('profile');
 
   // Folder-owned preset dispatch — all four presets ship their own
   // 9-section suite under `sections/<preset.id>/`.
+  if (preset?.id === 'dead-signal') return <HeroDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno') return <HeroElectricFireTechno bundle={bundle} />;
   if (preset?.id === 'mediakit-pro-v1') return <HeroMediakitProV1 bundle={bundle} />;
   if (preset?.id === 'festival-club-orange') return <HeroFestivalClubOrange bundle={bundle} />;
@@ -83,9 +79,7 @@ export function HeroRender({
             {displayName}
           </h1>
         )}
-        {tagline ? (
-          <p className="mt-6 max-w-prose text-lg text-text-muted">{tagline}</p>
-        ) : null}
+        {tagline ? <p className="mt-6 max-w-prose text-lg text-text-muted">{tagline}</p> : null}
         {ctaUrl ? <CtaButton url={ctaUrl} label={ctaLabel ?? t('ctaDefault')} /> : null}
       </header>
     );
@@ -124,9 +118,7 @@ export function HeroRender({
           <h1 className="mt-4 font-display text-5xl uppercase tracking-tight md:text-6xl">
             {displayName}
           </h1>
-          {tagline ? (
-            <p className="mt-6 max-w-prose text-lg text-text-muted">{tagline}</p>
-          ) : null}
+          {tagline ? <p className="mt-6 max-w-prose text-lg text-text-muted">{tagline}</p> : null}
           {ctaUrl ? <CtaButton url={ctaUrl} label={ctaLabel ?? t('ctaDefault')} /> : null}
         </div>
       </header>
@@ -164,9 +156,7 @@ export function HeroRender({
         <h1 className="mt-4 font-display text-5xl uppercase tracking-tight md:text-7xl">
           {displayName}
         </h1>
-        {tagline ? (
-          <p className="mt-6 max-w-prose text-lg text-text-muted">{tagline}</p>
-        ) : null}
+        {tagline ? <p className="mt-6 max-w-prose text-lg text-text-muted">{tagline}</p> : null}
         {ctaUrl ? <CtaButton url={ctaUrl} label={ctaLabel ?? t('ctaDefault')} /> : null}
       </div>
     </header>

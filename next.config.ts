@@ -24,13 +24,12 @@ const nextConfig: NextConfig = {
 function withBundleAnalyzerOptional(config: NextConfig): NextConfig {
   if (process.env.ANALYZE !== '1' && process.env.ANALYZE !== 'true') return config;
   const require = createRequire(import.meta.url);
-  const factory = require('@next/bundle-analyzer') as (
-    options: { enabled: boolean },
-  ) => (next: NextConfig) => NextConfig;
+  const factory = require('@next/bundle-analyzer') as (options: {
+    enabled: boolean;
+  }) => (next: NextConfig) => NextConfig;
   return factory({ enabled: true })(config);
 }
 
-export default withPayload(
-  withNextIntl(withBundleAnalyzerOptional(nextConfig)),
-  { devBundleServerPackages: false },
-);
+export default withPayload(withNextIntl(withBundleAnalyzerOptional(nextConfig)), {
+  devBundleServerPackages: false,
+});

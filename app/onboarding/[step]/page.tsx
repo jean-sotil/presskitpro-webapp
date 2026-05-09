@@ -3,11 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import { StepRail } from '@/components/onboarding/StepRail';
 import { StepShell } from '@/components/onboarding/StepShell';
 import { payload } from '@/lib/payload';
-import {
-  type OnboardingProgress,
-  resumeStep,
-  type WizardStep,
-} from '@/lib/onboarding/state';
+import { type OnboardingProgress, resumeStep, type WizardStep } from '@/lib/onboarding/state';
 import { supabaseServer } from '@/lib/supabase/server';
 
 import { MediaStep } from '../steps/MediaStep';
@@ -24,8 +20,7 @@ const STEP_TITLES: Record<WizardStep, { title: string; helper: string }> = {
   },
   2: {
     title: 'Adicione suas imagens',
-    helper:
-      'Foto principal e logo (opcional). Você pode pular este passo e enviar depois.',
+    helper: 'Foto principal e logo (opcional). Você pode pular este passo e enviar depois.',
   },
   3: {
     title: 'Tagline',
@@ -34,13 +29,11 @@ const STEP_TITLES: Record<WizardStep, { title: string; helper: string }> = {
   },
   4: {
     title: 'Quais serviços você oferece?',
-    helper:
-      'Selecione tudo o que se aplica. Você pode adicionar até 3 serviços customizados.',
+    helper: 'Selecione tudo o que se aplica. Você pode adicionar até 3 serviços customizados.',
   },
   5: {
     title: 'Adicione um link',
-    helper:
-      'Pelo menos uma rede social ou contato. Mais podem ser adicionados no editor.',
+    helper: 'Pelo menos uma rede social ou contato. Mais podem ser adicionados no editor.',
   },
 };
 
@@ -67,9 +60,7 @@ export default async function OnboardingStepPage({
     depth: 0,
   });
   const userDoc = result.docs[0];
-  const progress = (userDoc?.onboardingProgress ?? null) as
-    | OnboardingProgress
-    | null;
+  const progress = (userDoc?.onboardingProgress ?? null) as OnboardingProgress | null;
 
   // Don't let the user jump ahead — bounce to the first incomplete step.
   const allowed = resumeStep(progress);
@@ -127,10 +118,7 @@ function renderIsland(
       );
     case 5:
       return (
-        <SocialStep
-          initialPlatform={progress?.socialPlatform}
-          initialUrl={progress?.socialUrl}
-        />
+        <SocialStep initialPlatform={progress?.socialPlatform} initialUrl={progress?.socialUrl} />
       );
   }
 }

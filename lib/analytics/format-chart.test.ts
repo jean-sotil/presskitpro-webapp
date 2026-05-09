@@ -22,7 +22,13 @@ describe('formatChart', () => {
     const result = formatChart({
       rows: [
         { day: '2026-05-06', eventType: 'page_view', count: 10, uniqueCount: 8, topReferrers: [] },
-        { day: '2026-05-06', eventType: 'press_kit_click', count: 3, uniqueCount: 2, topReferrers: [] },
+        {
+          day: '2026-05-06',
+          eventType: 'press_kit_click',
+          count: 3,
+          uniqueCount: 2,
+          topReferrers: [],
+        },
       ],
       today,
     });
@@ -35,7 +41,13 @@ describe('formatChart', () => {
     const result = formatChart({
       rows: [
         { day: '2026-05-06', eventType: 'page_view', count: 10, uniqueCount: 8, topReferrers: [] },
-        { day: '2026-05-06', eventType: 'press_kit_click', count: 3, uniqueCount: 2, topReferrers: [] },
+        {
+          day: '2026-05-06',
+          eventType: 'press_kit_click',
+          count: 3,
+          uniqueCount: 2,
+          topReferrers: [],
+        },
       ],
       today,
       eventType: 'press_kit_click',
@@ -58,7 +70,13 @@ describe('formatChart', () => {
   it('drops rows outside the 14-day window', () => {
     const result = formatChart({
       rows: [
-        { day: '2026-04-01', eventType: 'page_view', count: 999, uniqueCount: 999, topReferrers: [] },
+        {
+          day: '2026-04-01',
+          eventType: 'page_view',
+          count: 999,
+          uniqueCount: 999,
+          topReferrers: [],
+        },
       ],
       today,
     });

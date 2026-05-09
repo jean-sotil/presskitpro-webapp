@@ -5,6 +5,7 @@ import { InstagramFeedEditorialNightlifeV1 } from './editorial-nightlife-v1/Inst
 import { InstagramElectricFireTechno } from './electric-fire-techno/InstagramFeedRender.electric-fire-techno';
 import { InstagramFeedFestivalClubOrange } from './festival-club-orange/InstagramFeedRender.festival-club-orange';
 import { InstagramFeedMediakitProV1 } from './mediakit-pro-v1/InstagramFeedRender.mediakit-pro-v1';
+import { InstagramFeedDeadSignal } from './dead-signal/InstagramFeedRender.dead-signal';
 import { LazyEmbed } from './LazyEmbed';
 
 type InstagramPostRow = {
@@ -22,16 +23,17 @@ export function InstagramFeedRender({
   preset?: Preset | null;
 }) {
   // Folder-owned preset dispatch.
+  if (preset?.id === 'dead-signal') return <InstagramFeedDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno') return <InstagramElectricFireTechno bundle={bundle} />;
   if (preset?.id === 'mediakit-pro-v1') return <InstagramFeedMediakitProV1 bundle={bundle} />;
-  if (preset?.id === 'festival-club-orange') return <InstagramFeedFestivalClubOrange bundle={bundle} />;
-  if (preset?.id === 'editorial-nightlife-v1') return <InstagramFeedEditorialNightlifeV1 bundle={bundle} />;
+  if (preset?.id === 'festival-club-orange')
+    return <InstagramFeedFestivalClubOrange bundle={bundle} />;
+  if (preset?.id === 'editorial-nightlife-v1')
+    return <InstagramFeedEditorialNightlifeV1 bundle={bundle} />;
 
   // No preset → unstyled "classic" fallback for legacy profiles.
   const raw = (bundle.instagramPosts ?? []) as unknown as InstagramPostRow[];
-  const posts = [...raw].sort(
-    (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
-  );
+  const posts = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   // Spec AC: removing all posts hides the section entirely.
   if (posts.length === 0) return null;
 

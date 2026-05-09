@@ -33,16 +33,15 @@ export default function PreviewPage() {
 
       <Section id="typography">
         <SectionMarker number={1} label="TIPOGRAFIA" />
-        <h1 className="font-display mt-4 text-6xl uppercase tracking-tight md:text-8xl">
+        <h1 className="mt-4 font-display text-6xl uppercase tracking-tight md:text-8xl">
           Editorial Nightlife
         </h1>
-        <p className="font-editorial mt-6 max-w-2xl text-xl italic">
+        <p className="mt-6 max-w-2xl font-editorial text-xl italic">
           São Paulo, ação, coração, mãe — a noite começa quando o sistema cala.
         </p>
-        <p className="font-body mt-8 max-w-prose text-base text-text-muted">
-          Diacríticos: ã ç ê õ á í ó ú. Curly quotes: “night” ‘mode’. Em-dash —
-          and en–dash. Ligatures: fi fl. Numerals 0123456789. The quick brown
-          fox jumps over the lazy dog.
+        <p className="mt-8 max-w-prose font-body text-base text-text-muted">
+          Diacríticos: ã ç ê õ á í ó ú. Curly quotes: “night” ‘mode’. Em-dash — and en–dash.
+          Ligatures: fi fl. Numerals 0123456789. The quick brown fox jumps over the lazy dog.
         </p>
       </Section>
 
@@ -50,7 +49,7 @@ export default function PreviewPage() {
         <SectionMarker number={2} label="PRIMITIVES" />
 
         <RevealStagger>
-          <h2 className="font-display mt-4 text-3xl uppercase">Botões</h2>
+          <h2 className="mt-4 font-display text-3xl uppercase">Botões</h2>
 
           <div className="mt-6 flex flex-wrap items-center gap-4">
             <Button>Reservar</Button>
@@ -61,14 +60,12 @@ export default function PreviewPage() {
             <Button disabled>Desabilitado</Button>
           </div>
 
-          <h2 className="font-display mt-12 text-3xl uppercase">Cards e Tags</h2>
+          <h2 className="mt-12 font-display text-3xl uppercase">Cards e Tags</h2>
 
           <div className="mt-6 grid gap-6 md:grid-cols-3">
             <Card>
               <p className="font-display text-xl uppercase">Bio</p>
-              <p className="mt-2 text-sm text-text-muted">
-                Card com surface e border tokenizados.
-              </p>
+              <p className="mt-2 text-sm text-text-muted">Card com surface e border tokenizados.</p>
               <div className="mt-4 flex gap-2">
                 <Tag>Techno</Tag>
                 <Tag>House</Tag>
@@ -92,21 +89,42 @@ export default function PreviewPage() {
             </Card>
           </div>
 
-          <h2 className="font-display mt-12 text-3xl uppercase">Icon buttons</h2>
+          <h2 className="mt-12 font-display text-3xl uppercase">Icon buttons</h2>
 
           <div className="mt-6 flex gap-3">
             <IconButton label="Editar">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
                 <path d="M4 20h4l10-10-4-4L4 16v4z" />
               </svg>
             </IconButton>
             <IconButton label="Apagar">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
                 <path d="M5 6h14M9 6V4h6v2m-7 0v14h8V6" />
               </svg>
             </IconButton>
             <IconButton label="Compartilhar">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
                 <circle cx="6" cy="12" r="2" />
                 <circle cx="18" cy="6" r="2" />
                 <circle cx="18" cy="18" r="2" />
@@ -119,11 +137,10 @@ export default function PreviewPage() {
 
       <Section id="contrast">
         <SectionMarker number={3} label="CONTRASTE" />
-        <h2 className="font-display mt-4 text-3xl uppercase">Acentos</h2>
+        <h2 className="mt-4 font-display text-3xl uppercase">Acentos</h2>
         <p className="text-sm text-text-muted">
-          Cada amostra desenha o accent token em fundo padrão. Verifique
-          legibilidade visualmente; o gate WCAG é executado por{' '}
-          <code className="font-mono">pnpm contrast:check</code>.
+          Cada amostra desenha o accent token em fundo padrão. Verifique legibilidade visualmente; o
+          gate WCAG é executado por <code className="font-mono">pnpm contrast:check</code>.
         </p>
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {accentPresets.map((a) => (

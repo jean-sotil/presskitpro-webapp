@@ -10,6 +10,7 @@ import { PressKitLinkEditorialNightlifeV1 } from './editorial-nightlife-v1/Press
 import { PressKitLinkElectricFireTechno } from './electric-fire-techno/PressKitLinkRender.electric-fire-techno';
 import { PressKitLinkFestivalClubOrange } from './festival-club-orange/PressKitLinkRender.festival-club-orange';
 import { PressKitLinkMediakitProV1 } from './mediakit-pro-v1/PressKitLinkRender.mediakit-pro-v1';
+import { PressKitLinkDeadSignal } from './dead-signal/PressKitLinkRender.dead-signal';
 import { TrackedPressKitAnchor } from './TrackedPressKitAnchor';
 
 export function PressKitLinkRender({
@@ -23,10 +24,14 @@ export function PressKitLinkRender({
   const tProviders = useTranslations('profile.pressKit.providers');
 
   // Folder-owned preset dispatch.
-  if (preset?.id === 'electric-fire-techno') return <PressKitLinkElectricFireTechno bundle={bundle} />;
+  if (preset?.id === 'dead-signal') return <PressKitLinkDeadSignal bundle={bundle} />;
+  if (preset?.id === 'electric-fire-techno')
+    return <PressKitLinkElectricFireTechno bundle={bundle} />;
   if (preset?.id === 'mediakit-pro-v1') return <PressKitLinkMediakitProV1 bundle={bundle} />;
-  if (preset?.id === 'festival-club-orange') return <PressKitLinkFestivalClubOrange bundle={bundle} />;
-  if (preset?.id === 'editorial-nightlife-v1') return <PressKitLinkEditorialNightlifeV1 bundle={bundle} />;
+  if (preset?.id === 'festival-club-orange')
+    return <PressKitLinkFestivalClubOrange bundle={bundle} />;
+  if (preset?.id === 'editorial-nightlife-v1')
+    return <PressKitLinkEditorialNightlifeV1 bundle={bundle} />;
 
   // No preset → unstyled inline-cta fallback for legacy profiles.
   const url = (bundle.profile.pressKitUrl as string | undefined) ?? null;
@@ -56,9 +61,7 @@ export function PressKitLinkRender({
           {t('ctaLegacy')}
         </TrackedPressKitAnchor>
         {badge ? (
-          <span className="text-xs uppercase tracking-wider text-text-muted">
-            {badge}
-          </span>
+          <span className="text-xs uppercase tracking-wider text-text-muted">{badge}</span>
         ) : null}
       </div>
     </section>
@@ -67,10 +70,7 @@ export function PressKitLinkRender({
 
 /** Returns the localized "Hosted on …" badge for known providers,
  *  null for `unknown` / `other` / unrecognized values. */
-function providerBadge(
-  t: (key: string) => string,
-  provider: PressKitProvider,
-): string | null {
+function providerBadge(t: (key: string) => string, provider: PressKitProvider): string | null {
   if (provider === 'unknown' || provider === 'other') return null;
   try {
     return t(provider);

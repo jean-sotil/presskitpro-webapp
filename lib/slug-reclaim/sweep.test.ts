@@ -1,10 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import {
-  sweepInactiveSlugs,
-  type SweepCandidate,
-  type SweepDeps,
-} from './sweep';
+import { sweepInactiveSlugs, type SweepCandidate, type SweepDeps } from './sweep';
 
 const NOW = new Date('2026-05-07T03:00:00Z');
 const DAY = 24 * 60 * 60 * 1000;
@@ -116,9 +112,7 @@ describe('sweepInactiveSlugs', () => {
   it('skips a candidate with an active subscription', async () => {
     const r = await sweepInactiveSlugs(
       makeDeps({
-        findCandidates: async () => [
-          makeCandidate({ hasActiveSubscription: true }),
-        ],
+        findCandidates: async () => [makeCandidate({ hasActiveSubscription: true })],
       }),
     );
     expect(r.skipped).toBe(1);

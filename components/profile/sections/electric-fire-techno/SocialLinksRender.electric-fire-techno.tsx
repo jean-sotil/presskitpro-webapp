@@ -31,9 +31,7 @@ export function SocialLinksElectricFireTechno({ bundle }: { bundle: EditorBundle
   const tPlatforms = useTranslations('profile.social.platforms');
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
   if (!raw.length) return null;
-  const links = [...raw].sort(
-    (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
-  );
+  const links = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   const profileSlug = bundle.profile.slug;
 
   return (
@@ -77,8 +75,7 @@ export function SocialLinksElectricFireTechno({ bundle }: { bundle: EditorBundle
             } catch {
               label = link.platform;
             }
-            const external =
-              link.platform !== 'email' && link.platform !== 'whatsapp';
+            const external = link.platform !== 'email' && link.platform !== 'whatsapp';
             return (
               <li key={String(link.id)}>
                 <TrackedSocialLink

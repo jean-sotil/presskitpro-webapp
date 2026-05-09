@@ -60,10 +60,7 @@ export function verifyKeepSlugToken(token: string): VerifyResult {
   }
   const expectedSig = createHmac(ALGO, secret).update(payload, 'utf8').digest();
 
-  if (
-    expectedSig.length !== sigBytes.length ||
-    !timingSafeEqual(expectedSig, sigBytes)
-  ) {
+  if (expectedSig.length !== sigBytes.length || !timingSafeEqual(expectedSig, sigBytes)) {
     return { ok: false, reason: 'invalid-signature' };
   }
 
@@ -79,7 +76,7 @@ function readSecret(): string {
   if (!s) {
     throw new Error(
       'KEEP_SLUG_TOKEN_SECRET is required to sign/verify slug-reclaim tokens. ' +
-        'Generate with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'base64\'))"',
+        "Generate with: node -e \"console.log(require('crypto').randomBytes(32).toString('base64'))\"",
     );
   }
   return s;

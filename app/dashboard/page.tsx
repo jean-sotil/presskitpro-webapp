@@ -7,10 +7,7 @@ import { Section } from '@/components/ui/Section';
 import { SectionMarker } from '@/components/atmosphere/SectionMarker';
 import { ACTIVE_PROFILE_COOKIE_NAME } from '@/lib/dashboard/active-profile';
 import { payload } from '@/lib/payload';
-import {
-  isComplete,
-  type OnboardingProgress,
-} from '@/lib/onboarding/state';
+import { isComplete, type OnboardingProgress } from '@/lib/onboarding/state';
 import { supabaseServer } from '@/lib/supabase/server';
 
 export default async function DashboardPage() {
@@ -29,9 +26,7 @@ export default async function DashboardPage() {
     depth: 0,
   });
   const userDoc = userResult.docs[0];
-  const progress = (userDoc?.onboardingProgress ?? null) as
-    | OnboardingProgress
-    | null;
+  const progress = (userDoc?.onboardingProgress ?? null) as OnboardingProgress | null;
   if (!isComplete(progress)) {
     redirect('/onboarding');
   }
@@ -44,20 +39,24 @@ export default async function DashboardPage() {
         limit: 20,
         depth: 0,
       })
-    : { docs: [] as Array<{ id: number | string; slug: string; status: string; updatedAt?: string }> };
+    : {
+        docs: [] as Array<{
+          id: number | string;
+          slug: string;
+          status: string;
+          updatedAt?: string;
+        }>,
+      };
 
   // Task-31 PR-B — surface the most-recently opened profile so agency
   // users (and Pro users with > 1 profile) resume context.
-  const activeProfileId =
-    (await cookies()).get(ACTIVE_PROFILE_COOKIE_NAME)?.value ?? null;
+  const activeProfileId = (await cookies()).get(ACTIVE_PROFILE_COOKIE_NAME)?.value ?? null;
 
   return (
     <main id="main">
       <Section>
         <SectionMarker number={1} label="DASHBOARD" />
-        <h1 className="mt-4 font-display text-5xl uppercase tracking-tight">
-          Olá, {user.email}
-        </h1>
+        <h1 className="mt-4 font-display text-5xl uppercase tracking-tight">Olá, {user.email}</h1>
 
         {userDoc ? (
           <div className="mt-8">
@@ -67,7 +66,7 @@ export default async function DashboardPage() {
                 trialEndsAt:
                   typeof userDoc.trialEndsAt === 'string'
                     ? userDoc.trialEndsAt
-                    : (userDoc.trialEndsAt as Date | null) ?? null,
+                    : ((userDoc.trialEndsAt as Date | null) ?? null),
                 stripeSubscriptionStatus:
                   (userDoc.stripeSubscriptionStatus as
                     | 'active'
@@ -82,7 +81,10 @@ export default async function DashboardPage() {
 
         {profilesResult.docs.length === 0 ? (
           <p className="mt-6 max-w-prose text-text-muted">
-            Você ainda não tem perfis. <Link href="/onboarding" className="underline">Comece o onboarding →</Link>
+            Você ainda não tem perfis.{' '}
+            <Link href="/onboarding" className="underline">
+              Comece o onboarding →
+            </Link>
           </p>
         ) : (
           <ul className="mt-8 grid gap-4 md:grid-cols-2">

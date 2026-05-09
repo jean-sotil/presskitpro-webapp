@@ -39,15 +39,16 @@ export function buildProfileJsonLd(
     slug: string;
     pressKitUrl?: string;
   };
-  const content = bundle.content as
-    | { metaTitle?: string; metaDescription?: string; tagline?: string }
-    | null;
+  const content = bundle.content as {
+    metaTitle?: string;
+    metaDescription?: string;
+    tagline?: string;
+  } | null;
 
   const displayName = content?.metaTitle?.trim() || displayFromSlug(profile.slug);
   const url = `${origin.replace(/\/$/, '')}/${profile.slug}`;
 
-  const description =
-    content?.metaDescription?.trim() || content?.tagline?.trim() || undefined;
+  const description = content?.metaDescription?.trim() || content?.tagline?.trim() || undefined;
 
   const sameAs = collectSameAs(bundle, profile.pressKitUrl);
 
@@ -67,10 +68,7 @@ function displayFromSlug(slug: string): string {
   return slug.replace(/-/g, ' ');
 }
 
-function collectSameAs(
-  bundle: EditorBundle,
-  pressKitUrl?: string,
-): string[] {
+function collectSameAs(bundle: EditorBundle, pressKitUrl?: string): string[] {
   const out: string[] = [];
   for (const link of bundle.socialLinks as Array<{ url?: string }>) {
     if (typeof link.url === 'string' && link.url.trim().length > 0) {

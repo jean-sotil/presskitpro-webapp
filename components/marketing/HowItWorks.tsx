@@ -15,16 +15,11 @@ export function HowItWorks() {
       </h2>
       <ol className="mt-12 grid gap-6 md:grid-cols-3">
         {steps.map((step) => (
-          <li
-            key={step.n}
-            className="flex flex-col gap-3 border border-border bg-surface p-6"
-          >
+          <li key={step.n} className="flex flex-col gap-3 border border-border bg-surface p-6">
             <span className="font-display text-xs uppercase tracking-widest text-accent">
               {step.n}
             </span>
-            <h3 className="font-display text-xl uppercase tracking-tight">
-              {step.title}
-            </h3>
+            <h3 className="font-display text-xl uppercase tracking-tight">{step.title}</h3>
             <p className="text-sm text-text-muted">{step.body}</p>
           </li>
         ))}

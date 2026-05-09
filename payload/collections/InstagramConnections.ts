@@ -1,9 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import {
-  canCreateForOwnedProfile,
-  ownsViaProfile,
-} from '../../lib/payload/access/predicates';
+import { canCreateForOwnedProfile, ownsViaProfile } from '../../lib/payload/access/predicates';
 import {
   decryptTokenAfterRead,
   encryptTokenBeforeChange,
@@ -61,7 +58,8 @@ export const InstagramConnections: CollectionConfig = {
         afterRead: [({ value }) => decryptTokenAfterRead({ value })],
       },
       admin: {
-        description: 'Encrypted at rest. Decryption happens in afterRead for admin/server use only.',
+        description:
+          'Encrypted at rest. Decryption happens in afterRead for admin/server use only.',
       },
     },
     {

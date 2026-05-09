@@ -17,8 +17,7 @@ import { PricingTable } from './PricingTable';
 // still reuses entries per locale.
 export const dynamic = 'force-dynamic';
 
-const SITE_ORIGIN =
-  process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
+const SITE_ORIGIN = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'https://presskit.pro';
 
 export async function generateMetadata(): Promise<Metadata> {
   const rawLocale = await getLocale();

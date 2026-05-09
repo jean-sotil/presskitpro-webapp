@@ -96,13 +96,7 @@ export function PressKitLinkElectricFireTechno({ bundle }: { bundle: EditorBundl
   );
 }
 
-function SideBolt({
-  className,
-  mirror = false,
-}: {
-  className?: string;
-  mirror?: boolean;
-}) {
+function SideBolt({ className, mirror = false }: { className?: string; mirror?: boolean }) {
   return (
     <svg
       viewBox="0 0 24 24"

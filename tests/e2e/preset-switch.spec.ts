@@ -34,9 +34,7 @@ test.describe('Design tab full ladder @full', () => {
     await page.goto(`/dashboard/profile/${profileId}`);
 
     await page.getByRole('tab', { name: /design/i }).click();
-    await expect(
-      page.getByRole('heading', { name: /preset|design/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /preset|design/i })).toBeVisible();
 
     const mediakit = page.locator('[data-preset-id="mediakit-pro-v1"]');
     const editorial = page.locator('[data-preset-id="editorial-nightlife-v1"]');
@@ -45,9 +43,7 @@ test.describe('Design tab full ladder @full', () => {
 
     // Click the preset that is NOT currently active and confirm the
     // selection indicator flips to it on the next render.
-    const initiallyActive = (await mediakit.getAttribute('data-active'))
-      ? mediakit
-      : editorial;
+    const initiallyActive = (await mediakit.getAttribute('data-active')) ? mediakit : editorial;
     const target = initiallyActive === mediakit ? editorial : mediakit;
 
     await target.getByRole('button', { name: /apply|aplicar/i }).click();

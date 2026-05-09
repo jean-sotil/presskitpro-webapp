@@ -76,7 +76,7 @@ export function HeroFestivalClubOrange({ bundle }: { bundle: EditorBundle }) {
             height={portraitHeight}
             priority
             sizes="100vw"
-            className="block h-full w-full object-cover object-top opacity-90 hover:opacity-100 transition-opacity duration-300"
+            className="block h-full w-full object-cover object-top opacity-90 transition-opacity duration-300 hover:opacity-100"
             // Three CSS techniques stacked for a "fake transparency"
             // that works on arbitrary uploads — no transparent PNG
             // required:
@@ -98,8 +98,7 @@ export function HeroFestivalClubOrange({ bundle }: { bundle: EditorBundle }) {
             style={{
               mixBlendMode: 'multiply',
               filter: 'contrast(1.15) saturate(1.1)',
-              maskImage:
-                'radial-gradient(ellipse 75% 95% at 50% 55%, black 55%, transparent 95%)',
+              maskImage: 'radial-gradient(ellipse 75% 95% at 50% 55%, black 55%, transparent 95%)',
               WebkitMaskImage:
                 'radial-gradient(ellipse 75% 95% at 50% 55%, black 55%, transparent 95%)',
             }}

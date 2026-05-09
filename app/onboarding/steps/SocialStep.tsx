@@ -9,18 +9,18 @@ import { advanceStep, completeWizard } from '../actions';
 
 const PLATFORMS: Array<{ value: SocialPlatform; label: string; placeholder: string }> = [
   { value: 'instagram', label: 'Instagram', placeholder: 'https://instagram.com/...' },
-  { value: 'tiktok',    label: 'TikTok',    placeholder: 'https://tiktok.com/@...' },
+  { value: 'tiktok', label: 'TikTok', placeholder: 'https://tiktok.com/@...' },
   { value: 'soundcloud', label: 'SoundCloud', placeholder: 'https://soundcloud.com/...' },
-  { value: 'spotify',   label: 'Spotify',   placeholder: 'https://open.spotify.com/artist/...' },
-  { value: 'youtube',   label: 'YouTube',   placeholder: 'https://youtube.com/@...' },
-  { value: 'twitter',   label: 'Twitter / X', placeholder: 'https://x.com/...' },
-  { value: 'bandcamp',  label: 'Bandcamp',  placeholder: 'https://artist.bandcamp.com' },
-  { value: 'mixcloud',  label: 'Mixcloud',  placeholder: 'https://mixcloud.com/...' },
+  { value: 'spotify', label: 'Spotify', placeholder: 'https://open.spotify.com/artist/...' },
+  { value: 'youtube', label: 'YouTube', placeholder: 'https://youtube.com/@...' },
+  { value: 'twitter', label: 'Twitter / X', placeholder: 'https://x.com/...' },
+  { value: 'bandcamp', label: 'Bandcamp', placeholder: 'https://artist.bandcamp.com' },
+  { value: 'mixcloud', label: 'Mixcloud', placeholder: 'https://mixcloud.com/...' },
   { value: 'apple-music', label: 'Apple Music', placeholder: 'https://music.apple.com/...' },
-  { value: 'beatport',  label: 'Beatport',  placeholder: 'https://beatport.com/artist/...' },
-  { value: 'whatsapp',  label: 'WhatsApp',  placeholder: 'https://wa.me/55...' },
-  { value: 'email',     label: 'E-mail',    placeholder: 'press@artist.com' },
-  { value: 'website',   label: 'Site',      placeholder: 'https://...' },
+  { value: 'beatport', label: 'Beatport', placeholder: 'https://beatport.com/artist/...' },
+  { value: 'whatsapp', label: 'WhatsApp', placeholder: 'https://wa.me/55...' },
+  { value: 'email', label: 'E-mail', placeholder: 'press@artist.com' },
+  { value: 'website', label: 'Site', placeholder: 'https://...' },
 ];
 
 export interface SocialStepProps {
@@ -107,11 +107,17 @@ export function SocialStep({ initialPlatform, initialUrl }: SocialStepProps) {
 
 function labelFor(reason: string): string {
   switch (reason) {
-    case 'invalid-url':   return 'URL inválida (precisa começar com http ou https).';
-    case 'invalid-email': return 'E-mail inválido.';
-    case 'required':      return 'Preencha este campo.';
-    case 'incomplete':    return 'Algum passo anterior está incompleto.';
-    case 'mirror-pending':return 'Sua conta ainda está sendo sincronizada — tenta de novo em alguns segundos.';
-    default:              return reason;
+    case 'invalid-url':
+      return 'URL inválida (precisa começar com http ou https).';
+    case 'invalid-email':
+      return 'E-mail inválido.';
+    case 'required':
+      return 'Preencha este campo.';
+    case 'incomplete':
+      return 'Algum passo anterior está incompleto.';
+    case 'mirror-pending':
+      return 'Sua conta ainda está sendo sincronizada — tenta de novo em alguns segundos.';
+    default:
+      return reason;
   }
 }

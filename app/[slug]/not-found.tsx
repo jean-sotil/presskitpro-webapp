@@ -10,15 +10,13 @@ export default function PublicProfileNotFound() {
   return (
     <main id="main">
       <Section>
-        <p className="font-display text-xs uppercase tracking-widest text-text-muted">
-          404
-        </p>
+        <p className="font-display text-xs uppercase tracking-widest text-text-muted">404</p>
         <h1 className="mt-4 font-display text-5xl uppercase tracking-tight md:text-7xl">
           Perfil não encontrado
         </h1>
         <p className="mt-6 max-w-prose text-text-muted">
-          Este perfil não existe ou ainda não foi publicado pelo artista.
-          Confira o link e tente novamente.
+          Este perfil não existe ou ainda não foi publicado pelo artista. Confira o link e tente
+          novamente.
         </p>
         <p className="mt-8">
           <Link

@@ -15,7 +15,8 @@ import type { Preset } from './types';
 export const mediakitProV1: Preset = {
   id: 'mediakit-pro-v1',
   name: 'Hard Techno Underground',
-  tagline: 'Estética rave underground: preto puro, cobalt elétrico, título fantasma e marquee em alta voltagem.',
+  tagline:
+    'Estética rave underground: preto puro, cobalt elétrico, título fantasma e marquee em alta voltagem.',
   theme: {
     bgPresetId: 'editorial-night',
     accentPresetId: 'cobalt',

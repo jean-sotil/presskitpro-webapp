@@ -145,9 +145,7 @@ async function main(): Promise<void> {
   }
   if (update) {
     await writeLock(current);
-    console.log(
-      `[bundle:check] wrote bundles.lock.json with ${current.length} routes.`,
-    );
+    console.log(`[bundle:check] wrote bundles.lock.json with ${current.length} routes.`);
     return;
   }
   let lock: LockFile;
@@ -188,8 +186,7 @@ async function main(): Promise<void> {
 }
 
 const invokedDirectly =
-  !!process.argv[1] &&
-  fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
+  !!process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
 
 if (invokedDirectly) {
   void main();

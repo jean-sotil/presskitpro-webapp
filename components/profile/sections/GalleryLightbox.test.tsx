@@ -30,10 +30,7 @@ describe('GalleryLightbox', () => {
     setup();
     const buttons = screen.getAllByRole('button');
     expect(buttons).toHaveLength(3);
-    expect(buttons[0]).toHaveAttribute(
-      'aria-label',
-      'Open photo 1 of 3: First photo',
-    );
+    expect(buttons[0]).toHaveAttribute('aria-label', 'Open photo 1 of 3: First photo');
   });
 
   it('opens the modal when a tile is clicked', () => {

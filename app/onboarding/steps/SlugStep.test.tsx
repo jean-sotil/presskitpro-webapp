@@ -35,9 +35,7 @@ describe('SlugStep', () => {
   it('flags client-side format failures before hitting the API', async () => {
     render(<SlugStep debounceMs={0} />);
     fireEvent.change(screen.getByLabelText(/url pública/i), { target: { value: 'a' } });
-    await waitFor(() =>
-      expect(screen.getByText(/mínimo 2 caracteres/i)).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByText(/mínimo 2 caracteres/i)).toBeInTheDocument());
     expect(globalThis.fetch).not.toHaveBeenCalled();
   });
 
@@ -45,12 +43,8 @@ describe('SlugStep', () => {
     setFetchOk({ available: true });
     render(<SlugStep debounceMs={0} />);
     fireEvent.change(screen.getByLabelText(/url pública/i), { target: { value: 'mariana-luz' } });
-    await waitFor(() =>
-      expect(screen.getByText(/disponível/i)).toBeInTheDocument(),
-    );
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      '/api/slug/check?slug=mariana-luz',
-    );
+    await waitFor(() => expect(screen.getByText(/disponível/i)).toBeInTheDocument());
+    expect(globalThis.fetch).toHaveBeenCalledWith('/api/slug/check?slug=mariana-luz');
     expect(screen.getByRole('button', { name: /continuar/i })).toBeEnabled();
   });
 
@@ -58,9 +52,7 @@ describe('SlugStep', () => {
     setFetchOk({ available: false, reason: 'reserved' });
     render(<SlugStep debounceMs={0} />);
     fireEvent.change(screen.getByLabelText(/url pública/i), { target: { value: 'admin' } });
-    await waitFor(() =>
-      expect(screen.getByText(/reservada/i)).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByText(/reservada/i)).toBeInTheDocument());
     expect(screen.getByRole('button', { name: /continuar/i })).toBeDisabled();
   });
 
@@ -85,12 +77,8 @@ describe('SlugStep', () => {
     });
     render(<SlugStep debounceMs={0} />);
     fireEvent.change(screen.getByLabelText(/url pública/i), { target: { value: 'mariana' } });
-    await waitFor(() =>
-      expect(screen.getByText(/disponível/i)).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByText(/disponível/i)).toBeInTheDocument());
     fireEvent.submit(screen.getByLabelText(/url pública/i).closest('form')!);
-    await waitFor(() =>
-      expect(screen.getByText(/em uso/i)).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByText(/em uso/i)).toBeInTheDocument());
   });
 });

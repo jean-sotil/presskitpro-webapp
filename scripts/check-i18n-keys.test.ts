@@ -23,7 +23,12 @@ describe('collectKeys', () => {
         },
       }),
     ).toEqual(
-      ['howItWorks.steps.0.n', 'howItWorks.steps.0.title', 'howItWorks.steps.1.n', 'howItWorks.steps.1.title'].sort(),
+      [
+        'howItWorks.steps.0.n',
+        'howItWorks.steps.0.title',
+        'howItWorks.steps.1.n',
+        'howItWorks.steps.1.title',
+      ].sort(),
     );
   });
 

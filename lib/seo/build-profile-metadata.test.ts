@@ -4,10 +4,12 @@ import type { EditorBundle } from '@/lib/editor/bundle';
 
 import { buildProfileMetadata } from './build-profile-metadata';
 
-function makeBundle(overrides: {
-  profile?: Partial<EditorBundle['profile']>;
-  content?: Record<string, unknown> | null;
-} = {}): EditorBundle {
+function makeBundle(
+  overrides: {
+    profile?: Partial<EditorBundle['profile']>;
+    content?: Record<string, unknown> | null;
+  } = {},
+): EditorBundle {
   return {
     profile: {
       id: 1,
@@ -79,22 +81,14 @@ describe('buildProfileMetadata', () => {
   });
 
   it('returns summary_large_image when an image is available, summary otherwise', () => {
-    const withImage = buildProfileMetadata(
-      makeBundle(),
-      'https://presskit.pro',
-      { imageUrl: 'https://abc.supabase.co/portrait.jpg' },
-    );
-    expect((withImage.twitter as { card?: string } | undefined)?.card).toBe(
-      'summary_large_image',
-    );
-    expect(withImage.openGraph?.images).toEqual([
-      { url: 'https://abc.supabase.co/portrait.jpg' },
-    ]);
+    const withImage = buildProfileMetadata(makeBundle(), 'https://presskit.pro', {
+      imageUrl: 'https://abc.supabase.co/portrait.jpg',
+    });
+    expect((withImage.twitter as { card?: string } | undefined)?.card).toBe('summary_large_image');
+    expect(withImage.openGraph?.images).toEqual([{ url: 'https://abc.supabase.co/portrait.jpg' }]);
 
     const sansImage = buildProfileMetadata(makeBundle(), 'https://presskit.pro');
-    expect((sansImage.twitter as { card?: string } | undefined)?.card).toBe(
-      'summary',
-    );
+    expect((sansImage.twitter as { card?: string } | undefined)?.card).toBe('summary');
     expect(sansImage.openGraph?.images).toBeUndefined();
   });
 

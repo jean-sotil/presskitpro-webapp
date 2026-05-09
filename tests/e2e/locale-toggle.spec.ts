@@ -17,19 +17,12 @@ test.describe('Locale toggle @smoke', () => {
     await context.clearCookies();
     await page.goto('/');
     // PT default — hero CTA is "Crie seu press kit".
-    await expect(
-      page.getByRole('link', { name: /crie seu press kit/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('link', { name: /crie seu press kit/i })).toBeVisible();
     await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
 
     // Click ES in the top-bar locale toggle.
-    await page
-      .locator('header')
-      .getByRole('button', { name: 'Español', exact: true })
-      .click();
-    await expect(
-      page.getByRole('link', { name: /crea tu press kit/i }),
-    ).toBeVisible();
+    await page.locator('header').getByRole('button', { name: 'Español', exact: true }).click();
+    await expect(page.getByRole('link', { name: /crea tu press kit/i })).toBeVisible();
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
 
     const cookies = await context.cookies();
@@ -37,9 +30,7 @@ test.describe('Locale toggle @smoke', () => {
 
     // Reload — locale persists.
     await page.reload();
-    await expect(
-      page.getByRole('link', { name: /crea tu press kit/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('link', { name: /crea tu press kit/i })).toBeVisible();
     await expect(page.locator('html')).toHaveAttribute('lang', 'es');
   });
 
@@ -54,9 +45,7 @@ test.describe('Locale toggle @smoke', () => {
       },
     ]);
     await page.goto('/privacy');
-    await expect(
-      page.getByRole('heading', { name: /privacy policy/i, level: 1 }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /privacy policy/i, level: 1 })).toBeVisible();
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   });
 });

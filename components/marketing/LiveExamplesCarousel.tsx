@@ -32,8 +32,7 @@ export function LiveExamplesCarousel({ examples }: LiveExamplesCarouselProps) {
       if (!card) return;
       const cardWidth = card.getBoundingClientRect().width + 16; // gap-4
       const max = track.scrollWidth - track.clientWidth;
-      const next =
-        track.scrollLeft + cardWidth >= max ? 0 : track.scrollLeft + cardWidth;
+      const next = track.scrollLeft + cardWidth >= max ? 0 : track.scrollLeft + cardWidth;
       track.scrollTo({ left: next, behavior: 'smooth' });
     }, AUTOPLAY_INTERVAL_MS);
 

@@ -33,16 +33,16 @@ export function PhotoGalleryEditorialNightlifeV1({ bundle }: { bundle: EditorBun
   return (
     <section id="galeria" className="border-b border-border px-6 py-16 md:px-12">
       <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
-      <ul className="mt-6 grid grid-cols-2 gap-2 md:grid-cols-4 md:auto-rows-[200px] md:gap-4">
+      <ul className="mt-6 grid grid-cols-2 gap-2 md:auto-rows-[200px] md:grid-cols-4 md:gap-4">
         {items.map((item) => {
           const src = mediaUrl({ bucket: item.bucket, path: item.path });
           if (!src) return null;
-          const alt = item.decorative ? '' : item.alt ?? '';
+          const alt = item.decorative ? '' : (item.alt ?? '');
           return (
             <li
               key={item.id}
               // Every 5th item spans 2 columns + 2 rows for visual rhythm.
-              className="relative aspect-square overflow-hidden md:[&:nth-child(5n+1)]:row-span-2 md:[&:nth-child(5n+1)]:col-span-2 md:[&:nth-child(5n+1)]:aspect-auto"
+              className="relative aspect-square overflow-hidden md:[&:nth-child(5n+1)]:col-span-2 md:[&:nth-child(5n+1)]:row-span-2 md:[&:nth-child(5n+1)]:aspect-auto"
             >
               <Image
                 src={src}

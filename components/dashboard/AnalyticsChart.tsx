@@ -7,13 +7,7 @@ import type { ChartShape } from '@/lib/analytics/format-chart';
  * readers. The visible SVG carries `role="img"` + a per-bar `<title>`
  * so hover tooltips work without JS.
  */
-export function AnalyticsChart({
-  shape,
-  label,
-}: {
-  shape: ChartShape;
-  label: string;
-}) {
+export function AnalyticsChart({ shape, label }: { shape: ChartShape; label: string }) {
   const W = 560;
   const H = 160;
   const pad = 12;
@@ -38,13 +32,7 @@ export function AnalyticsChart({
           return (
             <g key={bar.day}>
               <title>{`${bar.day}: ${bar.count}`}</title>
-              <rect
-                x={x}
-                y={y}
-                width={w}
-                height={Math.max(h, 1)}
-                className="fill-text"
-              />
+              <rect x={x} y={y} width={w} height={Math.max(h, 1)} className="fill-text" />
             </g>
           );
         })}

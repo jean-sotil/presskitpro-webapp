@@ -46,10 +46,7 @@ export function Contact_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   if (!whatsapp && !email && !formEnabled) return null;
 
   return (
-    <section
-      id="contato"
-      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
-    >
+    <section id="contato" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
       <div className="mx-auto max-w-3xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           05 — {t('label')}

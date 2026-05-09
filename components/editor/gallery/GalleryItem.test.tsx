@@ -1,8 +1,5 @@
 import { DndContext } from '@dnd-kit/core';
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -13,12 +10,12 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-import {
-  GalleryItem,
-  type GalleryEditItem,
-} from './GalleryItem';
+import { GalleryItem, type GalleryEditItem } from './GalleryItem';
 
-function harness(item: GalleryEditItem, props: Partial<React.ComponentProps<typeof GalleryItem>> = {}) {
+function harness(
+  item: GalleryEditItem,
+  props: Partial<React.ComponentProps<typeof GalleryItem>> = {},
+) {
   return (
     <DndContext>
       <SortableContext items={[`g-${item.id}`]} strategy={verticalListSortingStrategy}>

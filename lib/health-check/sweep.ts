@@ -34,18 +34,9 @@ export type SweepProfilePatch = {
 export type SweepDeps = {
   findCandidates(): Promise<SweepProfile[]>;
   checkUrl(url: string): Promise<CheckResult>;
-  updateProfile(args: {
-    profileId: number | string;
-    patch: SweepProfilePatch;
-  }): Promise<void>;
-  sendWarningEmail(args: {
-    profile: SweepProfile;
-    to: string;
-  }): Promise<void>;
-  sendBrokenEmail(args: {
-    profile: SweepProfile;
-    to: string;
-  }): Promise<void>;
+  updateProfile(args: { profileId: number | string; patch: SweepProfilePatch }): Promise<void>;
+  sendWarningEmail(args: { profile: SweepProfile; to: string }): Promise<void>;
+  sendBrokenEmail(args: { profile: SweepProfile; to: string }): Promise<void>;
   now(): Date;
 };
 
@@ -76,10 +67,7 @@ export async function sweepPressKitHealth(deps: SweepDeps): Promise<SweepResult>
       await processOne(profile, deps, result);
     }
   }
-  const workers = Array.from(
-    { length: Math.min(CONCURRENCY, candidates.length) },
-    () => worker(),
-  );
+  const workers = Array.from({ length: Math.min(CONCURRENCY, candidates.length) }, () => worker());
   await Promise.all(workers);
   return result;
 }

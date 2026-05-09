@@ -72,8 +72,8 @@ export default async function DashboardAnalyticsPage() {
           Tráfego do seu press kit
         </h1>
         <p className="mt-6 max-w-prose text-text-muted">
-          Janela de 14 dias. Os números são atualizados pelo cron diário —
-          não esperam atualização em tempo real.
+          Janela de 14 dias. Os números são atualizados pelo cron diário — não esperam atualização
+          em tempo real.
         </p>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-2">

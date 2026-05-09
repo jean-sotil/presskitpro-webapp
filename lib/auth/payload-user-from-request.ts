@@ -1,10 +1,7 @@
 import 'server-only';
 
 import { payload as getPayloadInstance } from '../payload';
-import {
-  type SupabaseUserSummary,
-  verifySupabaseSession,
-} from './verify-supabase-session';
+import { type SupabaseUserSummary, verifySupabaseSession } from './verify-supabase-session';
 
 /**
  * REST handler convenience: resolve the request's Supabase session into
@@ -51,9 +48,7 @@ export async function resolvePayloadUser(
  * Production wiring: real verifySession + Payload Local API lookup. Use
  * from API route handlers (`headers()` → resolvePayloadUserLive).
  */
-export async function resolvePayloadUserLive(
-  headers: Headers,
-): Promise<PayloadUserDoc | null> {
+export async function resolvePayloadUserLive(headers: Headers): Promise<PayloadUserDoc | null> {
   return resolvePayloadUser(headers, {
     verifySession: verifySupabaseSession,
     findPayloadUser: async (supabaseUserId) => {

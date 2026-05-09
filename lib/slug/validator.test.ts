@@ -3,25 +3,25 @@ import { containsProfanity, validateSlugFormat } from './validator';
 
 describe('validateSlugFormat', () => {
   it.each([
-    ['ok-simple',                    true],
-    ['vitalic-dj',                   true],
-    ['mc-3000',                      true],
-    ['a',                            false], // too short — needs 2+ chars
-    ['ab',                           true],  // exactly 2 chars OK
-    ['x'.repeat(30),                 true],  // max 30
-    ['x'.repeat(31),                 false], // 31 too long
-    ['Caps',                         false],
-    ['has space',                    false],
-    ['under_score',                  false],
-    ['accent-é',                     false],
-    ['emoji🎧',                       false],
-    ['-leading-hyphen',              false],
-    ['trailing-hyphen-',             false],
-    ['double--hyphen',               false],
-    ['triple---hyphen',              false],
-    ['1starts-with-digit',           true],
-    ['ends-with-digit2',             true],
-    ['',                             false],
+    ['ok-simple', true],
+    ['vitalic-dj', true],
+    ['mc-3000', true],
+    ['a', false], // too short — needs 2+ chars
+    ['ab', true], // exactly 2 chars OK
+    ['x'.repeat(30), true], // max 30
+    ['x'.repeat(31), false], // 31 too long
+    ['Caps', false],
+    ['has space', false],
+    ['under_score', false],
+    ['accent-é', false],
+    ['emoji🎧', false],
+    ['-leading-hyphen', false],
+    ['trailing-hyphen-', false],
+    ['double--hyphen', false],
+    ['triple---hyphen', false],
+    ['1starts-with-digit', true],
+    ['ends-with-digit2', true],
+    ['', false],
   ])('returns %s for %s', (input, expected) => {
     expect(validateSlugFormat(input).ok).toBe(expected);
   });
@@ -53,7 +53,7 @@ describe('containsProfanity', () => {
   it('does NOT match clean DJ-style names', () => {
     // Hand-picked real DJ name samples + neutral words. These must all stay clean.
     const clean = [
-      'vitalic',        // real artist
+      'vitalic', // real artist
       'skrillex',
       'massive-attack',
       'carl-cox',

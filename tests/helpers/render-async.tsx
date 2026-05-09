@@ -1,8 +1,4 @@
-import {
-  render,
-  type RenderOptions,
-  type RenderResult,
-} from '@testing-library/react';
+import { render, type RenderOptions, type RenderResult } from '@testing-library/react';
 import type { ReactElement, ReactNode } from 'react';
 
 /**

@@ -1,4 +1,4 @@
-import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres';
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
@@ -17,7 +17,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "profiles_rels_order_idx" ON "payload"."profiles_rels" USING btree ("order");
   CREATE INDEX "profiles_rels_parent_idx" ON "payload"."profiles_rels" USING btree ("parent_id");
   CREATE INDEX "profiles_rels_path_idx" ON "payload"."profiles_rels" USING btree ("path");
-  CREATE INDEX "profiles_rels_media_id_idx" ON "payload"."profiles_rels" USING btree ("media_id");`)
+  CREATE INDEX "profiles_rels_media_id_idx" ON "payload"."profiles_rels" USING btree ("media_id");`);
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
@@ -25,5 +25,5 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
    ALTER TABLE "payload"."profiles_rels" DISABLE ROW LEVEL SECURITY;
   DROP TABLE "payload"."profiles_rels" CASCADE;
   ALTER TABLE "payload"."media" ALTER COLUMN "alt" SET NOT NULL;
-  ALTER TABLE "payload"."media" DROP COLUMN "decorative";`)
+  ALTER TABLE "payload"."media" DROP COLUMN "decorative";`);
 }

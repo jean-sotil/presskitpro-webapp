@@ -13,8 +13,10 @@ test.describe('Smoke @smoke', () => {
     // In CI we run against `bun run start` (production build) so the page
     // is expected to 404 there. Local dev or PLAYWRIGHT_BASE_URL pointing
     // at a dev server is the only environment where it should render.
-    test.skip(process.env.CI === 'true' && !process.env.PLAYWRIGHT_BASE_URL,
-      'preview is dev-only; CI runs production build');
+    test.skip(
+      process.env.CI === 'true' && !process.env.PLAYWRIGHT_BASE_URL,
+      'preview is dev-only; CI runs production build',
+    );
 
     await page.goto('/dev/preview');
     await expect(page.getByRole('heading', { name: /editorial nightlife/i })).toBeVisible();

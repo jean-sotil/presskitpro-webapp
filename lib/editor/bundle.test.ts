@@ -132,13 +132,9 @@ describe('publishProfile', () => {
 });
 
 describe('loadPublicBundle', () => {
-  function makePublicDeps(
-    overrides: Partial<PublicBundleDeps> = {},
-  ): PublicBundleDeps {
+  function makePublicDeps(overrides: Partial<PublicBundleDeps> = {}): PublicBundleDeps {
     return {
-      findPublishedProfileBySlug: vi
-        .fn()
-        .mockResolvedValue({ ...PROFILE, status: 'published' }),
+      findPublishedProfileBySlug: vi.fn().mockResolvedValue({ ...PROFILE, status: 'published' }),
       findProfileContent: vi.fn().mockResolvedValue({
         id: 11,
         profile: 99,

@@ -19,20 +19,14 @@ test.describe('Checkout flow @smoke', () => {
 
   test('/checkout/canceled renders the recovery page', async ({ page }) => {
     await page.goto('/checkout/canceled');
-    await expect(
-      page.getByRole('heading', { name: /sem cobrança/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /sem cobrança/i })).toBeVisible();
     await expect(page.getByRole('link', { name: /ver planos/i })).toBeVisible();
   });
 
   test('/checkout/success renders the activated state', async ({ page }) => {
     await page.goto('/checkout/success');
-    await expect(
-      page.getByRole('heading', { name: /seu plano está ativo/i }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole('link', { name: /ir para o painel/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: /seu plano está ativo/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /ir para o painel/i })).toBeVisible();
   });
 });
 
@@ -50,8 +44,6 @@ test.describe('Checkout flow @full', () => {
     // the harness.
     await page.goto('/checkout/pro-monthly');
     await expect(page.getByRole('heading', { name: /pro/i })).toBeVisible();
-    await expect(
-      page.getByRole('button', { name: /continuar para o checkout/i }),
-    ).toBeVisible();
+    await expect(page.getByRole('button', { name: /continuar para o checkout/i })).toBeVisible();
   });
 });

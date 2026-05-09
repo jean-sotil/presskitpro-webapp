@@ -56,12 +56,30 @@
       "eyebrow": "FAQ",
       "title": "Preguntas frecuentes.",
       "items": [
-        { "q": "¿Necesito saber programar?", "a": "No. El editor es totalmente visual. En 5 minutos tu press kit está al aire." },
-        { "q": "¿Puedo usar mi propio dominio?", "a": "En el plan actual el enlace es presskit.pro/tu-nombre. Los dominios propios entran en la próxima fase del producto." },
-        { "q": "¿Los bookers pueden descargar mis fotos?", "a": "Sí. Pegas el enlace de tu Drive/Dropbox y validamos que sea público antes de guardarlo." },
-        { "q": "¿Funciona en el móvil?", "a": "Sí — escritorio, móvil y tablet. Las páginas públicas obtienen 95+ en Lighthouse móvil." },
-        { "q": "¿Qué idiomas están soportados?", "a": "Portugués, inglés y español a través del selector de idioma en el pie de página." },
-        { "q": "¿Puedo despublicar cuando quiera?", "a": "Sí. Despublicar saca la página al instante — el enlace público vuelve a 404." }
+        {
+          "q": "¿Necesito saber programar?",
+          "a": "No. El editor es totalmente visual. En 5 minutos tu press kit está al aire."
+        },
+        {
+          "q": "¿Puedo usar mi propio dominio?",
+          "a": "En el plan actual el enlace es presskit.pro/tu-nombre. Los dominios propios entran en la próxima fase del producto."
+        },
+        {
+          "q": "¿Los bookers pueden descargar mis fotos?",
+          "a": "Sí. Pegas el enlace de tu Drive/Dropbox y validamos que sea público antes de guardarlo."
+        },
+        {
+          "q": "¿Funciona en el móvil?",
+          "a": "Sí — escritorio, móvil y tablet. Las páginas públicas obtienen 95+ en Lighthouse móvil."
+        },
+        {
+          "q": "¿Qué idiomas están soportados?",
+          "a": "Portugués, inglés y español a través del selector de idioma en el pie de página."
+        },
+        {
+          "q": "¿Puedo despublicar cuando quiera?",
+          "a": "Sí. Despublicar saca la página al instante — el enlace público vuelve a 404."
+        }
       ]
     }
   },
@@ -227,10 +245,22 @@
     "draftBadge": "Borrador — pendiente de revisión legal.",
     "intro": "Esta política describe cómo PressKit Pro recopila, usa y protege tus datos personales cuando usas el servicio. Al crear una cuenta o navegar por las páginas públicas, aceptas los términos de esta política.",
     "sections": [
-      { "heading": "Datos que recopilamos", "body": "Recopilamos el correo electrónico proporcionado en el registro y el contenido que publicas en tu press kit (bio, fotos, enlaces, tracks). No recopilamos datos de localización, dispositivo o navegación con fines publicitarios." },
-      { "heading": "Cookies", "body": "Solo usamos dos cookies esenciales: la cookie de sesión de autenticación y la cookie de preferencia de idioma. No definimos cookies de seguimiento ni publicitarias. La cookie `cookie_consent` almacena tu reconocimiento de este aviso." },
-      { "heading": "Compartir", "body": "No vendemos ni alquilamos tus datos. Solo compartimos con proveedores esenciales para el funcionamiento del servicio (hosting, procesamiento de pagos), bajo contratos con obligaciones de confidencialidad." },
-      { "heading": "Tus derechos (LGPD)", "body": "Puedes acceder, corregir, exportar o eliminar tus datos en cualquier momento. Las herramientas self-serve de exportación y eliminación llegan en la próxima versión (task-33). Mientras tanto, escribe a contato@presskit.pro." },
+      {
+        "heading": "Datos que recopilamos",
+        "body": "Recopilamos el correo electrónico proporcionado en el registro y el contenido que publicas en tu press kit (bio, fotos, enlaces, tracks). No recopilamos datos de localización, dispositivo o navegación con fines publicitarios."
+      },
+      {
+        "heading": "Cookies",
+        "body": "Solo usamos dos cookies esenciales: la cookie de sesión de autenticación y la cookie de preferencia de idioma. No definimos cookies de seguimiento ni publicitarias. La cookie `cookie_consent` almacena tu reconocimiento de este aviso."
+      },
+      {
+        "heading": "Compartir",
+        "body": "No vendemos ni alquilamos tus datos. Solo compartimos con proveedores esenciales para el funcionamiento del servicio (hosting, procesamiento de pagos), bajo contratos con obligaciones de confidencialidad."
+      },
+      {
+        "heading": "Tus derechos (LGPD)",
+        "body": "Puedes acceder, corregir, exportar o eliminar tus datos en cualquier momento. Las herramientas self-serve de exportación y eliminación llegan en la próxima versión (task-33). Mientras tanto, escribe a contato@presskit.pro."
+      },
       { "heading": "Contacto", "body": "Preguntas sobre esta política: contato@presskit.pro." }
     ]
   },
@@ -241,12 +271,30 @@
     "draftBadge": "Borrador — pendiente de revisión legal.",
     "intro": "Estos términos rigen el uso de PressKit Pro. Al crear una cuenta, aceptas las condiciones siguientes. Si no estás de acuerdo, no uses el servicio.",
     "sections": [
-      { "heading": "Cuenta y contenido", "body": "Eres responsable del contenido que publicas en tu press kit, incluidos los derechos sobre fotos, tracks y textos. El contenido que infrinja derechos de terceros, viole leyes o sea ofensivo puede ser eliminado sin previo aviso." },
-      { "heading": "Plan y facturación", "body": "PressKit Pro ofrece un período gratuito de 14 días. Al final, se requiere un plan pago para mantener el press kit al aire. La cancelación puede hacerse en cualquier momento y entra en vigor al final del ciclo de facturación." },
-      { "heading": "Slug y enlace público", "body": "La URL presskit.pro/tu-nombre está reservada mientras tu cuenta esté activa. En caso de inactividad prolongada, el slug puede liberarse según la política de reciclaje (task-32)." },
-      { "heading": "Suspensión y terminación", "body": "Podemos suspender o terminar cuentas que violen estos términos. En caso de terminación por violación, no hay reembolso pro-rata." },
-      { "heading": "Limitación de responsabilidad", "body": "El servicio se proporciona \"tal cual\". No garantizamos disponibilidad continua, aunque nos esforzamos por cumplir los SLAs alineados con el tier del plan." },
-      { "heading": "Foro y legislación", "body": "Estos términos se rigen por las leyes de la República Federativa de Brasil. Se elige el foro de São Paulo - SP para resolver eventuales conflictos." },
+      {
+        "heading": "Cuenta y contenido",
+        "body": "Eres responsable del contenido que publicas en tu press kit, incluidos los derechos sobre fotos, tracks y textos. El contenido que infrinja derechos de terceros, viole leyes o sea ofensivo puede ser eliminado sin previo aviso."
+      },
+      {
+        "heading": "Plan y facturación",
+        "body": "PressKit Pro ofrece un período gratuito de 14 días. Al final, se requiere un plan pago para mantener el press kit al aire. La cancelación puede hacerse en cualquier momento y entra en vigor al final del ciclo de facturación."
+      },
+      {
+        "heading": "Slug y enlace público",
+        "body": "La URL presskit.pro/tu-nombre está reservada mientras tu cuenta esté activa. En caso de inactividad prolongada, el slug puede liberarse según la política de reciclaje (task-32)."
+      },
+      {
+        "heading": "Suspensión y terminación",
+        "body": "Podemos suspender o terminar cuentas que violen estos términos. En caso de terminación por violación, no hay reembolso pro-rata."
+      },
+      {
+        "heading": "Limitación de responsabilidad",
+        "body": "El servicio se proporciona \"tal cual\". No garantizamos disponibilidad continua, aunque nos esforzamos por cumplir los SLAs alineados con el tier del plan."
+      },
+      {
+        "heading": "Foro y legislación",
+        "body": "Estos términos se rigen por las leyes de la República Federativa de Brasil. Se elige el foro de São Paulo - SP para resolver eventuales conflictos."
+      },
       { "heading": "Contacto", "body": "Preguntas sobre estos términos: contato@presskit.pro." }
     ]
   },
@@ -276,6 +324,14 @@
     "editorial-nightlife-v1": {
       "name": "Editorial Nightlife",
       "tagline": "El look original de PressKit Pro: editorial brutalista, alto contraste."
+    },
+    "electric-fire-techno": {
+      "name": "Electric Fire Techno",
+      "tagline": "Estética rave infernal: negro azulado, fuego eléctrico, lightning cyan y tipografía condensada en alto contraste."
+    },
+    "dead-signal": {
+      "name": "Dead Signal",
+      "tagline": "Estética cyber y glitch-art. Líneas duras, scanlines de TV y aberración cromática en tonos de cian y rojo."
     }
   },
   "editor": {

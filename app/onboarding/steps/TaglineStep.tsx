@@ -46,11 +46,7 @@ export function TaglineStep({ initial }: { initial?: string }) {
         aria-describedby="tagline-counter"
         aria-invalid={Boolean(error)}
       />
-      <p
-        id="tagline-counter"
-        className="text-xs text-text-muted"
-        aria-live="polite"
-      >
+      <p id="tagline-counter" className="text-xs text-text-muted" aria-live="polite">
         {remaining} caracteres restantes
         {error ? ` · ${error}` : ''}
       </p>

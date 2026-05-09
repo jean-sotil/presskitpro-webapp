@@ -1,9 +1,6 @@
 import type { CollectionConfig } from 'payload';
 
-import {
-  canCreateForOwnedProfile,
-  ownsViaProfile,
-} from '../../lib/payload/access/predicates';
+import { canCreateForOwnedProfile, ownsViaProfile } from '../../lib/payload/access/predicates';
 
 /**
  * One featured audio track per Profile (typically a SoundCloud embed).
@@ -38,9 +35,7 @@ export const FeaturedTracks: CollectionConfig = {
       type: 'select',
       required: true,
       defaultValue: 'soundcloud',
-      options: [
-        { label: 'SoundCloud', value: 'soundcloud' },
-      ],
+      options: [{ label: 'SoundCloud', value: 'soundcloud' }],
       admin: { description: 'Other providers (Spotify, Bandcamp) land in v2.' },
     },
     {

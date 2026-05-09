@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  MAX_SOCIAL_LINKS,
-  parseAndCanonicalize,
-  validateLinks,
-} from './social-link-validate';
+import { MAX_SOCIAL_LINKS, parseAndCanonicalize, validateLinks } from './social-link-validate';
 
 describe('parseAndCanonicalize', () => {
   it('rejects empty input', () => {
@@ -28,10 +24,7 @@ describe('parseAndCanonicalize', () => {
 
     it('strips query/hash from a full URL', () => {
       expect(
-        parseAndCanonicalize(
-          'instagram',
-          'https://instagram.com/dj_x?utm_source=foo#bar',
-        ),
+        parseAndCanonicalize('instagram', 'https://instagram.com/dj_x?utm_source=foo#bar'),
       ).toEqual({
         ok: true,
         canonical: 'https://www.instagram.com/dj_x',
@@ -39,9 +32,10 @@ describe('parseAndCanonicalize', () => {
     });
 
     it('rejects a non-instagram host', () => {
-      expect(
-        parseAndCanonicalize('instagram', 'https://evil.example.com/dj_x'),
-      ).toEqual({ ok: false, reason: 'wrong-host' });
+      expect(parseAndCanonicalize('instagram', 'https://evil.example.com/dj_x')).toEqual({
+        ok: false,
+        reason: 'wrong-host',
+      });
     });
 
     it('rejects an empty handle', () => {
@@ -61,9 +55,10 @@ describe('parseAndCanonicalize', () => {
     });
 
     it('parses a full URL', () => {
-      expect(
-        parseAndCanonicalize('tiktok', 'https://www.tiktok.com/@dj_x?lang=en'),
-      ).toEqual({ ok: true, canonical: 'https://www.tiktok.com/@dj_x' });
+      expect(parseAndCanonicalize('tiktok', 'https://www.tiktok.com/@dj_x?lang=en')).toEqual({
+        ok: true,
+        canonical: 'https://www.tiktok.com/@dj_x',
+      });
     });
   });
 
@@ -76,9 +71,10 @@ describe('parseAndCanonicalize', () => {
     });
 
     it('accepts both twitter.com and x.com hosts', () => {
-      expect(
-        parseAndCanonicalize('twitter', 'https://twitter.com/dj_x'),
-      ).toEqual({ ok: true, canonical: 'https://x.com/dj_x' });
+      expect(parseAndCanonicalize('twitter', 'https://twitter.com/dj_x')).toEqual({
+        ok: true,
+        canonical: 'https://x.com/dj_x',
+      });
       expect(parseAndCanonicalize('twitter', 'https://x.com/dj_x')).toEqual({
         ok: true,
         canonical: 'https://x.com/dj_x',
@@ -100,32 +96,33 @@ describe('parseAndCanonicalize', () => {
     });
 
     it('rejects a non-open.spotify.com host', () => {
-      expect(
-        parseAndCanonicalize('spotify', 'https://spotify.com/artist/foo'),
-      ).toEqual({ ok: false, reason: 'wrong-host' });
+      expect(parseAndCanonicalize('spotify', 'https://spotify.com/artist/foo')).toEqual({
+        ok: false,
+        reason: 'wrong-host',
+      });
     });
   });
 
   describe('youtube', () => {
     it('keeps an @handle channel URL', () => {
-      expect(
-        parseAndCanonicalize('youtube', 'https://www.youtube.com/@djx'),
-      ).toEqual({
+      expect(parseAndCanonicalize('youtube', 'https://www.youtube.com/@djx')).toEqual({
         ok: true,
         canonical: 'https://www.youtube.com/@djx',
       });
     });
 
     it('keeps a youtu.be short URL', () => {
-      expect(
-        parseAndCanonicalize('youtube', 'https://youtu.be/abc123'),
-      ).toEqual({ ok: true, canonical: 'https://youtu.be/abc123' });
+      expect(parseAndCanonicalize('youtube', 'https://youtu.be/abc123')).toEqual({
+        ok: true,
+        canonical: 'https://youtu.be/abc123',
+      });
     });
 
     it('rejects a non-youtube host', () => {
-      expect(
-        parseAndCanonicalize('youtube', 'https://vimeo.com/foo'),
-      ).toEqual({ ok: false, reason: 'wrong-host' });
+      expect(parseAndCanonicalize('youtube', 'https://vimeo.com/foo')).toEqual({
+        ok: false,
+        reason: 'wrong-host',
+      });
     });
   });
 
@@ -166,9 +163,10 @@ describe('parseAndCanonicalize', () => {
     });
 
     it('parses an existing wa.me URL', () => {
-      expect(
-        parseAndCanonicalize('whatsapp', 'https://wa.me/5511999999999'),
-      ).toEqual({ ok: true, canonical: 'https://wa.me/5511999999999' });
+      expect(parseAndCanonicalize('whatsapp', 'https://wa.me/5511999999999')).toEqual({
+        ok: true,
+        canonical: 'https://wa.me/5511999999999',
+      });
     });
   });
 
@@ -197,12 +195,9 @@ describe('parseAndCanonicalize', () => {
 
   describe('website', () => {
     it('rebuilds origin + pathname (drops auth, query, hash)', () => {
-      expect(
-        parseAndCanonicalize(
-          'website',
-          'https://user:pwd@example.com/path?q=1#frag',
-        ),
-      ).toEqual({ ok: true, canonical: 'https://example.com/path' });
+      expect(parseAndCanonicalize('website', 'https://user:pwd@example.com/path?q=1#frag')).toEqual(
+        { ok: true, canonical: 'https://example.com/path' },
+      );
     });
 
     it('rejects non-http(s) schemes', () => {

@@ -75,12 +75,8 @@
           "tableFrom": "admins_sessions",
           "tableTo": "admins",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -292,12 +288,8 @@
           "tableFrom": "users_sessions",
           "tableTo": "users",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -553,12 +545,8 @@
           "tableFrom": "profiles_locales_available",
           "tableTo": "profiles",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -785,12 +773,8 @@
           "tableFrom": "profiles",
           "tableTo": "users",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "owner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["owner_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -799,12 +783,8 @@
           "tableFrom": "profiles",
           "tableTo": "media",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "portrait_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["portrait_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -813,12 +793,8 @@
           "tableFrom": "profiles",
           "tableTo": "media",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "logo_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["logo_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -932,12 +908,8 @@
           "tableFrom": "profiles_rels",
           "tableTo": "profiles",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -946,12 +918,8 @@
           "tableFrom": "profiles_rels",
           "tableTo": "media",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1057,12 +1025,8 @@
           "tableFrom": "profile_content_services",
           "tableTo": "profile_content",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1163,12 +1127,8 @@
           "tableFrom": "profile_content",
           "tableTo": "profiles",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "profile_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profile_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1289,12 +1249,8 @@
           "tableFrom": "profile_content_locales",
           "tableTo": "media",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "og_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["og_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1303,12 +1259,8 @@
           "tableFrom": "profile_content_locales",
           "tableTo": "profile_content",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1468,12 +1420,8 @@
           "tableFrom": "media",
           "tableTo": "users",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "owner_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["owner_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1588,12 +1536,8 @@
           "tableFrom": "social_links",
           "tableTo": "profiles",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "profile_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profile_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1714,12 +1658,8 @@
           "tableFrom": "featured_tracks",
           "tableTo": "profiles",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "profile_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profile_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1797,12 +1737,8 @@
           "tableFrom": "themes_section_order",
           "tableTo": "themes",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1957,12 +1893,8 @@
           "tableFrom": "themes",
           "tableTo": "profiles",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "profile_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profile_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -2081,12 +2013,8 @@
           "tableFrom": "instagram_connections",
           "tableTo": "profiles",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "profile_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profile_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -2206,12 +2134,8 @@
           "tableFrom": "instagram_posts",
           "tableTo": "profiles",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "profile_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profile_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -2646,12 +2570,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "payload_locked_documents",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2660,12 +2580,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "admins",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "admins_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["admins_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2674,12 +2590,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "users",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "users_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["users_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2688,12 +2600,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "profiles",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "profiles_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profiles_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2702,12 +2610,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "profile_content",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "profile_content_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profile_content_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2716,12 +2620,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "media",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2730,12 +2630,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "social_links",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "social_links_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["social_links_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2744,12 +2640,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "featured_tracks",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "featured_tracks_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["featured_tracks_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2758,12 +2650,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "themes",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "themes_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["themes_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2772,12 +2660,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "instagram_connections",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "instagram_connections_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["instagram_connections_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2786,12 +2670,8 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "instagram_posts",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "instagram_posts_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["instagram_posts_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3017,12 +2897,8 @@
           "tableFrom": "payload_preferences_rels",
           "tableTo": "payload_preferences",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -3031,12 +2907,8 @@
           "tableFrom": "payload_preferences_rels",
           "tableTo": "admins",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "admins_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["admins_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -3045,12 +2917,8 @@
           "tableFrom": "payload_preferences_rels",
           "tableTo": "users",
           "schemaTo": "payload",
-          "columnsFrom": [
-            "users_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["users_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3142,43 +3010,27 @@
     "payload._locales": {
       "name": "_locales",
       "schema": "payload",
-      "values": [
-        "pt-BR",
-        "en"
-      ]
+      "values": ["pt-BR", "en"]
     },
     "payload.enum_users_role": {
       "name": "enum_users_role",
       "schema": "payload",
-      "values": [
-        "user",
-        "admin"
-      ]
+      "values": ["user", "admin"]
     },
     "payload.enum_users_plan": {
       "name": "enum_users_plan",
       "schema": "payload",
-      "values": [
-        "free",
-        "pro"
-      ]
+      "values": ["free", "pro"]
     },
     "payload.enum_profiles_locales_available": {
       "name": "enum_profiles_locales_available",
       "schema": "payload",
-      "values": [
-        "pt-BR",
-        "en"
-      ]
+      "values": ["pt-BR", "en"]
     },
     "payload.enum_profiles_status": {
       "name": "enum_profiles_status",
       "schema": "payload",
-      "values": [
-        "draft",
-        "published",
-        "unpublished"
-      ]
+      "values": ["draft", "published", "unpublished"]
     },
     "payload.enum_profiles_press_kit_provider": {
       "name": "enum_profiles_press_kit_provider",
@@ -3197,28 +3049,17 @@
     "payload.enum_profiles_press_kit_health_status": {
       "name": "enum_profiles_press_kit_health_status",
       "schema": "payload",
-      "values": [
-        "unknown",
-        "healthy",
-        "warning",
-        "broken"
-      ]
+      "values": ["unknown", "healthy", "warning", "broken"]
     },
     "payload.enum_profiles_default_locale": {
       "name": "enum_profiles_default_locale",
       "schema": "payload",
-      "values": [
-        "pt-BR",
-        "en"
-      ]
+      "values": ["pt-BR", "en"]
     },
     "payload.enum_media_bucket": {
       "name": "enum_media_bucket",
       "schema": "payload",
-      "values": [
-        "avatars",
-        "gallery"
-      ]
+      "values": ["avatars", "gallery"]
     },
     "payload.enum_social_links_platform": {
       "name": "enum_social_links_platform",
@@ -3242,9 +3083,7 @@
     "payload.enum_featured_tracks_provider": {
       "name": "enum_featured_tracks_provider",
       "schema": "payload",
-      "values": [
-        "soundcloud"
-      ]
+      "values": ["soundcloud"]
     },
     "payload.enum_themes_font_pair_id": {
       "name": "enum_themes_font_pair_id",
@@ -3263,20 +3102,12 @@
     "payload.enum_themes_hero_style": {
       "name": "enum_themes_hero_style",
       "schema": "payload",
-      "values": [
-        "full-bleed-portrait",
-        "split-portrait-text",
-        "centered-logo"
-      ]
+      "values": ["full-bleed-portrait", "split-portrait-text", "centered-logo"]
     },
     "payload.enum_themes_gallery_layout": {
       "name": "enum_themes_gallery_layout",
       "schema": "payload",
-      "values": [
-        "mosaic",
-        "uniform-grid",
-        "carousel"
-      ]
+      "values": ["mosaic", "uniform-grid", "carousel"]
     }
   },
   "schemas": {

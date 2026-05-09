@@ -30,9 +30,7 @@ export interface LoadLiveExamplesDeps {
   limit: number;
 }
 
-export async function loadLiveExamples(
-  deps: LoadLiveExamplesDeps,
-): Promise<LiveExample[]> {
+export async function loadLiveExamples(deps: LoadLiveExamplesDeps): Promise<LiveExample[]> {
   const limit = Math.min(Math.max(1, deps.limit), MAX_LIMIT);
   const result = await deps.find({
     where: { status: { equals: 'published' } },

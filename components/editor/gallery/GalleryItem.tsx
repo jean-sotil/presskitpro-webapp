@@ -32,8 +32,9 @@ export function GalleryItem({
   onSelectToggle,
   onRemove,
 }: GalleryItemProps) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: `g-${item.id}` });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: `g-${item.id}`,
+  });
   const url = mediaUrl({ bucket: item.bucket, path: item.path });
   const altMissing = !item.decorative && item.alt.trim().length === 0;
 
@@ -82,16 +83,12 @@ export function GalleryItem({
       </div>
 
       <label className="flex flex-col gap-1">
-        <span className="text-xs uppercase tracking-wider text-text-muted">
-          Texto alternativo
-        </span>
+        <span className="text-xs uppercase tracking-wider text-text-muted">Texto alternativo</span>
         <input
           value={item.alt}
           onChange={(e) => onAltChange(e.target.value)}
           disabled={item.decorative}
-          placeholder={
-            item.decorative ? 'Decorativa (alt vazio)' : 'Descreva a imagem...'
-          }
+          placeholder={item.decorative ? 'Decorativa (alt vazio)' : 'Descreva a imagem...'}
           aria-invalid={altMissing}
           className="h-9 border border-border bg-bg px-3 text-sm outline-none focus:border-accent disabled:opacity-50"
         />
@@ -100,9 +97,7 @@ export function GalleryItem({
             Alt obrigatório (ou marque como decorativa).
           </span>
         ) : null}
-        {altPending ? (
-          <span className="text-xs text-text-muted">Salvando alt...</span>
-        ) : null}
+        {altPending ? <span className="text-xs text-text-muted">Salvando alt...</span> : null}
       </label>
 
       <div className="flex items-center justify-between">

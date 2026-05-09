@@ -92,11 +92,7 @@ export function ContactForm({ profileId }: ContactFormProps) {
 
   if (status.kind === 'ok') {
     return (
-      <p
-        role="status"
-        aria-live="polite"
-        className="border border-border bg-bg p-4 text-sm"
-      >
+      <p role="status" aria-live="polite" className="border border-border bg-bg p-4 text-sm">
         Mensagem enviada. Você receberá uma resposta no e-mail informado.
       </p>
     );
@@ -105,9 +101,7 @@ export function ContactForm({ profileId }: ContactFormProps) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       <label className="flex flex-col gap-1">
-        <span className="text-xs uppercase tracking-wider text-text-muted">
-          Seu nome
-        </span>
+        <span className="text-xs uppercase tracking-wider text-text-muted">Seu nome</span>
         <input
           type="text"
           required
@@ -118,9 +112,7 @@ export function ContactForm({ profileId }: ContactFormProps) {
         />
       </label>
       <label className="flex flex-col gap-1">
-        <span className="text-xs uppercase tracking-wider text-text-muted">
-          Seu e-mail
-        </span>
+        <span className="text-xs uppercase tracking-wider text-text-muted">Seu e-mail</span>
         <input
           type="email"
           required
@@ -131,9 +123,7 @@ export function ContactForm({ profileId }: ContactFormProps) {
         />
       </label>
       <label className="flex flex-col gap-1">
-        <span className="text-xs uppercase tracking-wider text-text-muted">
-          Mensagem
-        </span>
+        <span className="text-xs uppercase tracking-wider text-text-muted">Mensagem</span>
         <textarea
           required
           value={message}

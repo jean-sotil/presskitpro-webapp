@@ -53,9 +53,7 @@ describe('diffBundleSizes', () => {
     ];
     const result = diffBundleSizes({ current, lock, toleranceKB: lock.toleranceKB });
     expect(result.ok).toBe(false);
-    expect(result.violations).toEqual([
-      { kind: 'new-route', route: '/onboarding', currentKB: 95 },
-    ]);
+    expect(result.violations).toEqual([{ kind: 'new-route', route: '/onboarding', currentKB: 95 }]);
   });
 
   it('reports every violation, not just the first', () => {

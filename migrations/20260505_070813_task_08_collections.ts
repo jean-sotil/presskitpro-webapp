@@ -1,4 +1,4 @@
-import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
+import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres';
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
@@ -175,7 +175,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "payload_locked_documents_rels_themes_id_idx" ON "payload"."payload_locked_documents_rels" USING btree ("themes_id");
   CREATE INDEX "payload_locked_documents_rels_instagram_connections_id_idx" ON "payload"."payload_locked_documents_rels" USING btree ("instagram_connections_id");
   CREATE INDEX "payload_preferences_rels_users_id_idx" ON "payload"."payload_preferences_rels" USING btree ("users_id");
-  CREATE UNIQUE INDEX "users_email_idx" ON "payload"."users" USING btree ("email");`)
+  CREATE UNIQUE INDEX "users_email_idx" ON "payload"."users" USING btree ("email");`);
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
@@ -246,5 +246,5 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "payload"."enum_featured_tracks_provider";
   DROP TYPE "payload"."enum_themes_font_pair_id";
   DROP TYPE "payload"."enum_themes_hero_style";
-  DROP TYPE "payload"."enum_themes_gallery_layout";`)
+  DROP TYPE "payload"."enum_themes_gallery_layout";`);
 }

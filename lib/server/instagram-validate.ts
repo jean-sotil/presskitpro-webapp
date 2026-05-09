@@ -11,11 +11,7 @@
 
 export type IgKind = 'post' | 'reel' | 'tv';
 
-export type ParseReason =
-  | 'empty'
-  | 'invalid-url'
-  | 'wrong-host'
-  | 'invalid-path';
+export type ParseReason = 'empty' | 'invalid-url' | 'wrong-host' | 'invalid-path';
 
 export type ParseResult =
   | { ok: true; kind: IgKind; shortcode: string; canonical: string }
@@ -34,10 +30,7 @@ export function parseInstagramPostUrl(raw: string): ParseResult {
     return { ok: false, reason: 'invalid-url' };
   }
   if (parsed.protocol !== 'https:') return { ok: false, reason: 'invalid-url' };
-  if (
-    parsed.host !== 'instagram.com' &&
-    parsed.host !== 'www.instagram.com'
-  ) {
+  if (parsed.host !== 'instagram.com' && parsed.host !== 'www.instagram.com') {
     return { ok: false, reason: 'wrong-host' };
   }
 

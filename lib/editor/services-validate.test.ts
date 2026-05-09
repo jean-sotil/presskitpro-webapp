@@ -27,13 +27,16 @@ describe('validateServiceItem', () => {
   });
 
   it('rejects description > 240 chars', () => {
-    expect(
-      validateServiceItem({ title: 'DJ Set', description: 'a'.repeat(241) }),
-    ).toEqual({ ok: false, reason: 'description-too-long' });
+    expect(validateServiceItem({ title: 'DJ Set', description: 'a'.repeat(241) })).toEqual({
+      ok: false,
+      reason: 'description-too-long',
+    });
   });
 
   it('accepts a valid item', () => {
-    expect(validateServiceItem({ title: 'DJ Set', description: '60 min sessions' })).toEqual({ ok: true });
+    expect(validateServiceItem({ title: 'DJ Set', description: '60 min sessions' })).toEqual({
+      ok: true,
+    });
   });
 
   it('accepts a missing description (optional field)', () => {

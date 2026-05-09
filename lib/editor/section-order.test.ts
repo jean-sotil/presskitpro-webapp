@@ -16,8 +16,15 @@ describe('mergeOrder', () => {
 
   it('keeps the persisted order verbatim when it covers every registered key', () => {
     const persisted: SectionKey[] = [
-      'contact', 'socialLinks', 'pressKitLink', 'photoGallery',
-      'instagramFeed', 'featuredTrack', 'services', 'about', 'hero',
+      'contact',
+      'socialLinks',
+      'pressKitLink',
+      'photoGallery',
+      'instagramFeed',
+      'featuredTrack',
+      'services',
+      'about',
+      'hero',
     ];
     expect(mergeOrder(persisted)).toEqual(persisted);
   });
@@ -33,11 +40,7 @@ describe('mergeOrder', () => {
   });
 
   it('drops persisted keys that are no longer in the registry (renamed/removed)', () => {
-    const result = mergeOrder([
-      'hero',
-      'ghost-section' as SectionKey,
-      'about',
-    ]);
+    const result = mergeOrder(['hero', 'ghost-section' as SectionKey, 'about']);
     expect(result).not.toContain('ghost-section');
     expect(result).toContain('hero');
     expect(result).toContain('about');
@@ -54,13 +57,19 @@ describe('reorderSection', () => {
 
   it('moves a section up', () => {
     expect(reorderSection(order, 'services', 'hero')).toEqual([
-      'services', 'hero', 'about', 'contact',
+      'services',
+      'hero',
+      'about',
+      'contact',
     ]);
   });
 
   it('moves a section down', () => {
     expect(reorderSection(order, 'about', 'contact')).toEqual([
-      'hero', 'services', 'contact', 'about',
+      'hero',
+      'services',
+      'contact',
+      'about',
     ]);
   });
 

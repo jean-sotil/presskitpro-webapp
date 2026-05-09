@@ -9,6 +9,7 @@ import { SocialLinksEditorialNightlifeV1 } from './editorial-nightlife-v1/Social
 import { SocialLinksElectricFireTechno } from './electric-fire-techno/SocialLinksRender.electric-fire-techno';
 import { SocialLinksFestivalClubOrange } from './festival-club-orange/SocialLinksRender.festival-club-orange';
 import { SocialLinksMediakitProV1 } from './mediakit-pro-v1/SocialLinksRender.mediakit-pro-v1';
+import { SocialLinksDeadSignal } from './dead-signal/SocialLinksRender.dead-signal';
 import { TrackedSocialLink } from './TrackedSocialLink';
 
 type LinkRow = {
@@ -29,23 +30,23 @@ export function SocialLinksRender({
   const tPlatforms = useTranslations('profile.social.platforms');
 
   // Folder-owned preset dispatch.
-  if (preset?.id === 'electric-fire-techno') return <SocialLinksElectricFireTechno bundle={bundle} />;
+  if (preset?.id === 'dead-signal') return <SocialLinksDeadSignal bundle={bundle} />;
+  if (preset?.id === 'electric-fire-techno')
+    return <SocialLinksElectricFireTechno bundle={bundle} />;
   if (preset?.id === 'mediakit-pro-v1') return <SocialLinksMediakitProV1 bundle={bundle} />;
-  if (preset?.id === 'festival-club-orange') return <SocialLinksFestivalClubOrange bundle={bundle} />;
-  if (preset?.id === 'editorial-nightlife-v1') return <SocialLinksEditorialNightlifeV1 bundle={bundle} />;
+  if (preset?.id === 'festival-club-orange')
+    return <SocialLinksFestivalClubOrange bundle={bundle} />;
+  if (preset?.id === 'editorial-nightlife-v1')
+    return <SocialLinksEditorialNightlifeV1 bundle={bundle} />;
 
   // No preset → unstyled pill-list fallback for legacy profiles.
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
   if (!raw.length) return null;
-  const links = [...raw].sort(
-    (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
-  );
+  const links = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   const profileSlug = bundle.profile.slug;
   return (
     <section className="border-b border-border px-6 py-16 md:px-12">
-      <h2 className="font-display text-2xl uppercase tracking-tight">
-        {t('label')}
-      </h2>
+      <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
       <ul className="mt-6 flex flex-wrap gap-3">
         {links.map((link) => {
           const href = hrefFor(link);
@@ -55,8 +56,7 @@ export function SocialLinksRender({
           } catch {
             label = link.platform;
           }
-          const external =
-            link.platform !== 'email' && link.platform !== 'whatsapp';
+          const external = link.platform !== 'email' && link.platform !== 'whatsapp';
           return (
             <li key={String(link.id)}>
               <TrackedSocialLink

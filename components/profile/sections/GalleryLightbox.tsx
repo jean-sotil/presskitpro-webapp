@@ -127,13 +127,7 @@ export function GalleryLightbox({
         ))}
       </ul>
       {isOpen ? (
-        <LightboxModal
-          items={items}
-          activeIdx={activeIdx}
-          onClose={close}
-          onCycle={cycle}
-          t={t}
-        />
+        <LightboxModal items={items} activeIdx={activeIdx} onClose={close} onCycle={cycle} t={t} />
       ) : null}
     </>
   );
@@ -165,11 +159,7 @@ function LightboxModal({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={
-        item.alt
-          ? t('viewerLabelWithAlt', { alt: item.alt })
-          : t('viewerLabel')
-      }
+      aria-label={item.alt ? t('viewerLabelWithAlt', { alt: item.alt }) : t('viewerLabel')}
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 motion-safe:animate-[lightbox-fade-in_200ms_ease-out_both] md:p-12"
     >
       {/* Backdrop dismiss target. Sibling of the figure/buttons so the
@@ -219,9 +209,7 @@ function LightboxModal({
           priority
           className="h-auto max-h-[80vh] w-auto max-w-full object-contain md:max-h-[85vh]"
         />
-        {item.alt ? (
-          <figcaption className="sr-only">{item.alt}</figcaption>
-        ) : null}
+        {item.alt ? <figcaption className="sr-only">{item.alt}</figcaption> : null}
       </figure>
       <p
         aria-live="polite"

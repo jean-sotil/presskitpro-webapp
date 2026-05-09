@@ -61,7 +61,11 @@ export function PlatformIcon({ platform }: { platform: string }) {
     case 'twitter':
       return (
         <svg {...ICON_PROPS}>
-          <path d="M4 4l7 9-7 7h2l6-6 5 6h4l-8-10 7-6h-2l-6 5-4-5z" fill="currentColor" stroke="none" />
+          <path
+            d="M4 4l7 9-7 7h2l6-6 5 6h4l-8-10 7-6h-2l-6 5-4-5z"
+            fill="currentColor"
+            stroke="none"
+          />
         </svg>
       );
     case 'whatsapp':

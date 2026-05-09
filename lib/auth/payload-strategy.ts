@@ -2,10 +2,7 @@ import 'server-only';
 
 import type { AuthStrategy, AuthStrategyFunction } from 'payload';
 
-import {
-  type SupabaseUserSummary,
-  verifySupabaseSession,
-} from './verify-supabase-session';
+import { type SupabaseUserSummary, verifySupabaseSession } from './verify-supabase-session';
 
 /**
  * Custom Payload auth strategy that delegates session verification to

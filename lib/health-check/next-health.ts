@@ -32,22 +32,19 @@ const MAX_FAILS = 3;
 
 export function nextHealth(input: NextHealthInput): NextHealthResult {
   if (input.checkOk) {
-    const transition: HealthTransition =
-      input.priorStatus === 'healthy' ? 'none' : 'to-healthy';
+    const transition: HealthTransition = input.priorStatus === 'healthy' ? 'none' : 'to-healthy';
     return { status: 'healthy', fails: 0, transition };
   }
 
   const fails = Math.min(input.priorFails + 1, MAX_FAILS);
 
   if (fails >= 3) {
-    const transition: HealthTransition =
-      input.priorStatus === 'broken' ? 'none' : 'to-broken';
+    const transition: HealthTransition = input.priorStatus === 'broken' ? 'none' : 'to-broken';
     return { status: 'broken', fails, transition };
   }
 
   if (fails === 2) {
-    const transition: HealthTransition =
-      input.priorStatus === 'warning' ? 'none' : 'to-warning';
+    const transition: HealthTransition = input.priorStatus === 'warning' ? 'none' : 'to-warning';
     return { status: 'warning', fails, transition };
   }
 

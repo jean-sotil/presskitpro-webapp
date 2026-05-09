@@ -14,10 +14,7 @@ export async function POST(req: Request) {
   if (!stripe || !secret) {
     // Refuse to process webhooks without verification — silently 5xx so
     // Stripe retries, surfacing a misconfig in their dashboard.
-    return NextResponse.json(
-      { error: 'webhook not configured' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'webhook not configured' }, { status: 500 });
   }
 
   const signature = req.headers.get('stripe-signature');

@@ -23,10 +23,7 @@ export const dynamic = 'force-dynamic';
 
 const STALE_AFTER_MS = 30 * 24 * 60 * 60 * 1000;
 
-export async function PUT(
-  req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const profileId = Number.parseInt(id, 10);
   if (!Number.isInteger(profileId) || profileId <= 0) {
@@ -73,15 +70,8 @@ export async function PUT(
 
   // Cache hit: same URL + fresh + we have html + caller didn't force.
   const fresh =
-    existing?.fetchedAt &&
-    Date.now() - new Date(existing.fetchedAt).getTime() < STALE_AFTER_MS;
-  if (
-    !force &&
-    existing &&
-    existing.url === body.url &&
-    existing.oembedHtml &&
-    fresh
-  ) {
+    existing?.fetchedAt && Date.now() - new Date(existing.fetchedAt).getTime() < STALE_AFTER_MS;
+  if (!force && existing && existing.url === body.url && existing.oembedHtml && fresh) {
     return NextResponse.json({ ok: true, track: existing, cached: true });
   }
 
@@ -125,10 +115,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  _req: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const profileId = Number.parseInt(id, 10);
   if (!Number.isInteger(profileId) || profileId <= 0) {

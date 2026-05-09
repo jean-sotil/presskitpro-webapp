@@ -9,9 +9,7 @@ describe('buildInstagramBlockquote', () => {
       shortcode: 'CxYzAbc123',
     });
     expect(html).toContain('<blockquote class="instagram-media"');
-    expect(html).toContain(
-      'data-instgrm-permalink="https://www.instagram.com/p/CxYzAbc123/"',
-    );
+    expect(html).toContain('data-instgrm-permalink="https://www.instagram.com/p/CxYzAbc123/"');
     expect(html).toContain('data-instgrm-version="14"');
     expect(html).toContain('data-instgrm-captioned');
     expect(html).toContain('CxYzAbc123');

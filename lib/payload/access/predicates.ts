@@ -21,9 +21,7 @@ import { canCreateProfile } from '../../billing/profile-cap';
 
 function isAdmin(user: unknown): boolean {
   return Boolean(
-    user &&
-      typeof user === 'object' &&
-      (user as { collection?: string }).collection === 'admins',
+    user && typeof user === 'object' && (user as { collection?: string }).collection === 'admins',
   );
 }
 
