@@ -19,15 +19,18 @@ what was tested, what worked, what didn't, and what was filed.
 
 **Driver:** NVDA <version> on Windows 11 / VoiceOver on macOS Sonoma 14.x
 **Routes covered:** /, /pricing, /login, /signup, /onboarding/{1..5},
-                    /dashboard, /dashboard/analytics,
-                    /dashboard/profile/<id>, /<seeded-slug>
+/dashboard, /dashboard/analytics,
+/dashboard/profile/<id>, /<seeded-slug>
 
 ## Summary
+
 - <one-sentence verdict>
 
 ## Findings
+
 - [ ] <route> — <issue> — <severity> — <issue link or "fixed in commit X">
 
 ## Notes
+
 - <anything worth knowing for the next pass>
 ```

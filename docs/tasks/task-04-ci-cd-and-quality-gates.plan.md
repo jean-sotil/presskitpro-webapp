@@ -9,15 +9,15 @@ Establish the automated quality bar every future PR must clear: typecheck, lint,
 
 ## Decisions locked (Socratic Gate)
 
-| # | Axis | Decision | Rationale |
-|---|---|---|---|
-| 1 | CI provider | **GitHub Actions** | Free, native to the repo, no extra accounts. |
-| 2 | Hosting / preview | **Vercel** (Phase B — needs operator setup) | Canonical for Next.js 15 + Payload; matches PRD's PR-preview model. |
-| 3 | PR preview DB | **Shared hosted Supabase dev project** (already provisioned), `seed.sql` reset before each Playwright run | Simpler than ephemeral-per-PR. PRs aren't DB-isolated but seed makes tests deterministic. |
-| 4 | Axe runner | **`@axe-core/playwright`** — axe inside e2e tests | One tool, one report. |
-| 5 | Lighthouse runner | **`@lhci/cli` + budget file** + `treosh/lighthouse-ci-action` | Stable, de-facto. |
-| 6 | Playwright scope | **Smoke on PR, full on main** | PR feedback under 5 min. |
-| 7 | CI env values | **Hosted Supabase keys as GitHub Actions secrets** | The hosted dev project has no prod data; safe to consume in CI. |
+| #   | Axis              | Decision                                                                                                  | Rationale                                                                                 |
+| --- | ----------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| 1   | CI provider       | **GitHub Actions**                                                                                        | Free, native to the repo, no extra accounts.                                              |
+| 2   | Hosting / preview | **Vercel** (Phase B — needs operator setup)                                                               | Canonical for Next.js 15 + Payload; matches PRD's PR-preview model.                       |
+| 3   | PR preview DB     | **Shared hosted Supabase dev project** (already provisioned), `seed.sql` reset before each Playwright run | Simpler than ephemeral-per-PR. PRs aren't DB-isolated but seed makes tests deterministic. |
+| 4   | Axe runner        | **`@axe-core/playwright`** — axe inside e2e tests                                                         | One tool, one report.                                                                     |
+| 5   | Lighthouse runner | **`@lhci/cli` + budget file** + `treosh/lighthouse-ci-action`                                             | Stable, de-facto.                                                                         |
+| 6   | Playwright scope  | **Smoke on PR, full on main**                                                                             | PR feedback under 5 min.                                                                  |
+| 7   | CI env values     | **Hosted Supabase keys as GitHub Actions secrets**                                                        | The hosted dev project has no prod data; safe to consume in CI.                           |
 
 ## Cross-references
 
@@ -79,13 +79,13 @@ Establish the automated quality bar every future PR must clear: typecheck, lint,
 
 ## Acceptance evidence (Verification Matrix)
 
-| AC (from task) | Status this task | How to verify |
-|---|---|---|
-| TS error fails CI in < 3 min | ✅ Phase A | Open a PR introducing `const x: number = 'oops'`; CI red within 3 min on `gates` job. |
-| Lighthouse < 95 fails CI on seeded profile | 🚧 deferred to task-19 | Initial budget is perf ≥ 80 on `/`; tighten + extend to profile route in task-19. |
-| Playwright runs against ephemeral preview env with seed | 🟡 partial | Phase A: Playwright runs against locally-built `bun run start` with shared Supabase. Ephemeral-per-PR is Phase B (Vercel). |
-| Axe report uploaded as PR artifact, grouped by severity | ✅ Phase A | `actions/upload-artifact` step + axe wrapper groups violations. |
-| No secrets in repo; all from CI store | ✅ Phase A | `git grep -E '(SERVICE_ROLE_KEY=|PAYLOAD_SECRET=)'` returns nothing in tracked files; workflow consumes from `secrets.*`. |
+| AC (from task)                                          | Status this task       | How to verify                                                                                                              |
+| ------------------------------------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| TS error fails CI in < 3 min                            | ✅ Phase A             | Open a PR introducing `const x: number = 'oops'`; CI red within 3 min on `gates` job.                                      |
+| Lighthouse < 95 fails CI on seeded profile              | 🚧 deferred to task-19 | Initial budget is perf ≥ 80 on `/`; tighten + extend to profile route in task-19.                                          |
+| Playwright runs against ephemeral preview env with seed | 🟡 partial             | Phase A: Playwright runs against locally-built `bun run start` with shared Supabase. Ephemeral-per-PR is Phase B (Vercel). |
+| Axe report uploaded as PR artifact, grouped by severity | ✅ Phase A             | `actions/upload-artifact` step + axe wrapper groups violations.                                                            |
+| No secrets in repo; all from CI store                   | ✅ Phase A             | `git grep -E '(SERVICE_ROLE_KEY=                                                                                           | PAYLOAD_SECRET=)'`returns nothing in tracked files; workflow consumes from`secrets.\*`. |
 
 ## Test plan (TDD where applicable)
 
@@ -98,22 +98,22 @@ Establish the automated quality bar every future PR must clear: typecheck, lint,
 
 ## Out of scope (Phase B — explicit pre-conditions)
 
-| Phase B item | Pre-condition | Owner |
-|---|---|---|
-| Vercel preview deploys per PR | Operator creates Vercel project; adds `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` to GitHub secrets | Operator |
-| Production deploy on tag push to `main` | Same Vercel setup as above | Operator |
-| Branch protection (require all gates green) | GitHub repo Settings → Branches → add rule | Operator (UI-only) |
-| Lighthouse 95 on seeded profile | task-19 lands `app/[slug]/page.tsx` and seed creates a sample profile | task-19 |
+| Phase B item                                | Pre-condition                                                                                                | Owner              |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------ |
+| Vercel preview deploys per PR               | Operator creates Vercel project; adds `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` to GitHub secrets | Operator           |
+| Production deploy on tag push to `main`     | Same Vercel setup as above                                                                                   | Operator           |
+| Branch protection (require all gates green) | GitHub repo Settings → Branches → add rule                                                                   | Operator (UI-only) |
+| Lighthouse 95 on seeded profile             | task-19 lands `app/[slug]/page.tsx` and seed creates a sample profile                                        | task-19            |
 
 The runbook (`docs/runbooks/ci.md`) walks the operator through each.
 
 ## Risks
 
-- **R1 — Bun on GitHub Actions.** `oven-sh/setup-bun@v2` is stable but newer than `setup-node`. *Mitigation:* fall back to `bun install --frozen-lockfile` via npm script if the action ever flakes.
-- **R2 — Playwright browser download time.** First-run can be 60s+. *Mitigation:* cache `~/.cache/ms-playwright` with key `${{ runner.os }}-playwright-${{ hashFiles('bun.lock') }}`.
-- **R3 — Lighthouse run flakiness.** Different runs swing perf scores by ±5. *Mitigation:* `numberOfRuns: 3` and assert on median; loosen perf to ≥ 80 until task-19 lands.
-- **R4 — CI hits hosted Supabase under load.** Free tier rate-limits. *Mitigation:* Phase A only hits Supabase during `next build` (Payload introspection). e2e smoke doesn't traverse data paths.
-- **R5 — Operator forgets to add secrets.** First PR after merge will fail loudly with a clear "missing secret X" message. *Mitigation:* runbook + a `verify-secrets.yml` workflow as a one-time manual check.
+- **R1 — Bun on GitHub Actions.** `oven-sh/setup-bun@v2` is stable but newer than `setup-node`. _Mitigation:_ fall back to `bun install --frozen-lockfile` via npm script if the action ever flakes.
+- **R2 — Playwright browser download time.** First-run can be 60s+. _Mitigation:_ cache `~/.cache/ms-playwright` with key `${{ runner.os }}-playwright-${{ hashFiles('bun.lock') }}`.
+- **R3 — Lighthouse run flakiness.** Different runs swing perf scores by ±5. _Mitigation:_ `numberOfRuns: 3` and assert on median; loosen perf to ≥ 80 until task-19 lands.
+- **R4 — CI hits hosted Supabase under load.** Free tier rate-limits. _Mitigation:_ Phase A only hits Supabase during `next build` (Payload introspection). e2e smoke doesn't traverse data paths.
+- **R5 — Operator forgets to add secrets.** First PR after merge will fail loudly with a clear "missing secret X" message. _Mitigation:_ runbook + a `verify-secrets.yml` workflow as a one-time manual check.
 
 ## Done when
 

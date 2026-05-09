@@ -4,14 +4,14 @@ This document is the canonical reference for the data-plane and edge security gu
 
 ## Data plane
 
-| Surface | Rule | Where |
-|---|---|---|
-| `payload.*` schema | Not exposed to Supabase `anon`/`authenticated` roles. Service role only. | Supabase default — no `grant usage` ever issued. |
-| `public.slug_reservations`, `public.slug_redirects` | RLS enabled; **no anon policy**. All reads/writes go through the service-role server key. | `supabase/migrations/20260504000001_*` |
-| `public.analytics_events`, `public.analytics_daily_rollups`, `public.analytics_salts` | RLS enabled; **no anon policy**. Writes via `/api/track` (service role); reads via the dashboard route handler (also service role). | `supabase/migrations/20260506000001_*` |
-| Storage `avatars/*`, `gallery/*` | RLS policies: public read, authenticated write only on the user's own folder. | `supabase/migrations/20260429000001_*` |
-| `InstagramConnections.accessToken` | AES-256-GCM at rest. Encrypts in `beforeChange`, decrypts in `afterRead`. Never logged. Idempotent on re-save. | [`lib/payload/hooks/encrypt-token.ts`](../../lib/payload/hooks/encrypt-token.ts) — key in `INSTAGRAM_TOKEN_ENCRYPTION_KEY`. |
-| Payload collection access | Profile-scoped collections gate reads/writes via `ownsViaProfile` / `canCreateForOwnedProfile`. Admins (`req.user.collection === 'admins'`) bypass. | [`lib/payload/access/predicates.ts`](../../lib/payload/access/predicates.ts) |
+| Surface                                                                               | Rule                                                                                                                                                | Where                                                                                                                       |
+| ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `payload.*` schema                                                                    | Not exposed to Supabase `anon`/`authenticated` roles. Service role only.                                                                            | Supabase default — no `grant usage` ever issued.                                                                            |
+| `public.slug_reservations`, `public.slug_redirects`                                   | RLS enabled; **no anon policy**. All reads/writes go through the service-role server key.                                                           | `supabase/migrations/20260504000001_*`                                                                                      |
+| `public.analytics_events`, `public.analytics_daily_rollups`, `public.analytics_salts` | RLS enabled; **no anon policy**. Writes via `/api/track` (service role); reads via the dashboard route handler (also service role).                 | `supabase/migrations/20260506000001_*`                                                                                      |
+| Storage `avatars/*`, `gallery/*`                                                      | RLS policies: public read, authenticated write only on the user's own folder.                                                                       | `supabase/migrations/20260429000001_*`                                                                                      |
+| `InstagramConnections.accessToken`                                                    | AES-256-GCM at rest. Encrypts in `beforeChange`, decrypts in `afterRead`. Never logged. Idempotent on re-save.                                      | [`lib/payload/hooks/encrypt-token.ts`](../../lib/payload/hooks/encrypt-token.ts) — key in `INSTAGRAM_TOKEN_ENCRYPTION_KEY`. |
+| Payload collection access                                                             | Profile-scoped collections gate reads/writes via `ownsViaProfile` / `canCreateForOwnedProfile`. Admins (`req.user.collection === 'admins'`) bypass. | [`lib/payload/access/predicates.ts`](../../lib/payload/access/predicates.ts)                                                |
 
 ### Adding a new public table
 
@@ -34,11 +34,11 @@ If a 200 response with a non-empty array comes back, an anon policy slipped in �
 
 Sliding-window per-IP. KV-backed in production (`KV_REST_API_URL` + `KV_REST_API_TOKEN`); in-memory fallback in dev.
 
-| Surface | Budget | Code |
-|---|---|---|
-| `/login`, `/signup`, `/auth/callback` | 5 / minute / IP | [`middleware.ts`](../../middleware.ts) |
-| `GET /api/slug/check` | 30 / minute / IP | [`app/api/slug/check/route.ts`](../../app/api/slug/check/route.ts) |
-| `POST /api/profiles/:id/contact-submit` | 5 / hour / IP | [`app/api/profiles/[id]/contact-submit/route.ts`](../../app/api/profiles/[id]/contact-submit/route.ts) |
+| Surface                                 | Budget           | Code                                                                                                   |
+| --------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------ |
+| `/login`, `/signup`, `/auth/callback`   | 5 / minute / IP  | [`middleware.ts`](../../middleware.ts)                                                                 |
+| `GET /api/slug/check`                   | 30 / minute / IP | [`app/api/slug/check/route.ts`](../../app/api/slug/check/route.ts)                                     |
+| `POST /api/profiles/:id/contact-submit` | 5 / hour / IP    | [`app/api/profiles/[id]/contact-submit/route.ts`](../../app/api/profiles/[id]/contact-submit/route.ts) |
 
 429 responses always include a `Retry-After: <seconds>` header. The KV adapter fails open (allows traffic) on any backend error and `console.warn`s — denying real users on infra hiccups is worse than briefly losing the budget. Sentry (task-28) ingests the warning.
 
@@ -54,10 +54,11 @@ const limiter = createRateLimiterFromEnv({
 });
 
 const r = await limiter.check(clientIp(req));
-if (!r.ok) return new Response('rate-limited', {
-  status: 429,
-  headers: { 'Retry-After': String(r.retryAfterSec) },
-});
+if (!r.ok)
+  return new Response('rate-limited', {
+    status: 429,
+    headers: { 'Retry-After': String(r.retryAfterSec) },
+  });
 ```
 
 Use a unique `prefix` per logical surface — Vercel KV is shared, so collisions silently merge budgets.
@@ -86,8 +87,8 @@ Next.js itself emits inline RSC payload scripts; setting `x-nonce` in the reques
 
 ## Encryption keys
 
-| Key | Purpose | Where set |
-|---|---|---|
+| Key                              | Purpose                                                                                                                            | Where set                                                                                                                                                 |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `INSTAGRAM_TOKEN_ENCRYPTION_KEY` | AES-256-GCM key for IG access tokens. Generated via `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`. | Vercel project env, all deployments. Rotation requires a backfill: read every encrypted row with the old key, re-encrypt with the new. Not yet automated. |
 
 ## Out of scope (planned follow-ups)

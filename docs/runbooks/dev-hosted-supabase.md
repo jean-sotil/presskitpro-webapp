@@ -17,12 +17,12 @@ is archived at [spike-task-02.md](./spike-task-02.md).
 
 From the dashboard:
 
-| Where | What | Goes into `.env` as |
-|---|---|---|
-| Settings → API → Project URL | `https://<ref>.supabase.co` | `NEXT_PUBLIC_SUPABASE_URL` |
-| Settings → API → `anon` `public` | long JWT | `NEXT_PUBLIC_SUPABASE_ANON_KEY` |
-| Settings → API → `service_role` | long JWT (**server-only — never ship to the browser**) | `SUPABASE_SERVICE_ROLE_KEY` |
-| Settings → Database → Connection string → "Direct connection" | `postgresql://postgres.<ref>:<pwd>@…pooler.supabase.com:5432/postgres` | `DATABASE_URI` |
+| Where                                                         | What                                                                   | Goes into `.env` as             |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------- |
+| Settings → API → Project URL                                  | `https://<ref>.supabase.co`                                            | `NEXT_PUBLIC_SUPABASE_URL`      |
+| Settings → API → `anon` `public`                              | long JWT                                                               | `NEXT_PUBLIC_SUPABASE_ANON_KEY` |
+| Settings → API → `service_role`                               | long JWT (**server-only — never ship to the browser**)                 | `SUPABASE_SERVICE_ROLE_KEY`     |
+| Settings → Database → Connection string → "Direct connection" | `postgresql://postgres.<ref>:<pwd>@…pooler.supabase.com:5432/postgres` | `DATABASE_URI`                  |
 
 > The direct (5432) URI is what you want for DDL — Payload migrations and
 > ad-hoc `psql` admin commands. If you later want a separate runtime URI for
@@ -141,14 +141,14 @@ Supabase's free tier shared SMTP is throttled to ~4 emails/hour per project — 
 2. **API Keys → Create API Key** → name `presskitpro-dev` → permissions **Full access** → **Create**. Copy the `re_…` key immediately (shown once).
 3. Supabase dashboard → **Project Settings → Authentication → SMTP Settings** → toggle **Enable Custom SMTP** ON. Fill:
 
-   | Field | Value |
-   |---|---|
-   | Host | `smtp.resend.com` |
-   | Port | `465` |
-   | Username | `resend` |
-   | Password | the `re_…` key |
+   | Field        | Value                   |
+   | ------------ | ----------------------- |
+   | Host         | `smtp.resend.com`       |
+   | Port         | `465`                   |
+   | Username     | `resend`                |
+   | Password     | the `re_…` key          |
    | Sender email | `onboarding@resend.dev` |
-   | Sender name | `PressKit Pro` |
+   | Sender name  | `PressKit Pro`          |
 
    Save. Supabase verifies the connection — green checkmark expected.
 

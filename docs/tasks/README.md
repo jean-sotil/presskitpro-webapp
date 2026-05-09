@@ -25,6 +25,7 @@ Every task uses the same template:
 ## Phase breakdown
 
 ### Phase 0 — Foundation (week 1)
+
 Setup that everything else depends on. Block-and-tackle infra.
 
 - [task-01-project-setup.md](task-01-project-setup.md) — Next.js + Tailwind + tooling scaffold
@@ -33,6 +34,7 @@ Setup that everything else depends on. Block-and-tackle infra.
 - [task-04-ci-cd-and-quality-gates.md](task-04-ci-cd-and-quality-gates.md) — CI: typecheck, lint, axe, Playwright, Lighthouse
 
 ### Phase 1 — MVP (weeks 2–8)
+
 Single-locale, oEmbed integrations, no card at signup, external press kit links.
 
 - [task-05-auth-supabase.md](task-05-auth-supabase.md) — Email magic link + Google OAuth
@@ -61,6 +63,7 @@ Single-locale, oEmbed integrations, no card at signup, external press kit links.
 - [task-28-observability-sentry-posthog.md](task-28-observability-sentry-posthog.md) — Sentry + PostHog wiring
 
 ### Phase 2 — V1 (weeks 9–14)
+
 i18n, link-rot defenses, billing variants, compliance.
 
 - [task-29-i18n-next-intl.md](task-29-i18n-next-intl.md) — PT/EN with cookie-based locale, hreflang, fallback matrix
@@ -70,6 +73,7 @@ i18n, link-rot defenses, billing variants, compliance.
 - [task-33-lgpd-data-export-delete.md](task-33-lgpd-data-export-delete.md) — Self-serve export + delete
 
 ### Phase 3 — Backlog / V2
+
 Tracked here only as stubs; promoted to full tasks when prioritized.
 
 - [task-34-v2-backlog.md](task-34-v2-backlog.md) — Custom domains, IG Graph API, /explore, ES/FR, custom CSS, public API

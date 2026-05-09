@@ -9,14 +9,14 @@ Task-03 is the visual foundation every downstream feature consumes. PRD §12 spe
 
 ## Decisions locked (Socratic Gate)
 
-| # | Axis | Decision | Rationale |
-|---|---|---|---|
-| 1 | Component preview surface | **`app/dev/preview/page.tsx` gated by `NODE_ENV !== 'production'`** | Lightweight, no Storybook tooling burden. Fits Next.js conventions. |
-| 2 | Color space | **OKLCH** in CSS vars | Perceptual lightness; clean derivation of `--text` from `--bg`. ~95% browser support. |
-| 3 | Tailwind | **Stay on v3.4** | Already installed; v4 rewrite isn't free. Use CSS vars via `theme.extend` mapping. |
-| 4 | `<Grain />` | **PNG noise tile, `position: fixed`, `mix-blend-mode: overlay`** | One small asset, GPU-cheap, predictable. SVG `<feTurbulence>` defers to a future polish pass. |
-| 5 | Contrast lint | **`scripts/contrast-check.ts` using `culori`** for OKLCH→Lab→ΔL contrast math. Wired as `pnpm contrast:check`. | Catches WCAG regressions when presets change. CI-ready. |
-| 6 | Primitives source | **Build from scratch** (Button, Card, Section, Anchor, Tag, IconButton) | shadcn defaults fight `--radius: 0` and the editorial vibe. Six tiny components. |
+| #   | Axis                      | Decision                                                                                                       | Rationale                                                                                     |
+| --- | ------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| 1   | Component preview surface | **`app/dev/preview/page.tsx` gated by `NODE_ENV !== 'production'`**                                            | Lightweight, no Storybook tooling burden. Fits Next.js conventions.                           |
+| 2   | Color space               | **OKLCH** in CSS vars                                                                                          | Perceptual lightness; clean derivation of `--text` from `--bg`. ~95% browser support.         |
+| 3   | Tailwind                  | **Stay on v3.4**                                                                                               | Already installed; v4 rewrite isn't free. Use CSS vars via `theme.extend` mapping.            |
+| 4   | `<Grain />`               | **PNG noise tile, `position: fixed`, `mix-blend-mode: overlay`**                                               | One small asset, GPU-cheap, predictable. SVG `<feTurbulence>` defers to a future polish pass. |
+| 5   | Contrast lint             | **`scripts/contrast-check.ts` using `culori`** for OKLCH→Lab→ΔL contrast math. Wired as `pnpm contrast:check`. | Catches WCAG regressions when presets change. CI-ready.                                       |
+| 6   | Primitives source         | **Build from scratch** (Button, Card, Section, Anchor, Tag, IconButton)                                        | shadcn defaults fight `--radius: 0` and the editorial vibe. Six tiny components.              |
 
 ## Cross-references
 
@@ -29,15 +29,18 @@ Task-03 is the visual foundation every downstream feature consumes. PRD §12 spe
 ## File inventory (deliverables)
 
 ### Tokens
+
 - `app/globals.css` (modify) — `:root` block with all §12.1 vars in OKLCH; `@media (prefers-reduced-motion: reduce)` block.
 - `tailwind.config.ts` (modify) — extend `colors`, `fontFamily`, `fontSize`, `spacing`, `borderRadius`. Reference CSS vars via `colors: { bg: 'oklch(var(--bg) / <alpha-value>)' }` pattern.
 - `lib/design/tokens.ts` (new) — TS export of token names + the contrast preset matrix (6 bg × 12 accent). Single source of truth for `contrast-check.ts`.
 
 ### Typography
+
 - `app/fonts.ts` (new) — `next/font/google` loaders for the 8 pairs, each `{ subsets: ['latin', 'latin-ext'], display: 'swap' }`. Export `themeFonts` map keyed by pair name.
 - `app/layout.tsx` (modify) — apply default pair (Anton + Manrope + Fraunces) via `<html className={...}>`. Other pairs are loaded but only emit CSS vars when a profile selects them (task-18 wires the switch).
 
 ### Primitives (`components/ui/`)
+
 - `Button.tsx` — variants: `primary | ghost | link`. Sizes: `sm | md | lg`. Uses `--accent`. Sharp edges, `:focus-visible` ring.
 - `Card.tsx` — `--surface` background, `--border` hairline. No shadow by default (editorial flat).
 - `Section.tsx` — semantic `<section>` with vertical rhythm; consumes `<SectionMarker />`.
@@ -46,25 +49,31 @@ Task-03 is the visual foundation every downstream feature consumes. PRD §12 spe
 - `IconButton.tsx` — square 44px touch target (Fitts's Law); naked icons banned per skill.
 
 ### Atmosphere (`components/atmosphere/`)
+
 - `Grain.tsx` — fixed-position div with PNG noise tile + `--grain-opacity`. Disabled when `prefers-reduced-motion`.
 - `SectionMarker.tsx` — `<span aria-hidden>01</span> — <span>SOBRE</span>`. Uses `--font-display`. Decorative; the actual heading is its sibling.
 - `RevealStagger.tsx` (client) — wraps children, applies `view()` scroll-driven CSS animation with 40ms stagger via `--index`. No JS spring lib for this; native CSS.
 
 ### Static asset
+
 - `public/grain.png` (new) — 200×200 noise tile. Generated once locally and committed.
 
 ### Contrast lint
+
 - `scripts/contrast-check.ts` (new) — reads `lib/design/tokens.ts`, computes WCAG ratio for every preset combo, exits non-zero on AA fail.
 - `package.json` (modify) — add `"contrast:check": "tsx scripts/contrast-check.ts"`.
 
 ### Preview surface
+
 - `app/dev/preview/page.tsx` (new) — server component; `if (process.env.NODE_ENV === 'production') notFound()`. Renders every primitive in every variant + every theme pair.
 - `app/dev/preview/theme-switcher.tsx` (client) — toggles a `data-theme="<pair>"` attribute on `<html>` for visual sanity-check.
 
 ### Documentation
+
 - `docs/design-system.md` (new, DoD requirement) — token table, font-pair list, primitive API, contrast policy, reduced-motion behavior, how to add a preset.
 
 ### Lint plumbing
+
 - `package.json` deps: `culori`, `eslint-plugin-tailwindcss`, `tsx` (already a transitive dep but pin).
 - `.eslintrc.json` (modify) — extend `plugin:tailwindcss/recommended`.
 
@@ -80,14 +89,14 @@ Task-03 is the visual foundation every downstream feature consumes. PRD §12 spe
 
 ## Acceptance evidence (Verification Matrix)
 
-| AC (from task) | Command / check | Expected |
-|---|---|---|
-| Switching `--bg`/`--accent` recolors without re-render | Manual: `/dev/preview`, edit CSS var in DevTools | All surfaces update; no React re-render visible. |
-| All 8 font pairs render PT + EN copy | Manual: `/dev/preview`, switch through each pair | "São Paulo, ção, açaí, mãe" + "The quick brown fox" both render correctly. |
-| ≤ 50KB per pair after subsetting | `pnpm build` then `du -sh .next/static/media/*.woff2` | Each pair total ≤ 50KB. |
-| `prefers-reduced-motion` disables stagger | DevTools "Emulate prefers-reduced-motion: reduce" + `/dev/preview` | Reveal animation becomes instant; grain hidden. |
-| `pnpm contrast:check` passes WCAG AA | `pnpm contrast:check` | Exit 0, prints "✓ 72/72 preset combos pass AA". |
-| Standard quality gates | `pnpm typecheck && pnpm lint && pnpm build` | All green. |
+| AC (from task)                                         | Command / check                                                    | Expected                                                                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| Switching `--bg`/`--accent` recolors without re-render | Manual: `/dev/preview`, edit CSS var in DevTools                   | All surfaces update; no React re-render visible.                           |
+| All 8 font pairs render PT + EN copy                   | Manual: `/dev/preview`, switch through each pair                   | "São Paulo, ção, açaí, mãe" + "The quick brown fox" both render correctly. |
+| ≤ 50KB per pair after subsetting                       | `pnpm build` then `du -sh .next/static/media/*.woff2`              | Each pair total ≤ 50KB.                                                    |
+| `prefers-reduced-motion` disables stagger              | DevTools "Emulate prefers-reduced-motion: reduce" + `/dev/preview` | Reveal animation becomes instant; grain hidden.                            |
+| `pnpm contrast:check` passes WCAG AA                   | `pnpm contrast:check`                                              | Exit 0, prints "✓ 72/72 preset combos pass AA".                            |
+| Standard quality gates                                 | `pnpm typecheck && pnpm lint && pnpm build`                        | All green.                                                                 |
 
 ## Test plan (TDD)
 
@@ -106,10 +115,10 @@ Task-03 is the visual foundation every downstream feature consumes. PRD §12 spe
 
 ## Risks
 
-- **R1 — Font pair byte budget.** Fraunces and Big Shoulders Display ship lots of glyph variants; subsetting may not get under 50KB if we include both italic + variable axes. *Mitigation:* if any pair busts budget, subset to just `latin + latin-ext` regular + 700 weights; document the trade-off.
-- **R2 — OKLCH browser support.** Safari < 15.4 lacks OKLCH. *Mitigation:* PostCSS `@csstools/postcss-oklab-function` polyfill emits sRGB fallback at build time.
-- **R3 — `eslint-plugin-tailwindcss` and Tailwind 3.4.** Plugin sometimes lags Tailwind point releases. *Mitigation:* pin to a known-good version; if it errors on `theme.extend`, drop it and rely on `prettier-plugin-tailwindcss` for ordering only.
-- **R4 — PT-BR diacritic coverage.** Not every Google Font ships full Latin-Extended at every weight. *Mitigation:* the manual font validation step (sequence #2) catches gaps; swap any failing pair before locking the list.
+- **R1 — Font pair byte budget.** Fraunces and Big Shoulders Display ship lots of glyph variants; subsetting may not get under 50KB if we include both italic + variable axes. _Mitigation:_ if any pair busts budget, subset to just `latin + latin-ext` regular + 700 weights; document the trade-off.
+- **R2 — OKLCH browser support.** Safari < 15.4 lacks OKLCH. _Mitigation:_ PostCSS `@csstools/postcss-oklab-function` polyfill emits sRGB fallback at build time.
+- **R3 — `eslint-plugin-tailwindcss` and Tailwind 3.4.** Plugin sometimes lags Tailwind point releases. _Mitigation:_ pin to a known-good version; if it errors on `theme.extend`, drop it and rely on `prettier-plugin-tailwindcss` for ordering only.
+- **R4 — PT-BR diacritic coverage.** Not every Google Font ships full Latin-Extended at every weight. _Mitigation:_ the manual font validation step (sequence #2) catches gaps; swap any failing pair before locking the list.
 
 ## Done when
 

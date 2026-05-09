@@ -206,13 +206,13 @@
         "verticalDisplacement": "3px",
         "clipPathSlices": 6,
         "keyframes": [
-          { "progress": "0%",   "transforms": "none" },
-          { "progress": "10%",  "transforms": "clip-top skewX(-1deg) translateX(8px)" },
-          { "progress": "20%",  "transforms": "clip-mid translateX(-12px)" },
-          { "progress": "30%",  "transforms": "clip-bottom skewX(2deg) translateX(4px)" },
-          { "progress": "40%",  "transforms": "none" },
-          { "progress": "55%",  "transforms": "clip-top-third translateX(-6px) skewX(-3deg)" },
-          { "progress": "70%",  "transforms": "clip-bottom-half translateX(10px)" },
+          { "progress": "0%", "transforms": "none" },
+          { "progress": "10%", "transforms": "clip-top skewX(-1deg) translateX(8px)" },
+          { "progress": "20%", "transforms": "clip-mid translateX(-12px)" },
+          { "progress": "30%", "transforms": "clip-bottom skewX(2deg) translateX(4px)" },
+          { "progress": "40%", "transforms": "none" },
+          { "progress": "55%", "transforms": "clip-top-third translateX(-6px) skewX(-3deg)" },
+          { "progress": "70%", "transforms": "clip-bottom-half translateX(10px)" },
           { "progress": "100%", "transforms": "none" }
         ]
       },
@@ -276,7 +276,7 @@
         "rootMargin": "0px 0px -48px 0px",
         "animation": {
           "from": { "opacity": 0, "transform": "translateY(32px)" },
-          "to":   { "opacity": 1, "transform": "translateY(0)" },
+          "to": { "opacity": 1, "transform": "translateY(0)" },
           "duration": "560ms",
           "easing": "cubic-bezier(0.16, 1, 0.3, 1)"
         },
@@ -287,11 +287,11 @@
         "enabled": true,
         "type": "staggered-fade-up",
         "sequence": [
-          { "target": "heroHandle",   "delay": "0ms" },
-          { "target": "heroTitle",    "delay": "80ms" },
-          { "target": "heroName",     "delay": "200ms" },
-          { "target": "heroCTA",      "delay": "320ms" },
-          { "target": "heroSocials",  "delay": "400ms" }
+          { "target": "heroHandle", "delay": "0ms" },
+          { "target": "heroTitle", "delay": "80ms" },
+          { "target": "heroName", "delay": "200ms" },
+          { "target": "heroCTA", "delay": "320ms" },
+          { "target": "heroSocials", "delay": "400ms" }
         ],
         "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
         "duration": "600ms",
@@ -686,38 +686,38 @@
     },
 
     "cssVariables": {
-      "--pk-bg":             "#000000",
-      "--pk-surface":        "#090909",
-      "--pk-surface2":       "#111111",
-      "--pk-border":         "#1f1f1f",
-      "--pk-text":           "#ffffff",
-      "--pk-text-muted":     "#888888",
-      "--pk-text-subtle":    "#444444",
-      "--pk-accent":         "#1133FF",
-      "--pk-accent-light":   "#3355FF",
-      "--pk-accent-muted":   "rgba(17,51,255,0.12)",
-      "--pk-accent-border":  "rgba(17,51,255,0.4)",
-      "--pk-accent-contrast":"#ffffff",
-      "--pk-radius":         "0px",
-      "--pk-font-display":   "'Impact','Arial Black',sans-serif",
-      "--pk-font-body":      "'Helvetica Neue','Arial',sans-serif",
-      "--pk-font-mono":      "'Courier New',monospace"
+      "--pk-bg": "#000000",
+      "--pk-surface": "#090909",
+      "--pk-surface2": "#111111",
+      "--pk-border": "#1f1f1f",
+      "--pk-text": "#ffffff",
+      "--pk-text-muted": "#888888",
+      "--pk-text-subtle": "#444444",
+      "--pk-accent": "#1133FF",
+      "--pk-accent-light": "#3355FF",
+      "--pk-accent-muted": "rgba(17,51,255,0.12)",
+      "--pk-accent-border": "rgba(17,51,255,0.4)",
+      "--pk-accent-contrast": "#ffffff",
+      "--pk-radius": "0px",
+      "--pk-font-display": "'Impact','Arial Black',sans-serif",
+      "--pk-font-body": "'Helvetica Neue','Arial',sans-serif",
+      "--pk-font-mono": "'Courier New',monospace"
     },
 
     "tailwindExtensions": {
       "colors": {
-        "pk-bg":      "#000000",
+        "pk-bg": "#000000",
         "pk-surface": "#090909",
-        "pk-border":  "#1f1f1f",
-        "pk-text":    "#ffffff",
-        "pk-muted":   "#888888",
-        "pk-subtle":  "#444444",
-        "pk-accent":  "#1133FF"
+        "pk-border": "#1f1f1f",
+        "pk-text": "#ffffff",
+        "pk-muted": "#888888",
+        "pk-subtle": "#444444",
+        "pk-accent": "#1133FF"
       },
       "fontFamily": {
         "display": ["Impact", "Arial Black", "sans-serif"],
-        "body":    ["Helvetica Neue", "Arial", "sans-serif"],
-        "mono":    ["Courier New", "monospace"]
+        "body": ["Helvetica Neue", "Arial", "sans-serif"],
+        "mono": ["Courier New", "monospace"]
       },
       "borderRadius": {
         "pk": "0px"
@@ -726,26 +726,37 @@
 
     "payloadThemeRecord": {
       "colorPresetId": "hard-techno-underground",
-      "bg":            "#000000",
-      "surface":       "#090909",
-      "accent":        "#1133FF",
-      "text":          "#ffffff",
-      "fontPairId":    "impact-helvetica-system",
-      "heroStyle":     "full-bleed-portrait",
+      "bg": "#000000",
+      "surface": "#090909",
+      "accent": "#1133FF",
+      "text": "#ffffff",
+      "fontPairId": "impact-helvetica-system",
+      "heroStyle": "full-bleed-portrait",
       "galleryLayout": "mosaic",
-      "sectionOrder":  ["hero", "marquee", "biography", "services", "socialMedia", "featuredTrack", "instagram", "gallery", "pressKit", "contact"],
+      "sectionOrder": [
+        "hero",
+        "marquee",
+        "biography",
+        "services",
+        "socialMedia",
+        "featuredTrack",
+        "instagram",
+        "gallery",
+        "pressKit",
+        "contact"
+      ],
       "effects": {
-        "filmGrain":    true,
-        "glitch":       true,
-        "marquee":      true,
-        "inkSplatter":  true,
+        "filmGrain": true,
+        "glitch": true,
+        "marquee": true,
+        "inkSplatter": true,
         "scrollReveal": true
       },
-      "radius":        "sharp",
+      "radius": "sharp",
       "contrastValidated": true,
       "contrastRatios": {
-        "textOnBg":     "21:1",
-        "accentOnBg":   "4.7:1"
+        "textOnBg": "21:1",
+        "accentOnBg": "4.7:1"
       }
     }
   }

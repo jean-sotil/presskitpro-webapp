@@ -9,20 +9,20 @@ Task-06 is the bridge between magic-link signup (task-05) and the editor (task-0
 
 ## Decisions locked (Socratic Gate)
 
-| # | Axis | Decision | Rationale |
-|---|---|---|---|
-| 1 | Where wizard state lives | New JSON column `onboardingProgress` on `Users` (`{ step, slug?, taglinePtBR?, services?, socialPlatform?, socialUrl?, portraitId?, logoId?, completedAt? }`). | Cheap; tied to user lifecycle; clears on completion. No new collection. |
-| 2 | When the Profile row is created | Atomic on final-step submit. Prior steps mutate only `Users.onboardingProgress`. | No orphan half-profiles; rollback on failure is automatic; matches the "you don't exist publicly until you publish" mental model. |
-| 3 | Slug holding | Soft-hold on step-1 submit (`/api/slug/reserve`, 15 min). Wizard refreshes every 5 min via `visibilitychange` + interval. Released on cancel; dropped silently on success (the live `Profiles.slug` row replaces it). | Reuses task-07 plumbing. If hold expires and user resumes, re-reserve transparently. |
-| 4 | Portrait + logo storage | Add `portrait` and `logo` Media relationships to `Profiles` (schema migration). Upload via existing `/api/storage/sign-upload` → `/api/media` flow. Skippable per PRD §6.2 step 2. | Public profile + hero (task-10) need these. Adding now avoids a second migration in task-10. |
-| 5 | Services step shape | 8 curated chips (DJ Set, Live Set, Production, Mixing, Mastering, Sound Design, Workshops, Other) + free-text "+ Add custom". Each selection becomes a `{ title, description: '' }` row in `ProfileContent.services` (PT-BR). Editor (task-11) refines the description. | Multi-select keeps wizard fast; free-form defers to the editor. |
-| 6 | Routing | `/onboarding` (root → server-redirect to current step) + `/onboarding/[step]` (1..5). Each step is a server component for the form chrome + a client island for inputs. | Bookmarkable, refresh-safe, server-rendered scaffold. Avoids a single mega-client-component. |
-| 7 | Mutations | Server actions for `advanceStep`, `saveDraft`, `completeWizard`, `cancelWizard`. Slug check stays a REST `GET` (already exists). | Server actions get the auth context for free; REST is needed for the real-time debounced check. |
-| 8 | Completion redirect | After atomic profile creation: `redirect('/dashboard/profile/' + profile.id)`. | Matches PRD §6.2 step 6. |
-| 9 | Auth gate | Middleware-level: any unauthenticated request to `/onboarding/*` redirects to `/login?next=/onboarding/<step>`. Reuses task-05's middleware. | One source of truth for auth gating. |
-| 10 | Resume rule on `/dashboard` | If the authenticated user has no completed onboarding (`onboardingProgress.completedAt === null`) AND no `Profiles` row owned, redirect to `/onboarding`. Otherwise → existing dashboard stub. | Removes a class of half-finished states; once they finish, dashboard logic stays clean. |
-| 11 | i18n | Hard-code PT-BR for now; task-29 retrofits via next-intl. PRD §10 "Phase 1: PT only" governs. | Don't pre-pay i18n cost; the wizard copy lives in 5 step files, easy to retrofit. |
-| 12 | Analytics | Stub `track(event, props)` helper logs to console; task-24 swaps for PostHog. Wizard fires `onboarding_step_completed` per step. | Zero-cost call-site stubbing; no `// TODO`s. |
+| #   | Axis                            | Decision                                                                                                                                                                                                                                                                | Rationale                                                                                                                         |
+| --- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Where wizard state lives        | New JSON column `onboardingProgress` on `Users` (`{ step, slug?, taglinePtBR?, services?, socialPlatform?, socialUrl?, portraitId?, logoId?, completedAt? }`).                                                                                                          | Cheap; tied to user lifecycle; clears on completion. No new collection.                                                           |
+| 2   | When the Profile row is created | Atomic on final-step submit. Prior steps mutate only `Users.onboardingProgress`.                                                                                                                                                                                        | No orphan half-profiles; rollback on failure is automatic; matches the "you don't exist publicly until you publish" mental model. |
+| 3   | Slug holding                    | Soft-hold on step-1 submit (`/api/slug/reserve`, 15 min). Wizard refreshes every 5 min via `visibilitychange` + interval. Released on cancel; dropped silently on success (the live `Profiles.slug` row replaces it).                                                   | Reuses task-07 plumbing. If hold expires and user resumes, re-reserve transparently.                                              |
+| 4   | Portrait + logo storage         | Add `portrait` and `logo` Media relationships to `Profiles` (schema migration). Upload via existing `/api/storage/sign-upload` → `/api/media` flow. Skippable per PRD §6.2 step 2.                                                                                      | Public profile + hero (task-10) need these. Adding now avoids a second migration in task-10.                                      |
+| 5   | Services step shape             | 8 curated chips (DJ Set, Live Set, Production, Mixing, Mastering, Sound Design, Workshops, Other) + free-text "+ Add custom". Each selection becomes a `{ title, description: '' }` row in `ProfileContent.services` (PT-BR). Editor (task-11) refines the description. | Multi-select keeps wizard fast; free-form defers to the editor.                                                                   |
+| 6   | Routing                         | `/onboarding` (root → server-redirect to current step) + `/onboarding/[step]` (1..5). Each step is a server component for the form chrome + a client island for inputs.                                                                                                 | Bookmarkable, refresh-safe, server-rendered scaffold. Avoids a single mega-client-component.                                      |
+| 7   | Mutations                       | Server actions for `advanceStep`, `saveDraft`, `completeWizard`, `cancelWizard`. Slug check stays a REST `GET` (already exists).                                                                                                                                        | Server actions get the auth context for free; REST is needed for the real-time debounced check.                                   |
+| 8   | Completion redirect             | After atomic profile creation: `redirect('/dashboard/profile/' + profile.id)`.                                                                                                                                                                                          | Matches PRD §6.2 step 6.                                                                                                          |
+| 9   | Auth gate                       | Middleware-level: any unauthenticated request to `/onboarding/*` redirects to `/login?next=/onboarding/<step>`. Reuses task-05's middleware.                                                                                                                            | One source of truth for auth gating.                                                                                              |
+| 10  | Resume rule on `/dashboard`     | If the authenticated user has no completed onboarding (`onboardingProgress.completedAt === null`) AND no `Profiles` row owned, redirect to `/onboarding`. Otherwise → existing dashboard stub.                                                                          | Removes a class of half-finished states; once they finish, dashboard logic stays clean.                                           |
+| 11  | i18n                            | Hard-code PT-BR for now; task-29 retrofits via next-intl. PRD §10 "Phase 1: PT only" governs.                                                                                                                                                                           | Don't pre-pay i18n cost; the wizard copy lives in 5 step files, easy to retrofit.                                                 |
+| 12  | Analytics                       | Stub `track(event, props)` helper logs to console; task-24 swaps for PostHog. Wizard fires `onboarding_step_completed` per step.                                                                                                                                        | Zero-cost call-site stubbing; no `// TODO`s.                                                                                      |
 
 ## Cross-references
 
@@ -33,22 +33,26 @@ Task-06 is the bridge between magic-link signup (task-05) and the editor (task-0
 ## File inventory (deliverables)
 
 ### Schema
+
 - `payload/collections/Profiles.ts` — extend with `portrait` (relationship → media, optional) + `logo` (relationship → media, optional).
 - `payload/collections/Users.ts` — extend with `onboardingProgress` (json field; readOnly in admin).
 - `migrations/<ts>_task_06_wizard.ts` — generated by `pnpm payload migrate:create`.
 - `payload-types.ts` — regenerated.
 
 ### Server actions
+
 - `app/onboarding/actions.ts` — `advanceStep(step, data)`, `cancelWizard()`, `completeWizard()`. All authenticated; rely on `supabaseServer().auth.getUser()` + Payload Local API.
 - `app/onboarding/actions.test.ts` — TDD: each action's happy path + auth-required + invalid-step + slug-reservation-expired.
 
 ### Wizard scaffolding
+
 - `app/onboarding/layout.tsx` — auth gate (server-side). Renders progress bar + side rail listing the 5 steps.
 - `app/onboarding/page.tsx` — server-redirects to `/onboarding/<currentStep>` (1 if no progress).
 - `app/onboarding/[step]/page.tsx` — server component, switches on `step` to render the right step island.
 - `app/onboarding/[step]/not-found.tsx` — for invalid step indices (only 1..5).
 
 ### Step islands (client components)
+
 - `app/onboarding/steps/SlugStep.tsx` — debounced `/api/slug/check` call via TanStack Query; on submit calls `reserveSlug` then `advanceStep`.
 - `app/onboarding/steps/MediaStep.tsx` — drag-drop or click-upload for portrait + logo; reuses `/api/storage/sign-upload` + `/api/media`. "Skip for now" link.
 - `app/onboarding/steps/TaglineStep.tsx` — single-line input, 140-char counter (matches ProfileContent.tagline.maxLength).
@@ -57,24 +61,29 @@ Task-06 is the bridge between magic-link signup (task-05) and the editor (task-0
 - Each step has a colocated `*.test.tsx` (Testing Library): renders with seeded progress, asserts validation messages and submit-disabled state.
 
 ### Shared UI atoms
+
 - `components/onboarding/StepRail.tsx` — accessible nav rail; current step highlighted; `<a>` for completed prior steps (back-edit allowed), disabled for future steps.
 - `components/onboarding/StepShell.tsx` — common layout (heading, helper copy slot, primary/secondary buttons).
 - Both have minimal axe-clean snapshot tests.
 
 ### Helpers (TDD)
+
 - `lib/onboarding/state.ts` — pure functions: `nextStep(progress)`, `isComplete(progress)`, `validateProgress(progress)`. Test-driven; no DB.
 - `lib/onboarding/state.test.ts`.
 - `lib/analytics/track.ts` + `track.test.ts` — `track(event, props)` console-stub; export interface unchanged for task-24 swap.
 
 ### Routing wiring
+
 - `app/dashboard/page.tsx` — add the "redirect to /onboarding if not complete" guard.
 - `middleware.ts` — confirm `/onboarding/*` is gated (probably already covered by the existing `requiresAuth` matcher; add explicit test).
 
 ### E2E
+
 - `tests/e2e/onboarding.spec.ts` — happy path through all 5 steps using the dev-magic-link bypass; asserts redirect to `/dashboard/profile/<id>`. Smoke-tagged.
 - One @full case for "close browser mid-wizard then resume" (uses the same magic-link to log back in; asserts state survives).
 
 ### Docs
+
 - `docs/runbooks/dev-onboarding.md` — single-page walkthrough for resetting onboarding state on a dev account (`update payload.users set onboarding_progress = '{}' where id = X;`).
 
 ## Implementation sequence
@@ -91,13 +100,13 @@ Task-06 is the bridge between magic-link signup (task-05) and the editor (task-0
 
 ## Acceptance evidence (Verification Matrix)
 
-| AC (from task) | How verified |
-|---|---|
-| Median wizard completion < 3 min | 🚧 deferred — needs internal usability test (n ≥ 5). Unblocked once the wizard ships. Documented in plan + task status. |
-| Slug check < 200ms p95 | Already verified by task-07. Wizard reuses the route. Re-confirm in E2E with timing assertion (loose: < 500ms in CI). |
+| AC (from task)                             | How verified                                                                                                                   |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| Median wizard completion < 3 min           | 🚧 deferred — needs internal usability test (n ≥ 5). Unblocked once the wizard ships. Documented in plan + task status.        |
+| Slug check < 200ms p95                     | Already verified by task-07. Wizard reuses the route. Re-confirm in E2E with timing assertion (loose: < 500ms in CI).          |
 | Skipping uploads doesn't block progression | Step 2 has explicit "Skip for now" link → `advanceStep(2, { portraitId: null, logoId: null })`. E2E happy path doesn't upload. |
-| Closing the browser preserves state | E2E: complete steps 1–3, log out, log back in, assert `/onboarding` redirects to step 4. |
-| Keyboard-only completion | E2E: tab-only navigation through all 5 steps. axe-clean checks per step. |
+| Closing the browser preserves state        | E2E: complete steps 1–3, log out, log back in, assert `/onboarding` redirects to step 4.                                       |
+| Keyboard-only completion                   | E2E: tab-only navigation through all 5 steps. axe-clean checks per step.                                                       |
 
 ## Test plan (TDD)
 
@@ -115,11 +124,11 @@ Task-06 is the bridge between magic-link signup (task-05) and the editor (task-0
 
 ## Risks
 
-- **R1 — Slug hold expiry mid-wizard.** A user who pauses for > 15 min loses their hold. *Mitigation:* heartbeat refresh every 5 min while tab visible; on resume after expiry, attempt re-reserve and surface a friendly error if the slug was claimed by someone else. (Rare in practice — the wizard is fast.)
-- **R2 — Concurrent profile creation.** A user opens the wizard in two tabs and completes both. *Mitigation:* `completeWizard()` checks for an existing `Profiles` row owned by the user; if one exists, redirect to it instead of creating a duplicate. Slug uniqueness at the DB layer enforces the rest.
-- **R3 — Media upload partial failure.** Signed URL succeeds, then `/api/media` registration fails. *Mitigation:* the existing `/api/media` route already 404s if the storage object is missing; client retries the registration call. If it still fails, persist the bare `path` in `onboardingProgress` and let the user retry; the editor (task-09) sees an "incomplete media" state and prompts re-upload.
-- **R4 — User abandons the wizard, comes back weeks later.** Their `onboardingProgress` is stale; their slug hold is long gone. *Mitigation:* on resume, re-validate the slug; if taken, send them back to step 1 with a "we lost your slug" notice.
-- **R5 — Schema migration conflicts with the dev-mode-drift state we hit in task-08.** *Mitigation:* the runbook ([migrations.md](../runbooks/migrations.md#dev-mode-auto-push-drift)) now covers this; the user can `drop schema if exists payload cascade` and re-apply cleanly.
+- **R1 — Slug hold expiry mid-wizard.** A user who pauses for > 15 min loses their hold. _Mitigation:_ heartbeat refresh every 5 min while tab visible; on resume after expiry, attempt re-reserve and surface a friendly error if the slug was claimed by someone else. (Rare in practice — the wizard is fast.)
+- **R2 — Concurrent profile creation.** A user opens the wizard in two tabs and completes both. _Mitigation:_ `completeWizard()` checks for an existing `Profiles` row owned by the user; if one exists, redirect to it instead of creating a duplicate. Slug uniqueness at the DB layer enforces the rest.
+- **R3 — Media upload partial failure.** Signed URL succeeds, then `/api/media` registration fails. _Mitigation:_ the existing `/api/media` route already 404s if the storage object is missing; client retries the registration call. If it still fails, persist the bare `path` in `onboardingProgress` and let the user retry; the editor (task-09) sees an "incomplete media" state and prompts re-upload.
+- **R4 — User abandons the wizard, comes back weeks later.** Their `onboardingProgress` is stale; their slug hold is long gone. _Mitigation:_ on resume, re-validate the slug; if taken, send them back to step 1 with a "we lost your slug" notice.
+- **R5 — Schema migration conflicts with the dev-mode-drift state we hit in task-08.** _Mitigation:_ the runbook ([migrations.md](../runbooks/migrations.md#dev-mode-auto-push-drift)) now covers this; the user can `drop schema if exists payload cascade` and re-apply cleanly.
 
 ## Done when
 

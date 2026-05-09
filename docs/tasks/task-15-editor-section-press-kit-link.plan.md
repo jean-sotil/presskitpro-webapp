@@ -12,16 +12,16 @@ The press-kit link is the most "external" data point on a profile — it points 
 
 ## Decisions locked
 
-| # | Axis | Decision | Rationale |
-|---|---|---|---|
-| 1 | Where validation runs | New `POST /api/press-kit-validate { url }` route. The editor calls it on blur / "Validar" click, only commits to the bundle on success. The profile PATCH route does NOT re-run HEAD on every save (would block autosave and double the cost on every keystroke after the URL is set). | Spec AC ("Save with a 404 URL shows inline error and does not persist") is satisfied by the editor refusing to call `onMutate` when the URL isn't valid. The cron in task-30 catches link rot; we don't need belt-and-braces here. |
-| 2 | HEAD strategy | 8s timeout via `AbortSignal.timeout(8000)`. Up to 5 redirects (browsers' standard cap; `fetch` defaults to follow). Fall back to `Range: bytes=0-0` if HEAD returns 405 (Method Not Allowed). | Spec note. |
-| 3 | Restrictive-200 (Google Drive) | When provider is `google-drive` AND the response is 200, do a heuristic: read `<title>` from the body if `Content-Type: text/html`. Drive's "request access" page has `<title>Access denied</title>`. If matched, return `{ ok: true, warning: 'restrictive-access' }` so the editor can flag it without blocking save. | Per spec implementation note. |
-| 4 | Provider list | Extend `derivePressKitProvider` (and the `pressKitProvider` enum on Profiles) with `notion` and `mediafire`. Keep `google-drive`, `dropbox`, `onedrive`, `wetransfer`, `other`, `unknown`. | Spec lists `notion` + `mediafire` as recognized hosts. |
-| 5 | Analytics | Add `'press_kit_click'` to the `AnalyticsEvent` union. Public CTA fires `track('press_kit_click', { provider, profileSlug })` on click. | Spec AC. The shim already exists; this is one-line per side. |
-| 6 | Public render polish | Provider badge ("Hospedado no Google Drive" / "no Dropbox" / etc.) renders next to the CTA when provider is recognized; falls back to no badge when `unknown`/`other`. CTA stays `target="_blank" rel="noopener noreferrer"`. | Spec AC. |
-| 7 | Editor UI | Single URL input + status badge: idle → validating (spinner) → valid (✓ + provider chip) / warning (⚠ "Pode estar restrito a usuários da organização") / invalid (✕ + reason). On valid commit, `applyMutation('profile', { pressKitUrl })`. On warning, allow save with a confirmation. On invalid, no save. | Spec AC, plus the implementation note about restrictive-200. |
-| 8 | Out of scope | Daily health-check (task-30); ZIP generation; hosting assets. | Spec scope-out. |
+| #   | Axis                           | Decision                                                                                                                                                                                                                                                                                                                | Rationale                                                                                                                                                                                                                          |
+| --- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Where validation runs          | New `POST /api/press-kit-validate { url }` route. The editor calls it on blur / "Validar" click, only commits to the bundle on success. The profile PATCH route does NOT re-run HEAD on every save (would block autosave and double the cost on every keystroke after the URL is set).                                  | Spec AC ("Save with a 404 URL shows inline error and does not persist") is satisfied by the editor refusing to call `onMutate` when the URL isn't valid. The cron in task-30 catches link rot; we don't need belt-and-braces here. |
+| 2   | HEAD strategy                  | 8s timeout via `AbortSignal.timeout(8000)`. Up to 5 redirects (browsers' standard cap; `fetch` defaults to follow). Fall back to `Range: bytes=0-0` if HEAD returns 405 (Method Not Allowed).                                                                                                                           | Spec note.                                                                                                                                                                                                                         |
+| 3   | Restrictive-200 (Google Drive) | When provider is `google-drive` AND the response is 200, do a heuristic: read `<title>` from the body if `Content-Type: text/html`. Drive's "request access" page has `<title>Access denied</title>`. If matched, return `{ ok: true, warning: 'restrictive-access' }` so the editor can flag it without blocking save. | Per spec implementation note.                                                                                                                                                                                                      |
+| 4   | Provider list                  | Extend `derivePressKitProvider` (and the `pressKitProvider` enum on Profiles) with `notion` and `mediafire`. Keep `google-drive`, `dropbox`, `onedrive`, `wetransfer`, `other`, `unknown`.                                                                                                                              | Spec lists `notion` + `mediafire` as recognized hosts.                                                                                                                                                                             |
+| 5   | Analytics                      | Add `'press_kit_click'` to the `AnalyticsEvent` union. Public CTA fires `track('press_kit_click', { provider, profileSlug })` on click.                                                                                                                                                                                 | Spec AC. The shim already exists; this is one-line per side.                                                                                                                                                                       |
+| 6   | Public render polish           | Provider badge ("Hospedado no Google Drive" / "no Dropbox" / etc.) renders next to the CTA when provider is recognized; falls back to no badge when `unknown`/`other`. CTA stays `target="_blank" rel="noopener noreferrer"`.                                                                                           | Spec AC.                                                                                                                                                                                                                           |
+| 7   | Editor UI                      | Single URL input + status badge: idle → validating (spinner) → valid (✓ + provider chip) / warning (⚠ "Pode estar restrito a usuários da organização") / invalid (✕ + reason). On valid commit, `applyMutation('profile', { pressKitUrl })`. On warning, allow save with a confirmation. On invalid, no save.           | Spec AC, plus the implementation note about restrictive-200.                                                                                                                                                                       |
+| 8   | Out of scope                   | Daily health-check (task-30); ZIP generation; hosting assets.                                                                                                                                                                                                                                                           | Spec scope-out.                                                                                                                                                                                                                    |
 
 ## Cross-references
 
@@ -31,29 +31,37 @@ The press-kit link is the most "external" data point on a profile — it points 
 ## File inventory
 
 ### Schema
+
 - `payload/collections/Profiles.ts` — append `notion` + `mediafire` options to `pressKitProvider` select. Migration generated by `pnpm payload migrate:create`.
 
 ### Pure helpers (TDD)
+
 - `lib/payload/hooks/derive-press-kit-provider.ts` (+ existing test) — extend with `notion`, `mediafire` cases; tests already parameterized.
 - `lib/server/press-kit-validate.ts` (+ test) — `validatePressKitUrl({ url, fetch?, abortSignal? })`. Pure DI. Returns `{ ok, provider, warning?, status?, finalUrl? }`. Handles HEAD timeout, 405 fallback to ranged GET, Drive's restrictive-200 heuristic.
 
 ### REST route
+
 - `app/api/press-kit-validate/route.ts` — POST `{ url }` → `{ ok, provider, warning?, status?, finalUrl? }`. Auth: any logged-in user (no profile-id; the validator has no side effects on data).
 
 ### Editor
+
 - `components/editor/sections/PressKitEditCard.tsx` (+ test) — URL input, "Validar" button (or auto-on-blur), status badge, helper hint about public-viewable link.
 
 ### Public renderer
+
 - `components/profile/sections/PressKitLinkRender.tsx` — provider badge + `track('press_kit_click', ...)` on click. Needs to become a client component (or extract a small client `<TrackedAnchor>` to keep the section server-rendered).
 
 ### Analytics shim
+
 - `lib/analytics/track.ts` — extend the union with `'press_kit_click'`.
 
 ### Wire-up
+
 - `lib/editor/sections.ts` — flip `pressKitLink.hasEditor = true`.
 - `components/editor/EditorPane.tsx` — add `case 'pressKitLink'`.
 
 ### E2E + runbook
+
 - `tests/e2e/editor-press-kit.spec.ts` — `@full` happy path: paste a valid URL → green badge → save persists → bad URL blocks save.
 - `docs/runbooks/dev-editor.md` — append the press-kit recipe (incl. the Drive restrictive-200 quirk).
 
@@ -70,13 +78,13 @@ The press-kit link is the most "external" data point on a profile — it points 
 
 ## Acceptance evidence
 
-| AC | How verified |
-|---|---|
-| 404 URL shows inline error + does not persist | EditCard test mocks `fetch('/api/press-kit-validate')` → `{ ok: false, status: 404 }`; asserts `applyMutation` is NOT called and the row's `aria-invalid` flips. |
-| HEAD is server-side only | Validation route lives in `app/api/press-kit-validate/route.ts`, never invoked from a client. |
-| Recognized providers render the correct badge | PressKitLinkRender test maps each provider value to its expected badge label. |
-| Public CTA opens in new tab with `rel="noopener noreferrer"` | Existing render preserves these attrs; tested. |
-| `press_kit_click` event fires | TrackedAnchor test asserts `track('press_kit_click', { provider, profileSlug })` is invoked on click. |
+| AC                                                           | How verified                                                                                                                                                     |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 404 URL shows inline error + does not persist                | EditCard test mocks `fetch('/api/press-kit-validate')` → `{ ok: false, status: 404 }`; asserts `applyMutation` is NOT called and the row's `aria-invalid` flips. |
+| HEAD is server-side only                                     | Validation route lives in `app/api/press-kit-validate/route.ts`, never invoked from a client.                                                                    |
+| Recognized providers render the correct badge                | PressKitLinkRender test maps each provider value to its expected badge label.                                                                                    |
+| Public CTA opens in new tab with `rel="noopener noreferrer"` | Existing render preserves these attrs; tested.                                                                                                                   |
+| `press_kit_click` event fires                                | TrackedAnchor test asserts `track('press_kit_click', { provider, profileSlug })` is invoked on click.                                                            |
 
 ## Test plan
 
@@ -92,10 +100,10 @@ The press-kit link is the most "external" data point on a profile — it points 
 
 ## Risks
 
-- **R1 — HEAD blocked on the host.** Some providers (Notion, Mediafire) may not support HEAD or may return 405. *Mitigation:* fall back to ranged GET; if both fail, return `{ ok: false, reason: 'unreachable', status }`.
-- **R2 — Drive restrictive-200 false positive.** Our heuristic reads `<title>` after fetching ~1KB of the body. If Drive A/B-tests a different title, we mis-flag a public file as restricted. *Mitigation:* the warning is non-blocking ("Pode estar restrito"); the user can save anyway.
-- **R3 — User pastes an authenticated SaaS URL** (e.g. a Notion page set to "view-only with workspace login"). HEAD returns 200. We can't distinguish from the outside. *Mitigation:* helper text on the editor card: "Verifique se o link está público (não 'restrito ao seu workspace')."
-- **R4 — Cron in task-30 races with the editor save.** Both write `pressKitHealthStatus`. *Mitigation:* the cron is the only writer of `pressKitHealthStatus` per task-08's spec; our save NEVER touches it.
+- **R1 — HEAD blocked on the host.** Some providers (Notion, Mediafire) may not support HEAD or may return 405. _Mitigation:_ fall back to ranged GET; if both fail, return `{ ok: false, reason: 'unreachable', status }`.
+- **R2 — Drive restrictive-200 false positive.** Our heuristic reads `<title>` after fetching ~1KB of the body. If Drive A/B-tests a different title, we mis-flag a public file as restricted. _Mitigation:_ the warning is non-blocking ("Pode estar restrito"); the user can save anyway.
+- **R3 — User pastes an authenticated SaaS URL** (e.g. a Notion page set to "view-only with workspace login"). HEAD returns 200. We can't distinguish from the outside. _Mitigation:_ helper text on the editor card: "Verifique se o link está público (não 'restrito ao seu workspace')."
+- **R4 — Cron in task-30 races with the editor save.** Both write `pressKitHealthStatus`. _Mitigation:_ the cron is the only writer of `pressKitHealthStatus` per task-08's spec; our save NEVER touches it.
 
 ## Done when
 

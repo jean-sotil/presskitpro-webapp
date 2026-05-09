@@ -195,9 +195,11 @@ The blockquote fallback is enough for v1. To switch to the higher-fidelity Graph
 ### Verifying the toast / gate manually
 
 To force the publish gate to fire even on a passing theme, manually clear `contrastValidatedAt` in Postgres:
+
 ```sql
 update payload.themes set contrast_validated_at = null where profile_id = <id>;
 ```
+
 Click **Publicar** → 422 lands → toast shows. Re-validate on the Tema tab to clear it.
 
 ## Test the public profile route (task-19)
@@ -269,7 +271,6 @@ update payload.profiles set status = 'draft' where id = <id>;
 ```
 
 Re-publish from the editor to confirm the ISR revalidation hook fires and the public route would update (the public route ships in task-19 — for now `/{slug}` returns 404).
-
 
 ## Test the billing flow (task-23)
 

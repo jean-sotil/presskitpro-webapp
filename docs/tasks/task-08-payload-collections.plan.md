@@ -9,16 +9,16 @@ Task-08 lands the data model for everything downstream: editor (task-09), public
 
 ## Decisions locked (Socratic Gate)
 
-| # | Axis | Decision | Rationale |
-|---|---|---|---|
-| 1 | Payload REST auth | Custom strategy on `Users` (set `auth: { disableLocalStrategy: true, strategies: [supabaseStrategy] }`). Strategy reads Supabase session cookie → finds the Payload `Users` row by `supabaseUserId` → returns it as `req.user`. | Only way to make the "403 cross-user" AC verifiable without writing custom REST wrappers. |
-| 2 | IG token encryption | AES-256-GCM in Node `crypto`. Key from `INSTAGRAM_TOKEN_ENCRYPTION_KEY` env (32-byte base64). Encrypt in Payload `beforeChange`, decrypt in `afterRead` (admin-only). | Vendor-neutral; survives without Supabase Vault. Migrating to Vault later is a key-format change only. |
-| 3 | ISR revalidation | `Profiles.afterChange` fires `revalidatePath('/${slug}')` when `status === 'published'`. On slug change, also revalidate the old slug. | Payload runs in-process; `next/cache` works directly. |
-| 4 | Slug validation in Payload | `validate` hook on `Profiles.slug` calls `validateSlugFormat()`. `afterChange` calls `recordSlugChange()` when slug differs from previous. | Reuses task-07; no duplication. |
-| 5 | Seed | `scripts/seed.ts` uses Payload Local API directly. 5 demo profiles with synthetic `supabaseUserId` UUIDs. Idempotent (delete + recreate the demo set). | Fast, reproducible. Real Supabase auth users not needed for static demo content. |
-| 6 | Localization | `payload.config.ts` adds `localization: { locales: ['pt-BR', 'en'], defaultLocale: 'pt-BR', fallback: true }`. `localized: true` on `ProfileContent.{tagline, bio, services, metaTitle, metaDescription, ogImage}`. | Configures both locales now so task-29 doesn't have to retrofit every collection. |
-| 7 | Access control depth | Default deny. Allow Admins (`req.user.collection === 'admins'`). Allow `Users` whose `id` matches the doc's `owner` (Profiles) or the parent profile's `owner` (child collections, via a `where` filter). | Standard Payload pattern. Verified by the e2e ladder. |
-| 8 | Phasing | One commit. Internal sequence: schemas → access + auth strategy → encryption → ISR hook → seed → tests. | Each step a clean checkpoint, but they ship together — task-09 needs all of it. |
+| #   | Axis                       | Decision                                                                                                                                                                                                                        | Rationale                                                                                              |
+| --- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| 1   | Payload REST auth          | Custom strategy on `Users` (set `auth: { disableLocalStrategy: true, strategies: [supabaseStrategy] }`). Strategy reads Supabase session cookie → finds the Payload `Users` row by `supabaseUserId` → returns it as `req.user`. | Only way to make the "403 cross-user" AC verifiable without writing custom REST wrappers.              |
+| 2   | IG token encryption        | AES-256-GCM in Node `crypto`. Key from `INSTAGRAM_TOKEN_ENCRYPTION_KEY` env (32-byte base64). Encrypt in Payload `beforeChange`, decrypt in `afterRead` (admin-only).                                                           | Vendor-neutral; survives without Supabase Vault. Migrating to Vault later is a key-format change only. |
+| 3   | ISR revalidation           | `Profiles.afterChange` fires `revalidatePath('/${slug}')` when `status === 'published'`. On slug change, also revalidate the old slug.                                                                                          | Payload runs in-process; `next/cache` works directly.                                                  |
+| 4   | Slug validation in Payload | `validate` hook on `Profiles.slug` calls `validateSlugFormat()`. `afterChange` calls `recordSlugChange()` when slug differs from previous.                                                                                      | Reuses task-07; no duplication.                                                                        |
+| 5   | Seed                       | `scripts/seed.ts` uses Payload Local API directly. 5 demo profiles with synthetic `supabaseUserId` UUIDs. Idempotent (delete + recreate the demo set).                                                                          | Fast, reproducible. Real Supabase auth users not needed for static demo content.                       |
+| 6   | Localization               | `payload.config.ts` adds `localization: { locales: ['pt-BR', 'en'], defaultLocale: 'pt-BR', fallback: true }`. `localized: true` on `ProfileContent.{tagline, bio, services, metaTitle, metaDescription, ogImage}`.             | Configures both locales now so task-29 doesn't have to retrofit every collection.                      |
+| 7   | Access control depth       | Default deny. Allow Admins (`req.user.collection === 'admins'`). Allow `Users` whose `id` matches the doc's `owner` (Profiles) or the parent profile's `owner` (child collections, via a `where` filter).                       | Standard Payload pattern. Verified by the e2e ladder.                                                  |
+| 8   | Phasing                    | One commit. Internal sequence: schemas → access + auth strategy → encryption → ISR hook → seed → tests.                                                                                                                         | Each step a clean checkpoint, but they ship together — task-09 needs all of it.                        |
 
 ## Cross-references
 
@@ -32,6 +32,7 @@ Task-08 lands the data model for everything downstream: editor (task-09), public
 ## File inventory (deliverables)
 
 ### Collections
+
 - `payload/collections/Users.ts` — switch to `auth: { disableLocalStrategy: true, strategies: [supabaseStrategy] }`. No new fields.
 - `payload/collections/Profiles.ts` — extend with PRD §7 fields (`pressKitUrl`, `pressKitProvider`, `pressKitLastCheckedAt`, `pressKitHealthStatus`, `localesAvailable`, `defaultLocale`). Wire slug validate hook + slug-change → `recordSlugChange` afterChange + ISR revalidate afterChange. Rename `owner` if needed for consistency (currently fine).
 - `payload/collections/Media.ts` — extend: `alt` required (validation enforced by access/hook).
@@ -42,35 +43,43 @@ Task-08 lands the data model for everything downstream: editor (task-09), public
 - `payload/collections/InstagramConnections.ts` — **new**, encrypted `accessToken`.
 
 ### Auth strategy + lib
+
 - `lib/auth/payload-strategy.ts` — `supabaseStrategy` factory. Reads cookies via Payload's headers arg → decodes Supabase JWT (using `@supabase/ssr` parser if accessible, else manual base64) → looks up Users by `supabaseUserId` → returns the Payload doc.
 - `lib/auth/payload-strategy.test.ts` — table-driven tests (no cookies → null, valid cookie → user, mismatched supabaseUserId → null).
 
 ### Crypto
+
 - `lib/crypto/symmetric.ts` — `encrypt(plaintext)` / `decrypt(ciphertext)`. AES-256-GCM with a random IV per encryption; output format `iv.tag.ciphertext` (base64 each, dot-separated).
 - `lib/crypto/symmetric.test.ts` — round-trip + key-mismatch failure + tampered-ciphertext failure.
 
 ### Payload hooks (extracted for testability)
+
 - `lib/payload/hooks/profile-slug-validate.ts` (+ test) — wraps `validateSlugFormat` to return Payload's expected `string | true` validate signature.
 - `lib/payload/hooks/profile-slug-changed.ts` (+ test) — afterChange: if `data.slug !== previousDoc.slug`, call `recordSlugChange`. Mocked Supabase client in tests.
 - `lib/payload/hooks/profile-revalidate.ts` (+ test) — afterChange: if `published`, `revalidatePath`. Tests mock `revalidatePath`.
 - `lib/payload/hooks/encrypt-token.ts` (+ test) — beforeChange + afterRead pair for `accessToken`.
 
 ### Access control
+
 - `lib/payload/access/owns-profile.ts` (+ test) — `({ req }) => User-id === doc.owner OR Admin`.
 - `lib/payload/access/owns-via-profile.ts` (+ test) — for child collections; resolves to a `where` filter `{ profile: { owner: { equals: req.user.id } } }`.
 
 ### Seed
+
 - `scripts/seed.ts` — bun script. Creates 5 demo Users (with synthetic UUIDs) + Profiles + ProfileContent (in PT-BR + EN) + Themes + 2 SocialLinks each + 1 FeaturedTrack each. Run via `bun run seed`.
 - `package.json`: `"seed": "bun scripts/seed.ts"`.
 
 ### Config
+
 - `payload.config.ts` — register all 8 collections, add `localization` block, ensure user has env-injected localization fallback.
 - `.env.example` — add `INSTAGRAM_TOKEN_ENCRYPTION_KEY=` placeholder + setup instructions.
 
 ### Type generation
+
 - `payload-types.ts` — regenerated via `bun payload generate:types`. Committed.
 
 ### Docs
+
 - `docs/runbooks/migrations.md` — append the Payload migration row.
 
 ## Implementation sequence
@@ -88,12 +97,12 @@ Task-08 lands the data model for everything downstream: editor (task-09), public
 
 ## Acceptance evidence (Verification Matrix)
 
-| AC (from task) | How verified |
-|---|---|
-| Type-generation works + consumes cleanly in Next | `bun run typecheck` post-generate. |
-| Cross-user REST write returns 403 | E2E spec spins up two users (or simulates two sessions), tries cross-write, asserts 403. |
-| Encrypted tokens unreadable in raw DB | Unit test: round-trip the helper; integration check by reading the column directly via Supabase client and asserting it doesn't contain the plaintext. |
-| Demo seed produces ≥ 95 Lighthouse on first run | 🚧 deferred to task-19 — needs the public profile route to exist. Documented in plan + task status. |
+| AC (from task)                                   | How verified                                                                                                                                           |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Type-generation works + consumes cleanly in Next | `bun run typecheck` post-generate.                                                                                                                     |
+| Cross-user REST write returns 403                | E2E spec spins up two users (or simulates two sessions), tries cross-write, asserts 403.                                                               |
+| Encrypted tokens unreadable in raw DB            | Unit test: round-trip the helper; integration check by reading the column directly via Supabase client and asserting it doesn't contain the plaintext. |
+| Demo seed produces ≥ 95 Lighthouse on first run  | 🚧 deferred to task-19 — needs the public profile route to exist. Documented in plan + task status.                                                    |
 
 ## Test plan (TDD)
 
@@ -110,10 +119,10 @@ Task-08 lands the data model for everything downstream: editor (task-09), public
 
 ## Risks
 
-- **R1 — Auth strategy + cookie parsing edge cases.** Supabase rotates session cookies on refresh; the strategy must read the latest, not stale ones. *Mitigation:* use `@supabase/ssr`'s `createServerClient` from inside the strategy with a Payload-headers adapter, then call `auth.getUser()` to get a verified user.
-- **R2 — Encryption key rotation.** No rotation story this task. *Mitigation:* document key format as `v1:<base64>` so future versions can prefix with `v2:` and decrypt routes can branch.
-- **R3 — Migration order on a fresh DB.** Per ADR-0001, Supabase migrations run BEFORE Payload migrations. The new Payload migration adds tables in `payload.*`; the seed script then writes user-data into them. *Mitigation:* update `docs/runbooks/migrations.md` to note ordering hasn't changed.
-- **R4 — Localization fallback noise.** With `fallback: true`, missing-locale lookups return defaultLocale silently. Could mask data bugs. *Mitigation:* document that the public profile route (task-19) must check `localesAvailable` before linking to a locale toggle.
+- **R1 — Auth strategy + cookie parsing edge cases.** Supabase rotates session cookies on refresh; the strategy must read the latest, not stale ones. _Mitigation:_ use `@supabase/ssr`'s `createServerClient` from inside the strategy with a Payload-headers adapter, then call `auth.getUser()` to get a verified user.
+- **R2 — Encryption key rotation.** No rotation story this task. _Mitigation:_ document key format as `v1:<base64>` so future versions can prefix with `v2:` and decrypt routes can branch.
+- **R3 — Migration order on a fresh DB.** Per ADR-0001, Supabase migrations run BEFORE Payload migrations. The new Payload migration adds tables in `payload.*`; the seed script then writes user-data into them. _Mitigation:_ update `docs/runbooks/migrations.md` to note ordering hasn't changed.
+- **R4 — Localization fallback noise.** With `fallback: true`, missing-locale lookups return defaultLocale silently. Could mask data bugs. _Mitigation:_ document that the public profile route (task-19) must check `localesAvailable` before linking to a locale toggle.
 - **R5 — Type generation drift.** `payload-types.ts` is regenerated and committed; if a teammate forgets to regenerate, CI catches it via typecheck failures on the consumer side.
 
 ## Done when

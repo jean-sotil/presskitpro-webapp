@@ -16,34 +16,35 @@ Every primitive task-30 needs already exists (cron-route pattern, Resend wiring,
 
 ## Audit — what's already shipped
 
-| Surface | Status | Where |
-|---|---|---|
-| `Profiles.pressKitUrl`, `pressKitProvider`, `pressKitLastCheckedAt`, `pressKitHealthStatus` (with `unknown`/`healthy`/`warning`/`broken` options) | ✅ done in task-08 | [Profiles.ts:160-210](../../payload/collections/Profiles.ts#L160) |
-| Provider derivation hook | ✅ done in task-15 | [derive-press-kit-provider.ts](../../lib/payload/hooks/derive-press-kit-provider.ts) |
-| Cron route pattern + `CRON_SECRET` Bearer auth | ✅ done in task-23 | [app/api/cron/billing/route.ts](../../app/api/cron/billing/route.ts) |
-| Resend transactional email | ✅ done in task-14 | inline `sendEmail()` in [contact-submit/route.ts](../../app/api/profiles/%5Bid%5D/contact-submit/route.ts) |
-| `getTranslations({ locale })` for email templates | ✅ done in task-29 | next-intl/server |
-| Public profile render of the press-kit CTA | ✅ done in task-15 | [PressKitLinkRender.tsx](../../components/profile/sections/PressKitLinkRender.tsx) |
-| Profile.defaultLocale (proxy for "owner's preferred locale") | ✅ done in task-08 | (no per-User locale field exists; the profile's defaultLocale is the right axis) |
+| Surface                                                                                                                                           | Status             | Where                                                                                                      |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------- |
+| `Profiles.pressKitUrl`, `pressKitProvider`, `pressKitLastCheckedAt`, `pressKitHealthStatus` (with `unknown`/`healthy`/`warning`/`broken` options) | ✅ done in task-08 | [Profiles.ts:160-210](../../payload/collections/Profiles.ts#L160)                                          |
+| Provider derivation hook                                                                                                                          | ✅ done in task-15 | [derive-press-kit-provider.ts](../../lib/payload/hooks/derive-press-kit-provider.ts)                       |
+| Cron route pattern + `CRON_SECRET` Bearer auth                                                                                                    | ✅ done in task-23 | [app/api/cron/billing/route.ts](../../app/api/cron/billing/route.ts)                                       |
+| Resend transactional email                                                                                                                        | ✅ done in task-14 | inline `sendEmail()` in [contact-submit/route.ts](../../app/api/profiles/%5Bid%5D/contact-submit/route.ts) |
+| `getTranslations({ locale })` for email templates                                                                                                 | ✅ done in task-29 | next-intl/server                                                                                           |
+| Public profile render of the press-kit CTA                                                                                                        | ✅ done in task-15 | [PressKitLinkRender.tsx](../../components/profile/sections/PressKitLinkRender.tsx)                         |
+| Profile.defaultLocale (proxy for "owner's preferred locale")                                                                                      | ✅ done in task-08 | (no per-User locale field exists; the profile's defaultLocale is the right axis)                           |
 
 ## Decisions locked
 
-| # | Axis | Decision | Rationale |
-|---|---|---|---|
-| 1 | New schema field | Add `pressKitConsecutiveFails: number, default 0, admin-readonly` to `Profiles`. The transition rules read this; it never appears in the editor UI. | Explicit counter beats deriving from history. Reseting to 0 on success is a one-line update. |
-| 2 | Health-check primitive | `checkPressKitUrl(url, deps)` → `{ ok: boolean, statusCode?: number, kind: 'http-2xx' \| 'http-3xx' \| 'http-error' \| 'timeout' \| 'network-error' }`. Pure DI on `fetch`, `now`. 8s timeout via `AbortController`. Fallback to ranged GET (`Range: bytes=0-0`) when HEAD returns ≥ 405. | Spec implementation note. Keeps the function unit-testable with a fake fetch. |
-| 3 | Provider rate-limits | Concurrency 10 across the entire sweep. No per-host throttle in v1 — Drive's documented HEAD limit is generous and we won't blow it on hundreds of profiles. | YAGNI. Add a per-host queue when we actually see 429s in production. |
-| 4 | Status transition rules | Pure function `nextHealth({ priorStatus, priorFails, checkOk })` → `{ status, fails, transitioned: boolean }`. Encodes the spec's 2/3 thresholds + reset-on-success. Returns `transitioned: true` when status flipped, so the caller knows to send the right email. | One source of truth for the state machine; trivially testable. |
-| 5 | Email locale | Read `Profile.defaultLocale`, map via `fromPayloadLocale()` to a next-intl short code, then `getTranslations({ locale: short })`. No per-User locale field today — the profile's default is the proxy. | Spec AC: "Email content is translated per the DJ's preferred locale (task-29)." |
-| 6 | Email send transport | Reuse the inline `sendEmail()` from contact-submit by extracting it into `lib/email/send.ts`. Same Resend wiring; same `RESEND_API_KEY`-unset → console-warn fallback. | DRY without overengineering — one transport, two callers. |
-| 7 | Cron schedule | New route `app/api/cron/press-kit-health/route.ts`, same Bearer-auth + POST shape as `/api/cron/billing`. Vercel cron is configured at the dashboard level (no `vercel.json` in repo today; this PR doesn't introduce one — the existing analytics + billing crons follow the same convention). Runbook documents the curl + the Vercel cron entry. | Consistent with the two existing crons. |
-| 8 | Public CTA hide | `PressKitLinkRender` returns `null` when `pressKitHealthStatus === 'broken'`. Provider badge + CTA both disappear; the section just doesn't render. | Spec scope. The artist sees their own broken state in the dashboard banner (deferred — see scope-out). |
-| 9 | ISR / freshness | The public profile is `force-dynamic` (task-29 PR-B). When the cron updates a profile and the status changes, the next request renders the new state automatically. No `revalidatePath` needed. | Free correctness from PR-B's invariant. |
-| 10 | Out of scope (PR-1) | Dashboard warning banner (no editor chrome translations yet — task-29 PR-C territory); per-User preferred locale; Drive-specific OAuth probes; long-link follow chains; alert-suppression on transient 5xx storms. | Each is a separate, low-risk follow-up. |
+| #   | Axis                    | Decision                                                                                                                                                                                                                                                                                                                                            | Rationale                                                                                              |
+| --- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| 1   | New schema field        | Add `pressKitConsecutiveFails: number, default 0, admin-readonly` to `Profiles`. The transition rules read this; it never appears in the editor UI.                                                                                                                                                                                                 | Explicit counter beats deriving from history. Reseting to 0 on success is a one-line update.           |
+| 2   | Health-check primitive  | `checkPressKitUrl(url, deps)` → `{ ok: boolean, statusCode?: number, kind: 'http-2xx' \| 'http-3xx' \| 'http-error' \| 'timeout' \| 'network-error' }`. Pure DI on `fetch`, `now`. 8s timeout via `AbortController`. Fallback to ranged GET (`Range: bytes=0-0`) when HEAD returns ≥ 405.                                                           | Spec implementation note. Keeps the function unit-testable with a fake fetch.                          |
+| 3   | Provider rate-limits    | Concurrency 10 across the entire sweep. No per-host throttle in v1 — Drive's documented HEAD limit is generous and we won't blow it on hundreds of profiles.                                                                                                                                                                                        | YAGNI. Add a per-host queue when we actually see 429s in production.                                   |
+| 4   | Status transition rules | Pure function `nextHealth({ priorStatus, priorFails, checkOk })` → `{ status, fails, transitioned: boolean }`. Encodes the spec's 2/3 thresholds + reset-on-success. Returns `transitioned: true` when status flipped, so the caller knows to send the right email.                                                                                 | One source of truth for the state machine; trivially testable.                                         |
+| 5   | Email locale            | Read `Profile.defaultLocale`, map via `fromPayloadLocale()` to a next-intl short code, then `getTranslations({ locale: short })`. No per-User locale field today — the profile's default is the proxy.                                                                                                                                              | Spec AC: "Email content is translated per the DJ's preferred locale (task-29)."                        |
+| 6   | Email send transport    | Reuse the inline `sendEmail()` from contact-submit by extracting it into `lib/email/send.ts`. Same Resend wiring; same `RESEND_API_KEY`-unset → console-warn fallback.                                                                                                                                                                              | DRY without overengineering — one transport, two callers.                                              |
+| 7   | Cron schedule           | New route `app/api/cron/press-kit-health/route.ts`, same Bearer-auth + POST shape as `/api/cron/billing`. Vercel cron is configured at the dashboard level (no `vercel.json` in repo today; this PR doesn't introduce one — the existing analytics + billing crons follow the same convention). Runbook documents the curl + the Vercel cron entry. | Consistent with the two existing crons.                                                                |
+| 8   | Public CTA hide         | `PressKitLinkRender` returns `null` when `pressKitHealthStatus === 'broken'`. Provider badge + CTA both disappear; the section just doesn't render.                                                                                                                                                                                                 | Spec scope. The artist sees their own broken state in the dashboard banner (deferred — see scope-out). |
+| 9   | ISR / freshness         | The public profile is `force-dynamic` (task-29 PR-B). When the cron updates a profile and the status changes, the next request renders the new state automatically. No `revalidatePath` needed.                                                                                                                                                     | Free correctness from PR-B's invariant.                                                                |
+| 10  | Out of scope (PR-1)     | Dashboard warning banner (no editor chrome translations yet — task-29 PR-C territory); per-User preferred locale; Drive-specific OAuth probes; long-link follow chains; alert-suppression on transient 5xx storms.                                                                                                                                  | Each is a separate, low-risk follow-up.                                                                |
 
 ## File inventory
 
 ### New
+
 - `lib/health-check/check-press-kit-url.ts` — pure HEAD/GET fetcher with timeout + fallback.
 - `lib/health-check/check-press-kit-url.test.ts` — fake-fetch coverage of every branch.
 - `lib/health-check/next-health.ts` — pure transition function (counter + status).
@@ -57,6 +58,7 @@ Every primitive task-30 needs already exists (cron-route pattern, Resend wiring,
 - `tests/e2e/cron-auth.spec.ts` — `@smoke` confirming the route 401s without `Authorization` and 200s with the seed secret (lifted from existing billing-cron coverage if any).
 
 ### Modified
+
 - `payload/collections/Profiles.ts` — add `pressKitConsecutiveFails` (number, default 0, readOnly admin).
 - `payload-types.ts` — regenerate via `bun run generate:types`.
 - `app/api/profiles/[id]/contact-submit/route.ts` — swap inline `sendEmail` for the extracted helper.
@@ -65,6 +67,7 @@ Every primitive task-30 needs already exists (cron-route pattern, Resend wiring,
 - `docs/runbooks/dev-editor.md` — append a "Press kit health-check cron" recipe (curl + manual fixture + Vercel schedule note).
 
 ### Untouched (verified)
+
 - Existing analytics + billing crons (the auth pattern is reused as-is).
 - The provider-derivation hook from task-15.
 - The middleware (no path-level changes for cron auth — the route is already exempt by the matcher).
@@ -86,12 +89,12 @@ Every primitive task-30 needs already exists (cron-route pattern, Resend wiring,
 
 ## Acceptance evidence
 
-| AC | How verified |
-|---|---|
-| Cron runs reliably at the scheduled time on production | The route is wired; Vercel-side schedule lives in the project config the user manages. The runbook documents the schedule and the curl command for manual triggers. |
+| AC                                                                             | How verified                                                                                                                                                                                      |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cron runs reliably at the scheduled time on production                         | The route is wired; Vercel-side schedule lives in the project config the user manages. The runbook documents the schedule and the curl command for manual triggers.                               |
 | Test fixtures with known-broken URLs flip to `broken` after exactly 3 failures | `sweep.test.ts` — fake deps; iterate three times with a failing fetcher; assert final `pressKitHealthStatus === 'broken'` and exactly two emails were sent (warning at iter 2, broken at iter 3). |
-| Email content translated per the DJ's preferred locale | `next-health.ts` + `sweep.ts` thread the profile's `defaultLocale`; templates rendered via `getTranslations({ locale })`; `i18n:check` enforces key parity across pt/en/es. |
-| CTA hide takes effect within the next ISR revalidation cycle | `/[slug]` is `force-dynamic` (task-29 PR-B), so the next request renders the updated `pressKitHealthStatus` immediately. PressKitLinkRender's broken-state branch is unit-tested. |
+| Email content translated per the DJ's preferred locale                         | `next-health.ts` + `sweep.ts` thread the profile's `defaultLocale`; templates rendered via `getTranslations({ locale })`; `i18n:check` enforces key parity across pt/en/es.                       |
+| CTA hide takes effect within the next ISR revalidation cycle                   | `/[slug]` is `force-dynamic` (task-29 PR-B), so the next request renders the updated `pressKitHealthStatus` immediately. PressKitLinkRender's broken-state branch is unit-tested.                 |
 
 ## Test plan
 
@@ -100,10 +103,10 @@ Every primitive task-30 needs already exists (cron-route pattern, Resend wiring,
 
 ## Risks
 
-- **R1 — Drive throttling on a large cohort.** Concurrency 10 with hundreds of profiles per cron is fine for v1. *Mitigation:* the runbook records the actual sweep duration; if 4xx spikes appear, the next iteration adds a per-host queue.
-- **R2 — Transient 5xx false positives.** A provider hiccup at 03:00 UTC could flip every Drive-hosted profile to `warning`. *Mitigation:* the counter resets on the next successful check, so a one-day blip self-heals before transitioning to `broken`.
-- **R3 — Email storm on a backfill run.** Running the cron against a freshly-imported dataset could fire hundreds of warning emails at once. *Mitigation:* the cron only emails on STATE TRANSITIONS, not on every check — and the counter starts at 0, so the first run can only emit warnings (not brokens) and only for URLs that ALREADY fail twice in a row, which is a same-day double-check that won't happen on a fresh run.
-- **R4 — Locale code mismatch.** `Profile.defaultLocale` stores `pt-BR`/`en`/`es`; next-intl uses `pt`/`en`/`es`. *Mitigation:* `fromPayloadLocale()` already exists from task-29 PR-B; tests cover the round-trip.
+- **R1 — Drive throttling on a large cohort.** Concurrency 10 with hundreds of profiles per cron is fine for v1. _Mitigation:_ the runbook records the actual sweep duration; if 4xx spikes appear, the next iteration adds a per-host queue.
+- **R2 — Transient 5xx false positives.** A provider hiccup at 03:00 UTC could flip every Drive-hosted profile to `warning`. _Mitigation:_ the counter resets on the next successful check, so a one-day blip self-heals before transitioning to `broken`.
+- **R3 — Email storm on a backfill run.** Running the cron against a freshly-imported dataset could fire hundreds of warning emails at once. _Mitigation:_ the cron only emails on STATE TRANSITIONS, not on every check — and the counter starts at 0, so the first run can only emit warnings (not brokens) and only for URLs that ALREADY fail twice in a row, which is a same-day double-check that won't happen on a fresh run.
+- **R4 — Locale code mismatch.** `Profile.defaultLocale` stores `pt-BR`/`en`/`es`; next-intl uses `pt`/`en`/`es`. _Mitigation:_ `fromPayloadLocale()` already exists from task-29 PR-B; tests cover the round-trip.
 
 ## Done when
 

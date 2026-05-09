@@ -12,17 +12,17 @@ Task-18 is the editor's first **per-profile design** surface and the project's f
 
 ## Decisions locked
 
-| # | Axis | Decision | Rationale |
-|---|---|---|---|
-| 1 | Token derivation | Pure helper `deriveThemeTokens(theme)` returns `{ bg, accent, text, accentContrast }` as hex. Order: per-field custom hex (when present) → preset values (when `colorPresetId`/etc. set) → defaults. Auto-derives `text` from `bg` luminance when omitted (using `autoText` from `lib/design/tokens.ts`). | Single source of truth for "what would the page actually render". The route, the editor, and the SSR injector all call the same function. |
-| 2 | Contrast validation | `validateThemeContrast(tokens)` runs `contrastRatio(text, bg)` (must ≥ 4.5) and `contrastRatio(accent, bg)` (must ≥ 3). Returns `{ ok, ratios: { textBg, accentBg } }`. | Spec AC + WCAG 2.1 SC 1.4.3 / 1.4.11. |
-| 3 | Server gate | `contrastValidatedAt` is removed from `PATCHABLE` (was previously trusted from the client). After every theme upsert the route re-runs `validateThemeContrast`; on pass, second update bumps `contrastValidatedAt`; on fail, the field stays untouched (so the user keeps iterating but the "freshness clock" doesn't reset). | Server is the only thing that bumps the gate. Closes the bypass hole. |
-| 4 | Publish gate | `publishProfile` (and the route handler) reads `theme.contrastValidatedAt`. Reject (`422 contrast-stale`) if null or > 30 days. Editor surfaces the rejection via the publish dialog: "Re-validate the theme before publishing" + a deep link to the Theme tab. | Spec AC. |
-| 5 | Custom hex inputs | Use native `<input type="color">` for visual picker + a sibling `<input type="text">` that accepts a 6-digit hex. Auto-sync. Validate at the editor — invalid hex blocks the picker apply. | Native pickers are good enough for v1; no extra dependency. |
-| 6 | Editor placement | New tab strip above the rail+EditCard column: **Seções** / **Tema**. Active tab swaps the left column's content; the right (preview) pane is unchanged. Mobile tabs (existing) gain a "Tema" entry for the same toggle. | Theme is a global per-profile concern; living next to (not inside) the section rail keeps the "what changes affect what" mental model clean. |
-| 7 | Theme CSS injection | `ProfileRenderer` accepts the bundle and emits a `<style>` element at the top of its tree with `:root { --bg: <hex>; --accent: <hex>; --accent-contrast: <hex>; --text: <hex>; }`. Runs identical in `mode="preview"` and `mode="public"`. | Spec AC ("CSS-variable injection in `<head>`"). The tag is rendered once at the top of the article tree; in the public route (task-19) it's hoisted to `<head>` via the standard mechanism. |
-| 8 | Live preview | The editor's `qc.setQueryData` already updates `bundle.theme` optimistically; the existing right-pane mount picks up the new tokens automatically. No special wiring. | Free reuse of the autosave pipeline. |
-| 9 | Out of scope | Custom CSS / token overrides beyond what the schema supports (v2). User-uploaded fonts (v2). | Spec scope-out. |
+| #   | Axis                | Decision                                                                                                                                                                                                                                                                                                                      | Rationale                                                                                                                                                                                   |
+| --- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Token derivation    | Pure helper `deriveThemeTokens(theme)` returns `{ bg, accent, text, accentContrast }` as hex. Order: per-field custom hex (when present) → preset values (when `colorPresetId`/etc. set) → defaults. Auto-derives `text` from `bg` luminance when omitted (using `autoText` from `lib/design/tokens.ts`).                     | Single source of truth for "what would the page actually render". The route, the editor, and the SSR injector all call the same function.                                                   |
+| 2   | Contrast validation | `validateThemeContrast(tokens)` runs `contrastRatio(text, bg)` (must ≥ 4.5) and `contrastRatio(accent, bg)` (must ≥ 3). Returns `{ ok, ratios: { textBg, accentBg } }`.                                                                                                                                                       | Spec AC + WCAG 2.1 SC 1.4.3 / 1.4.11.                                                                                                                                                       |
+| 3   | Server gate         | `contrastValidatedAt` is removed from `PATCHABLE` (was previously trusted from the client). After every theme upsert the route re-runs `validateThemeContrast`; on pass, second update bumps `contrastValidatedAt`; on fail, the field stays untouched (so the user keeps iterating but the "freshness clock" doesn't reset). | Server is the only thing that bumps the gate. Closes the bypass hole.                                                                                                                       |
+| 4   | Publish gate        | `publishProfile` (and the route handler) reads `theme.contrastValidatedAt`. Reject (`422 contrast-stale`) if null or > 30 days. Editor surfaces the rejection via the publish dialog: "Re-validate the theme before publishing" + a deep link to the Theme tab.                                                               | Spec AC.                                                                                                                                                                                    |
+| 5   | Custom hex inputs   | Use native `<input type="color">` for visual picker + a sibling `<input type="text">` that accepts a 6-digit hex. Auto-sync. Validate at the editor — invalid hex blocks the picker apply.                                                                                                                                    | Native pickers are good enough for v1; no extra dependency.                                                                                                                                 |
+| 6   | Editor placement    | New tab strip above the rail+EditCard column: **Seções** / **Tema**. Active tab swaps the left column's content; the right (preview) pane is unchanged. Mobile tabs (existing) gain a "Tema" entry for the same toggle.                                                                                                       | Theme is a global per-profile concern; living next to (not inside) the section rail keeps the "what changes affect what" mental model clean.                                                |
+| 7   | Theme CSS injection | `ProfileRenderer` accepts the bundle and emits a `<style>` element at the top of its tree with `:root { --bg: <hex>; --accent: <hex>; --accent-contrast: <hex>; --text: <hex>; }`. Runs identical in `mode="preview"` and `mode="public"`.                                                                                    | Spec AC ("CSS-variable injection in `<head>`"). The tag is rendered once at the top of the article tree; in the public route (task-19) it's hoisted to `<head>` via the standard mechanism. |
+| 8   | Live preview        | The editor's `qc.setQueryData` already updates `bundle.theme` optimistically; the existing right-pane mount picks up the new tokens automatically. No special wiring.                                                                                                                                                         | Free reuse of the autosave pipeline.                                                                                                                                                        |
+| 9   | Out of scope        | Custom CSS / token overrides beyond what the schema supports (v2). User-uploaded fonts (v2).                                                                                                                                                                                                                                  | Spec scope-out.                                                                                                                                                                             |
 
 ## Cross-references
 
@@ -32,23 +32,28 @@ Task-18 is the editor's first **per-profile design** surface and the project's f
 ## File inventory
 
 ### Pure helpers (TDD)
+
 - `lib/design/derive-theme-tokens.ts` (+ test) — `deriveThemeTokens(theme)` returns the canonical hex set.
 - `lib/design/validate-theme-contrast.ts` (+ test) — wraps `contrastRatio` for the two AA pairs; returns ratios + pass.
 
 ### REST routes
+
 - `app/api/profiles/[id]/theme/route.ts` — drop `contrastValidatedAt` from the PATCHABLE allow-list; after upsert, re-derive + validate; bump `contrastValidatedAt` on pass.
 - `app/api/profiles/[id]/publish/route.ts` — short-circuit with `422 contrast-stale` when the theme gate fails.
 - `lib/editor/bundle.ts` — extend `publishProfile` to accept a "stale-after-ms" param + thread the rejection.
 
 ### Editor
+
 - `components/editor/ThemeTab.tsx` (+ test) — color/preset grid + custom hex + font cards + hero/gallery switchers + live contrast indicator.
 - `components/editor/ThemeTabs.tsx` (or inline in `EditorClient.tsx`) — Sections / Tema strip.
 - `app/dashboard/profile/[id]/EditorClient.tsx` — add tab state, render either `editPaneEl` or `themeTabEl`. Surface the publish-gate rejection in the publish dialog flow.
 
 ### Public renderer
+
 - `components/profile/ProfileRenderer.tsx` — derive tokens via the helper, emit a `<style>` tag at the top of the tree.
 
 ### E2E + runbook
+
 - `tests/e2e/editor-theme.spec.ts` — `@full` happy path (switch preset, switch font, switch hero, save).
 - `docs/runbooks/dev-editor.md` — append the Theme recipe + how the contrast gate works.
 
@@ -65,12 +70,12 @@ Task-18 is the editor's first **per-profile design** surface and the project's f
 
 ## Acceptance evidence
 
-| AC | How verified |
-|---|---|
-| Low-contrast custom hex pair surfaces inline error with exact ratio | ThemeTab test renders custom `bg=#ffffff accent=#ffffff`; assert the ratio (1.0) and the `role="alert"` text are visible. |
-| Switching font pair updates the preview without reload | `applyMutation('theme', { fontPairId })` already triggers `setQueryData`; PreviewPane re-renders. Asserted via integration test (re-render of `<ProfileRenderer>` with new theme picks up the new fontPairId-derived class). |
-| Theme record persists `colorPresetId` when preset chosen, raw hex when custom | ThemeTab test on preset click → expect `applyMutation` payload `{ colorPresetId, bg: undefined, accent: undefined, text: undefined }`. On custom hex → `{ colorPresetId: '', bg: '#abc...', accent: '#def...' }`. |
-| Public page renders theme via CSS-variable injection in `<head>` | ProfileRenderer test asserts the rendered tree contains a `<style>` element with `:root { --bg: ... }`. Task-19 hoists it into `<head>`. |
+| AC                                                                            | How verified                                                                                                                                                                                                                 |
+| ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Low-contrast custom hex pair surfaces inline error with exact ratio           | ThemeTab test renders custom `bg=#ffffff accent=#ffffff`; assert the ratio (1.0) and the `role="alert"` text are visible.                                                                                                    |
+| Switching font pair updates the preview without reload                        | `applyMutation('theme', { fontPairId })` already triggers `setQueryData`; PreviewPane re-renders. Asserted via integration test (re-render of `<ProfileRenderer>` with new theme picks up the new fontPairId-derived class). |
+| Theme record persists `colorPresetId` when preset chosen, raw hex when custom | ThemeTab test on preset click → expect `applyMutation` payload `{ colorPresetId, bg: undefined, accent: undefined, text: undefined }`. On custom hex → `{ colorPresetId: '', bg: '#abc...', accent: '#def...' }`.            |
+| Public page renders theme via CSS-variable injection in `<head>`              | ProfileRenderer test asserts the rendered tree contains a `<style>` element with `:root { --bg: ... }`. Task-19 hoists it into `<head>`.                                                                                     |
 
 ## Test plan
 
@@ -87,10 +92,10 @@ Task-18 is the editor's first **per-profile design** surface and the project's f
 
 ## Risks
 
-- **R1 — User picks a custom hex pair that passes locally but fails server-side** (e.g. browser color picker emits a slightly different hex than what the server canonicalizes). *Mitigation:* the editor calls `validateThemeContrast` on the same canonical form (uppercase 6-digit hex) the server uses; the helper is pure and shared.
-- **R2 — Stale gate after font/layout-only changes** (cosmetic edits don't touch colors but reset the timer). *Mitigation:* the server only bumps `contrastValidatedAt` when validation passes after a PATCH that *touched colors* (`bg`, `accent`, `text`, `colorPresetId`). Non-color PATCHes leave the timestamp alone.
-- **R3 — `contrastValidatedAt` set in the past during initial profile creation, then > 30 days later the user opens the Theme tab and sees "stale" without changing anything.** *Mitigation:* the editor surfaces "Re-validate" inline on the Theme tab; one click triggers a no-op color save that bumps the timestamp.
-- **R4 — `<style>` element repeated across SSR renders.** *Mitigation:* keyed by profile id; React renders one per `ProfileRenderer` mount. Public route mounts only one.
+- **R1 — User picks a custom hex pair that passes locally but fails server-side** (e.g. browser color picker emits a slightly different hex than what the server canonicalizes). _Mitigation:_ the editor calls `validateThemeContrast` on the same canonical form (uppercase 6-digit hex) the server uses; the helper is pure and shared.
+- **R2 — Stale gate after font/layout-only changes** (cosmetic edits don't touch colors but reset the timer). _Mitigation:_ the server only bumps `contrastValidatedAt` when validation passes after a PATCH that _touched colors_ (`bg`, `accent`, `text`, `colorPresetId`). Non-color PATCHes leave the timestamp alone.
+- **R3 — `contrastValidatedAt` set in the past during initial profile creation, then > 30 days later the user opens the Theme tab and sees "stale" without changing anything.** _Mitigation:_ the editor surfaces "Re-validate" inline on the Theme tab; one click triggers a no-op color save that bumps the timestamp.
+- **R4 — `<style>` element repeated across SSR renders.** _Mitigation:_ keyed by profile id; React renders one per `ProfileRenderer` mount. Public route mounts only one.
 
 ## Done when
 

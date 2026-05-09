@@ -9,14 +9,14 @@ Auth is the gate for everything in the dashboard. Supabase Auth is canonical (pe
 
 ## Decisions locked (Socratic Gate)
 
-| # | Axis | Decision | Rationale |
-|---|---|---|---|
-| 1 | Auth scope this task | **Phase A: email magic link only.** Google OAuth deferred (Phase B). Custom rate limit deferred (Phase C). | Magic link is fully self-contained; Google needs operator dashboard work; rate-limiter needs vendor decision. |
-| 2 | Rate limit | **Defer.** Lean on Supabase's built-in `sign_in_sign_ups: 30 / 5min / IP` for now. | PRD §14 doesn't set a deadline; adding Upstash now is premature. |
-| 3 | `/dashboard` | **Placeholder** — "Welcome, {email}" + logout. | Real dashboard is task-09. |
-| 4 | Server vs client checks | **Layered:** middleware redirects → server-component verifies session → client only reads for UI niceties. | Per implementation note "Avoid client-only auth checks." |
-| 5 | Form library | **Hand-rolled** | Single-input `<input type="email">` form; library is overkill. |
-| 6 | TDD coverage | Unit: `next` allowlist + middleware redirect decisions. E2E: form renders, submit shows "check your email", axe-clean. End-to-end magic-link verified manually (real email). | Real email round-trip is hard to assert in CI. |
+| #   | Axis                    | Decision                                                                                                                                                                     | Rationale                                                                                                     |
+| --- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| 1   | Auth scope this task    | **Phase A: email magic link only.** Google OAuth deferred (Phase B). Custom rate limit deferred (Phase C).                                                                   | Magic link is fully self-contained; Google needs operator dashboard work; rate-limiter needs vendor decision. |
+| 2   | Rate limit              | **Defer.** Lean on Supabase's built-in `sign_in_sign_ups: 30 / 5min / IP` for now.                                                                                           | PRD §14 doesn't set a deadline; adding Upstash now is premature.                                              |
+| 3   | `/dashboard`            | **Placeholder** — "Welcome, {email}" + logout.                                                                                                                               | Real dashboard is task-09.                                                                                    |
+| 4   | Server vs client checks | **Layered:** middleware redirects → server-component verifies session → client only reads for UI niceties.                                                                   | Per implementation note "Avoid client-only auth checks."                                                      |
+| 5   | Form library            | **Hand-rolled**                                                                                                                                                              | Single-input `<input type="email">` form; library is overkill.                                                |
+| 6   | TDD coverage            | Unit: `next` allowlist + middleware redirect decisions. E2E: form renders, submit shows "check your email", axe-clean. End-to-end magic-link verified manually (real email). | Real email round-trip is hard to assert in CI.                                                                |
 
 ## Cross-references
 
@@ -83,13 +83,13 @@ Auth is the gate for everything in the dashboard. Supabase Auth is canonical (pe
 
 ## Acceptance evidence (Verification Matrix)
 
-| AC (from task) | Status | How to verify |
-|---|---|---|
-| Magic link round-trip < 60s | 🟡 manual | Run `bun run dev` + cloudflared; submit email; click link in inbox; lands on `/dashboard`. CI doesn't traverse this. |
-| Google OAuth `next` redirect | 🚧 deferred Phase B | n/a |
-| Session persists across reloads (7d default) | ✅ | `@supabase/ssr` writes `sb-*` cookies with Supabase's defaults. Manual reload confirms. |
-| Logged-out `/dashboard` → 302 `/login?next=/dashboard` | ✅ | Playwright spec #3. |
-| 429 after 5/min/IP on `/api/auth/*` | 🚧 deferred Phase C | n/a; Supabase Auth's own limit applies. |
+| AC (from task)                                         | Status              | How to verify                                                                                                        |
+| ------------------------------------------------------ | ------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Magic link round-trip < 60s                            | 🟡 manual           | Run `bun run dev` + cloudflared; submit email; click link in inbox; lands on `/dashboard`. CI doesn't traverse this. |
+| Google OAuth `next` redirect                           | 🚧 deferred Phase B | n/a                                                                                                                  |
+| Session persists across reloads (7d default)           | ✅                  | `@supabase/ssr` writes `sb-*` cookies with Supabase's defaults. Manual reload confirms.                              |
+| Logged-out `/dashboard` → 302 `/login?next=/dashboard` | ✅                  | Playwright spec #3.                                                                                                  |
+| 429 after 5/min/IP on `/api/auth/*`                    | 🚧 deferred Phase C | n/a; Supabase Auth's own limit applies.                                                                              |
 
 ## Test plan (TDD)
 
@@ -110,9 +110,9 @@ Auth is the gate for everything in the dashboard. Supabase Auth is canonical (pe
 
 ## Risks
 
-- **R1 — `@supabase/ssr` cookie integration in middleware.** Subtle: the `cookies` adapter must mutate the response, not just read the request. *Mitigation:* follow the official Next 15 example pattern; test by signing in and confirming the session survives a refresh.
-- **R2 — `next` open-redirect.** Easy to get wrong. *Mitigation:* `safeNext` is a pure function with table-driven unit tests covering known attack vectors.
-- **R3 — Supabase Site URL misconfig.** If the hosted project's Site URL ≠ our cloudflared tunnel, the magic link points at the wrong host. *Mitigation:* runbook step explicitly tells the operator to update Site URL to the tunnel URL each session, or use a stable named tunnel.
+- **R1 — `@supabase/ssr` cookie integration in middleware.** Subtle: the `cookies` adapter must mutate the response, not just read the request. _Mitigation:_ follow the official Next 15 example pattern; test by signing in and confirming the session survives a refresh.
+- **R2 — `next` open-redirect.** Easy to get wrong. _Mitigation:_ `safeNext` is a pure function with table-driven unit tests covering known attack vectors.
+- **R3 — Supabase Site URL misconfig.** If the hosted project's Site URL ≠ our cloudflared tunnel, the magic link points at the wrong host. _Mitigation:_ runbook step explicitly tells the operator to update Site URL to the tunnel URL each session, or use a stable named tunnel.
 - **R4 — CI can't verify the email round-trip.** Documented; manual QA only for the actual link click. The Playwright spec stubs the network so CI still asserts UI behavior end-to-end.
 
 ## Done when

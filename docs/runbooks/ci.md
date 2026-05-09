@@ -37,27 +37,27 @@ Total wall time on a clean PR: **~8–10 minutes**.
 
 Settings → Secrets and variables → Actions → New repository secret:
 
-| Secret | Value source |
-|---|---|
-| `DATABASE_URI` | Supabase dashboard → Settings → Database → Direct connection (port 5432). |
-| `PAYLOAD_SECRET` | `openssl rand -base64 48` — independent of dev `.env`. |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API → Project URL. |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API → `anon public`. |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API → `service_role` (server-only). |
-| `SUPABASE_AUTH_WEBHOOK_SECRET` | `openssl rand -hex 32` — match what's set in the hosted DB's `app.webhook_secret` if you want CI's webhook tests to work; otherwise any value is fine for now. |
+| Secret                          | Value source                                                                                                                                                   |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URI`                  | Supabase dashboard → Settings → Database → Direct connection (port 5432).                                                                                      |
+| `PAYLOAD_SECRET`                | `openssl rand -base64 48` — independent of dev `.env`.                                                                                                         |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase → Settings → API → Project URL.                                                                                                                       |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API → `anon public`.                                                                                                                     |
+| `SUPABASE_SERVICE_ROLE_KEY`     | Supabase → Settings → API → `service_role` (server-only).                                                                                                      |
+| `SUPABASE_AUTH_WEBHOOK_SECRET`  | `openssl rand -hex 32` — match what's set in the hosted DB's `app.webhook_secret` if you want CI's webhook tests to work; otherwise any value is fine for now. |
 
 > The hosted **dev** Supabase project is what CI talks to. There is no production database yet (task-23 onward); when it lands, add a parallel set of `PROD_*` secrets and a separate workflow.
 
 ## Debugging a failed gate
 
-| Job is red | Check |
-|---|---|
-| `typecheck` | `bun run typecheck` locally — same command. |
-| `lint` | `bun run lint`. |
-| `unit-test` | `bun run test`. The matrix output names the failing spec. |
-| `contrast` | `bun run contrast:check` — output lists the failing bg×accent combos with their ratios. |
-| `build` | Re-run locally with the same env vars. Most failures are env-missing or migration drift. |
-| `e2e` | Download the `playwright-report` artifact from the run. `bun run test:e2e:ui` locally to repro interactively. |
+| Job is red   | Check                                                                                                                                                                                                                                                                              |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `typecheck`  | `bun run typecheck` locally — same command.                                                                                                                                                                                                                                        |
+| `lint`       | `bun run lint`.                                                                                                                                                                                                                                                                    |
+| `unit-test`  | `bun run test`. The matrix output names the failing spec.                                                                                                                                                                                                                          |
+| `contrast`   | `bun run contrast:check` — output lists the failing bg×accent combos with their ratios.                                                                                                                                                                                            |
+| `build`      | Re-run locally with the same env vars. Most failures are env-missing or migration drift.                                                                                                                                                                                           |
+| `e2e`        | Download the `playwright-report` artifact from the run. `bun run test:e2e:ui` locally to repro interactively.                                                                                                                                                                      |
 | `lighthouse` | The action prints a public URL with the full report; click through to see which audit failed. Tighten/loosen thresholds in [`lighthouserc.json`](../../lighthouserc.json) if they're wrong, but **don't loosen perf/a11y to make a real regression go away** — fix the regression. |
 
 ## Phase B — operator setup (deferred from task-04)

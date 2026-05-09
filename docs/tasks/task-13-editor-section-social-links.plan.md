@@ -13,17 +13,17 @@ Social links are the editor's first **collection-backed** section: each link is 
 
 ## Decisions locked (Socratic Gate)
 
-| # | Axis | Decision | Rationale |
-|---|---|---|---|
-| 1 | Storage shape | Keep `social-links` as a separate collection (one row per link). Drop `displayOrder` on writes — it's an output of array index, set by the route. | Matches the existing schema. Array index is the source of truth for order, which avoids "two rows have displayOrder=3" drift. |
-| 2 | Save mode | Single bulk endpoint: `PUT /api/profiles/[id]/social-links` with `{ links: [{ id?, platform, url }] }`. Server reconciles (update existing, create missing, delete absent). | Fits the autosave's debounced-buffer model (one PATCH per dirty cycle). Per-row CRUD would force a parallel state machine that fights the existing scopes. Last-write-wins on concurrent tabs is acceptable for a single-user editor. |
-| 3 | URL handling | Per-platform `parseAndCanonicalize(platform, raw)` returns `{ ok, canonical }` or an error. Rules: pasted `@handle` → canonical URL; bare URLs are parsed and rebuilt from origin + sanitized path; WhatsApp accepts E.164 numbers and produces `https://wa.me/<digits>`; email accepts `user@host` and produces `mailto:user@host`. | Spec AC. Rebuilding from parts (rather than passing the user string through) closes the open-redirect/XSS surface. |
-| 4 | Validation surfacing | Inline error per row + a "Como encontrar a URL do {platform}" helper link to a static docs page. Save proceeds for valid rows; invalid rows block the save with a `role="alert"` summary at the top. | Spec AC ("invalid URLs surface inline"). Don't autosave broken rows — server rejection would just produce an error toast with no recovery path. |
-| 5 | Cap | 10 rows. "Adicionar link" disables at 10. Server enforces too. | Spec AC. |
-| 6 | Reorder | dnd-kit, vertical list (same as services). Drag-end → optimistic `applyMutation('socialLinks', { links: next })` → autosave PUT. | Same shape as task-11. |
-| 7 | MutationScope | Add `'socialLinks'` to the union in `EditorClient.tsx`. Add a fourth dirty buffer + a fourth route entry. Cache update path: `qc.setQueryData` writes the new list to `bundle.socialLinks` directly (not nested in `profile`). | The scope already abstracts buffer + route lookup; one new entry per scope. |
-| 8 | Public render | `SocialLinksRender` sorts by `displayOrder`, then renders `mailto:` for email, `https://wa.me/<digits>` for WhatsApp, `target="_blank" rel="noopener noreferrer"` for everything else. Label is the platform's PT-BR label (icon set is task-19 polish). | Spec AC. |
-| 9 | Out of scope reaffirmed | Icon set, OAuth-connected handles (Instagram Graph in task-34). | Spec scope-out. |
+| #   | Axis                    | Decision                                                                                                                                                                                                                                                                                                                             | Rationale                                                                                                                                                                                                                             |
+| --- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Storage shape           | Keep `social-links` as a separate collection (one row per link). Drop `displayOrder` on writes — it's an output of array index, set by the route.                                                                                                                                                                                    | Matches the existing schema. Array index is the source of truth for order, which avoids "two rows have displayOrder=3" drift.                                                                                                         |
+| 2   | Save mode               | Single bulk endpoint: `PUT /api/profiles/[id]/social-links` with `{ links: [{ id?, platform, url }] }`. Server reconciles (update existing, create missing, delete absent).                                                                                                                                                          | Fits the autosave's debounced-buffer model (one PATCH per dirty cycle). Per-row CRUD would force a parallel state machine that fights the existing scopes. Last-write-wins on concurrent tabs is acceptable for a single-user editor. |
+| 3   | URL handling            | Per-platform `parseAndCanonicalize(platform, raw)` returns `{ ok, canonical }` or an error. Rules: pasted `@handle` → canonical URL; bare URLs are parsed and rebuilt from origin + sanitized path; WhatsApp accepts E.164 numbers and produces `https://wa.me/<digits>`; email accepts `user@host` and produces `mailto:user@host`. | Spec AC. Rebuilding from parts (rather than passing the user string through) closes the open-redirect/XSS surface.                                                                                                                    |
+| 4   | Validation surfacing    | Inline error per row + a "Como encontrar a URL do {platform}" helper link to a static docs page. Save proceeds for valid rows; invalid rows block the save with a `role="alert"` summary at the top.                                                                                                                                 | Spec AC ("invalid URLs surface inline"). Don't autosave broken rows — server rejection would just produce an error toast with no recovery path.                                                                                       |
+| 5   | Cap                     | 10 rows. "Adicionar link" disables at 10. Server enforces too.                                                                                                                                                                                                                                                                       | Spec AC.                                                                                                                                                                                                                              |
+| 6   | Reorder                 | dnd-kit, vertical list (same as services). Drag-end → optimistic `applyMutation('socialLinks', { links: next })` → autosave PUT.                                                                                                                                                                                                     | Same shape as task-11.                                                                                                                                                                                                                |
+| 7   | MutationScope           | Add `'socialLinks'` to the union in `EditorClient.tsx`. Add a fourth dirty buffer + a fourth route entry. Cache update path: `qc.setQueryData` writes the new list to `bundle.socialLinks` directly (not nested in `profile`).                                                                                                       | The scope already abstracts buffer + route lookup; one new entry per scope.                                                                                                                                                           |
+| 8   | Public render           | `SocialLinksRender` sorts by `displayOrder`, then renders `mailto:` for email, `https://wa.me/<digits>` for WhatsApp, `target="_blank" rel="noopener noreferrer"` for everything else. Label is the platform's PT-BR label (icon set is task-19 polish).                                                                             | Spec AC.                                                                                                                                                                                                                              |
+| 9   | Out of scope reaffirmed | Icon set, OAuth-connected handles (Instagram Graph in task-34).                                                                                                                                                                                                                                                                      | Spec scope-out.                                                                                                                                                                                                                       |
 
 ## Cross-references
 
@@ -35,26 +35,33 @@ Social links are the editor's first **collection-backed** section: each link is 
 ## File inventory (deliverables)
 
 ### Pure helpers (TDD)
+
 - `lib/editor/social-link-validate.ts` (+ test) — `Platform` enum, `parseAndCanonicalize(platform, raw)`, `validateLinks(items)` (per-row + dup-platform-check + cap).
 
 ### REST route
+
 - `app/api/profiles/[id]/social-links/route.ts` — `PUT` accepts `{ links: [...] }`, calls reconciler, returns the fresh list. Auth: `assertOwnsProfile` first (same as content/theme).
 - `lib/editor/social-links-reconcile.ts` (+ test) — pure DI helper: takes `{ existing, incoming, deps }` and emits the create/update/delete plan + final array. Live wiring lives next to it.
 
 ### Editor scope wiring
+
 - `app/dashboard/profile/[id]/EditorClient.tsx` — extend `MutationScope`, add `dirtySocialLinks` ref, add `'socialLinks'` to `ROUTE_FOR`, extend `applyMutation` to update `bundle.socialLinks` (sibling, not nested).
 
 ### Editor UI
+
 - `components/editor/sections/SocialLinksEditCard.tsx` (+ test) — vertical sortable list, platform `<select>`, URL `<input>`, per-row validation, "Adicionar link" capped at 10, helper link.
 
 ### Public renderer
+
 - `components/profile/sections/SocialLinksRender.tsx` — sort by `displayOrder`; emit `mailto:` / `wa.me` for email/whatsapp; PT-BR label; existing test coverage retained.
 
 ### Section registry tweak + EditorPane
+
 - `lib/editor/sections.ts` — flip `socialLinks.hasEditor = true`.
 - `components/editor/EditorPane.tsx` — add `case 'socialLinks'`.
 
 ### E2E + runbook
+
 - `tests/e2e/editor-social-links.spec.ts` — `@full` happy path: add 3 links → reorder → invalid URL inline → fix → remove one.
 - `docs/runbooks/dev-editor.md` — append the social-links recipe.
 
@@ -71,12 +78,12 @@ Social links are the editor's first **collection-backed** section: each link is 
 
 ## Acceptance evidence (Verification Matrix)
 
-| AC | How verified |
-|---|---|
+| AC                                   | How verified                                                                          |
+| ------------------------------------ | ------------------------------------------------------------------------------------- |
 | Pasting `@handle` is auto-normalized | `parseAndCanonicalize('instagram', '@dj_x')` test → `https://www.instagram.com/dj_x`. |
-| Invalid URLs surface inline | EditCard test asserts the row's `aria-invalid` + helper link appears. |
-| Reorder persists | Drag-end mutates the array → PUT writes new `displayOrder`. E2E covers refresh. |
-| WhatsApp validation enforces E.164 | `parseAndCanonicalize('whatsapp', '5511999999999')` ok; `'invalid'` returns error. |
+| Invalid URLs surface inline          | EditCard test asserts the row's `aria-invalid` + helper link appears.                 |
+| Reorder persists                     | Drag-end mutates the array → PUT writes new `displayOrder`. E2E covers refresh.       |
+| WhatsApp validation enforces E.164   | `parseAndCanonicalize('whatsapp', '5511999999999')` ok; `'invalid'` returns error.    |
 
 ## Test plan (TDD)
 
@@ -93,10 +100,10 @@ Social links are the editor's first **collection-backed** section: each link is 
 
 ## Risks
 
-- **R1 — Server rebuild rejects a previously valid URL.** A user pastes `https://www.instagram.com/dj_x?utm=foo`; the canonical strips the query. Their pasted string is preserved client-side optimistically, then server returns the stripped version on refetch — flicker. *Mitigation:* the editor calls `parseAndCanonicalize` client-side too on every change; the input always shows the canonical version. The flicker doesn't happen.
-- **R2 — Reconcile partial failure.** Update of row 3 succeeds, delete of row 5 fails (Payload throws). Database left in an in-between state. *Mitigation:* the route returns 500; the autosave error path invalidates the query, refetches, and the editor re-renders with whatever the database currently holds. User retries.
-- **R3 — Concurrent tabs save in different order.** Tab A reorders, Tab B adds a row, Tab A's PUT lands second. Tab A's snapshot doesn't have Tab B's new row → it's deleted. *Mitigation:* documented as out of scope; matches the gallery + sectionOrder posture.
-- **R4 — Phishing via WhatsApp.** A normalized `wa.me/<digits>` link could go to anyone. *Mitigation:* same posture as every other social link — the user types the number; we don't introspect the destination.
+- **R1 — Server rebuild rejects a previously valid URL.** A user pastes `https://www.instagram.com/dj_x?utm=foo`; the canonical strips the query. Their pasted string is preserved client-side optimistically, then server returns the stripped version on refetch — flicker. _Mitigation:_ the editor calls `parseAndCanonicalize` client-side too on every change; the input always shows the canonical version. The flicker doesn't happen.
+- **R2 — Reconcile partial failure.** Update of row 3 succeeds, delete of row 5 fails (Payload throws). Database left in an in-between state. _Mitigation:_ the route returns 500; the autosave error path invalidates the query, refetches, and the editor re-renders with whatever the database currently holds. User retries.
+- **R3 — Concurrent tabs save in different order.** Tab A reorders, Tab B adds a row, Tab A's PUT lands second. Tab A's snapshot doesn't have Tab B's new row → it's deleted. _Mitigation:_ documented as out of scope; matches the gallery + sectionOrder posture.
+- **R4 — Phishing via WhatsApp.** A normalized `wa.me/<digits>` link could go to anyone. _Mitigation:_ same posture as every other social link — the user types the number; we don't introspect the destination.
 
 ## Done when
 

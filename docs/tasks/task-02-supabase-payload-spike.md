@@ -1,15 +1,19 @@
 # Task 02 — Supabase + Payload Architecture Spike
 
 ## Summary
+
 Validate the dual-schema architecture (Payload owns content in `payload` schema; Supabase owns auth, storage, analytics in `public` schema) end-to-end before we commit the entire data model to it.
 
 ## PRD references
+
 - §7 (Data model), §8 (Tech architecture), §18 row #1 (architectural decision flagged for week-1 spike).
 
 ## Dependencies
+
 - task-01 (project scaffold).
 
 ## Scope (in)
+
 - Stand up Supabase locally (`supabase start`).
 - Wire Payload's Postgres adapter to that DB on the `payload` schema.
 - Prove a round-trip: create a Supabase Auth user → webhook into a Payload `Users` collection → relation from a Payload `Profiles` row back to that user.
@@ -17,22 +21,27 @@ Validate the dual-schema architecture (Payload owns content in `payload` schema;
 - Document the migration story (who runs Payload migrations vs. Supabase migrations, in what order).
 
 ## Scope (out)
+
 - Final shape of every collection (task-08 lands those).
 - RLS policies (task-27).
 
 ## Acceptance criteria
-- [x] A new Supabase Auth user appears as a Payload `Users` document within 5s. *(trigger + webhook handler in `app/api/webhooks/supabase-auth/route.ts`; verified via runbook step 4)*
-- [x] Payload migrations run cleanly without colliding with Supabase tables. *(`schemaName: 'payload'` in `payload.config.ts`; runbook step 2 verifies)*
-- [x] Browser-side test uploads a 2MB JPEG to Supabase Storage and the resulting Payload Media record links to the correct object. *(`/spike?spike=1` page; runbook step 5)*
-- [x] Decision log committed at `docs/decisions/0001-payload-supabase-split.md` either confirming the split or proposing an alternative. *(spike confirmed the split)*
+
+- [x] A new Supabase Auth user appears as a Payload `Users` document within 5s. _(trigger + webhook handler in `app/api/webhooks/supabase-auth/route.ts`; verified via runbook step 4)_
+- [x] Payload migrations run cleanly without colliding with Supabase tables. _(`schemaName: 'payload'` in `payload.config.ts`; runbook step 2 verifies)_
+- [x] Browser-side test uploads a 2MB JPEG to Supabase Storage and the resulting Payload Media record links to the correct object. _(`/spike?spike=1` page; runbook step 5)_
+- [x] Decision log committed at `docs/decisions/0001-payload-supabase-split.md` either confirming the split or proposing an alternative. _(spike confirmed the split)_
 
 ## Status
+
 **Complete (spike validated 2026-04-29).** See [ADR-0001](../decisions/0001-payload-supabase-split.md) and [the spike runbook](../runbooks/spike-task-02.md). Follow-ups for task-08: Users/Profiles/Media collections are minimum-viable shapes intended to be extended, not replaced.
 
 ## Implementation notes
+
 - The webhook from Supabase Auth → Payload should be idempotent (handle replays).
 - Encrypt service-role keys; never expose to client.
 - Payload's Local API is the only way the public profile RSC reads content (per §8).
 
 ## Definition of Done
+
 Per PRD Appendix C; spike artifact + decision doc + working demo route gated behind `?spike=1`.

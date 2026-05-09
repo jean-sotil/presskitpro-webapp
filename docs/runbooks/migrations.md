@@ -4,11 +4,11 @@ Two systems write DDL to the same Postgres database. They MUST be applied in thi
 
 ## Schemas at a glance
 
-| Schema | Owner | Tooling |
-|---|---|---|
-| `auth`, `storage`, `realtime`, `extensions` | Supabase platform | `supabase db push` / `supabase migration up` |
-| `public` | Application — Supabase migrations + seeds | `supabase migration up` |
-| `payload` | Payload CMS | `pnpm payload migrate` |
+| Schema                                      | Owner                                     | Tooling                                      |
+| ------------------------------------------- | ----------------------------------------- | -------------------------------------------- |
+| `auth`, `storage`, `realtime`, `extensions` | Supabase platform                         | `supabase db push` / `supabase migration up` |
+| `public`                                    | Application — Supabase migrations + seeds | `supabase migration up`                      |
+| `payload`                                   | Payload CMS                               | `pnpm payload migrate`                       |
 
 ## Fresh environment bootstrap
 
@@ -35,11 +35,11 @@ pnpm seed
 
 ## Migrations to date
 
-| File | Adds |
-|---|---|
-| `20260429000001_spike_storage_and_auth_webhook.sql` | task-02 spike: storage buckets + auth.users → webhook trigger |
-| `20260504000001_slug_reservations_and_redirects.sql` | task-07: `slug_reservations` + `slug_redirects` + 29 reserved-word seed (PRD §5) + `pg_cron` sweep job (`slug-sweep-expired`, every 5 min) |
-| `migrations/20260505_015050.ts` (Payload) | task-08 baseline: `payload.{admins,users,profiles,media}` + Payload internals (`payload_migrations`, `payload_locked_documents*`, `payload_preferences*`) |
+| File                                                          | Adds                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `20260429000001_spike_storage_and_auth_webhook.sql`           | task-02 spike: storage buckets + auth.users → webhook trigger                                                                                                                                                                                                                                                                                                                                         |
+| `20260504000001_slug_reservations_and_redirects.sql`          | task-07: `slug_reservations` + `slug_redirects` + 29 reserved-word seed (PRD §5) + `pg_cron` sweep job (`slug-sweep-expired`, every 5 min)                                                                                                                                                                                                                                                            |
+| `migrations/20260505_015050.ts` (Payload)                     | task-08 baseline: `payload.{admins,users,profiles,media}` + Payload internals (`payload_migrations`, `payload_locked_documents*`, `payload_preferences*`)                                                                                                                                                                                                                                             |
 | `migrations/20260505_070813_task_08_collections.ts` (Payload) | task-08 collections: `profile_content` (+ `_locales` + `_services`), `social_links`, `featured_tracks`, `themes` (+ `_section_order`), `instagram_connections`. Adds press-kit + locale columns to `profiles`; adds Payload-managed auth columns to `users` (sessions, salt/hash, lock fields — present even though local strategy is disabled because `enableFields: true` keeps the schema stable). |
 
 The `pg_cron` job lives in the `cron.job` table — verify with `select jobname, schedule from cron.job;` (requires service-role / superuser). Re-running the migration is idempotent: `cron.schedule` replaces by jobname, and the seed uses `ON CONFLICT DO NOTHING`.
@@ -51,7 +51,7 @@ The `pg_cron` job lives in the `cron.job` table — verify with `select jobname,
 
 ## Orphaned auth.users after a `payload` schema reset
 
-Dropping `payload.*` (the recovery from dev-mode auto-push drift, below) nukes `payload.users` along with everything else. Existing Supabase Auth sessions stay valid (Supabase doesn't know or care about Payload), so users *appear* logged in but every Payload-side action — onboarding, editor, REST routes — surfaces `mirror-pending` because no row matches their `supabaseUserId`.
+Dropping `payload.*` (the recovery from dev-mode auto-push drift, below) nukes `payload.users` along with everything else. Existing Supabase Auth sessions stay valid (Supabase doesn't know or care about Payload), so users _appear_ logged in but every Payload-side action — onboarding, editor, REST routes — surfaces `mirror-pending` because no row matches their `supabaseUserId`.
 
 The auth-sync webhook (task-02) only fires on `auth.users` INSERT / UPDATE, so it doesn't retroactively backfill. Two ways to recover:
 
@@ -81,12 +81,14 @@ If `pnpm payload migrate` prompts:
 Two ways to clear it:
 
 1. **Fresh dev DB (preferred for local).** Reset the `payload` schema and re-apply from scratch:
+
    ```sql
    drop schema if exists payload cascade;
    ```
+
    Then `pnpm payload migrate` runs all migration files in order.
 
-2. **Mark migrations as applied** if your DB schema *already* matches the migration files (e.g. you've been auto-pushing the same shape). Insert rows into `payload.payload_migrations` for each applied filename. Verify schema parity first by diffing `payload.*` against the migration's `up()` SQL.
+2. **Mark migrations as applied** if your DB schema _already_ matches the migration files (e.g. you've been auto-pushing the same shape). Insert rows into `payload.payload_migrations` for each applied filename. Verify schema parity first by diffing `payload.*` against the migration's `up()` SQL.
 
    **Recurring case:** `pnpm dev` is running, you edit `payload/collections/*.ts` to add a field, dev-mode auto-push creates the column. Later you run `pnpm payload migrate:create` + `migrate` and the migration's `ADD COLUMN` collides with `column "..." already exists`. The schema is correct; only `payload_migrations` is missing a row. Confirm the column exists (`\d payload.<table>`) then mark the migration applied:
 

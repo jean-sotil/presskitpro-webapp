@@ -13,15 +13,15 @@ The POC ships [MediakitPRO Template 1](../presets/MediakitPRO%E2%84%A2_Template%
 
 Single-column, mobile-first, black-dominant. Seven distinct visual blocks stacked vertically:
 
-| Block | Content | Visual treatment |
-|---|---|---|
-| 1. Hero | DJ portrait + artist name | Tile-broken portrait, oversized dj name overlapping image, white text on black |
-| 2. Marquee | Artist name (decoration) | Repeating ticker band ("dj username …") with cut-out treatment |
-| 3. Bio | Photo + body text | 2-column split: cyan/red color-overlaid live photo on left, "BIOGRAPHY" heading + body on right |
-| 4. Social | IG / YouTube / SoundCloud / More links + CTA | Black panel, icon-list rows, single dark-bordered "CLICK HERE" button |
-| 5. Press kit | Square panel + CTA | Square graphic (record/glitch motif) with "DOWNLOAD PRESSKIT" + button |
-| 6. Gallery | 2 portrait photos | Inline horizontal arrangement |
-| 7. Contact | "FOR BOOKING CONTACT" + WhatsApp icon + email + CTA | Dark panel, WhatsApp emphasis, white-on-black |
+| Block        | Content                                             | Visual treatment                                                                                |
+| ------------ | --------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| 1. Hero      | DJ portrait + artist name                           | Tile-broken portrait, oversized dj name overlapping image, white text on black                  |
+| 2. Marquee   | Artist name (decoration)                            | Repeating ticker band ("dj username …") with cut-out treatment                                  |
+| 3. Bio       | Photo + body text                                   | 2-column split: cyan/red color-overlaid live photo on left, "BIOGRAPHY" heading + body on right |
+| 4. Social    | IG / YouTube / SoundCloud / More links + CTA        | Black panel, icon-list rows, single dark-bordered "CLICK HERE" button                           |
+| 5. Press kit | Square panel + CTA                                  | Square graphic (record/glitch motif) with "DOWNLOAD PRESSKIT" + button                          |
+| 6. Gallery   | 2 portrait photos                                   | Inline horizontal arrangement                                                                   |
+| 7. Contact   | "FOR BOOKING CONTACT" + WhatsApp icon + email + CTA | Dark panel, WhatsApp emphasis, white-on-black                                                   |
 
 Visual tokens: pure black backgrounds, white/off-white text, accent color cyan-red on photo overlays, bold display-sans titles in mixed case, body sans at small sizes, heavy negative space, no rounded corners, no shadows. Sentence case prevails inside copy; titles tend toward all-caps for hierarchical emphasis.
 
@@ -29,22 +29,23 @@ These don't need 7 new components — they're variants of the existing 6 section
 
 ## Decisions locked
 
-| # | Axis | Decision | Rationale |
-|---|---|---|---|
-| 1 | Preset shape | Pure TS module: `lib/presets/<id>.ts` exports a `Preset` object with `{ id, name, tagline, defaultPreset?, theme: { bg, accent, text, contrast, fontPairId }, sections: { hero, gallery, socialLinks, pressKit, contact }, decorations: { marquee?: { text } }, thumbnail }`. Registry at `lib/presets/index.ts` collects all presets into `PRESETS: readonly Preset[]`. | Type-safe, reviewable in diffs, no Payload schema cost. The variant strings are unioned types so the renderer + editor share one source of truth. |
-| 2 | Themes.presetId field | New select on `Themes`: options = preset ids + `null` (legacy). Default `null` for existing rows; `mediakit-pro-v1` for new rows via the onboarding action. | Keeps the existing `Themes` columns load-bearing for the contrast gate (task-18) — the preset just *populates* them on first apply. |
-| 3 | Variant resolution | `ProfileRenderer` reads `Themes.presetId` → looks up the preset → passes variant strings as props to existing section render components (`<HeroRender variant="title-overlay-broken" …/>`). Each component switch-statements over its own variant union. | No changes to which sections render — only HOW each one renders. Existing variant fields (`heroStyle`, `galleryLayout`) become fallbacks when `presetId` is null. |
-| 4 | Apply-preset flow | Editor's Design tab calls a server action `applyPresetAction(presetId)` that:<br>(a) writes `Themes.presetId`,<br>(b) overwrites the theme color/font fields with the preset's tokens (so the contrast gate runs against the new palette),<br>(c) bumps `Themes.contrastValidatedAt = null` so re-publish requires a fresh contrast pass. | The contrast gate (task-18 `CONTRAST_STALE_AFTER_MS`) protects accessibility through preset switches. |
-| 5 | Decorations | Preset-owned, code-rendered, no editor knobs. v1 adds one decoration: `marquee.text`. The renderer reads `decorations.marquee` from the active preset and renders an `<aside data-marquee>` band between hero and bio. | Decorations are chrome, not content — owning them in the preset is correct. |
-| 6 | Default for new profiles | Onboarding action sets `Themes.presetId = 'mediakit-pro-v1'` on profile creation. | Spec — the POC IS the new default. |
-| 7 | Migration for existing profiles | One SQL UPDATE (documented in the runbook) sets `Themes.preset_id = 'editorial-nightlife-v1'` for every existing row. The legacy preset is visually identical to today's render, so the upgrade is invisible. | Avoids a migration script; the SQL is one-shot per env. |
-| 8 | Thumbnail strategy | Static JPG at `public/presets/<id>/thumb.jpg`, 4:3 aspect, ~50 KB max. The Design tab renders them with `next/image`. The MediakitPRO thumbnail can be a cropped version of the reference template image; Editorial Nightlife uses a screenshot of the current rendered look. | Static assets keep the editor bundle from ballooning; thumbnails don't need to be live-rendered. |
-| 9 | i18n | Preset `name` and `tagline` live in `messages/{pt,en,es}.json` under `presets.<id>.name` / `presets.<id>.tagline`. | Same posture as the rest of the chrome. |
-| 10 | Out of scope (PR-A) | Remaining presets beyond the two; per-preset custom CSS; live preview on hover; user-created presets. | Each is a separate, low-risk follow-up. |
+| #   | Axis                            | Decision                                                                                                                                                                                                                                                                                                                                                                 | Rationale                                                                                                                                                         |
+| --- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Preset shape                    | Pure TS module: `lib/presets/<id>.ts` exports a `Preset` object with `{ id, name, tagline, defaultPreset?, theme: { bg, accent, text, contrast, fontPairId }, sections: { hero, gallery, socialLinks, pressKit, contact }, decorations: { marquee?: { text } }, thumbnail }`. Registry at `lib/presets/index.ts` collects all presets into `PRESETS: readonly Preset[]`. | Type-safe, reviewable in diffs, no Payload schema cost. The variant strings are unioned types so the renderer + editor share one source of truth.                 |
+| 2   | Themes.presetId field           | New select on `Themes`: options = preset ids + `null` (legacy). Default `null` for existing rows; `mediakit-pro-v1` for new rows via the onboarding action.                                                                                                                                                                                                              | Keeps the existing `Themes` columns load-bearing for the contrast gate (task-18) — the preset just _populates_ them on first apply.                               |
+| 3   | Variant resolution              | `ProfileRenderer` reads `Themes.presetId` → looks up the preset → passes variant strings as props to existing section render components (`<HeroRender variant="title-overlay-broken" …/>`). Each component switch-statements over its own variant union.                                                                                                                 | No changes to which sections render — only HOW each one renders. Existing variant fields (`heroStyle`, `galleryLayout`) become fallbacks when `presetId` is null. |
+| 4   | Apply-preset flow               | Editor's Design tab calls a server action `applyPresetAction(presetId)` that:<br>(a) writes `Themes.presetId`,<br>(b) overwrites the theme color/font fields with the preset's tokens (so the contrast gate runs against the new palette),<br>(c) bumps `Themes.contrastValidatedAt = null` so re-publish requires a fresh contrast pass.                                | The contrast gate (task-18 `CONTRAST_STALE_AFTER_MS`) protects accessibility through preset switches.                                                             |
+| 5   | Decorations                     | Preset-owned, code-rendered, no editor knobs. v1 adds one decoration: `marquee.text`. The renderer reads `decorations.marquee` from the active preset and renders an `<aside data-marquee>` band between hero and bio.                                                                                                                                                   | Decorations are chrome, not content — owning them in the preset is correct.                                                                                       |
+| 6   | Default for new profiles        | Onboarding action sets `Themes.presetId = 'mediakit-pro-v1'` on profile creation.                                                                                                                                                                                                                                                                                        | Spec — the POC IS the new default.                                                                                                                                |
+| 7   | Migration for existing profiles | One SQL UPDATE (documented in the runbook) sets `Themes.preset_id = 'editorial-nightlife-v1'` for every existing row. The legacy preset is visually identical to today's render, so the upgrade is invisible.                                                                                                                                                            | Avoids a migration script; the SQL is one-shot per env.                                                                                                           |
+| 8   | Thumbnail strategy              | Static JPG at `public/presets/<id>/thumb.jpg`, 4:3 aspect, ~50 KB max. The Design tab renders them with `next/image`. The MediakitPRO thumbnail can be a cropped version of the reference template image; Editorial Nightlife uses a screenshot of the current rendered look.                                                                                            | Static assets keep the editor bundle from ballooning; thumbnails don't need to be live-rendered.                                                                  |
+| 9   | i18n                            | Preset `name` and `tagline` live in `messages/{pt,en,es}.json` under `presets.<id>.name` / `presets.<id>.tagline`.                                                                                                                                                                                                                                                       | Same posture as the rest of the chrome.                                                                                                                           |
+| 10  | Out of scope (PR-A)             | Remaining presets beyond the two; per-preset custom CSS; live preview on hover; user-created presets.                                                                                                                                                                                                                                                                    | Each is a separate, low-risk follow-up.                                                                                                                           |
 
 ## File inventory
 
 ### New
+
 - `lib/presets/types.ts` — `Preset` type + variant unions (`HeroVariant`, `GalleryVariant`, `SocialVariant`, `PressKitVariant`, `ContactVariant`).
 - `lib/presets/mediakit-pro-v1.ts` — the POC preset definition.
 - `lib/presets/editorial-nightlife-v1.ts` — sibling preset matching the current default.
@@ -62,6 +63,7 @@ These don't need 7 new components — they're variants of the existing 6 section
 - `public/presets/editorial-nightlife-v1/thumb.jpg` — 4:3 thumbnail.
 
 ### Modified
+
 - `payload/collections/Themes.ts` — `presetId` select (options derived from `PRESETS`).
 - `payload-types.ts` — regenerated.
 - `components/profile/ProfileRenderer.tsx` — resolves `presetId`, passes variant props.
@@ -73,6 +75,7 @@ These don't need 7 new components — they're variants of the existing 6 section
 - `docs/runbooks/dev-editor.md` — one-line backfill SQL + how to add a new preset.
 
 ### Untouched (verified)
+
 - The contrast-validation flow from task-18 — `applyPresetAction` writes new color tokens and nulls `contrastValidatedAt`, forcing a fresh contrast pass before publish.
 - The slug + analytics + middleware paths — design is purely render-layer.
 - The bundle-budget gate (task-26) — adding presets adds bytes; the budget caps the regression.
@@ -95,15 +98,15 @@ These don't need 7 new components — they're variants of the existing 6 section
 
 ## Acceptance evidence
 
-| AC | How verified |
-|---|---|
-| Fresh profile renders MediakitPRO out of the box | Onboarding test asserts `Themes.presetId === 'mediakit-pro-v1'` after profile creation; manual visit of `/<seeded-slug>` shows the brutalist look. |
-| Artist can switch presets and the public re-renders | New e2e: open editor → click Design tab → click Editorial Nightlife card → reload `/[slug]` → assert the previous look. |
-| Switching writes `presetId` + theme tokens + clears `contrastValidatedAt` | Unit test on `buildApplyPresetPatch` covers the patch shape. |
-| 6 sections render with MediakitPRO variants when active | Component-level test for each new variant component + a snapshot-style check on the rendered DOM. |
-| Existing artists keep their look after backfill | Runbook SQL is one-shot and idempotent; legacy preset's tokens match the current defaults. |
-| MediakitPRO matches reference's structural intent | Manual side-by-side review against the reference JPG; documented in PR description. |
-| Lighthouse Performance ≥ 95 on MediakitPRO | LHCI assertion config from task-26 is unchanged; new variants must use existing `next/image` patterns + inline SVG decorations only. |
+| AC                                                                        | How verified                                                                                                                                       |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Fresh profile renders MediakitPRO out of the box                          | Onboarding test asserts `Themes.presetId === 'mediakit-pro-v1'` after profile creation; manual visit of `/<seeded-slug>` shows the brutalist look. |
+| Artist can switch presets and the public re-renders                       | New e2e: open editor → click Design tab → click Editorial Nightlife card → reload `/[slug]` → assert the previous look.                            |
+| Switching writes `presetId` + theme tokens + clears `contrastValidatedAt` | Unit test on `buildApplyPresetPatch` covers the patch shape.                                                                                       |
+| 6 sections render with MediakitPRO variants when active                   | Component-level test for each new variant component + a snapshot-style check on the rendered DOM.                                                  |
+| Existing artists keep their look after backfill                           | Runbook SQL is one-shot and idempotent; legacy preset's tokens match the current defaults.                                                         |
+| MediakitPRO matches reference's structural intent                         | Manual side-by-side review against the reference JPG; documented in PR description.                                                                |
+| Lighthouse Performance ≥ 95 on MediakitPRO                                | LHCI assertion config from task-26 is unchanged; new variants must use existing `next/image` patterns + inline SVG decorations only.               |
 
 ## Test plan
 
@@ -113,11 +116,11 @@ These don't need 7 new components — they're variants of the existing 6 section
 
 ## Risks
 
-- **R1 — Marquee + glitched-photo treatments tank LCP.** The MediakitPRO hero overlays a tile-broken portrait + oversized title; if either renders client-side post-hydration, LCP misses the 2.5s budget. *Mitigation:* hero must be entirely server-rendered + use `next/image priority` on the LCP element; the tile-break treatment is a CSS `clip-path` mask on the existing portrait, not a separate raster.
-- **R2 — Contrast gate failures after preset switch.** A preset's color tokens may not pass WCAG AA against the artist's content (e.g. a logo colored to fight the bg). *Mitigation:* `applyPresetAction` nulls `contrastValidatedAt`; the artist must run the contrast check before re-publishing. The Theme tab's existing contrast UI handles the case.
-- **R3 — i18n drift.** Adding presets without adding their copy to all three locales would fail `i18n:check`. *Mitigation:* the registry references `presets.<id>.name`; CI fails on missing keys.
-- **R4 — Migration of existing artists.** The legacy preset must be visually pixel-identical to today's render; otherwise an artist sees their site unexpectedly change. *Mitigation:* `editorial-nightlife-v1`'s tokens are copied verbatim from the current defaults in `lib/design/tokens.ts`; the variant choices (`hero=full-bleed-portrait`, `gallery=mosaic`, …) match the existing fields' defaults.
-- **R5 — Adding a new preset later requires touching every section component.** *Mitigation:* the variant union types make this explicit at the type level — adding a new variant string to `HeroVariant` forces the renderer's switch to handle it, and TypeScript fails the build if it doesn't.
+- **R1 — Marquee + glitched-photo treatments tank LCP.** The MediakitPRO hero overlays a tile-broken portrait + oversized title; if either renders client-side post-hydration, LCP misses the 2.5s budget. _Mitigation:_ hero must be entirely server-rendered + use `next/image priority` on the LCP element; the tile-break treatment is a CSS `clip-path` mask on the existing portrait, not a separate raster.
+- **R2 — Contrast gate failures after preset switch.** A preset's color tokens may not pass WCAG AA against the artist's content (e.g. a logo colored to fight the bg). _Mitigation:_ `applyPresetAction` nulls `contrastValidatedAt`; the artist must run the contrast check before re-publishing. The Theme tab's existing contrast UI handles the case.
+- **R3 — i18n drift.** Adding presets without adding their copy to all three locales would fail `i18n:check`. _Mitigation:_ the registry references `presets.<id>.name`; CI fails on missing keys.
+- **R4 — Migration of existing artists.** The legacy preset must be visually pixel-identical to today's render; otherwise an artist sees their site unexpectedly change. _Mitigation:_ `editorial-nightlife-v1`'s tokens are copied verbatim from the current defaults in `lib/design/tokens.ts`; the variant choices (`hero=full-bleed-portrait`, `gallery=mosaic`, …) match the existing fields' defaults.
+- **R5 — Adding a new preset later requires touching every section component.** _Mitigation:_ the variant union types make this explicit at the type level — adding a new variant string to `HeroVariant` forces the renderer's switch to handle it, and TypeScript fails the build if it doesn't.
 
 ## Done when
 

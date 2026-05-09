@@ -20,33 +20,34 @@ PRD §16 ships v1 with monthly Pro only. Task-31 adds annual Pro (~2 months free
 
 ## Audit — what's already shipped
 
-| Surface | Status | Where |
-|---|---|---|
-| `PlanId` enum at type level | ✅ done | [lib/pricing/plans.ts:11](../../lib/pricing/plans.ts#L11) |
-| Pricing config + Stripe Price ID env mapping | ✅ done | [lib/pricing/plans.ts](../../lib/pricing/plans.ts) (agency has monthly only) |
+| Surface                                                                             | Status             | Where                                                                                  |
+| ----------------------------------------------------------------------------------- | ------------------ | -------------------------------------------------------------------------------------- |
+| `PlanId` enum at type level                                                         | ✅ done            | [lib/pricing/plans.ts:11](../../lib/pricing/plans.ts#L11)                              |
+| Pricing config + Stripe Price ID env mapping                                        | ✅ done            | [lib/pricing/plans.ts](../../lib/pricing/plans.ts) (agency has monthly only)           |
 | Checkout session creation w/ `pro_monthly` / `pro_annual` / `agency_monthly` switch | ✅ done in task-23 | [lib/billing/create-checkout-session.ts](../../lib/billing/create-checkout-session.ts) |
-| Stripe webhook setting `stripeSubscriptionStatus` | ✅ done | [lib/billing/handle-stripe-webhook.ts](../../lib/billing/handle-stripe-webhook.ts) |
-| `Users.stripeCustomerId` + `stripeSubscriptionId` | ✅ done | [Users.ts](../../payload/collections/Users.ts) |
-| Pricing page + annual toggle component | ✅ done in task-22 | [app/pricing/page.tsx](../../app/pricing/page.tsx) |
-| Trial pause cron | ✅ done in task-23 | [app/api/cron/billing/route.ts](../../app/api/cron/billing/route.ts) |
+| Stripe webhook setting `stripeSubscriptionStatus`                                   | ✅ done            | [lib/billing/handle-stripe-webhook.ts](../../lib/billing/handle-stripe-webhook.ts)     |
+| `Users.stripeCustomerId` + `stripeSubscriptionId`                                   | ✅ done            | [Users.ts](../../payload/collections/Users.ts)                                         |
+| Pricing page + annual toggle component                                              | ✅ done in task-22 | [app/pricing/page.tsx](../../app/pricing/page.tsx)                                     |
+| Trial pause cron                                                                    | ✅ done in task-23 | [app/api/cron/billing/route.ts](../../app/api/cron/billing/route.ts)                   |
 
 ## Decisions locked (PR-A)
 
-| # | Axis | Decision | Rationale |
-|---|---|---|---|
-| 1 | `Users.plan` enum | Add `'agency'` (and rename `'free'` → `'trial'` for consistency with `PlanId`). Migration is non-destructive — Payload select fields accept new values without a backfill, and existing `'free'` rows are remapped via a one-shot SQL update referenced in the runbook. | Single source of truth for the plan name across `Users`, `PlanId`, and the webhook reverse map. |
-| 2 | Price-id reverse map | `priceIdToPlan(priceId): { plan: 'pro' \| 'agency', cycle: 'monthly' \| 'annual' } \| null`. Pure DI on `process.env` lookups so tests don't need real Stripe IDs. Pure module = trivially testable. | Webhook reads `subscription.items.data[0].price.id` and reverse-maps to a known plan. |
-| 3 | Webhook plan flip | Extend the existing `customer.subscription.created/updated` branch in [handle-stripe-webhook.ts](../../lib/billing/handle-stripe-webhook.ts) to read the price id, call `priceIdToPlan`, and set `Users.plan` alongside the existing `stripeSubscriptionStatus`. `customer.subscription.deleted` flips back to `'trial'`. | AC #4 — within-5s update is automatic via Stripe's webhook delivery. |
-| 4 | Plan-switch route | New `POST /api/billing/switch-plan` accepts `{ planKey: 'pro_monthly' \| 'pro_annual' \| 'agency_monthly' \| 'agency_annual' }`. Loads the user's existing subscription, calls `stripe.subscriptions.update({ items: [{ id, price }], proration_behavior: 'create_prorations' })`. | AC #1 — Stripe handles the proration math. |
-| 5 | Env-var shape | Rename `STRIPE_PRICE_ID_AGENCY` → `STRIPE_PRICE_ID_AGENCY_MONTHLY`. Add `STRIPE_PRICE_ID_AGENCY_ANNUAL`. Keep the old name as a fallback in `priceIdToPlan` for one release so deployments don't break mid-flight. | Aliasing covers the rolling-deploy gap. The env-example documents the rename. |
-| 6 | Auth on switch route | Standard Supabase session cookie via `supabaseServer().auth.getUser()` — same shape as `/api/profiles/[id]`. Returns 401 for anon, 403 if the calling user has no `stripeSubscriptionId`. | The route is per-user; no cron/admin-only path needed. |
-| 7 | Pricing config — agency annual | Add `priceUSDAnnual: 33` (≈2 months free off `39`) and `stripePriceIdAnnualEnv: 'STRIPE_PRICE_ID_AGENCY_ANNUAL'` to the agency entry. The pricing page picks it up automatically via `priceForBilling`. | Feeds PR-B's pricing-page update without extra plumbing. |
-| 8 | Test posture | Pure-fn tests on `priceIdToPlan` + `webhook plan-flip branch` + `switch-plan handler`. Real Stripe SDK is injected via existing `stripe-client` so the tests use a fake. | Same posture as task-23. |
-| 9 | Out of scope (PR-A) | Profile switcher (cookie + dropdown), 10-profile create gate, pricing page UI updates, translations for new dashboard strings, `/api/billing/portal-link` (Stripe customer portal — separate task if needed). | All in PR-B. |
+| #   | Axis                           | Decision                                                                                                                                                                                                                                                                                                                  | Rationale                                                                                       |
+| --- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| 1   | `Users.plan` enum              | Add `'agency'` (and rename `'free'` → `'trial'` for consistency with `PlanId`). Migration is non-destructive — Payload select fields accept new values without a backfill, and existing `'free'` rows are remapped via a one-shot SQL update referenced in the runbook.                                                   | Single source of truth for the plan name across `Users`, `PlanId`, and the webhook reverse map. |
+| 2   | Price-id reverse map           | `priceIdToPlan(priceId): { plan: 'pro' \| 'agency', cycle: 'monthly' \| 'annual' } \| null`. Pure DI on `process.env` lookups so tests don't need real Stripe IDs. Pure module = trivially testable.                                                                                                                      | Webhook reads `subscription.items.data[0].price.id` and reverse-maps to a known plan.           |
+| 3   | Webhook plan flip              | Extend the existing `customer.subscription.created/updated` branch in [handle-stripe-webhook.ts](../../lib/billing/handle-stripe-webhook.ts) to read the price id, call `priceIdToPlan`, and set `Users.plan` alongside the existing `stripeSubscriptionStatus`. `customer.subscription.deleted` flips back to `'trial'`. | AC #4 — within-5s update is automatic via Stripe's webhook delivery.                            |
+| 4   | Plan-switch route              | New `POST /api/billing/switch-plan` accepts `{ planKey: 'pro_monthly' \| 'pro_annual' \| 'agency_monthly' \| 'agency_annual' }`. Loads the user's existing subscription, calls `stripe.subscriptions.update({ items: [{ id, price }], proration_behavior: 'create_prorations' })`.                                        | AC #1 — Stripe handles the proration math.                                                      |
+| 5   | Env-var shape                  | Rename `STRIPE_PRICE_ID_AGENCY` → `STRIPE_PRICE_ID_AGENCY_MONTHLY`. Add `STRIPE_PRICE_ID_AGENCY_ANNUAL`. Keep the old name as a fallback in `priceIdToPlan` for one release so deployments don't break mid-flight.                                                                                                        | Aliasing covers the rolling-deploy gap. The env-example documents the rename.                   |
+| 6   | Auth on switch route           | Standard Supabase session cookie via `supabaseServer().auth.getUser()` — same shape as `/api/profiles/[id]`. Returns 401 for anon, 403 if the calling user has no `stripeSubscriptionId`.                                                                                                                                 | The route is per-user; no cron/admin-only path needed.                                          |
+| 7   | Pricing config — agency annual | Add `priceUSDAnnual: 33` (≈2 months free off `39`) and `stripePriceIdAnnualEnv: 'STRIPE_PRICE_ID_AGENCY_ANNUAL'` to the agency entry. The pricing page picks it up automatically via `priceForBilling`.                                                                                                                   | Feeds PR-B's pricing-page update without extra plumbing.                                        |
+| 8   | Test posture                   | Pure-fn tests on `priceIdToPlan` + `webhook plan-flip branch` + `switch-plan handler`. Real Stripe SDK is injected via existing `stripe-client` so the tests use a fake.                                                                                                                                                  | Same posture as task-23.                                                                        |
+| 9   | Out of scope (PR-A)            | Profile switcher (cookie + dropdown), 10-profile create gate, pricing page UI updates, translations for new dashboard strings, `/api/billing/portal-link` (Stripe customer portal — separate task if needed).                                                                                                             | All in PR-B.                                                                                    |
 
 ## File inventory (PR-A)
 
 ### New
+
 - `lib/pricing/price-id-to-plan.ts` — pure reverse map; reads env to resolve.
 - `lib/pricing/price-id-to-plan.test.ts` — coverage of all 4 mappings + unknown.
 - `lib/billing/switch-plan.ts` — pure handler with DI on Stripe + Payload deps.
@@ -55,6 +56,7 @@ PRD §16 ships v1 with monthly Pro only. Task-31 adds annual Pro (~2 months free
 - `tests/e2e/switch-plan-auth.spec.ts` — `@smoke` 401 unauth, 401 wrong session.
 
 ### Modified
+
 - `payload/collections/Users.ts` — `plan` enum gains `'agency'`; `'free'` renamed to `'trial'` (label remains user-facing).
 - `payload-types.ts` — regenerated.
 - `lib/pricing/plans.ts` — agency gains `priceUSDAnnual: 33` and `stripePriceIdAnnualEnv: 'STRIPE_PRICE_ID_AGENCY_ANNUAL'`. Comment notes the rename of the monthly env var.
@@ -65,6 +67,7 @@ PRD §16 ships v1 with monthly Pro only. Task-31 adds annual Pro (~2 months free
 - `docs/runbooks/dev-editor.md` — append a "Switch plans + verify proration" recipe + a one-line note on the SQL backfill from `'free'` → `'trial'` for old rows.
 
 ### Untouched (verified)
+
 - The existing trial-pause cron — its query reads `trialEndsAt`, not `plan`, so the rename is invisible.
 - The pricing page render — automatically picks up `priceUSDAnnual` from the config.
 - The middleware + CSP + rate limiters.
@@ -84,12 +87,12 @@ PRD §16 ships v1 with monthly Pro only. Task-31 adds annual Pro (~2 months free
 
 ## Acceptance evidence (PR-A)
 
-| AC | Status (PR-A) |
-|---|---|
-| Switching from monthly to annual prorates correctly | ✅ The `switch-plan` handler calls `stripe.subscriptions.update({ proration_behavior: 'create_prorations' })`. Unit tests verify the call shape; manual verification recipe in the runbook for end-to-end Stripe testing. |
-| Agency user can create up to 10 profiles, blocked at 11 | ⏳ PR-B (Payload `Profiles.access.create` predicate). |
-| Profile switcher persists last-active profile per session | ⏳ PR-B. |
-| Stripe webhook plan-change events update `Users.plan` within 5s | ✅ `priceIdToPlan` + webhook branch update; tests verify the branch fires for both `pro_monthly`→`pro_annual` and `pro`→`agency`. |
+| AC                                                              | Status (PR-A)                                                                                                                                                                                                             |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Switching from monthly to annual prorates correctly             | ✅ The `switch-plan` handler calls `stripe.subscriptions.update({ proration_behavior: 'create_prorations' })`. Unit tests verify the call shape; manual verification recipe in the runbook for end-to-end Stripe testing. |
+| Agency user can create up to 10 profiles, blocked at 11         | ⏳ PR-B (Payload `Profiles.access.create` predicate).                                                                                                                                                                     |
+| Profile switcher persists last-active profile per session       | ⏳ PR-B.                                                                                                                                                                                                                  |
+| Stripe webhook plan-change events update `Users.plan` within 5s | ✅ `priceIdToPlan` + webhook branch update; tests verify the branch fires for both `pro_monthly`→`pro_annual` and `pro`→`agency`.                                                                                         |
 
 ACs 2 + 3 land in PR-B; this plan covers PR-A only.
 
@@ -100,10 +103,10 @@ ACs 2 + 3 land in PR-B; this plan covers PR-A only.
 
 ## Risks
 
-- **R1 — Env-var rename breaks rolling deploy.** The renamed `STRIPE_PRICE_ID_AGENCY_MONTHLY` shipping before the env update would break agency checkouts. *Mitigation:* `priceIdToPlan` and the checkout helper accept BOTH the new and old env names; the runbook flags the rename as a one-shot deploy task.
-- **R2 — Webhook stops firing on a price-id we don't know.** A Stripe-side price replacement (e.g. tax migration) would break the reverse map. *Mitigation:* `priceIdToPlan` returns `null` on unknown ids; the webhook handler logs + leaves `plan` unchanged. Better than mis-flipping.
-- **R3 — Switching down (annual → monthly) charges immediately.** Stripe's default for `proration_behavior: 'create_prorations'` issues a credit/charge instantly. *Mitigation:* spec says "prorates correctly" — that's the intended behavior. The runbook recipe shows the test path so we don't surprise ourselves.
-- **R4 — `Users.plan` rename from `'free'` to `'trial'`.** Any code branching on `=== 'free'` would silently drift. *Mitigation:* `git grep "=== 'free'"` shows the only consumers are the seed + the (now-renamed) Users collection; the migration note covers the old data.
+- **R1 — Env-var rename breaks rolling deploy.** The renamed `STRIPE_PRICE_ID_AGENCY_MONTHLY` shipping before the env update would break agency checkouts. _Mitigation:_ `priceIdToPlan` and the checkout helper accept BOTH the new and old env names; the runbook flags the rename as a one-shot deploy task.
+- **R2 — Webhook stops firing on a price-id we don't know.** A Stripe-side price replacement (e.g. tax migration) would break the reverse map. _Mitigation:_ `priceIdToPlan` returns `null` on unknown ids; the webhook handler logs + leaves `plan` unchanged. Better than mis-flipping.
+- **R3 — Switching down (annual → monthly) charges immediately.** Stripe's default for `proration_behavior: 'create_prorations'` issues a credit/charge instantly. _Mitigation:_ spec says "prorates correctly" — that's the intended behavior. The runbook recipe shows the test path so we don't surprise ourselves.
+- **R4 — `Users.plan` rename from `'free'` to `'trial'`.** Any code branching on `=== 'free'` would silently drift. _Mitigation:_ `git grep "=== 'free'"` shows the only consumers are the seed + the (now-renamed) Users collection; the migration note covers the old data.
 
 ## Done when (PR-A)
 

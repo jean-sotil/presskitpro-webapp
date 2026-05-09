@@ -49,31 +49,31 @@ Copy `.env.example` to `.env`, then populate each value below. Never commit `.en
 
 ### App
 
-| Variable | How to get it |
-|---|---|
+| Variable              | How to get it                                                                                                     |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | `NEXT_PUBLIC_APP_URL` | Your dev URL. Default `http://localhost:3000`. In production, the canonical origin (e.g. `https://presskit.pro`). |
 
 ### Payload
 
-| Variable | How to get it |
-|---|---|
-| `PAYLOAD_SECRET` | Long random string. Run `openssl rand -base64 48` and paste the output. Used to sign Payload sessions. |
-| `DATABASE_URI` | Supabase dashboard → **Project Settings → Database → Connection string → "Direct connection"** (port 5432). Payload writes only to the `payload` schema (configured in `payload.config.ts`). |
+| Variable         | How to get it                                                                                                                                                                                |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PAYLOAD_SECRET` | Long random string. Run `openssl rand -base64 48` and paste the output. Used to sign Payload sessions.                                                                                       |
+| `DATABASE_URI`   | Supabase dashboard → **Project Settings → Database → Connection string → "Direct connection"** (port 5432). Payload writes only to the `payload` schema (configured in `payload.config.ts`). |
 
 ### Supabase
 
 All three values come from the project dashboard:
 
-| Variable | How to get it |
-|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Dashboard → **Project Settings → API → Project URL** (`https://<ref>.supabase.co`). |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Dashboard → **Project Settings → API → `anon` `public`**. Safe to expose to the browser. |
-| `SUPABASE_SERVICE_ROLE_KEY` | Dashboard → **Project Settings → API → `service_role` `secret`**. **Server-only — never expose to the browser.** |
+| Variable                        | How to get it                                                                                                    |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Dashboard → **Project Settings → API → Project URL** (`https://<ref>.supabase.co`).                              |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Dashboard → **Project Settings → API → `anon` `public`**. Safe to expose to the browser.                         |
+| `SUPABASE_SERVICE_ROLE_KEY`     | Dashboard → **Project Settings → API → `service_role` `secret`**. **Server-only — never expose to the browser.** |
 
 ### Auth-sync webhook (task-02)
 
-| Variable | How to get it |
-|---|---|
+| Variable                       | How to get it                                                                                                                                                                                             |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SUPABASE_AUTH_WEBHOOK_SECRET` | Generate with `openssl rand -hex 32`. Shared secret between the Postgres trigger on `auth.users` and `/api/webhooks/supabase-auth`. Must be set in BOTH `.env` and at the Postgres level — see next step. |
 
 After picking the value, register it with the database. The webhook URL must be a **public** URL — in dev that's your `cloudflared` tunnel; in production it's your deployed origin.
@@ -112,17 +112,17 @@ Detailed step-by-step: [docs/runbooks/spike-task-02.md](docs/runbooks/spike-task
 
 ## Common scripts
 
-| Command | What it does |
-|---|---|
-| `pnpm dev` | Next dev server + Payload admin (hot-reload). |
-| `pnpm build` | Production build. Triggers `withPayload` to regenerate the import map automatically. |
-| `pnpm start` | Run the production build locally. |
-| `pnpm typecheck` | TypeScript only — no emit. |
-| `pnpm lint` | ESLint with Next + a11y rules. |
-| `pnpm format` / `format:check` | Prettier. |
-| `pnpm payload <cmd>` | Standalone Payload CLI (e.g. `migrate`, `migrate:create`). |
-| `pnpm generate:types` | Regenerate `payload-types.ts` from the current collections. |
-| `pnpm generate:importmap` | Manually regenerate `app/(payload)/admin/importMap.js`. Rarely needed; `pnpm build` does it. |
+| Command                        | What it does                                                                                 |
+| ------------------------------ | -------------------------------------------------------------------------------------------- |
+| `pnpm dev`                     | Next dev server + Payload admin (hot-reload).                                                |
+| `pnpm build`                   | Production build. Triggers `withPayload` to regenerate the import map automatically.         |
+| `pnpm start`                   | Run the production build locally.                                                            |
+| `pnpm typecheck`               | TypeScript only — no emit.                                                                   |
+| `pnpm lint`                    | ESLint with Next + a11y rules.                                                               |
+| `pnpm format` / `format:check` | Prettier.                                                                                    |
+| `pnpm payload <cmd>`           | Standalone Payload CLI (e.g. `migrate`, `migrate:create`).                                   |
+| `pnpm generate:types`          | Regenerate `payload-types.ts` from the current collections.                                  |
+| `pnpm generate:importmap`      | Manually regenerate `app/(payload)/admin/importMap.js`. Rarely needed; `pnpm build` does it. |
 
 ---
 

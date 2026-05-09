@@ -58,7 +58,16 @@
     },
 
     "sectionAlternation": {
-      "pattern": ["light", "light", "marquee-dark", "full-bleed-crowd", "marquee-dark", "dark", "dark", "footer-dark"],
+      "pattern": [
+        "light",
+        "light",
+        "marquee-dark",
+        "full-bleed-crowd",
+        "marquee-dark",
+        "dark",
+        "dark",
+        "footer-dark"
+      ],
       "description": "Alternating light cream and dark charcoal sections create visual rhythm. Hero and bio are light. Stats, presskit, footer are dark.",
       "transitionStyle": "hard-cut",
       "transitionAngle": "0deg"
@@ -221,10 +230,14 @@
         "enabled": true,
         "technique": "css-z-index-stacking",
         "layers": [
-          { "z": 0, "content": "heroBackground",        "bg": "bg" },
-          { "z": 1, "content": "heroTitleText",         "color": "accent", "opacity": 0.85 },
-          { "z": 2, "content": "artistCutoutImage",     "note": "PNG with transparent background or CSS mask-image for cutout effect" },
-          { "z": 3, "content": "heroLabels",            "position": "top-left" }
+          { "z": 0, "content": "heroBackground", "bg": "bg" },
+          { "z": 1, "content": "heroTitleText", "color": "accent", "opacity": 0.85 },
+          {
+            "z": 2,
+            "content": "artistCutoutImage",
+            "note": "PNG with transparent background or CSS mask-image for cutout effect"
+          },
+          { "z": 3, "content": "heroLabels", "position": "top-left" }
         ],
         "cutoutMethod": "css-mask-image-or-png-with-transparency",
         "cutoutEdge": "natural-shoulder-crop",
@@ -299,7 +312,7 @@
         "threshold": 0.1,
         "animation": {
           "from": { "opacity": 0, "transform": "translateY(24px)" },
-          "to":   { "opacity": 1, "transform": "translateY(0)" },
+          "to": { "opacity": 1, "transform": "translateY(0)" },
           "duration": "500ms",
           "easing": "cubic-bezier(0.16, 1, 0.3, 1)"
         },
@@ -309,10 +322,10 @@
       "pageLoadReveal": {
         "enabled": true,
         "sequence": [
-          { "target": "heroLabel",    "delay": "0ms" },
-          { "target": "heroHandle",   "delay": "60ms" },
-          { "target": "heroTitle",    "delay": "150ms" },
-          { "target": "heroCutout",   "delay": "200ms" }
+          { "target": "heroLabel", "delay": "0ms" },
+          { "target": "heroHandle", "delay": "60ms" },
+          { "target": "heroTitle", "delay": "150ms" },
+          { "target": "heroCutout", "delay": "200ms" }
         ],
         "duration": "500ms",
         "easing": "cubic-bezier(0.16, 1, 0.3, 1)"
@@ -387,9 +400,23 @@
         "layout": "layered-cutout",
         "layers": {
           "background": { "color": "bg", "zIndex": 0 },
-          "titleText":  { "content": "MEDIAKIT", "color": "accent", "opacity": 0.85, "zIndex": 1, "position": "absolute-center" },
-          "artistCutout": { "type": "png-with-alpha-or-masked-img", "position": "center-bottom-anchored", "zIndex": 2 },
-          "labelBadge": { "position": "top-left", "zIndex": 3, "content": "MEDIAKIT badge + handle" }
+          "titleText": {
+            "content": "MEDIAKIT",
+            "color": "accent",
+            "opacity": 0.85,
+            "zIndex": 1,
+            "position": "absolute-center"
+          },
+          "artistCutout": {
+            "type": "png-with-alpha-or-masked-img",
+            "position": "center-bottom-anchored",
+            "zIndex": 2
+          },
+          "labelBadge": {
+            "position": "top-left",
+            "zIndex": 3,
+            "content": "MEDIAKIT badge + handle"
+          }
         },
         "labelBadge": {
           "bg": "text",
@@ -462,7 +489,11 @@
         "statsItems": [
           { "platform": "instagram", "metric": "followers", "iconStyle": "official-brand-icon" },
           { "platform": "soundcloud", "metric": "followers", "iconStyle": "official-brand-icon" },
-          { "platform": "spotify", "metric": "monthly-listeners", "iconStyle": "official-brand-icon" },
+          {
+            "platform": "spotify",
+            "metric": "monthly-listeners",
+            "iconStyle": "official-brand-icon"
+          },
           { "platform": "facebook", "metric": "followers", "iconStyle": "official-brand-icon" }
         ],
         "statItemLayout": "icon-name-count-horizontal",
@@ -637,7 +668,7 @@
       },
       "sectionGrainVariants": {
         "onLight": { "blendMode": "multiply", "opacity": 0.04 },
-        "onDark":  { "blendMode": "overlay",  "opacity": 0.06 }
+        "onDark": { "blendMode": "overlay", "opacity": 0.06 }
       }
     },
 
@@ -669,10 +700,10 @@
 
     "accessibility": {
       "contrastRatios": {
-        "darkTextOnLightBg":  "17.5:1",
-        "accentOnLightBg":     "3.4:1",
-        "whiteTextOnDarkBg":  "18.1:1",
-        "accentOnDarkBg":      "5.1:1"
+        "darkTextOnLightBg": "17.5:1",
+        "accentOnLightBg": "3.4:1",
+        "whiteTextOnDarkBg": "18.1:1",
+        "accentOnDarkBg": "5.1:1"
       },
       "contrastWarning": {
         "accentOnLightBg": "3.4:1 — fails WCAG AA for body text (4.5:1 required). Accent must only be used at display size (≥18px bold = 3:1 threshold OK) or dark bg contexts.",
@@ -710,43 +741,43 @@
     },
 
     "cssVariables": {
-      "--pk-bg":               "#F2F0EB",
-      "--pk-bg-alt":           "#ECEAE4",
-      "--pk-bg-dark":          "#0E0E0E",
-      "--pk-bg-dark2":         "#1A1A1A",
-      "--pk-border":           "#DDDBD5",
-      "--pk-border-dark":      "#2A2A2A",
-      "--pk-text":             "#0E0E0E",
-      "--pk-text-muted":       "#555550",
-      "--pk-text-subtle":      "#999990",
-      "--pk-text-inverse":     "#FFFFFF",
-      "--pk-text-inv-muted":   "#AAAAAA",
-      "--pk-accent":           "#FF5500",
-      "--pk-accent-light":     "#FF7733",
-      "--pk-accent-muted":     "rgba(255,85,0,0.12)",
-      "--pk-accent-border":    "rgba(255,85,0,0.4)",
-      "--pk-accent-contrast":  "#FFFFFF",
-      "--pk-crowd-overlay":    "rgba(255,85,0,0.55)",
-      "--pk-radius":           "0px",
-      "--pk-font-display":     "'Big Shoulders Display','Impact',sans-serif",
-      "--pk-font-body":        "'Nunito','Helvetica Neue',sans-serif"
+      "--pk-bg": "#F2F0EB",
+      "--pk-bg-alt": "#ECEAE4",
+      "--pk-bg-dark": "#0E0E0E",
+      "--pk-bg-dark2": "#1A1A1A",
+      "--pk-border": "#DDDBD5",
+      "--pk-border-dark": "#2A2A2A",
+      "--pk-text": "#0E0E0E",
+      "--pk-text-muted": "#555550",
+      "--pk-text-subtle": "#999990",
+      "--pk-text-inverse": "#FFFFFF",
+      "--pk-text-inv-muted": "#AAAAAA",
+      "--pk-accent": "#FF5500",
+      "--pk-accent-light": "#FF7733",
+      "--pk-accent-muted": "rgba(255,85,0,0.12)",
+      "--pk-accent-border": "rgba(255,85,0,0.4)",
+      "--pk-accent-contrast": "#FFFFFF",
+      "--pk-crowd-overlay": "rgba(255,85,0,0.55)",
+      "--pk-radius": "0px",
+      "--pk-font-display": "'Big Shoulders Display','Impact',sans-serif",
+      "--pk-font-body": "'Nunito','Helvetica Neue',sans-serif"
     },
 
     "tailwindExtensions": {
       "colors": {
-        "pk-bg":          "#F2F0EB",
-        "pk-bg-dark":     "#0E0E0E",
-        "pk-text":        "#0E0E0E",
-        "pk-inv":         "#FFFFFF",
-        "pk-muted":       "#555550",
-        "pk-inv-muted":   "#AAAAAA",
-        "pk-accent":      "#FF5500",
-        "pk-border":      "#DDDBD5",
+        "pk-bg": "#F2F0EB",
+        "pk-bg-dark": "#0E0E0E",
+        "pk-text": "#0E0E0E",
+        "pk-inv": "#FFFFFF",
+        "pk-muted": "#555550",
+        "pk-inv-muted": "#AAAAAA",
+        "pk-accent": "#FF5500",
+        "pk-border": "#DDDBD5",
         "pk-border-dark": "#2A2A2A"
       },
       "fontFamily": {
         "display": ["Big Shoulders Display", "Impact", "sans-serif"],
-        "body":    ["Nunito", "Helvetica Neue", "sans-serif"]
+        "body": ["Nunito", "Helvetica Neue", "sans-serif"]
       },
       "borderRadius": {
         "pk": "0px",
@@ -756,24 +787,33 @@
 
     "payloadThemeRecord": {
       "colorPresetId": "festival-club-orange",
-      "bg":            "#F2F0EB",
-      "surface":       "#FFFFFF",
-      "bgDark":        "#0E0E0E",
-      "accent":        "#FF5500",
-      "text":          "#0E0E0E",
-      "fontPairId":    "big-shoulders-nunito",
-      "heroStyle":     "light-bg-cutout-portrait",
+      "bg": "#F2F0EB",
+      "surface": "#FFFFFF",
+      "bgDark": "#0E0E0E",
+      "accent": "#FF5500",
+      "text": "#0E0E0E",
+      "fontPairId": "big-shoulders-nunito",
+      "heroStyle": "light-bg-cutout-portrait",
       "galleryLayout": "mosaic",
       "sectionAlternation": "light-dark-alternating",
-      "sectionOrder":  ["hero", "biography", "marqueeTop", "crowdPhoto", "marqueeBottom", "socialStats", "pressKit", "footer"],
+      "sectionOrder": [
+        "hero",
+        "biography",
+        "marqueeTop",
+        "crowdPhoto",
+        "marqueeBottom",
+        "socialStats",
+        "pressKit",
+        "footer"
+      ],
       "effects": {
-        "filmGrain":        true,
+        "filmGrain": true,
         "heroTextLayering": true,
-        "marquee":          true,
-        "crowdOverlay":     true,
-        "phoneMockup":      true,
-        "phoneFloat":       true,
-        "scrollReveal":     true,
+        "marquee": true,
+        "crowdOverlay": true,
+        "phoneMockup": true,
+        "phoneFloat": true,
+        "scrollReveal": true,
         "cursorIllustration": true
       },
       "radius": "sharp",
