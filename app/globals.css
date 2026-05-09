@@ -504,13 +504,14 @@
     selection: bg-[#ff5c00] text-black;
   }
 
-  /* Nuclear Winter - Desolate and Radioactive */
+  /* Nuclear Winter - Desolate and Cold */
   [data-preset-nuclear-winter-bg] {
-    background-color: #050705;
+    background-color: #050505;
     background-image: 
-      linear-gradient(rgba(57, 255, 20, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(57, 255, 20, 0.02) 1px, transparent 1px);
-    background-size: 100px 100px;
+      linear-gradient(rgba(224, 234, 255, 0.01) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(224, 234, 255, 0.01) 1px, transparent 1px),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+    background-size: 100px 100px, 100px 100px, 200px 200px;
     background-attachment: fixed;
   }
 
@@ -523,58 +524,97 @@
     background: 
       repeating-linear-gradient(
         0deg,
-        rgba(57, 255, 20, 0.03) 0px,
-        rgba(57, 255, 20, 0.03) 1px,
+        rgba(224, 234, 255, 0.02) 0px,
+        rgba(224, 234, 255, 0.02) 1px,
         transparent 1px,
-        transparent 4px
+        transparent 6px
       ),
       radial-gradient(
         circle at 50% 50%,
-        rgba(57, 255, 20, 0.05) 0%,
-        transparent 80%
+        rgba(224, 234, 255, 0.03) 0%,
+        transparent 90%
       );
     mix-blend-mode: screen;
   }
 
   [data-preset-nuclear-winter-bg] section,
   [data-preset-nuclear-winter-bg] header {
-    border-bottom: 1px solid rgba(57, 255, 20, 0.1);
+    border-bottom: 1px solid rgba(224, 234, 255, 0.05);
     position: relative;
-    backdrop-filter: brightness(0.8) contrast(1.2);
+    backdrop-filter: grayscale(1) brightness(0.7) contrast(1.1);
   }
 
-  /* Geiger Counter Pulse */
+  /* Excavated Reveal Animation */
+  @keyframes excavated-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+      filter: blur(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  [data-preset-nuclear-winter-bg] [data-reveal] {
+    animation: excavated-reveal 2.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 25%;
+  }
+
+  /* Geiger Counter Pulse - Cold Blue-White */
   @keyframes geiger-pulse {
-    0%, 100% { opacity: 0.1; transform: scale(1); }
-    5% { opacity: 0.5; transform: scale(1.1); }
-    10% { opacity: 0.1; transform: scale(1); }
+    0%, 100% { opacity: 0.05; transform: scale(1); }
+    5% { opacity: 0.3; transform: scale(1.05); }
+    10% { opacity: 0.05; transform: scale(1); }
   }
 
   [data-preset-nuclear-winter-bg] [data-geiger-dot] {
     animation: geiger-pulse 4s infinite;
     animation-delay: var(--geiger-delay, 0s);
+    background-color: #e0eaff !important;
   }
 
-  /* Toxic Glow Text */
+  /* Cold Glow Text */
   [data-preset-nuclear-winter-bg] h1,
   [data-preset-nuclear-winter-bg] h2 {
-    text-shadow: 0 0 10px rgba(57, 255, 20, 0.3), 0 0 20px rgba(57, 255, 20, 0.1);
+    text-shadow: 0 0 15px rgba(224, 234, 255, 0.15), 0 0 30px rgba(224, 234, 255, 0.05);
   }
 
-  /* Fallout Glitch Animation */
+  /* Fallout Glitch Animation - Desaturated */
   @keyframes fallout-glitch {
     0% { transform: translate(0); }
-    2% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
-    4% { transform: translate(2px, -2px); filter: hue-rotate(-90deg); }
+    2% { transform: translate(-1px, 1px); filter: brightness(1.2); }
+    4% { transform: translate(1px, -1px); filter: contrast(1.2); }
     6% { transform: translate(0); }
   }
 
   [data-preset-nuclear-winter-bg] [data-fallout-glitch]:hover {
-    animation: fallout-glitch 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
+    animation: fallout-glitch 0.5s steps(2) both infinite;
   }
 
   [data-preset-nuclear-winter-bg] .text-shadow-glow {
-    text-shadow: 0 0 10px rgba(57, 255, 20, 0.5), 0 0 20px rgba(57, 255, 20, 0.2);
+    text-shadow: 0 0 15px rgba(224, 234, 255, 0.25), 0 0 30px rgba(224, 234, 255, 0.1);
+  }
+
+  /* Fractured Border Utility */
+  [data-preset-nuclear-winter-bg] .fractured-border {
+    position: relative;
+  }
+  [data-preset-nuclear-winter-bg] .fractured-border::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border: 1px solid rgba(224, 234, 255, 0.2);
+    pointer-events: none;
+    clip-path: polygon(
+      0% 0%, 15% 0%, 18% 2%, 25% 0%, 45% 0%, 48% 3%, 55% 0%, 75% 0%, 78% 2%, 100% 0%,
+      100% 25%, 98% 28%, 100% 35%, 100% 65%, 97% 68%, 100% 75%, 100% 100%,
+      85% 100%, 82% 98%, 75% 100%, 55% 100%, 52% 97%, 45% 100%, 25% 100%, 22% 98%, 0% 100%,
+      0% 75%, 3% 72%, 0% 65%, 0% 35%, 2% 32%, 0% 25%
+    );
   }
 
   /* Bunker 909 - Concrete and Industrial Brutalism */

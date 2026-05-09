@@ -6,7 +6,7 @@ import { isEmptyLexicalState } from '@/lib/editor/rich-text/is-empty';
 
 /**
  * Nuclear Winter About
- * Desolate layout with terminal-style biography and radioactive framing.
+ * Desolate layout with terminal-style biography and cold signal framing.
  */
 export function AboutNuclearWinter({ bundle }: { bundle: EditorBundle }) {
   const tagline = (bundle.content?.tagline as string | undefined) ?? null;
@@ -18,44 +18,40 @@ export function AboutNuclearWinter({ bundle }: { bundle: EditorBundle }) {
   return (
     <section
       id="sobre"
-      className="relative border-b border-[#39ff14]/10 bg-black px-6 py-20 font-mono text-gray-400 md:px-12 md:py-32"
+      className="relative border-b border-[#e0eaff]/5 bg-[#050505] px-8 py-24 font-mono text-gray-400 md:px-16 md:py-40"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="grid gap-16 lg:grid-cols-12">
-          {/* Radioactive sidebar marker */}
-          <div className="lg:col-span-4">
-            <div className="sticky top-12">
-               <div className="mb-6 flex items-center gap-3">
-                  <div className="h-3 w-3 rounded-full bg-[#39ff14] animate-pulse" />
-                  <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#39ff14]">DATA_LOG // 01</span>
+        <div className="grid gap-24 lg:grid-cols-12">
+          {/* Cold sidebar marker */}
+          <div className="lg:col-span-4" data-reveal>
+            <div className="sticky top-20">
+               <div className="mb-8 flex items-center gap-4">
+                  <div className="h-3 w-3 bg-[#e0eaff]" data-geiger-dot />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-[#e0eaff]/60">LOG_ARCHIVE // 01</span>
                </div>
                
-               <h2 className="font-display text-5xl uppercase leading-none tracking-tighter text-white md:text-7xl">
+               <h2 className="font-display text-6xl uppercase leading-none tracking-tighter text-white md:text-8xl">
                  ORIGIN<br />
-                 <span className="text-[#39ff14]/80 text-shadow-glow">DOSSIER</span>
+                 <span className="text-[#e0eaff]/70 text-shadow-glow">DOSSIER</span>
                </h2>
 
-               <div className="mt-12 hidden space-y-4 border-l border-[#39ff14]/20 pl-6 text-[9px] font-bold tracking-[0.2em] text-[#39ff14]/30 uppercase lg:block">
-                  <p>ENCRYPTION: LEVEL_5</p>
-                  <p>USER: SURVIVOR_B9</p>
-                  <p>TIMESTAMP: 2026.05.09</p>
+               <div className="mt-16 hidden space-y-6 border-l border-[#e0eaff]/10 pl-8 text-[9px] font-bold tracking-[0.3em] text-[#333] uppercase lg:block">
+                  <p>ENCRYPTION: MAX_SECURE</p>
+                  <p>SUBJECT: {bundle.profile.slug.toUpperCase()}</p>
+                  <p>EXPIRY: NEVER</p>
                </div>
             </div>
           </div>
 
           {/* Bio Container */}
-          <div className="lg:col-span-8">
-            <div className="group relative border border-[#39ff14]/30 bg-[#050705] p-8 md:p-12 lg:p-16">
-              {/* Corner Accents */}
-              <div className="absolute -left-[1px] -top-[1px] h-6 w-6 border-l border-t border-[#39ff14]" />
-              <div className="absolute -bottom-[1px] -right-[1px] h-6 w-6 border-b border-r border-[#39ff14]" />
-              
+          <div className="lg:col-span-8" data-reveal>
+            <div className="fractured-border group relative bg-black/40 p-10 md:p-16 lg:p-20">
               {tagline ? (
-                <div className="mb-10">
-                  <p className="text-xl font-bold uppercase leading-tight tracking-widest text-white md:text-2xl">
+                <div className="mb-12">
+                  <p className="text-2xl font-bold uppercase leading-tight tracking-[0.2em] text-white md:text-3xl">
                     {tagline}
                   </p>
-                  <div className="mt-4 h-px w-24 bg-[#39ff14]/60" />
+                  <div className="mt-6 h-px w-32 bg-[#e0eaff]/20" />
                 </div>
               ) : null}
 
@@ -63,18 +59,18 @@ export function AboutNuclearWinter({ bundle }: { bundle: EditorBundle }) {
                 <div className="prose prose-invert max-w-none">
                   <RichTextRender
                     state={bio}
-                    className="font-mono text-base leading-relaxed text-gray-400 selection:bg-[#39ff14] selection:text-black"
+                    className="font-mono text-lg leading-relaxed text-gray-400 selection:bg-[#e0eaff] selection:text-black"
                   />
                 </div>
               ) : null}
 
-              <div className="mt-16 flex items-center justify-between border-t border-[#39ff14]/10 pt-8">
-                 <div className="flex gap-1.5">
+              <div className="mt-20 flex items-center justify-between border-t border-[#e0eaff]/5 pt-10">
+                 <div className="flex gap-2">
                     {[...Array(5)].map((_, i) => (
-                      <div key={i} className="h-1 w-4 bg-[#39ff14]/10" />
+                      <div key={i} className="h-0.5 w-6 bg-[#e0eaff]/5" />
                     ))}
                  </div>
-                 <span className="text-[9px] font-bold tracking-[0.3em] text-[#39ff14]/20 uppercase">EOF: END_OF_FILE</span>
+                 <span className="text-[9px] font-bold tracking-[0.4em] text-[#222] uppercase">EOF // END_OF_TRANSMISSION</span>
               </div>
             </div>
           </div>

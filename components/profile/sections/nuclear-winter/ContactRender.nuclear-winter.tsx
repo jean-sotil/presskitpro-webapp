@@ -9,7 +9,7 @@ import { ContactForm } from '../ContactForm';
 
 /**
  * Nuclear Winter Contact
- * Secure terminal terminal for fallout-proof communications.
+ * Secure terminal for fallout-proof communications.
  */
 export function ContactNuclearWinter({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.contact');
@@ -22,46 +22,47 @@ export function ContactNuclearWinter({ bundle }: { bundle: EditorBundle }) {
   return (
     <section
       id="contato"
-      className="relative border-b border-[#39ff14]/10 bg-[#050705] px-6 py-20 font-mono text-gray-400 md:px-12 md:py-32"
+      className="relative border-b border-[#e0eaff]/5 bg-[#050505] px-8 py-24 font-mono text-gray-400 md:px-16 md:py-40"
+      data-reveal
     >
       <div className="mx-auto max-w-4xl">
-        <div className="relative border border-[#39ff14]/20 bg-black p-8 md:p-12">
+        <div className="fractured-border relative bg-black/60 p-10 md:p-16 lg:p-20">
           {/* Header */}
-          <div className="mb-12 border-b border-[#39ff14]/30 pb-8">
+          <div className="mb-16 border-b border-[#e0eaff]/10 pb-12">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[10px] uppercase tracking-[0.4em] text-[#39ff14] mb-2">
-                   SECURE_COMM_v3 // CH_04
+                <p className="text-[10px] uppercase tracking-[0.5em] text-[#e0eaff]/60 mb-3">
+                   SECURE_TRANS // CH_04
                 </p>
-                <h2 className="font-display text-4xl uppercase tracking-tighter text-white md:text-6xl">
-                  {t('label')}<span className="text-[#39ff14]">.</span>PORTAL
+                <h2 className="font-display text-5xl uppercase tracking-tighter text-white md:text-8xl">
+                  {t('label')}<span className="text-[#e0eaff]">.</span>PORTAL
                 </h2>
               </div>
-              <div className="hidden h-14 w-14 border border-[#39ff14] p-1 md:block">
-                 <div className="h-full w-full bg-[#39ff14]/20 flex items-center justify-center">
-                    <span className="text-[#39ff14] font-bold text-lg animate-pulse">!</span>
+              <div className="hidden h-20 w-20 border border-[#e0eaff]/10 p-1 md:block">
+                 <div className="h-full w-full bg-[#e0eaff]/5 flex items-center justify-center">
+                    <span className="text-[#e0eaff]/40 font-bold text-2xl" data-geiger-dot>!</span>
                  </div>
               </div>
             </div>
           </div>
 
-          <div className="relative z-10 selection:bg-[#39ff14] selection:text-black">
+          <div className="relative z-10 selection:bg-[#e0eaff] selection:text-black">
             <ContactForm
               profileId={profile.id}
             />
           </div>
 
           {/* Footer warning */}
-          <div className="mt-12 flex items-center gap-4 opacity-30">
-             <div className="h-px flex-1 bg-[#39ff14]/20" />
-             <span className="text-[9px] tracking-[0.4em] uppercase text-[#39ff14]">Transmission encrypted via fallout-net</span>
-             <div className="h-px flex-1 bg-[#39ff14]/20" />
+          <div className="mt-16 flex items-center gap-6 opacity-10">
+             <div className="h-px flex-1 bg-[#e0eaff]" />
+             <span className="text-[9px] tracking-[0.5em] uppercase text-[#e0eaff]">SIGNAL_ENCRYPTED_BY_FALLOUT_NET</span>
+             <div className="h-px flex-1 bg-[#e0eaff]" />
           </div>
         </div>
         
         {/* Decorative metadata */}
-        <div className="mt-8 text-center text-[9px] tracking-[0.5em] text-[#222] uppercase">
-           VAULT_CORE // SMTP_SECURE // RAD_SHIELD_ACTIVE
+        <div className="mt-12 text-center text-[10px] tracking-[0.6em] text-[#111] uppercase">
+           VAULT_CORE // 0.0.0.0 // RAD_SHIELD_V4
         </div>
       </div>
     </section>

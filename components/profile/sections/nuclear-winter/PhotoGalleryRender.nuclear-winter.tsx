@@ -1,7 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
 
@@ -19,10 +17,9 @@ type GalleryEntry = {
 
 /**
  * Nuclear Winter Photo Gallery
- * Desaturated grid with radioactive toxic-glow hover effects and technical metadata.
+ * Desaturated grid with cold signal hover effects and technical metadata.
  */
 export function PhotoGalleryNuclearWinter({ bundle }: { bundle: EditorBundle }) {
-  const t = useTranslations('profile.gallery');
   const raw = bundle.profile.gallery as Array<GalleryEntry | number> | undefined;
   const entries = Array.isArray(raw)
     ? raw.filter(
@@ -48,39 +45,41 @@ export function PhotoGalleryNuclearWinter({ bundle }: { bundle: EditorBundle }) 
   if (items.length === 0) return null;
 
   return (
-    <section id="galeria" className="relative border-b border-[#39ff14]/10 bg-black px-6 py-20 font-mono text-gray-400 md:px-12 md:py-32">
+    <section id="galeria" className="relative border-b border-[#e0eaff]/5 bg-black px-8 py-24 font-mono text-gray-400 md:px-16 md:py-40">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-16 flex flex-col justify-between gap-8 md:flex-row md:items-end">
+        <div className="mb-20 flex flex-col justify-between gap-12 md:flex-row md:items-end" data-reveal>
           <div>
-            <div className="mb-4 flex items-center gap-3">
-              <div className="h-4 w-4 border border-[#39ff14] bg-[#39ff14]/20" />
-              <p className="text-[10px] uppercase tracking-[0.4em] text-[#39ff14]">
-                03 // {t('label')}
+            <div className="mb-6 flex items-center gap-4">
+              <div className="h-4 w-4 bg-[#e0eaff]/20 border border-[#e0eaff]/40" />
+              <p className="text-[10px] uppercase tracking-[0.5em] text-[#e0eaff]/60">
+                RECON // 03
               </p>
             </div>
-            <h2 className="font-display text-5xl uppercase leading-none tracking-tighter text-white md:text-8xl">
-              RECON<span className="text-[#39ff14]">.</span>VISUALS
+            <h2 className="font-display text-6xl uppercase leading-none tracking-tighter text-white md:text-9xl">
+              VISUAL<span className="text-[#e0eaff]">.</span>LOG
             </h2>
           </div>
-          <div className="border-l border-[#39ff14]/30 pl-6">
-             <p className="max-w-xs text-[10px] uppercase tracking-widest text-[#555] leading-relaxed">
-               Visual records of survival zones and high-radiation events.
+          <div className="border-l border-[#e0eaff]/10 pl-8">
+             <p className="max-w-xs text-[10px] uppercase tracking-[0.3em] text-[#333] leading-relaxed">
+               Documentary evidence of survival operations and perimeter scouting.
              </p>
           </div>
         </div>
 
-        <GalleryLightbox 
-          items={items}
-          gridClassName="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4"
-          tileClassName={() => "aspect-square border border-[#39ff14]/20 bg-[#050705] transition-all hover:border-[#39ff14] hover:shadow-[0_0_20px_rgba(57,255,20,0.2)]"}
-        />
+        <div data-reveal>
+          <GalleryLightbox 
+            items={items}
+            gridClassName="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
+            tileClassName={() => "fractured-border aspect-square bg-black/40 grayscale contrast-125 transition-all duration-700 hover:grayscale-0 hover:contrast-100 hover:shadow-[0_0_30px_rgba(224,234,255,0.1)]"}
+          />
+        </div>
 
         {/* Technical Footer */}
-        <div className="mt-16 flex items-center justify-between border-t border-[#39ff14]/10 pt-8">
-           <span className="text-[9px] tracking-widest text-[#333] uppercase">SCAN_ARCHIVE_v1.0 // CACHE_VALID</span>
-           <div className="flex gap-2 opacity-20">
+        <div className="mt-20 flex items-center justify-between border-t border-[#e0eaff]/5 pt-10" data-reveal>
+           <span className="text-[9px] tracking-[0.4em] text-[#222] uppercase">ARCHIVE_SECURE // SIG_VALID // 2026</span>
+           <div className="flex gap-3 opacity-10">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-1 w-6 bg-[#39ff14]" />
+                <div key={i} className="h-1 w-8 bg-[#e0eaff]" />
               ))}
            </div>
         </div>
