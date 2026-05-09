@@ -22,5 +22,8 @@ export const editorialNightlifeV1: Preset = {
     fontPairId: 'editorial-nightlife',
   },
   ownedSections: true,
+  decorations: {
+    scrollAnimation: true,
+  },
   thumbnail: '/presets/editorial-nightlife-v1/thumb.jpg',
 };

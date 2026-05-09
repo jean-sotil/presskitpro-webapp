@@ -4,6 +4,8 @@ import { useTranslations } from 'next-intl';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 
+import type { Profile } from '@/payload-types';
+
 import { ContactForm } from '../ContactForm';
 
 /**
@@ -12,7 +14,7 @@ import { ContactForm } from '../ContactForm';
  */
 export function ContactBunker909({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.contact');
-  const profile = bundle.profile as any;
+  const profile = bundle.profile as unknown as Profile;
   const showForm = profile.contactFormEnabled === true;
   const destinationEmail = (profile.contactFormDestination || profile.contactEmail) as string | undefined;
 
@@ -46,9 +48,7 @@ export function ContactBunker909({ bundle }: { bundle: EditorBundle }) {
 
           <div className="relative z-10 selection:bg-[#ff5c00] selection:text-black">
             <ContactForm
-              profileId={bundle.profile.id}
-              profileSlug={bundle.profile.slug}
-              className="grid gap-8"
+              profileId={profile.id}
             />
           </div>
 

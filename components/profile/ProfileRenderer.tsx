@@ -6,6 +6,7 @@ import { DEFAULT_FONT_PAIR, fontPairs, type FontPairId } from '@/lib/design/toke
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { DEFAULT_SECTION_ORDER, mergeOrder, type SectionKey } from '@/lib/editor/section-order';
 import { getPresetById, type Preset } from '@/lib/presets';
+import { ScrollAnimator } from '../ScrollAnimator';
 
 import { Marquee } from './sections/decorations/Marquee';
 import { AboutRender } from './sections/AboutRender';
@@ -91,6 +92,7 @@ export function ProfileRenderer({ bundle, mode: _mode, nonce }: ProfileRendererP
   const presetId = (bundle.theme as { presetId?: string | null } | null)?.presetId;
   const preset = getPresetById(presetId ?? null);
   const marquee = preset?.decorations?.marquee ?? null;
+  const scrollAnimation = preset?.decorations?.scrollAnimation ?? false;
 
   const tokens = deriveThemeTokens(bundle.theme as never);
   // Scope the override to a per-profile data-attr so previews of multiple
@@ -122,27 +124,31 @@ ${fontDecls}
   const deadSignalBg = preset?.decorations?.deadSignalBg === true;
   const bunker909Bg = preset?.decorations?.bunker909Bg === true;
 
+  const Article = (
+    <article
+      data-theme-scope={scopeId}
+      data-preset-grain={filmGrain ? 'true' : undefined}
+      data-preset-electric-fire={electricFire ? 'true' : undefined}
+      data-preset-circuit-board={circuitBoard ? 'true' : undefined}
+      data-preset-dead-signal-bg={deadSignalBg ? 'true' : undefined}
+      data-preset-bunker-909-bg={bunker909Bg ? 'true' : undefined}
+      className="bg-bg text-text"
+    >
+      {order.map((key) => (
+        <Fragment key={key}>
+          {renderSection(key, bundle, preset)}
+          {key === 'hero' && marquee ? <Marquee bundle={bundle} source={marquee.source} /> : null}
+        </Fragment>
+      ))}
+    </article>
+  );
+
   return (
     <>
       <style data-theme-scope={scopeId} nonce={nonce}>
         {themeCss}
       </style>
-      <article
-        data-theme-scope={scopeId}
-        data-preset-grain={filmGrain ? 'true' : undefined}
-        data-preset-electric-fire={electricFire ? 'true' : undefined}
-        data-preset-circuit-board={circuitBoard ? 'true' : undefined}
-        data-preset-dead-signal-bg={deadSignalBg ? 'true' : undefined}
-        data-preset-bunker-909-bg={bunker909Bg ? 'true' : undefined}
-        className="bg-bg text-text"
-      >
-        {order.map((key) => (
-          <Fragment key={key}>
-            {renderSection(key, bundle, preset)}
-            {key === 'hero' && marquee ? <Marquee bundle={bundle} source={marquee.source} /> : null}
-          </Fragment>
-        ))}
-      </article>
+      {scrollAnimation ? <ScrollAnimator>{Article}</ScrollAnimator> : Article}
     </>
   );
 }

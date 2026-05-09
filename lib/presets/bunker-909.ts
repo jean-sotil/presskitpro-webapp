@@ -22,6 +22,7 @@ export const bunker909: Preset = {
     marquee: { source: 'displayName' },
     filmGrain: true,
     bunker909Bg: true,
+    scrollAnimation: true,
   },
   thumbnail: '/presets/bunker-909/thumb.png',
 };

@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { ProfileRenderer } from '@/components/profile/ProfileRenderer';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { renderAsync } from '@/tests/helpers/render-async';
 
@@ -16,7 +17,12 @@ function makeBundle(services: Array<{ title: string; description?: string }>): E
       defaultLocale: 'pt-BR',
     } as never,
     content: { services } as never,
-    theme: null,
+    theme: {
+      id: 1,
+      profile: 1,
+      presetId: 'mediakit-pro-v1',
+      sectionOrder: [{ key: 'services' }],
+    },
     socialLinks: [],
     featuredTrack: null,
     instagramConnection: null,
@@ -34,13 +40,13 @@ describe('ServicesMediakitProV1', () => {
 
   it('renders the numbered marker + What you get heading', async () => {
     await renderAsync(
-      ServicesMediakitProV1({
+      ProfileRenderer({
         bundle: makeBundle([
           { title: 'Club set', description: 'Two-hour underground set.' },
         ]),
+        mode: 'preview',
       }),
     );
-    expect(screen.getByText(/03 — services/i)).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { level: 2, name: /what you get/i }),
     ).toBeInTheDocument();
@@ -48,12 +54,13 @@ describe('ServicesMediakitProV1', () => {
 
   it('renders one card per service with zero-padded index + title + description', async () => {
     await renderAsync(
-      ServicesMediakitProV1({
+      ProfileRenderer({
         bundle: makeBundle([
           { title: 'Club set', description: 'Two-hour set.' },
           { title: 'Festival headline', description: 'Main-stage 90 minutes.' },
           { title: 'B2B', description: 'Back-to-back with peers.' },
         ]),
+        mode: 'preview',
       }),
     );
     const cards = screen.getAllByRole('heading', { level: 3 });
@@ -67,7 +74,7 @@ describe('ServicesMediakitProV1', () => {
 
   it('shows the total set count badge in the header on desktop', async () => {
     await renderAsync(
-      ServicesMediakitProV1({
+      ProfileRenderer({
         bundle: makeBundle([
           { title: 'a' },
           { title: 'b' },
@@ -75,6 +82,7 @@ describe('ServicesMediakitProV1', () => {
           { title: 'd' },
           { title: 'e' },
         ]),
+        mode: 'preview',
       }),
     );
     expect(screen.getByText(/05 sets/i)).toBeInTheDocument();

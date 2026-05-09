@@ -45,6 +45,7 @@ export const electricFireTechno: Preset = {
     filmGrain: true,
     electricFire: true,
     circuitBoard: true,
+    scrollAnimation: true,
   },
   thumbnail: '/presets/electric-fire-techno/thumb.png',
 };

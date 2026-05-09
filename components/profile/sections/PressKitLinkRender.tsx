@@ -51,7 +51,11 @@ export function PressKitLinkRender({
   const badge = providerBadge(tProviders, provider);
 
   return (
-    <section id="press-kit" className="border-b border-border px-6 py-16 md:px-12">
+    <section
+      id="press-kit"
+      className="border-b border-border px-6 py-16 md:px-12"
+      data-scroll-animation="pressKitLink"
+    >
       <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <TrackedPressKitAnchor

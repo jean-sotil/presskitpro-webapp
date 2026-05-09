@@ -1,7 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-
 import type { EditorBundle } from '@/lib/editor/bundle';
 
 /**
@@ -9,7 +7,6 @@ import type { EditorBundle } from '@/lib/editor/bundle';
  * Heavy brutalist block with industrial warning styling.
  */
 export function PressKitLinkBunker909({ bundle }: { bundle: EditorBundle }) {
-  const t = useTranslations('profile.pressKit');
   const url = (bundle.profile.pressKitUrl as string | undefined) ?? null;
 
   if (!url) return null;

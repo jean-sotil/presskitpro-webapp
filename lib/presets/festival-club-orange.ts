@@ -37,6 +37,7 @@ export const festivalClubOrange: Preset = {
   decorations: {
     marquee: { source: 'displayName' },
     filmGrain: true,
+    scrollAnimation: true,
   },
   thumbnail: '/presets/festival-club-orange/thumb.jpg',
 };

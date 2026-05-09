@@ -66,6 +66,7 @@ export type PresetDecorations = {
   circuitBoard?: boolean;
   deadSignalBg?: boolean;
   bunker909Bg?: boolean;
+  scrollAnimation?: boolean;
 };
 
 export type Preset = {

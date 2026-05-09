@@ -40,7 +40,10 @@ export function InstagramFeedRender({
   if (posts.length === 0) return null;
 
   return (
-    <section className="border-b border-border px-6 py-16 md:px-12">
+    <section
+      className="border-b border-border px-6 py-16 md:px-12"
+      data-scroll-animation="instagramFeed"
+    >
       <h2 className="font-display text-2xl uppercase tracking-tight">Instagram</h2>
       <ul className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) =>

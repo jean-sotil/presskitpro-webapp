@@ -1,21 +1,20 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
 
-import { GalleryLightbox } from '../GalleryLightbox';
+import { GalleryLightbox, type LightboxItem } from '../GalleryLightbox';
 
-type PhotoMedia = {
-  id: string;
+type GalleryEntry = {
+  id: number;
   bucket: string;
   path: string;
   alt?: string;
+  decorative?: boolean;
   width?: number | null;
   height?: number | null;
-  displayOrder?: number;
 };
 
 /**
@@ -24,10 +23,29 @@ type PhotoMedia = {
  */
 export function PhotoGalleryBunker909({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.gallery');
-  const raw = (bundle.photos ?? []) as unknown as PhotoMedia[];
-  const photos = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
+  const raw = bundle.profile.gallery as Array<GalleryEntry | number> | undefined;
+  const entries = Array.isArray(raw)
+    ? raw.filter(
+        (entry): entry is GalleryEntry =>
+          typeof entry === 'object' && entry !== null && 'id' in entry,
+      )
+    : [];
+  
+  const items: LightboxItem[] = entries.flatMap((entry) => {
+    const src = mediaUrl({ bucket: entry.bucket, path: entry.path });
+    if (!src) return [];
+    return [
+      {
+        id: entry.id,
+        src,
+        alt: entry.decorative ? '' : (entry.alt ?? ''),
+        width: entry.width ?? null,
+        height: entry.height ?? null,
+      },
+    ];
+  });
 
-  if (photos.length === 0) return null;
+  if (items.length === 0) return null;
 
   return (
     <section id="galeria" className="relative border-b-4 border-[#1a1a1a] bg-black px-6 py-20 font-mono text-gray-400 md:px-12 md:py-32">
@@ -51,31 +69,11 @@ export function PhotoGalleryBunker909({ bundle }: { bundle: EditorBundle }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
-          {photos.map((photo, i) => {
-            const url = mediaUrl(photo);
-            if (!url) return null;
-            return (
-              <div key={photo.id} className="group relative aspect-square overflow-hidden border-4 border-[#1a1a1a] bg-[#050505] transition-all hover:border-[#ff5c00]">
-                <Image
-                  src={url}
-                  alt={photo.alt ?? ''}
-                  fill
-                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-                  className="object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
-                />
-                
-                {/* ID Tag */}
-                <div className="absolute bottom-2 left-2 z-10 bg-black/80 px-2 py-1 text-[9px] font-bold text-[#ff5c00] opacity-0 transition-opacity group-hover:opacity-100">
-                  IMG_{i.toString().padStart(3, '0')}
-                </div>
-
-                {/* Lightbox trigger button */}
-                <GalleryLightbox photos={photos} initialIndex={i} triggerClassName="absolute inset-0 z-20" />
-              </div>
-            );
-          })}
-        </div>
+        <GalleryLightbox 
+          items={items}
+          gridClassName="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4"
+          tileClassName={() => "aspect-square border-4 border-[#1a1a1a] bg-[#050505] transition-all hover:border-[#ff5c00]"}
+        />
 
         {/* Section Metadata Footer */}
         <div className="mt-16 flex items-center justify-between border-t border-[#1a1a1a] pt-8">

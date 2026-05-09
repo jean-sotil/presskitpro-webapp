@@ -47,7 +47,7 @@ export function SocialLinksRender({
   const links = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   const profileSlug = bundle.profile.slug;
   return (
-    <section className="border-b border-border px-6 py-16 md:px-12">
+    <section className="border-b border-border px-6 py-16 md:px-12" data-scroll-animation="socialLinks">
       <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
       <ul className="mt-6 flex flex-wrap gap-3">
         {links.map((link) => {

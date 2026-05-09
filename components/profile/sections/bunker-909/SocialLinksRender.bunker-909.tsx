@@ -18,7 +18,6 @@ type LinkRow = {
  * Large industrial buttons with heavy borders and technical numbering.
  */
 export function SocialLinksBunker909({ bundle }: { bundle: EditorBundle }) {
-  const t = useTranslations('profile.social');
   const tPlatforms = useTranslations('profile.social.platforms');
 
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];

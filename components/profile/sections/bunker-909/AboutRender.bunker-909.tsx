@@ -1,7 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-
 import { RichTextRender } from '@/components/profile/rich-text/RichTextRender';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { isEmptyLexicalState } from '@/lib/editor/rich-text/is-empty';
@@ -11,7 +9,6 @@ import { isEmptyLexicalState } from '@/lib/editor/rich-text/is-empty';
  * Heavy brutalist layout with technical annotations and structural frames.
  */
 export function AboutBunker909({ bundle }: { bundle: EditorBundle }) {
-  const t = useTranslations('profile.about');
   const tagline = (bundle.content?.tagline as string | undefined) ?? null;
   const bio = (bundle.content?.bio as never) ?? null;
   const hasBio = !isEmptyLexicalState(bio);

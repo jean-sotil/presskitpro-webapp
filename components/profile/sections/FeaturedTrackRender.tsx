@@ -40,7 +40,11 @@ export function FeaturedTrackRender({
   if (!url) return null;
 
   return (
-    <section id="faixa" className="border-b border-border px-6 py-16 md:px-12">
+    <section
+      id="faixa"
+      className="border-b border-border px-6 py-16 md:px-12"
+      data-scroll-animation="featuredTrack"
+    >
       <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
       <div className="mt-6">
         {oembedHtml ? (

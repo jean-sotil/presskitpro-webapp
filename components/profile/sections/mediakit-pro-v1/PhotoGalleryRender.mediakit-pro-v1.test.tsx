@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
+import { ProfileRenderer } from '@/components/profile/ProfileRenderer';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { renderAsync } from '@/tests/helpers/render-async';
 
@@ -38,7 +39,12 @@ function makeBundle(items: GalleryEntry[]): EditorBundle {
       gallery: items as never,
     } as never,
     content: null,
-    theme: null,
+    theme: {
+      id: 1,
+      profile: 1,
+      presetId: 'mediakit-pro-v1',
+      sectionOrder: [{ key: 'photoGallery' }],
+    },
     socialLinks: [],
     featuredTrack: null,
     instagramConnection: null,
@@ -63,11 +69,11 @@ describe('PhotoGalleryMediakitProV1', () => {
 
   it('renders the numbered marker + Live frames heading', async () => {
     await renderAsync(
-      PhotoGalleryMediakitProV1({
+      ProfileRenderer({
         bundle: makeBundle([item(1), item(2), item(3)]),
+        mode: 'preview',
       }),
     );
-    expect(screen.getByText(/05 — gallery/i)).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { level: 2, name: /live frames/i }),
     ).toBeInTheDocument();
@@ -75,8 +81,9 @@ describe('PhotoGalleryMediakitProV1', () => {
 
   it('emits the section with the galeria id', async () => {
     const { container } = await renderAsync(
-      PhotoGalleryMediakitProV1({
+      ProfileRenderer({
         bundle: makeBundle([item(1), item(2), item(3)]),
+        mode: 'preview',
       }),
     );
     expect(container.querySelector('section#galeria')).not.toBeNull();

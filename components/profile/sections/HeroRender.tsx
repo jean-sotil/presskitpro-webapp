@@ -129,7 +129,7 @@ export function HeroRender({ bundle, preset }: { bundle: EditorBundle; preset?: 
 
   // Default: full-bleed-portrait.
   return (
-    <header className="relative border-b border-border">
+    <header className="relative border-b border-border" data-scroll-animation="hero">
       {portraitUrl ? (
         <Image
           src={portraitUrl}

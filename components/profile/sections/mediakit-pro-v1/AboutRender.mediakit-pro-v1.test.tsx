@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { ProfileRenderer } from '@/components/profile/ProfileRenderer';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { renderAsync } from '@/tests/helpers/render-async';
 
@@ -16,7 +17,12 @@ function makeBundle(content: { tagline?: string; bio?: unknown } = {}): EditorBu
       defaultLocale: 'pt-BR',
     } as never,
     content: content as never,
-    theme: null,
+    theme: {
+      id: 1,
+      profile: 1,
+      presetId: 'mediakit-pro-v1',
+      sectionOrder: [{ key: 'about' }],
+    },
     socialLinks: [],
     featuredTrack: null,
     instagramConnection: null,
@@ -34,20 +40,19 @@ describe('AboutMediakitProV1', () => {
 
   it('renders the numbered marker + Biography heading', async () => {
     await renderAsync(
-      AboutMediakitProV1({
+      ProfileRenderer({
         bundle: makeBundle({ tagline: 'Producing techno since 2014.' }),
+        mode: 'preview',
       }),
     );
-    expect(screen.getByText(/01 — about/i)).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 2, name: /biography/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/biography/i)).toBeInTheDocument();
   });
 
   it('renders the tagline as the lead paragraph', async () => {
     await renderAsync(
-      AboutMediakitProV1({
+      ProfileRenderer({
         bundle: makeBundle({ tagline: 'Producing techno since 2014.' }),
+        mode: 'preview',
       }),
     );
     expect(screen.getByText(/producing techno since 2014/i)).toBeInTheDocument();

@@ -29,6 +29,7 @@ export const mediakitProV1: Preset = {
   decorations: {
     marquee: { source: 'displayName' },
     filmGrain: true,
+    scrollAnimation: true,
   },
   thumbnail: '/presets/mediakit-pro-v1/thumb.jpg',
 };

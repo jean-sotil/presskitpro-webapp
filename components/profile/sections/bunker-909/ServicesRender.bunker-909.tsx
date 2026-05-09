@@ -1,7 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-
 import type { EditorBundle } from '@/lib/editor/bundle';
 
 /**
@@ -9,7 +7,6 @@ import type { EditorBundle } from '@/lib/editor/bundle';
  * Industrial cards with heavy borders and structural grid feel.
  */
 export function ServicesBunker909({ bundle }: { bundle: EditorBundle }) {
-  const t = useTranslations('profile.services');
   const services =
     (bundle.content?.services as Array<{ title: string; description?: string }> | undefined) ?? [];
 

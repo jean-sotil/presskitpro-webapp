@@ -1,8 +1,8 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-
 import type { EditorBundle } from '@/lib/editor/bundle';
+
+import type { FeaturedTrack } from '@/payload-types';
 
 import { LazyEmbed } from '../LazyEmbed';
 
@@ -11,8 +11,7 @@ import { LazyEmbed } from '../LazyEmbed';
  * Industrial terminal aesthetic for the embedded player.
  */
 export function FeaturedTrackBunker909({ bundle }: { bundle: EditorBundle }) {
-  const t = useTranslations('profile.featuredTrack');
-  const track = bundle.featuredTrack;
+  const track = bundle.featuredTrack as unknown as FeaturedTrack;
   if (!track?.oembedHtml) return null;
 
   return (

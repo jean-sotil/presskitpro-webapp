@@ -51,9 +51,8 @@ export function HeroBunker909({ bundle }: { bundle: EditorBundle }) {
              </span>
           </div>
           <span className="origin-left -rotate-90 whitespace-nowrap text-[10px] font-bold tracking-[0.5em] text-[#333]">
-            {new Date().getFullYear()} // PKP_SYS
-          </span>
-        </div>
+            {new Date().getFullYear()} {'//'} PKP_SYS
+          </span>        </div>
 
         {/* Center/Main: Two-Panel Layout */}
         <div className="flex flex-1 flex-col md:flex-row">

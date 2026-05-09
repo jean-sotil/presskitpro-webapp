@@ -10,6 +10,7 @@ import { isSupportedLocale, toBcp47, DEFAULT_LOCALE } from '@/lib/i18n/locale';
 import { buildOrganizationJsonLd } from '@/lib/seo/build-organization-jsonld';
 import { Providers } from './providers';
 import './globals.css';
+import './animations.css';
 
 /**
  * Root layout.

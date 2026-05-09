@@ -83,3 +83,26 @@ vi.mock('next-intl', async (importOriginal) => {
     useLocale: vi.fn(() => 'en'),
   };
 });
+
+class IntersectionObserver {
+  root: Element | null = null;
+  rootMargin = '';
+  thresholds: ReadonlyArray<number> = [];
+  disconnect = vi.fn();
+  observe = vi.fn();
+  takeRecords = vi.fn();
+  unobserve = vi.fn();
+}
+
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserver,
+});
+
+Object.defineProperty(global, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserver,
+});
+

@@ -49,7 +49,11 @@ export function ContactRender({
   if (!whatsapp && !email && !formEnabled) return null;
 
   return (
-    <section id="contato" className="border-b border-border px-6 py-16 md:px-12">
+    <section
+      id="contato"
+      className="border-b border-border px-6 py-16 md:px-12"
+      data-scroll-animation="contact"
+    >
       <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
       {whatsapp || email ? (
         <ul className="mt-6 flex flex-wrap gap-3">

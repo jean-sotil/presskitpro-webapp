@@ -31,7 +31,11 @@ export function AboutRender({ bundle, preset }: { bundle: EditorBundle; preset?:
   const hasBio = !isEmptyLexicalState(bio);
   if (!tagline && !hasBio) return null;
   return (
-    <section id="sobre" className="border-b border-border px-6 py-16 md:px-12">
+    <section
+      id="sobre"
+      className="border-b border-border px-6 py-16 md:px-12"
+      data-scroll-animation="about"
+    >
       <h2 className="font-display text-2xl uppercase tracking-tight">{t('label')}</h2>
       {tagline ? <p className="mt-4 max-w-prose text-text">{tagline}</p> : null}
       {hasBio ? <RichTextRender state={bio} className="mt-6 max-w-prose text-text" /> : null}

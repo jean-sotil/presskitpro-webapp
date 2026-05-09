@@ -21,6 +21,7 @@ export const deadSignal: Preset = {
     marquee: { source: 'tagline' },
     filmGrain: true,
     deadSignalBg: true,
+    scrollAnimation: true,
   },
   thumbnail: '/presets/dead-signal/thumb.png',
 };
