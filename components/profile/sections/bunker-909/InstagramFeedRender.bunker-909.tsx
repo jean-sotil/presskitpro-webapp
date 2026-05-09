@@ -44,12 +44,12 @@ export function InstagramFeedBunker909({ bundle }: { bundle: EditorBundle }) {
           </div>
         </div>
 
-        <ul className="grid gap-1 md:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post, i) =>
             post.oembedHtml ? (
               <li
                 key={String(post.id)}
-                className="group relative border-4 border-[#1a1a1a] bg-[#050505] transition-all hover:border-[#ff5c00]"
+                className="group relative border-4 border-[#1a1a1a] bg-[#050505] p-2 transition-all hover:border-[#ff5c00]"
               >
                 <div className="absolute left-2 top-2 z-10 text-[9px] font-bold text-[#333] opacity-0 transition-opacity group-hover:opacity-100">
                   REF_{i.toString().padStart(3, '0')}

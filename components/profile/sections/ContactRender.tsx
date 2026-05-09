@@ -10,7 +10,7 @@ import { ContactElectricFireTechno } from './electric-fire-techno/ContactRender.
 import { ContactFestivalClubOrange } from './festival-club-orange/ContactRender.festival-club-orange';
 import { ContactMediakitProV1 } from './mediakit-pro-v1/ContactRender.mediakit-pro-v1';
 import { ContactDeadSignal } from './dead-signal/ContactRender.dead-signal';
-import { ContactBunker909 } from './bunker-909/ContactRender.contact.bunker-909';
+import { ContactBunker909 } from './bunker-909/ContactRender.bunker-909';
 import { ContactForm } from './ContactForm';
 import { TrackedContactCta } from './TrackedContactCta';
 

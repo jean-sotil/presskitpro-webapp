@@ -12,8 +12,9 @@ import { ContactForm } from '../ContactForm';
  */
 export function ContactBunker909({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.contact');
-  const showForm = bundle.content?.showContactForm !== false;
-  const destinationEmail = (bundle.content?.contactEmail as string | undefined) ?? null;
+  const profile = bundle.profile as any;
+  const showForm = profile.contactFormEnabled === true;
+  const destinationEmail = (profile.contactFormDestination || profile.contactEmail) as string | undefined;
 
   if (!showForm || !destinationEmail) return null;
 

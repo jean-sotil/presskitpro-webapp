@@ -15,7 +15,7 @@ type PortraitMedia = {
 
 /**
  * Bunker 909 Hero
- * Industrial, brutalist design with high-contrast orange/black.
+ * Refined industrial brutalism. Focused on legibility and structural hierarchy.
  */
 export function HeroBunker909({ bundle }: { bundle: EditorBundle }) {
   const { profile, content } = bundle;
@@ -32,92 +32,108 @@ export function HeroBunker909({ bundle }: { bundle: EditorBundle }) {
   const displayName = profile.slug.replace(/-/g, ' ');
 
   return (
-    <header className="relative min-h-[80vh] overflow-hidden bg-black font-mono selection:bg-orange-500 selection:text-black">
-      {/* Structural Industrial Grid Background */}
-      <div className="absolute inset-0 z-0 opacity-20" 
-           style={{ backgroundImage: 'linear-gradient(#1a1a1a 1px, transparent 1px), linear-gradient(90deg, #1a1a1a 1px, transparent 1px)', backgroundSize: '40px 40px' }} 
+    <header className="relative min-h-[90vh] w-full overflow-hidden bg-[#050505] font-mono selection:bg-[#ff5c00] selection:text-black">
+      {/* Background Grid Layer */}
+      <div className="absolute inset-0 z-0 opacity-10" 
+           style={{ backgroundImage: 'linear-gradient(#1a1a1a 1px, transparent 1px), linear-gradient(90deg, #1a1a1a 1px, transparent 1px)', backgroundSize: '60px 60px' }} 
       />
 
-      <div className="relative z-10 grid h-full md:grid-cols-12">
-        {/* Left Column: Vertical Branding */}
-        <div className="hidden border-r-4 border-[#1a1a1a] p-4 md:col-span-1 md:flex md:flex-col md:items-center md:justify-between">
-          <span className="origin-left -rotate-90 whitespace-nowrap text-[10px] tracking-[0.5em] text-[#333]">
-            SYSTEM_TYPE // B909-PRO
-          </span>
-          <div className="h-32 w-1 bg-[#ff5c00]" />
-          <span className="origin-left -rotate-90 whitespace-nowrap text-[10px] tracking-[0.5em] text-[#333]">
-            {new Date().getFullYear()} // PKP_CORE
+      <div className="relative z-10 flex min-h-[90vh] flex-col md:flex-row">
+        
+        {/* Left: Industrial Sidebar (Vertical Branding) */}
+        <div className="hidden w-20 flex-col items-center justify-between border-r-4 border-[#1a1a1a] py-12 md:flex">
+          <div className="flex flex-col items-center gap-12">
+             <div className="h-12 w-12 border-2 border-[#1a1a1a] p-1">
+                <div className="h-full w-full bg-[#ff5c00]" />
+             </div>
+             <span className="origin-left -rotate-90 whitespace-nowrap text-[10px] font-bold tracking-[0.5em] text-[#333]">
+               BUNKER_CORE_V1.0
+             </span>
+          </div>
+          <span className="origin-left -rotate-90 whitespace-nowrap text-[10px] font-bold tracking-[0.5em] text-[#333]">
+            {new Date().getFullYear()} // PKP_SYS
           </span>
         </div>
 
-        {/* Center: Main Content */}
-        <div className="flex flex-col border-r-4 border-[#1a1a1a] p-6 md:col-span-6 md:p-12 lg:p-20">
-          <div className="flex-1">
-            <div className="mb-12 inline-flex items-center gap-4 border-l-4 border-[#ff5c00] pl-6">
-              <span className="text-xs tracking-[0.3em] text-[#ff5c00]">BUNKER_PROTOCOL // ACTIVE</span>
+        {/* Center/Main: Two-Panel Layout */}
+        <div className="flex flex-1 flex-col md:flex-row">
+          
+          {/* Main Info Panel */}
+          <div className="flex flex-1 flex-col justify-center border-r-4 border-[#1a1a1a] p-8 md:p-16 lg:p-24">
+            <div className="mb-8 inline-flex items-center gap-4">
+               <span className="h-0.5 w-12 bg-[#ff5c00]" />
+               <span className="text-xs font-bold tracking-[0.4em] text-[#ff5c00]">ESTABLISHED // ACTIVE</span>
             </div>
 
-            <h1 className="font-display text-6xl uppercase leading-[0.85] tracking-tighter text-white md:text-8xl lg:text-[10rem]">
+            <h1 className="font-display text-5xl uppercase leading-[0.9] tracking-tighter text-white sm:text-7xl lg:text-9xl">
               {displayName.split(' ').map((word, i) => (
-                <span key={i} className="block">
+                <span key={i} className="block last:text-[#ff5c00]">
                   {word}
-                  {i === 0 && <span className="text-[#ff5c00]">.</span>}
                 </span>
               ))}
             </h1>
 
             {tagline ? (
-              <div className="mt-12 max-w-md border-t border-[#1a1a1a] pt-8">
-                <p className="text-sm leading-relaxed tracking-widest text-[#888] uppercase">
+              <div className="mt-12 max-w-lg border-l-4 border-[#1a1a1a] pl-8">
+                <p className="text-sm font-medium leading-relaxed tracking-widest text-gray-400 uppercase">
                   {tagline}
                 </p>
               </div>
             ) : null}
+
+            {ctaLabel && ctaUrl ? (
+              <div className="mt-16">
+                <a
+                  href={ctaUrl}
+                  className="group relative inline-flex items-center gap-6 overflow-hidden border-2 border-[#ff5c00] bg-transparent px-10 py-5 text-sm font-bold uppercase tracking-[0.2em] text-[#ff5c00] transition-all hover:bg-[#ff5c00] hover:text-black"
+                >
+                  <span className="relative z-10 flex items-center gap-4">
+                    {ctaLabel}
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform group-hover:translate-x-2">
+                      <path d="M4 10H16M16 10L12 6M16 10L12 14" stroke="currentColor" strokeWidth="2" strokeLinecap="square"/>
+                    </svg>
+                  </span>
+                </a>
+              </div>
+            ) : null}
           </div>
 
-          {ctaLabel && ctaUrl ? (
-            <div className="mt-12">
-              <a
-                href={ctaUrl}
-                className="group relative inline-flex items-center gap-6 bg-[#ff5c00] px-10 py-5 text-sm font-bold uppercase tracking-[0.2em] text-black transition-all hover:bg-white"
-              >
-                {ctaLabel}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform group-hover:translate-x-2">
-                  <path d="M4 10H16M16 10L12 6M16 10L12 14" stroke="currentColor" strokeWidth="2" strokeLinecap="square"/>
-                </svg>
-              </a>
-            </div>
-          ) : null}
-        </div>
-
-        {/* Right Column: Visual Component */}
-        <div className="relative min-h-[400px] md:col-span-5">
-          {portraitUrl ? (
-            <div className="absolute inset-0 h-full w-full grayscale contrast-125 transition-all duration-700 hover:grayscale-0">
-              <Image
-                src={portraitUrl}
-                alt={portraitMedia?.alt ?? ''}
-                width={portraitWidth}
-                height={portraitHeight}
-                priority
-                sizes="(min-width: 768px) 40vw, 100vw"
-                className="h-full w-full object-cover"
-              />
-              {/* Scanline / Texture overlay */}
-              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] opacity-30" />
-            </div>
-          ) : (
-            <div className="flex h-full w-full items-center justify-center bg-[#111]">
-              <div className="h-32 w-32 border-4 border-[#1a1a1a] p-4 opacity-20">
-                <div className="h-full w-full border-2 border-dashed border-[#ff5c00]" />
-              </div>
-            </div>
-          )}
-
-          {/* Industrial "Caution" Bar */}
-          <div className="absolute bottom-0 left-0 h-8 w-full bg-[repeating-linear-gradient(45deg,#ff5c00,#ff5c00_20px,#000_20px,#000_40px)]" />
+          {/* Portrait Panel */}
+          <div className="relative h-[60vh] overflow-hidden border-b-4 border-[#1a1a1a] md:h-auto md:w-[40%] md:border-b-0">
+             {portraitUrl ? (
+               <>
+                 <Image
+                   src={portraitUrl}
+                   alt={portraitMedia?.alt ?? ''}
+                   width={portraitWidth}
+                   height={portraitHeight}
+                   priority
+                   sizes="(min-width: 768px) 40vw, 100vw"
+                   className="h-full w-full object-cover grayscale contrast-125 transition-all duration-1000 group-hover:grayscale-0"
+                 />
+                 {/* Decorative Overlays */}
+                 <div className="absolute inset-0 bg-[#ff5c00]/5 mix-blend-overlay" />
+                 <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]" />
+                 
+                 {/* Technical Specs Overlay */}
+                 <div className="absolute bottom-12 left-8 right-8 flex items-end justify-between border-t border-white/20 pt-4 text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">
+                    <span>UNIT_SPEC: {portraitWidth}x{portraitHeight}</span>
+                    <span>OP_LVL: STABLE</span>
+                 </div>
+               </>
+             ) : (
+               <div className="flex h-full w-full items-center justify-center bg-[#111]">
+                 <div className="h-24 w-24 border-2 border-dashed border-[#1a1a1a] flex items-center justify-center">
+                    <span className="text-[10px] text-[#333]">NO_FEED</span>
+                 </div>
+               </div>
+             )}
+          </div>
         </div>
       </div>
+
+      {/* Industrial Warning Bar (Bottom) */}
+      <div className="h-10 w-full bg-[repeating-linear-gradient(45deg,#ff5c00,#ff5c00_30px,#000_30px,#000_60px)] opacity-80" />
     </header>
   );
 }

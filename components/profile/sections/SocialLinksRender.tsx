@@ -10,7 +10,7 @@ import { SocialLinksElectricFireTechno } from './electric-fire-techno/SocialLink
 import { SocialLinksFestivalClubOrange } from './festival-club-orange/SocialLinksRender.festival-club-orange';
 import { SocialLinksMediakitProV1 } from './mediakit-pro-v1/SocialLinksRender.mediakit-pro-v1';
 import { SocialLinksDeadSignal } from './dead-signal/SocialLinksRender.dead-signal';
-import { SocialLinksBunker909 } from './bunker-909/SocialLinksRender.social-links.bunker-909';
+import { SocialLinksBunker909 } from './bunker-909/SocialLinksRender.bunker-909';
 import { TrackedSocialLink } from './TrackedSocialLink';
 
 type LinkRow = {

@@ -10,7 +10,7 @@ import { FeaturedTrackElectricFireTechno } from './electric-fire-techno/Featured
 import { FeaturedTrackFestivalClubOrange } from './festival-club-orange/FeaturedTrackRender.festival-club-orange';
 import { FeaturedTrackMediakitProV1 } from './mediakit-pro-v1/FeaturedTrackRender.mediakit-pro-v1';
 import { FeaturedTrackDeadSignal } from './dead-signal/FeaturedTrackRender.dead-signal';
-import { FeaturedTrackBunker909 } from './bunker-909/FeaturedTrackRender.featured-track.bunker-909';
+import { FeaturedTrackBunker909 } from './bunker-909/FeaturedTrackRender.bunker-909';
 import { LazyIframe } from './LazyIframe';
 
 export function FeaturedTrackRender({

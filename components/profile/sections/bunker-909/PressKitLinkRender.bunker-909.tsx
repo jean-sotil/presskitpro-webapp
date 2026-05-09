@@ -9,8 +9,8 @@ import type { EditorBundle } from '@/lib/editor/bundle';
  * Heavy brutalist block with industrial warning styling.
  */
 export function PressKitLinkBunker909({ bundle }: { bundle: EditorBundle }) {
-  const t = useTranslations('profile.presskit');
-  const url = (bundle.content?.pressKitUrl as string | undefined) ?? null;
+  const t = useTranslations('profile.pressKit');
+  const url = (bundle.profile.pressKitUrl as string | undefined) ?? null;
 
   if (!url) return null;
 
