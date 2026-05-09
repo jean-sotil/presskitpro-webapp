@@ -10,6 +10,7 @@ import { FeaturedTrackElectricFireTechno } from './electric-fire-techno/Featured
 import { FeaturedTrackFestivalClubOrange } from './festival-club-orange/FeaturedTrackRender.festival-club-orange';
 import { FeaturedTrackMediakitProV1 } from './mediakit-pro-v1/FeaturedTrackRender.mediakit-pro-v1';
 import { FeaturedTrackDeadSignal } from './dead-signal/FeaturedTrackRender.dead-signal';
+import { FeaturedTrackBunker909 } from './bunker-909/FeaturedTrackRender.featured-track.bunker-909';
 import { LazyIframe } from './LazyIframe';
 
 export function FeaturedTrackRender({
@@ -22,6 +23,7 @@ export function FeaturedTrackRender({
   const t = useTranslations('profile.featuredTrack');
 
   // Folder-owned preset dispatch.
+  if (preset?.id === 'bunker-909') return <FeaturedTrackBunker909 bundle={bundle} />;
   if (preset?.id === 'dead-signal') return <FeaturedTrackDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno')
     return <FeaturedTrackElectricFireTechno bundle={bundle} />;

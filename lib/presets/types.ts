@@ -65,6 +65,7 @@ export type PresetDecorations = {
   electricFire?: boolean;
   circuitBoard?: boolean;
   deadSignalBg?: boolean;
+  bunker909Bg?: boolean;
 };
 
 export type Preset = {

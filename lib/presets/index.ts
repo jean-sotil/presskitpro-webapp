@@ -1,3 +1,4 @@
+import { bunker909 } from './bunker-909';
 import { deadSignal } from './dead-signal';
 import { editorialNightlifeV1 } from './editorial-nightlife-v1';
 import { electricFireTechno } from './electric-fire-techno';
@@ -12,6 +13,7 @@ export type { Preset, PresetDecorations, PresetTheme } from './types';
  * artist sees should be the new flagship preset, then the legacy default.
  */
 export const PRESETS: readonly Preset[] = [
+  bunker909,
   deadSignal,
   mediakitProV1,
   festivalClubOrange,

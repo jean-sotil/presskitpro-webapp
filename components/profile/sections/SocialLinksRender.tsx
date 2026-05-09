@@ -10,6 +10,7 @@ import { SocialLinksElectricFireTechno } from './electric-fire-techno/SocialLink
 import { SocialLinksFestivalClubOrange } from './festival-club-orange/SocialLinksRender.festival-club-orange';
 import { SocialLinksMediakitProV1 } from './mediakit-pro-v1/SocialLinksRender.mediakit-pro-v1';
 import { SocialLinksDeadSignal } from './dead-signal/SocialLinksRender.dead-signal';
+import { SocialLinksBunker909 } from './bunker-909/SocialLinksRender.social-links.bunker-909';
 import { TrackedSocialLink } from './TrackedSocialLink';
 
 type LinkRow = {
@@ -30,6 +31,7 @@ export function SocialLinksRender({
   const tPlatforms = useTranslations('profile.social.platforms');
 
   // Folder-owned preset dispatch.
+  if (preset?.id === 'bunker-909') return <SocialLinksBunker909 bundle={bundle} />;
   if (preset?.id === 'dead-signal') return <SocialLinksDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno')
     return <SocialLinksElectricFireTechno bundle={bundle} />;

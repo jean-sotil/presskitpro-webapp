@@ -12,6 +12,7 @@ import { HeroElectricFireTechno } from './electric-fire-techno/HeroRender.electr
 import { HeroFestivalClubOrange } from './festival-club-orange/HeroRender.festival-club-orange';
 import { HeroMediakitProV1 } from './mediakit-pro-v1/HeroRender.mediakit-pro-v1';
 import { HeroDeadSignal } from './dead-signal/HeroRender.dead-signal';
+import { HeroBunker909 } from './bunker-909/HeroRender.bunker-909';
 
 /**
  * Legacy `Themes.heroStyle` values, kept around so no-preset profiles
@@ -37,6 +38,7 @@ export function HeroRender({ bundle, preset }: { bundle: EditorBundle; preset?: 
 
   // Folder-owned preset dispatch — all four presets ship their own
   // 9-section suite under `sections/<preset.id>/`.
+  if (preset?.id === 'bunker-909') return <HeroBunker909 bundle={bundle} />;
   if (preset?.id === 'dead-signal') return <HeroDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno') return <HeroElectricFireTechno bundle={bundle} />;
   if (preset?.id === 'mediakit-pro-v1') return <HeroMediakitProV1 bundle={bundle} />;

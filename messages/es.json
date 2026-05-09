@@ -313,6 +313,10 @@
     }
   },
   "presets": {
+    "bunker-909": {
+      "name": "Bunker 909",
+      "tagline": "Estética industrial y brutalista. Hormigón, rejillas metálicas y el clásico naranja 909 sobre negro profundo."
+    },
     "mediakit-pro-v1": {
       "name": "Hard Techno Underground",
       "tagline": "Estética rave underground: negro puro, cobalt eléctrico, título fantasma y marquesina de alto voltaje."

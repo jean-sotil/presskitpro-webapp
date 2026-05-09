@@ -312,6 +312,10 @@
     }
   },
   "presets": {
+    "bunker-909": {
+      "name": "Bunker 909",
+      "tagline": "Estética industrial e brutalista. Concreto, grades metálicas e o clássico laranja 909 sobre preto profundo."
+    },
     "mediakit-pro-v1": {
       "name": "Hard Techno Underground",
       "tagline": "Estética rave underground: preto puro, cobalt elétrico, título fantasma e marquee em alta voltagem."
