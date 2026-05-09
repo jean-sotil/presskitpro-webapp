@@ -64,6 +64,7 @@ export type PresetDecorations = {
   filmGrain?: boolean;
   electricFire?: boolean;
   circuitBoard?: boolean;
+  deadSignalBg?: boolean;
 };
 
 export type Preset = {
