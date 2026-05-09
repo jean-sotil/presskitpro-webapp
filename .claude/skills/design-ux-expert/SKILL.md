@@ -28,15 +28,15 @@ visualize:read_me(modules=[...relevant...], platform="desktop"|"mobile")
 
 Pick modules based on the task:
 
-| Task | Modules |
-|---|---|
-| Dashboard, form, card, settings UI | `mockup`, `interactive` |
-| Process flow, architecture, how-X-works diagram | `diagram` |
-| Data charts, analytics, maps | `chart`, `data_viz` |
-| Interactive explainer (sliders, toggles, live math) | `interactive` |
-| Illustration, generative art, poster | `art` |
-| Gathering user input before generating | `elicitation` |
-| Anything combining multiple of the above | load all relevant |
+| Task                                                | Modules                 |
+| --------------------------------------------------- | ----------------------- |
+| Dashboard, form, card, settings UI                  | `mockup`, `interactive` |
+| Process flow, architecture, how-X-works diagram     | `diagram`               |
+| Data charts, analytics, maps                        | `chart`, `data_viz`     |
+| Interactive explainer (sliders, toggles, live math) | `interactive`           |
+| Illustration, generative art, poster                | `art`                   |
+| Gathering user input before generating              | `elicitation`           |
+| Anything combining multiple of the above            | load all relevant       |
 
 ---
 
@@ -66,12 +66,12 @@ Does the user want to input options/preferences?
 
 ### SVG vs HTML
 
-| Use SVG when | Use HTML when |
-|---|---|
-| Diagram / illustration / icon / art | Interactive controls (sliders, buttons) |
-| Static explanation of structure | Live computation or state changes |
-| One visual communicating one idea | Multiple components (chart + cards + form) |
-| Flowcharts, ER diagrams, structural maps | Dashboards, data tables, comparison cards |
+| Use SVG when                             | Use HTML when                              |
+| ---------------------------------------- | ------------------------------------------ |
+| Diagram / illustration / icon / art      | Interactive controls (sliders, buttons)    |
+| Static explanation of structure          | Live computation or state changes          |
+| One visual communicating one idea        | Multiple components (chart + cards + form) |
+| Flowcharts, ER diagrams, structural maps | Dashboards, data tables, comparison cards  |
 
 **Never mix modes** — pick one per tool call. SVG starts with `<svg`. HTML is everything else.
 
@@ -133,30 +133,30 @@ Always use CSS variables (adapts to light/dark automatically):
 
 Use `c-{ramp}` classes on SVG `<g>` or shape elements. Auto-handles dark mode.
 
-| Class | Use case |
-|---|---|
+| Class      | Use case                                |
+| ---------- | --------------------------------------- |
 | `c-purple` | Primary categories, AI/compute concepts |
-| `c-teal` | Secondary categories, data/pipeline |
-| `c-coral` | Danger, heat, primary action emphasis |
-| `c-pink` | User-facing, consumer, creative |
-| `c-gray` | Neutral, structural, start/end nodes |
-| `c-blue` | Info, informational concepts |
-| `c-green` | Success, organic, nature, positive |
-| `c-amber` | Warning, cost, budget, energy |
-| `c-red` | Error, critical, high-risk |
+| `c-teal`   | Secondary categories, data/pipeline     |
+| `c-coral`  | Danger, heat, primary action emphasis   |
+| `c-pink`   | User-facing, consumer, creative         |
+| `c-gray`   | Neutral, structural, start/end nodes    |
+| `c-blue`   | Info, informational concepts            |
+| `c-green`  | Success, organic, nature, positive      |
+| `c-amber`  | Warning, cost, budget, energy           |
+| `c-red`    | Error, critical, high-risk              |
 
 **Text on colored fills:** Use 800-stop for titles, 600-stop for subtitles in light mode. Opposite in dark. Never use black or CSS vars on colored fills.
 
 ### SVG Hardcoded Color Stops
 
-| Ramp | 50 (lightest fill) | 600 (stroke) | 800 (dark title) |
-|---|---|---|---|
-| purple | #EEEDFE | #534AB7 | #3C3489 |
-| teal | #E1F5EE | #0F6E56 | #085041 |
-| coral | #FAECE7 | #993C1D | #712B13 |
-| blue | #E6F1FB | #185FA5 | #0C447C |
-| amber | #FAEEDA | #854F0B | #633806 |
-| gray | #F1EFE8 | #5F5E5A | #444441 |
+| Ramp   | 50 (lightest fill) | 600 (stroke) | 800 (dark title) |
+| ------ | ------------------ | ------------ | ---------------- |
+| purple | #EEEDFE            | #534AB7      | #3C3489          |
+| teal   | #E1F5EE            | #0F6E56      | #085041          |
+| coral  | #FAECE7            | #993C1D      | #712B13          |
+| blue   | #E6F1FB            | #185FA5      | #0C447C          |
+| amber  | #FAEEDA            | #854F0B      | #633806          |
+| gray   | #F1EFE8            | #5F5E5A      | #444441          |
 
 ---
 
@@ -227,6 +227,7 @@ class="c-{ramp}"— colored node group (auto dark mode)
 Read `references/diagram-types.md` for complete guidance on all diagram types.
 
 Quick routing:
+
 - "How does X work?" (intuition) → **Illustrative diagram** (or HTML stepper if cyclical)
 - "Show me the architecture/structure" → **Structural diagram**
 - "What are the steps/flow?" → **Flowchart**
@@ -240,23 +241,30 @@ Quick routing:
 ### Component Patterns
 
 **Cards:**
+
 ```html
-<div style="background:var(--color-background-primary);border-radius:var(--border-radius-lg);
-  border:0.5px solid var(--color-border-tertiary);padding:1rem 1.25rem;">
+<div
+  style="background:var(--color-background-primary);border-radius:var(--border-radius-lg);
+  border:0.5px solid var(--color-border-tertiary);padding:1rem 1.25rem;"
+>
   content
 </div>
 ```
 
 **Metric summary cards:**
+
 ```html
-<div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);
-  padding:1rem;text-align:center;">
+<div
+  style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);
+  padding:1rem;text-align:center;"
+>
   <p style="font-size:13px;color:var(--color-text-secondary);margin:0 0 4px">Label</p>
   <p style="font-size:24px;font-weight:500;margin:0">Value</p>
 </div>
 ```
 
 **Accessible icons (Tabler Outline only):**
+
 ```html
 <i class="ti ti-NAME" style="font-size:20px" aria-hidden="true"></i>
 <!-- Common: ti-home ti-user ti-chart-bar ti-settings ti-check ti-x ti-arrow-right -->
@@ -264,12 +272,14 @@ Quick routing:
 ```
 
 **Buttons:**
+
 ```html
 <button type="button" onclick="sendPrompt('Follow-up question ↗')">Action ↗</button>
 <!-- Pre-styled: transparent bg, 0.5px border, hover bg-secondary, active scale(0.98) -->
 ```
 
 ### Responsive Grid Pattern
+
 ```html
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
   <!-- cards -->
@@ -277,21 +287,22 @@ Quick routing:
 ```
 
 ### Charts (Chart.js)
+
 ```html
 <div style="position:relative;width:100%;height:300px;">
   <canvas id="myChart" role="img" aria-label="Description of chart">Fallback text.</canvas>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-new Chart(document.getElementById('myChart'), {
-  type: 'bar',
-  data: { labels: [], datasets: [{ label: '', data: [] }] },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false } }
-  }
-});
+  new Chart(document.getElementById('myChart'), {
+    type: 'bar',
+    data: { labels: [], datasets: [{ label: '', data: [] }] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+    },
+  });
 </script>
 ```
 
@@ -320,30 +331,43 @@ Before writing any code, answer all five:
 
 ### Layout Patterns by Use Case
 
-| Use Case | Layout Choice |
-|---|---|
-| Data analytics | Metric cards grid + chart below |
-| Settings / preferences | Left label, right control, full-width rows |
-| Comparison | Side-by-side cards, featured item with info-border |
-| User profile / data record | Single card with avatar, dividers |
-| Onboarding / wizard | Stepper with progress dots |
-| Dashboard | Top summary row + main chart + side detail |
+| Use Case                   | Layout Choice                                      |
+| -------------------------- | -------------------------------------------------- |
+| Data analytics             | Metric cards grid + chart below                    |
+| Settings / preferences     | Left label, right control, full-width rows         |
+| Comparison                 | Side-by-side cards, featured item with info-border |
+| User profile / data record | Single card with avatar, dividers                  |
+| Onboarding / wizard        | Stepper with progress dots                         |
+| Dashboard                  | Top summary row + main chart + side detail         |
 
 ### Motion and Animation
 
 Use only for:
+
 - State transitions (toggle on/off, tab switching)
 - Physical mechanisms in illustrative diagrams (convection, rotation)
 - Load/reveal sequences
 
 Rules:
+
 ```css
 /* Only animate transform and opacity */
-@keyframes reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
 
 /* Wrap in reduced-motion guard */
 @media (prefers-reduced-motion: no-preference) {
-  .animate { animation: reveal 0.3s ease forwards; }
+  .animate {
+    animation: reveal 0.3s ease forwards;
+  }
 }
 ```
 
@@ -354,23 +378,23 @@ No physics engines in widgets.
 
 ## Step 7 — Forbidden Patterns (Avoid These)
 
-| ❌ Wrong | ✅ Right |
-|---|---|
-| `color: #333` hardcoded | `color: var(--color-text-primary)` |
-| Gradient backgrounds | Flat CSS variable fills |
-| `font-weight: 700` | `font-weight: 500` |
-| `position: fixed` modals | Normal-flow faux viewport div |
-| `display: none` hidden tabs | Stepper/sequential HTML layout |
-| Title Case headings | Sentence case |
-| Emoji | Tabler outline icons (`ti-*`) |
-| Comments in code | None (waste tokens, break streaming) |
-| Text outside SVG safe zone | x=40–640, y=40–(H-40) |
-| Arrow through another box | L-shaped path detour |
-| Unclassed SVG `<text>` | Always `class="t"`, `"ts"`, or `"th"` |
-| All pills same visual format | Vary: pills/cards/tiles per question type |
-| Ring/circle for cyclical flows | HTML stepper with wrap-around Next |
-| Centered layout everywhere | Mix flush-left editorial + centered UI |
-| `Inter` or `Arial` font | `var(--font-sans)` (Anthropic Sans) |
+| ❌ Wrong                       | ✅ Right                                  |
+| ------------------------------ | ----------------------------------------- |
+| `color: #333` hardcoded        | `color: var(--color-text-primary)`        |
+| Gradient backgrounds           | Flat CSS variable fills                   |
+| `font-weight: 700`             | `font-weight: 500`                        |
+| `position: fixed` modals       | Normal-flow faux viewport div             |
+| `display: none` hidden tabs    | Stepper/sequential HTML layout            |
+| Title Case headings            | Sentence case                             |
+| Emoji                          | Tabler outline icons (`ti-*`)             |
+| Comments in code               | None (waste tokens, break streaming)      |
+| Text outside SVG safe zone     | x=40–640, y=40–(H-40)                     |
+| Arrow through another box      | L-shaped path detour                      |
+| Unclassed SVG `<text>`         | Always `class="t"`, `"ts"`, or `"th"`     |
+| All pills same visual format   | Vary: pills/cards/tiles per question type |
+| Ring/circle for cyclical flows | HTML stepper with wrap-around Next        |
+| Centered layout everywhere     | Mix flush-left editorial + centered UI    |
+| `Inter` or `Arial` font        | `var(--font-sans)` (Anthropic Sans)       |
 
 ---
 
@@ -382,6 +406,7 @@ Code order matters — useful content must appear early in the stream:
 **SVG:** `<defs>` → shapes → text labels → annotations
 
 Avoid during streaming:
+
 - Gradients (flash during DOM diffs)
 - `display: none` sections (stream invisibly)
 - Multiple inline `<style>` blocks
@@ -393,6 +418,7 @@ Avoid during streaming:
 Use when you need user preferences before generating. See `references/elicitation.md` for full patterns.
 
 Quick rule: **Infer from context first**. Only ask what you cannot determine.
+
 - Pills: short ≤4-word options
 - Cards: options with icons + subtitles
 - Tiles: visual format pickers

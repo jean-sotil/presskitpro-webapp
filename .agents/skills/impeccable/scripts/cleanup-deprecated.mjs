@@ -215,15 +215,9 @@ export function cleanup(projectRoot) {
 }
 
 // CLI entry point
-if (
-  process.argv[1] &&
-  resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname)
-) {
+if (process.argv[1] && resolve(process.argv[1]) === resolve(new URL(import.meta.url).pathname)) {
   const result = cleanup();
-  if (
-    result.deletedPaths.length === 0 &&
-    result.removedLockEntries.length === 0
-  ) {
+  if (result.deletedPaths.length === 0 && result.removedLockEntries.length === 0) {
     console.log('No deprecated Impeccable skills found. Nothing to clean up.');
   } else {
     if (result.deletedPaths.length > 0) {

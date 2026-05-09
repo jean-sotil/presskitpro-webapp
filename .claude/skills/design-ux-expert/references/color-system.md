@@ -63,17 +63,17 @@ or physical-world illustrations that should NOT invert in dark mode.
 
 Use these in SVG via `c-{ramp}` class on `<g>` or shape elements.
 
-| Ramp | Class | 50 | 100 | 200 | 400 | 600 | 800 | 900 |
-|---|---|---|---|---|---|---|---|---|
+| Ramp   | Class      | 50      | 100     | 200     | 400     | 600     | 800     | 900     |
+| ------ | ---------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- |
 | Purple | `c-purple` | #EEEDFE | #CECBF6 | #AFA9EC | #7F77DD | #534AB7 | #3C3489 | #26215C |
-| Teal | `c-teal` | #E1F5EE | #9FE1CB | #5DCAA5 | #1D9E75 | #0F6E56 | #085041 | #04342C |
-| Coral | `c-coral` | #FAECE7 | #F5C4B3 | #F0997B | #D85A30 | #993C1D | #712B13 | #4A1B0C |
-| Pink | `c-pink` | #FBEAF0 | #F4C0D1 | #ED93B1 | #D4537E | #993556 | #72243E | #4B1528 |
-| Gray | `c-gray` | #F1EFE8 | #D3D1C7 | #B4B2A9 | #888780 | #5F5E5A | #444441 | #2C2C2A |
-| Blue | `c-blue` | #E6F1FB | #B5D4F4 | #85B7EB | #378ADD | #185FA5 | #0C447C | #042C53 |
-| Green | `c-green` | #EAF3DE | #C0DD97 | #97C459 | #639922 | #3B6D11 | #27500A | #173404 |
-| Amber | `c-amber` | #FAEEDA | #FAC775 | #EF9F27 | #BA7517 | #854F0B | #633806 | #412402 |
-| Red | `c-red` | #FCEBEB | #F7C1C1 | #F09595 | #E24B4A | #A32D2D | #791F1F | #501313 |
+| Teal   | `c-teal`   | #E1F5EE | #9FE1CB | #5DCAA5 | #1D9E75 | #0F6E56 | #085041 | #04342C |
+| Coral  | `c-coral`  | #FAECE7 | #F5C4B3 | #F0997B | #D85A30 | #993C1D | #712B13 | #4A1B0C |
+| Pink   | `c-pink`   | #FBEAF0 | #F4C0D1 | #ED93B1 | #D4537E | #993556 | #72243E | #4B1528 |
+| Gray   | `c-gray`   | #F1EFE8 | #D3D1C7 | #B4B2A9 | #888780 | #5F5E5A | #444441 | #2C2C2A |
+| Blue   | `c-blue`   | #E6F1FB | #B5D4F4 | #85B7EB | #378ADD | #185FA5 | #0C447C | #042C53 |
+| Green  | `c-green`  | #EAF3DE | #C0DD97 | #97C459 | #639922 | #3B6D11 | #27500A | #173404 |
+| Amber  | `c-amber`  | #FAEEDA | #FAC775 | #EF9F27 | #BA7517 | #854F0B | #633806 | #412402 |
+| Red    | `c-red`    | #FCEBEB | #F7C1C1 | #F09595 | #E24B4A | #A32D2D | #791F1F | #501313 |
 
 ### Light/Dark Mode Quick Reference
 
@@ -86,14 +86,14 @@ Dark mode:  800 fill + 200 stroke + 100 title + 200 subtitle
 
 Text on any colored fill MUST use same-ramp stops (never black, gray, or CSS vars):
 
-| Fill | Title text | Subtitle text |
-|---|---|---|
+| Fill      | Title text    | Subtitle text |
+| --------- | ------------- | ------------- |
 | Purple 50 | #3C3489 (800) | #534AB7 (600) |
-| Teal 50 | #085041 (800) | #0F6E56 (600) |
-| Coral 50 | #712B13 (800) | #993C1D (600) |
-| Blue 50 | #0C447C (800) | #185FA5 (600) |
-| Amber 50 | #633806 (800) | #854F0B (600) |
-| Gray 50 | #444441 (800) | #5F5E5A (600) |
+| Teal 50   | #085041 (800) | #0F6E56 (600) |
+| Coral 50  | #712B13 (800) | #993C1D (600) |
+| Blue 50   | #0C447C (800) | #185FA5 (600) |
+| Amber 50  | #633806 (800) | #854F0B (600) |
+| Gray 50   | #444441 (800) | #5F5E5A (600) |
 
 ---
 
@@ -101,17 +101,17 @@ Text on any colored fill MUST use same-ramp stops (never black, gray, or CSS var
 
 ### By semantic role
 
-| Meaning | Ramp | Example use |
-|---|---|---|
-| Primary/AI/compute | Purple | API nodes, model layers |
-| Data/pipeline | Teal | Data flows, ETL |
-| Warning/cost/energy | Amber | Budget nodes, CPU load |
-| Error/critical | Red | Error states, danger |
-| Success/organic | Green | Healthy states, nature |
-| Info/informational | Blue | Info nodes, links |
-| Neutral/structural | Gray | Start/end nodes, containers |
-| Consumer/creative | Pink | User-facing features |
-| Danger/heat | Coral | Hot zones, deprecated |
+| Meaning             | Ramp   | Example use                 |
+| ------------------- | ------ | --------------------------- |
+| Primary/AI/compute  | Purple | API nodes, model layers     |
+| Data/pipeline       | Teal   | Data flows, ETL             |
+| Warning/cost/energy | Amber  | Budget nodes, CPU load      |
+| Error/critical      | Red    | Error states, danger        |
+| Success/organic     | Green  | Healthy states, nature      |
+| Info/informational  | Blue   | Info nodes, links           |
+| Neutral/structural  | Gray   | Start/end nodes, containers |
+| Consumer/creative   | Pink   | User-facing features        |
+| Danger/heat         | Coral  | Hot zones, deprecated       |
 
 ### Don't rainbow-cycle colors
 
@@ -125,26 +125,29 @@ Text on any colored fill MUST use same-ramp stops (never black, gray, or CSS var
 Chart.js canvas cannot resolve CSS variables. Use these palettes:
 
 ### Primary series
+
 ```js
-'#534AB7'  // purple 600
-'#0F6E56'  // teal 600
-'#854F0B'  // amber 600
-'#185FA5'  // blue 600
-'#3B6D11'  // green 600
-'#993C1D'  // coral 600
+'#534AB7'; // purple 600
+'#0F6E56'; // teal 600
+'#854F0B'; // amber 600
+'#185FA5'; // blue 600
+'#3B6D11'; // green 600
+'#993C1D'; // coral 600
 ```
 
 ### Light fills (area charts, backgrounds)
+
 ```js
-'rgba(83, 74, 183, 0.15)'   // purple
-'rgba(15, 110, 86, 0.15)'   // teal
-'rgba(133, 79, 11, 0.15)'   // amber
+'rgba(83, 74, 183, 0.15)'; // purple
+'rgba(15, 110, 86, 0.15)'; // teal
+'rgba(133, 79, 11, 0.15)'; // amber
 ```
 
 ### Neutral
+
 ```js
-'#888780'  // gray 400 — neutral/baseline series
-'#B4B2A9'  // gray 200 — very subtle
+'#888780'; // gray 400 — neutral/baseline series
+'#B4B2A9'; // gray 200 — very subtle
 ```
 
 ---
