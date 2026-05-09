@@ -12,18 +12,18 @@
 @layer base {
   :root {
     /* Color (default theme — dark) */
-    --bg:               0.094 0 0;
-    --surface:          0.155 0 0;
-    --border:           0.218 0 0;
-    --text:             0.938 0.009 88;
-    --text-muted:       0.620 0.010 78;
-    --accent:           0.751 0.230 142;
-    --accent-contrast:  0.094 0 0;
+    --bg: 0.094 0 0;
+    --surface: 0.155 0 0;
+    --border: 0.218 0 0;
+    --text: 0.938 0.009 88;
+    --text-muted: 0.62 0.01 78;
+    --accent: 0.751 0.23 142;
+    --accent-contrast: 0.094 0 0;
 
     /* Typography — default pair "Editorial Nightlife" (PRD §12.1).
        Per-profile overrides come from lib/design/fonts.ts (fontPairCssVars). */
-    --font-display:   var(--font-anton);
-    --font-body:      var(--font-manrope);
+    --font-display: var(--font-anton);
+    --font-body: var(--font-manrope);
     --font-editorial: var(--font-fraunces);
 
     /* Atmosphere */
@@ -34,9 +34,9 @@
 
     /* Motion — locked timings */
     --motion-stagger: 40ms;
-    --motion-quick:   140ms;
-    --motion-base:    240ms;
-    --motion-slow:    420ms;
+    --motion-quick: 140ms;
+    --motion-base: 240ms;
+    --motion-slow: 420ms;
 
     color-scheme: dark;
   }
@@ -105,8 +105,14 @@
 
 @layer components {
   @keyframes reveal-up {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   [data-reveal] {
@@ -119,23 +125,39 @@
   /* Task-35 — marquee scroll. Track is duplicated 2x in the DOM so
      translateX(-50%) loops without a visible seam. */
   @keyframes marquee {
-    from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(-50%, 0, 0); }
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
   }
 
   /* Task-35 — Festival Club Orange decorative phone-frame float. The
      base rotation comes from an inline transform in the component so
      the keyframe just animates the translate. */
   @keyframes phone-float {
-    0%, 100% { transform: rotate(-6deg) translateY(0); }
-    50%      { transform: rotate(-6deg) translateY(-8px); }
+    0%,
+    100% {
+      transform: rotate(-6deg) translateY(0);
+    }
+    50% {
+      transform: rotate(-6deg) translateY(-8px);
+    }
   }
 
   /* Task-35 — retro cursor wiggle for the festival press-kit CTA. */
   @keyframes cursor-wiggle {
-    0%, 100% { transform: rotate(-12deg); }
-    25%      { transform: rotate(-18deg); }
-    75%      { transform: rotate(-6deg); }
+    0%,
+    100% {
+      transform: rotate(-12deg);
+    }
+    25% {
+      transform: rotate(-18deg);
+    }
+    75% {
+      transform: rotate(-6deg);
+    }
   }
 
   /* Task-35 — gallery lightbox enter animations. Backdrop fades in,
@@ -143,12 +165,22 @@
      immediately to feel responsive. Reduced-motion users see the
      final state instantly. */
   @keyframes lightbox-fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   @keyframes lightbox-zoom-in {
-    from { opacity: 0; transform: scale(0.96); }
-    to   { opacity: 1; transform: scale(1); }
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 
   /* Task-35 — animated film grain overlay. Scoped to the
@@ -167,11 +199,21 @@
     animation: grain-shift 0.5s steps(1, end) infinite;
   }
   @keyframes grain-shift {
-    0%   { transform: translate(0, 0); }
-    25%  { transform: translate(-2px, 1px); }
-    50%  { transform: translate(1px, -2px); }
-    75%  { transform: translate(-1px, 2px); }
-    100% { transform: translate(2px, -1px); }
+    0% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(-2px, 1px);
+    }
+    50% {
+      transform: translate(1px, -2px);
+    }
+    75% {
+      transform: translate(-1px, 2px);
+    }
+    100% {
+      transform: translate(2px, -1px);
+    }
   }
 
   /* Task-35 — Electric Fire Techno effect bundle. Scoped to the article
@@ -255,12 +297,7 @@
      transparent text-fill. */
   [data-preset-electric-fire] h1,
   [data-preset-electric-fire] h2 {
-    background: linear-gradient(
-      180deg,
-      #FFD700 0%,
-      #FF8C00 45%,
-      #FF4500 100%
-    );
+    background: linear-gradient(180deg, #ffd700 0%, #ff8c00 45%, #ff4500 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -280,7 +317,8 @@
     animation: electric-fire-neon-pulse 2.6s ease-in-out infinite;
   }
   @keyframes electric-fire-neon-pulse {
-    0%, 100% {
+    0%,
+    100% {
       box-shadow:
         0 0 6px rgba(255, 85, 0, 0.95),
         0 0 20px rgba(255, 85, 0, 0.55),
@@ -298,8 +336,7 @@
      drop-shadow layers fake the red/cyan channel split without
      loading the image multiple times. */
   [data-preset-electric-fire] [data-fire-hero-portrait] {
-    filter:
-      drop-shadow(2.5px 0 0 rgba(255, 0, 60, 0.55))
+    filter: drop-shadow(2.5px 0 0 rgba(255, 0, 60, 0.55))
       drop-shadow(-2.5px 0 0 rgba(0, 191, 255, 0.55));
   }
 
@@ -358,13 +395,116 @@
     background-attachment: fixed;
   }
 
+  [data-preset-dead-signal-bg] {
+    background-image: url('/presets/dead-signal/bg.png');
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    background-attachment: fixed;
+  }
+
+  [data-preset-dead-signal-bg] header,
+  [data-preset-dead-signal-bg] section {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(8px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Glitch TV Effect for sections */
+  [data-preset-dead-signal-bg] header::before,
+  [data-preset-dead-signal-bg] section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15) 0px,
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    opacity: 0.4;
+    mix-blend-mode: overlay;
+  }
+
+  /* Moving scanline */
+  [data-preset-dead-signal-bg] header::after,
+  [data-preset-dead-signal-bg] section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(239, 68, 68, 0.05),
+      rgba(34, 211, 238, 0.05),
+      transparent
+    );
+    pointer-events: none;
+    z-index: 2;
+    animation: dead-signal-scan 8s linear infinite;
+    mix-blend-mode: screen;
+  }
+
+  @keyframes dead-signal-scan {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(100vh);
+    }
+  }
+
+  @keyframes dead-signal-flicker {
+    0% {
+      opacity: 1;
+      filter: brightness(1);
+    }
+    5% {
+      opacity: 0.99;
+      filter: brightness(1.02);
+    }
+    10% {
+      opacity: 1;
+      filter: brightness(1);
+    }
+    15% {
+      opacity: 0.98;
+      filter: brightness(0.98);
+    }
+    20% {
+      opacity: 1;
+      filter: brightness(1);
+    }
+    100% {
+      opacity: 1;
+      filter: brightness(1);
+    }
+  }
+
+  [data-preset-dead-signal-bg] header,
+  [data-preset-dead-signal-bg] section {
+    animation: dead-signal-flicker 4s infinite step-end;
+  }
+
   /* Equalizer bars on the FeaturedTrack glow-track variant. Each bar
      pulses on a staggered delay (set via inline `animation-delay`) so
      the row reads as live audio without Web Audio or canvas. */
   @keyframes equalizer-bar {
-    0%   { transform: scaleY(0.25); }
-    50%  { transform: scaleY(1.0); }
-    100% { transform: scaleY(0.4); }
+    0% {
+      transform: scaleY(0.25);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+    100% {
+      transform: scaleY(0.4);
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     [data-glow-track] [aria-hidden='true'] span {
