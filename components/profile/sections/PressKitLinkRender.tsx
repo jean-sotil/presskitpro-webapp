@@ -12,6 +12,7 @@ import { PressKitLinkFestivalClubOrange } from './festival-club-orange/PressKitL
 import { PressKitLinkMediakitProV1 } from './mediakit-pro-v1/PressKitLinkRender.mediakit-pro-v1';
 import { PressKitLinkDeadSignal } from './dead-signal/PressKitLinkRender.dead-signal';
 import { PressKitLinkBunker909 } from './bunker-909/PressKitLinkRender.bunker-909';
+import { PressKitLinkNuclearWinter } from './nuclear-winter/PressKitLinkRender.nuclear-winter';
 import { TrackedPressKitAnchor } from './TrackedPressKitAnchor';
 
 export function PressKitLinkRender({
@@ -25,6 +26,7 @@ export function PressKitLinkRender({
   const tProviders = useTranslations('profile.pressKit.providers');
 
   // Folder-owned preset dispatch.
+  if (preset?.id === 'nuclear-winter') return <PressKitLinkNuclearWinter bundle={bundle} />;
   if (preset?.id === 'bunker-909') return <PressKitLinkBunker909 bundle={bundle} />;
   if (preset?.id === 'dead-signal') return <PressKitLinkDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno')

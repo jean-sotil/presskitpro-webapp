@@ -4,6 +4,7 @@ import { editorialNightlifeV1 } from './editorial-nightlife-v1';
 import { electricFireTechno } from './electric-fire-techno';
 import { festivalClubOrange } from './festival-club-orange';
 import { mediakitProV1 } from './mediakit-pro-v1';
+import { nuclearWinter } from './nuclear-winter';
 import type { Preset } from './types';
 
 export type { Preset, PresetDecorations, PresetTheme } from './types';
@@ -13,6 +14,7 @@ export type { Preset, PresetDecorations, PresetTheme } from './types';
  * artist sees should be the new flagship preset, then the legacy default.
  */
 export const PRESETS: readonly Preset[] = [
+  nuclearWinter,
   bunker909,
   deadSignal,
   mediakitProV1,

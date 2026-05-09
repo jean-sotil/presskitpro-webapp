@@ -7,6 +7,7 @@ import { InstagramFeedFestivalClubOrange } from './festival-club-orange/Instagra
 import { InstagramFeedMediakitProV1 } from './mediakit-pro-v1/InstagramFeedRender.mediakit-pro-v1';
 import { InstagramFeedDeadSignal } from './dead-signal/InstagramFeedRender.dead-signal';
 import { InstagramFeedBunker909 } from './bunker-909/InstagramFeedRender.bunker-909';
+import { InstagramFeedNuclearWinter } from './nuclear-winter/InstagramFeedRender.nuclear-winter';
 import { LazyEmbed } from './LazyEmbed';
 
 type InstagramPostRow = {
@@ -24,6 +25,7 @@ export function InstagramFeedRender({
   preset?: Preset | null;
 }) {
   // Folder-owned preset dispatch.
+  if (preset?.id === 'nuclear-winter') return <InstagramFeedNuclearWinter bundle={bundle} />;
   if (preset?.id === 'bunker-909') return <InstagramFeedBunker909 bundle={bundle} />;
   if (preset?.id === 'dead-signal') return <InstagramFeedDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno') return <InstagramElectricFireTechno bundle={bundle} />;

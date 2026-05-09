@@ -13,11 +13,13 @@ import { AboutFestivalClubOrange } from './festival-club-orange/AboutRender.fest
 import { AboutMediakitProV1 } from './mediakit-pro-v1/AboutRender.mediakit-pro-v1';
 import { AboutDeadSignal } from './dead-signal/AboutRender.dead-signal';
 import { AboutBunker909 } from './bunker-909/AboutRender.bunker-909';
+import { AboutNuclearWinter } from './nuclear-winter/AboutRender.nuclear-winter';
 
 export function AboutRender({ bundle, preset }: { bundle: EditorBundle; preset?: Preset | null }) {
   const t = useTranslations('profile.about');
 
   // Folder-owned preset dispatch.
+  if (preset?.id === 'nuclear-winter') return <AboutNuclearWinter bundle={bundle} />;
   if (preset?.id === 'bunker-909') return <AboutBunker909 bundle={bundle} />;
   if (preset?.id === 'dead-signal') return <AboutDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno') return <AboutElectricFireTechno bundle={bundle} />;

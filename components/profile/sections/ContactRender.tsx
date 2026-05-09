@@ -11,6 +11,7 @@ import { ContactFestivalClubOrange } from './festival-club-orange/ContactRender.
 import { ContactMediakitProV1 } from './mediakit-pro-v1/ContactRender.mediakit-pro-v1';
 import { ContactDeadSignal } from './dead-signal/ContactRender.dead-signal';
 import { ContactBunker909 } from './bunker-909/ContactRender.bunker-909';
+import { ContactNuclearWinter } from './nuclear-winter/ContactRender.nuclear-winter';
 import { ContactForm } from './ContactForm';
 import { TrackedContactCta } from './TrackedContactCta';
 
@@ -30,6 +31,7 @@ export function ContactRender({
   const t = useTranslations('profile.contact');
 
   // Folder-owned preset dispatch.
+  if (preset?.id === 'nuclear-winter') return <ContactNuclearWinter bundle={bundle} />;
   if (preset?.id === 'bunker-909') return <ContactBunker909 bundle={bundle} />;
   if (preset?.id === 'dead-signal') return <ContactDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno') return <ContactElectricFireTechno bundle={bundle} />;

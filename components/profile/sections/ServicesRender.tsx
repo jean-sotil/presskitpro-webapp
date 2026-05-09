@@ -11,6 +11,7 @@ import { ServicesFestivalClubOrange } from './festival-club-orange/ServicesRende
 import { ServicesMediakitProV1 } from './mediakit-pro-v1/ServicesRender.mediakit-pro-v1';
 import { ServicesDeadSignal } from './dead-signal/ServicesRender.dead-signal';
 import { ServicesBunker909 } from './bunker-909/ServicesRender.bunker-909';
+import { ServicesNuclearWinter } from './nuclear-winter/ServicesRender.nuclear-winter';
 
 export function ServicesRender({
   bundle,
@@ -22,6 +23,7 @@ export function ServicesRender({
   const t = useTranslations('profile.services');
 
   // Folder-owned preset dispatch.
+  if (preset?.id === 'nuclear-winter') return <ServicesNuclearWinter bundle={bundle} />;
   if (preset?.id === 'bunker-909') return <ServicesBunker909 bundle={bundle} />;
   if (preset?.id === 'dead-signal') return <ServicesDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno') return <ServicesElectricFireTechno bundle={bundle} />;

@@ -13,6 +13,7 @@ import { PhotoGalleryFestivalClubOrange } from './festival-club-orange/PhotoGall
 import { PhotoGalleryMediakitProV1 } from './mediakit-pro-v1/PhotoGalleryRender.mediakit-pro-v1';
 import { PhotoGalleryDeadSignal } from './dead-signal/PhotoGalleryRender.dead-signal';
 import { PhotoGalleryBunker909 } from './bunker-909/PhotoGalleryRender.bunker-909';
+import { PhotoGalleryNuclearWinter } from './nuclear-winter/PhotoGalleryRender.nuclear-winter';
 
 type GalleryEntry = {
   id: number;
@@ -39,6 +40,7 @@ export function PhotoGalleryRender({
   const t = useTranslations('profile.gallery');
 
   // Folder-owned preset dispatch.
+  if (preset?.id === 'nuclear-winter') return <PhotoGalleryNuclearWinter bundle={bundle} />;
   if (preset?.id === 'bunker-909') return <PhotoGalleryBunker909 bundle={bundle} />;
   if (preset?.id === 'dead-signal') return <PhotoGalleryDeadSignal bundle={bundle} />;
   if (preset?.id === 'electric-fire-techno')

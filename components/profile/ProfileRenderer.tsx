@@ -123,6 +123,7 @@ ${fontDecls}
   const circuitBoard = preset?.decorations?.circuitBoard === true;
   const deadSignalBg = preset?.decorations?.deadSignalBg === true;
   const bunker909Bg = preset?.decorations?.bunker909Bg === true;
+  const nuclearWinterBg = preset?.decorations?.nuclearWinterBg === true;
 
   const Article = (
     <article
@@ -132,9 +133,9 @@ ${fontDecls}
       data-preset-circuit-board={circuitBoard ? 'true' : undefined}
       data-preset-dead-signal-bg={deadSignalBg ? 'true' : undefined}
       data-preset-bunker-909-bg={bunker909Bg ? 'true' : undefined}
+      data-preset-nuclear-winter-bg={nuclearWinterBg ? 'true' : undefined}
       className="bg-bg text-text"
-    >
-      {order.map((key) => (
+    >      {order.map((key) => (
         <Fragment key={key}>
           {renderSection(key, bundle, preset)}
           {key === 'hero' && marquee ? <Marquee bundle={bundle} source={marquee.source} /> : null}
