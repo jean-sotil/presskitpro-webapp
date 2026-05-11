@@ -32,7 +32,8 @@
     "payload": "cross-env NODE_OPTIONS='--no-deprecation --conditions=react-server' payload",
     "generate:types": "pnpm payload generate:types",
     "generate:importmap": "pnpm payload generate:importmap",
-    "seed": "cross-env NODE_OPTIONS='--no-deprecation --conditions=react-server' tsx --env-file=.env scripts/seed.ts"
+    "seed": "cross-env NODE_OPTIONS='--no-deprecation --conditions=react-server' tsx --env-file=.env scripts/seed.ts",
+    "cloudflared": "cloudflared tunnel --url http://localhost:3000"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

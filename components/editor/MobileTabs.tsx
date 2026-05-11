@@ -15,6 +15,7 @@ export interface MobileTabsProps {
   /** Override default URL-hash sync (tests pass `false`). */
   syncHash?: boolean;
   initial?: MobileTab;
+  active?: MobileTab;
   onChange?: (tab: MobileTab) => void;
   /** The two panes, keyed by tab. */
   panes: Record<MobileTab, React.ReactNode>;
@@ -28,20 +29,22 @@ const TABS: Array<{ key: MobileTab; label: string }> = [
 export function MobileTabs({
   syncHash = true,
   initial = 'edit',
+  active: activeProp,
   onChange,
   panes,
 }: MobileTabsProps) {
-  const [active, setActive] = useState<MobileTab>(initial);
+  const [internalActive, setInternalActive] = useState<MobileTab>(initial);
+  const active = activeProp ?? internalActive;
 
   useEffect(() => {
     if (!syncHash) return;
     const fromHash = window.location.hash;
-    if (fromHash === '#preview') setActive('preview');
-    else if (fromHash === '#edit') setActive('edit');
+    if (fromHash === '#preview') setInternalActive('preview');
+    else if (fromHash === '#edit') setInternalActive('edit');
   }, [syncHash]);
 
   function pick(next: MobileTab) {
-    setActive(next);
+    if (!activeProp) setInternalActive(next);
     if (syncHash && typeof window !== 'undefined') {
       window.history.replaceState(null, '', HASH_FOR[next]);
     }
