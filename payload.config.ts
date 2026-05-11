@@ -10,10 +10,10 @@ import { FeaturedTracks } from './payload/collections/FeaturedTracks';
 import { InstagramConnections } from './payload/collections/InstagramConnections';
 import { InstagramPosts } from './payload/collections/InstagramPosts';
 import { Media } from './payload/collections/Media';
+import { PayPalWebhookEvents } from './payload/collections/PayPalWebhookEvents';
 import { ProfileContent } from './payload/collections/ProfileContent';
 import { Profiles } from './payload/collections/Profiles';
 import { SocialLinks } from './payload/collections/SocialLinks';
-import { StripeWebhookEvents } from './payload/collections/StripeWebhookEvents';
 import { Themes } from './payload/collections/Themes';
 import { Users } from './payload/collections/Users';
 
@@ -38,7 +38,7 @@ export default buildConfig({
     Themes,
     InstagramConnections,
     InstagramPosts,
-    StripeWebhookEvents,
+    PayPalWebhookEvents,
   ],
   // PRD §10 + task-29 — PT-BR is the v1 default; EN was wired since
   // task-08; ES was promoted from task-34 by user direction. The

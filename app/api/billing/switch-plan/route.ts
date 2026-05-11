@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getStripeClientOrThrow } from '@/lib/billing/stripe-client';
+import { getPayPalClientOrThrow } from '@/lib/billing/paypal-client';
 import { switchPlan, type SwitchPlanKey } from '@/lib/billing/switch-plan';
 import { payload } from '@/lib/payload';
 import { supabaseServer } from '@/lib/supabase/server';
@@ -55,19 +55,19 @@ export async function POST(req: Request) {
     overrideAccess: true,
   });
   const payloadUser = found.docs[0] as
-    | { id: number | string; stripeSubscriptionId?: string | null }
+    | { id: number | string; paypalSubscriptionId?: string | null }
     | undefined;
   if (!payloadUser) {
     return NextResponse.json({ error: 'user-not-found' }, { status: 404 });
   }
 
-  // 4) Stripe SDK — surface an explicit error when unconfigured rather
+  // 4) PayPal client — surface an explicit error when unconfigured rather
   //    than a generic 500.
-  let stripe;
+  let paypal;
   try {
-    stripe = getStripeClientOrThrow();
+    paypal = getPayPalClientOrThrow();
   } catch {
-    return NextResponse.json({ error: 'stripe-not-configured' }, { status: 503 });
+    return NextResponse.json({ error: 'paypal-not-configured' }, { status: 503 });
   }
 
   const result = await switchPlan({
@@ -78,17 +78,17 @@ export async function POST(req: Request) {
         if (id !== payloadUser.id) return null;
         return {
           id: payloadUser.id,
-          stripeSubscriptionId: payloadUser.stripeSubscriptionId ?? null,
+          paypalSubscriptionId: payloadUser.paypalSubscriptionId ?? null,
         };
       },
-      stripe,
+      paypal,
     },
   });
   if (!result.ok) {
     const status =
       result.reason === 'no-subscription'
         ? 409
-        : result.reason === 'unknown-plan' || result.reason === 'not-configured'
+        : result.reason === 'unknown-plan'
           ? 400
           : result.reason === 'user-not-found'
             ? 404

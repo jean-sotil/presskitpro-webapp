@@ -17,11 +17,11 @@ export interface PlanConfig {
   priceUSD: number;
   /** Display price in USD per month when billed annually. Optional. */
   priceUSDAnnual?: number;
-  /** Env var name holding the Stripe Price ID for monthly billing.
-   *  `null` for the trial (no checkout). Task-23 reads this. */
-  stripePriceIdEnv: string | null;
-  /** Env var for annual Stripe Price ID. Optional; tier may not have annual. */
-  stripePriceIdAnnualEnv?: string;
+  /** Env var name holding the PayPal Plan ID for monthly billing.
+   *  `null` for the trial (no checkout). */
+  paypalPlanIdEnv: string | null;
+  /** Env var for annual PayPal Plan ID. Optional; tier may not have annual. */
+  paypalPlanIdAnnualEnv?: string;
   /** Path the CTA navigates to after auth (monthly cadence). The page
    *  wraps this in `/login?next=...` for logged-out users. */
   ctaCheckoutPath: string;
@@ -37,15 +37,15 @@ export const PLANS: PlanConfig[] = [
     id: 'trial',
     priceUSD: 0,
     priceUSDAnnual: 0,
-    stripePriceIdEnv: null,
+    paypalPlanIdEnv: null,
     ctaCheckoutPath: '/signup',
   },
   {
     id: 'pro',
     priceUSD: 12,
     priceUSDAnnual: 10,
-    stripePriceIdEnv: 'STRIPE_PRICE_ID_PRO_MONTHLY',
-    stripePriceIdAnnualEnv: 'STRIPE_PRICE_ID_PRO_ANNUAL',
+    paypalPlanIdEnv: 'PAYPAL_PLAN_ID_PRO_MONTHLY',
+    paypalPlanIdAnnualEnv: 'PAYPAL_PLAN_ID_PRO_ANNUAL',
     ctaCheckoutPath: '/checkout/pro-monthly',
     ctaCheckoutPathAnnual: '/checkout/pro-annual',
     featured: true,
@@ -55,12 +55,8 @@ export const PLANS: PlanConfig[] = [
     priceUSD: 39,
     // ~2 months free off the monthly cadence (39 × 10 / 12 = 32.5 → 33).
     priceUSDAnnual: 33,
-    // task-31 — `STRIPE_PRICE_ID_AGENCY_MONTHLY` is the new name; the
-    // legacy `STRIPE_PRICE_ID_AGENCY` is honored as a fallback by
-    // `priceIdToPlan` for one rolling-deploy release. Drop the legacy
-    // env once every deploy migrates.
-    stripePriceIdEnv: 'STRIPE_PRICE_ID_AGENCY_MONTHLY',
-    stripePriceIdAnnualEnv: 'STRIPE_PRICE_ID_AGENCY_ANNUAL',
+    paypalPlanIdEnv: 'PAYPAL_PLAN_ID_AGENCY_MONTHLY',
+    paypalPlanIdAnnualEnv: 'PAYPAL_PLAN_ID_AGENCY_ANNUAL',
     ctaCheckoutPath: '/checkout/agency-monthly',
     ctaCheckoutPathAnnual: '/checkout/agency-annual',
   },

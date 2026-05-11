@@ -2,13 +2,15 @@
 
 import { redirect } from 'next/navigation';
 
-import { createCheckoutSession, type CheckoutPlanKey } from '@/lib/billing/create-checkout-session';
+import { createPayPalSubscription, type CheckoutPlanKey } from '@/lib/billing/create-paypal-subscription';
 import { payload } from '@/lib/payload';
 import { supabaseServer } from '@/lib/supabase/server';
 
 const KNOWN_PLAN_KEYS: ReadonlySet<CheckoutPlanKey> = new Set([
   'pro-monthly',
   'pro-annual',
+  'agency-monthly',
+  'agency-annual',
   'agency',
 ]);
 
@@ -49,30 +51,27 @@ export async function startCheckout(planId: string): Promise<CheckoutActionResul
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
-  const result = await createCheckoutSession(
-    {
-      planKey: planId,
-      user: {
-        id: userDoc.id,
-        email: authUser.email,
-        stripeCustomerId: userDoc.stripeCustomerId ?? null,
-      },
-      successUrl: `${baseUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancelUrl: `${baseUrl}/checkout/canceled`,
+  const result = await createPayPalSubscription({
+    planKey: planId,
+    user: {
+      id: userDoc.id,
+      email: authUser.email,
     },
-    async (userId, customerId) => {
-      await p.update({
-        collection: 'users',
-        id: userId,
-        data: { stripeCustomerId: customerId },
-        overrideAccess: true,
-      });
-    },
-  );
+    returnUrl: `${baseUrl}/checkout/success`,
+    cancelUrl: `${baseUrl}/checkout/canceled`,
+  });
 
   if (!result.ok) {
     return { ok: false, message: result.message };
   }
 
-  return { ok: true, redirectUrl: result.url };
+  // Critical: write subscriptionId before redirect so webhook can find user
+  await p.update({
+    collection: 'users',
+    id: userDoc.id,
+    data: { paypalSubscriptionId: result.subscriptionId },
+    overrideAccess: true,
+  });
+
+  return { ok: true, redirectUrl: result.approveUrl };
 }

@@ -54,6 +54,7 @@
     "clsx": "^2.1.1",
     "graphql": "^16.9.0",
     "lexical": "0.41.0",
+    "lucide-react": "^1.14.0",
     "next": "^15.1.0",
     "next-intl": "^3.26.0",
     "payload": "^3.0.0",
@@ -61,7 +62,6 @@
     "react-dom": "^19.0.0",
     "server-only": "^0.0.1",
     "sharp": "^0.33.5",
-    "stripe": "^22.1.0",
     "supabase": "^2.95.6",
     "tailwind-merge": "^3.5.0"
   },

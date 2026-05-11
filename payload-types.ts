@@ -78,7 +78,7 @@ export interface Config {
     themes: Theme;
     'instagram-connections': InstagramConnection;
     'instagram-posts': InstagramPost;
-    'stripe-webhook-events': StripeWebhookEvent;
+    'paypal-webhook-events': PaypalWebhookEvent;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -96,7 +96,7 @@ export interface Config {
     themes: ThemesSelect<false> | ThemesSelect<true>;
     'instagram-connections': InstagramConnectionsSelect<false> | InstagramConnectionsSelect<true>;
     'instagram-posts': InstagramPostsSelect<false> | InstagramPostsSelect<true>;
-    'stripe-webhook-events': StripeWebhookEventsSelect<false> | StripeWebhookEventsSelect<true>;
+    'paypal-webhook-events': PaypalWebhookEventsSelect<false> | PaypalWebhookEventsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -206,17 +206,17 @@ export interface User {
    */
   deletionRequestedAt?: string | null;
   /**
-   * Set on first checkout attempt (lazy customer creation). Webhook handler reads this to match incoming events.
+   * PayPal payer_id from the BILLING.SUBSCRIPTION.ACTIVATED webhook (subscriber.payer_id). Equivalent to Stripe customer ID.
    */
-  stripeCustomerId?: string | null;
+  paypalCustomerId?: string | null;
   /**
-   * Set by `checkout.session.completed`; cleared by `customer.subscription.deleted`.
+   * Set at checkout creation (before approval) and confirmed by BILLING.SUBSCRIPTION.ACTIVATED. Cleared by CANCELLED/EXPIRED.
    */
-  stripeSubscriptionId?: string | null;
+  paypalSubscriptionId?: string | null;
   /**
-   * Mirrored from Stripe webhooks. Null when no subscription has ever been created.
+   * Mirrored from PayPal webhooks. Null when no subscription has ever been activated.
    */
-  stripeSubscriptionStatus?: ('active' | 'past_due' | 'canceled') | null;
+  paypalSubscriptionStatus?: ('ACTIVE' | 'SUSPENDED' | 'CANCELLED') | null;
   /**
    * Wizard progress. Owned by the wizard server actions; do not edit directly from admin.
    */
@@ -467,7 +467,17 @@ export interface Theme {
   /**
    * Design preset. Source of truth for section variants when set; null falls back to heroStyle/galleryLayout.
    */
-  presetId?: ('mediakit-pro-v1' | 'festival-club-orange' | 'editorial-nightlife-v1') | null;
+  presetId?:
+    | (
+        | 'nuclear-winter'
+        | 'bunker-909'
+        | 'dead-signal'
+        | 'mediakit-pro-v1'
+        | 'festival-club-orange'
+        | 'electric-fire-techno'
+        | 'editorial-nightlife-v1'
+      )
+    | null;
   /**
    * BG preset id (e.g. 'editorial-night'). Empty when overriding via custom hex.
    */
@@ -564,19 +574,19 @@ export interface InstagramPost {
   createdAt: string;
 }
 /**
- * Stripe webhook idempotency log. Read-only — written by /api/webhooks/stripe.
+ * PayPal webhook idempotency log. Read-only — written by /api/webhooks/paypal.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "stripe-webhook-events".
+ * via the `definition` "paypal-webhook-events".
  */
-export interface StripeWebhookEvent {
+export interface PaypalWebhookEvent {
   id: number;
   /**
-   * Stripe's `event.id`. Unique constraint enforces idempotency.
+   * PayPal's `event.id` (UUID). Unique constraint enforces idempotency.
    */
   eventId: string;
   /**
-   * Stripe's `event.type` (e.g. checkout.session.completed).
+   * PayPal's `event_type` (e.g. BILLING.SUBSCRIPTION.ACTIVATED).
    */
   eventType: string;
   processedAt: string;
@@ -648,8 +658,8 @@ export interface PayloadLockedDocument {
         value: number | InstagramPost;
       } | null)
     | ({
-        relationTo: 'stripe-webhook-events';
-        value: number | StripeWebhookEvent;
+        relationTo: 'paypal-webhook-events';
+        value: number | PaypalWebhookEvent;
       } | null);
   globalSlug?: string | null;
   user:
@@ -737,9 +747,9 @@ export interface UsersSelect<T extends boolean = true> {
   plan?: T;
   trialEndsAt?: T;
   deletionRequestedAt?: T;
-  stripeCustomerId?: T;
-  stripeSubscriptionId?: T;
-  stripeSubscriptionStatus?: T;
+  paypalCustomerId?: T;
+  paypalSubscriptionId?: T;
+  paypalSubscriptionStatus?: T;
   onboardingProgress?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -903,9 +913,9 @@ export interface InstagramPostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "stripe-webhook-events_select".
+ * via the `definition` "paypal-webhook-events_select".
  */
-export interface StripeWebhookEventsSelect<T extends boolean = true> {
+export interface PaypalWebhookEventsSelect<T extends boolean = true> {
   eventId?: T;
   eventType?: T;
   processedAt?: T;

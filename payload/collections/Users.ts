@@ -102,37 +102,37 @@ export const Users: CollectionConfig = {
       },
     },
 
-    // ----- Stripe billing (task-23) -----
+    // ----- PayPal billing -----
     {
-      name: 'stripeCustomerId',
+      name: 'paypalCustomerId',
       type: 'text',
       admin: {
         readOnly: true,
         description:
-          'Set on first checkout attempt (lazy customer creation). Webhook handler reads this to match incoming events.',
+          'PayPal payer_id from the BILLING.SUBSCRIPTION.ACTIVATED webhook (subscriber.payer_id). Equivalent to Stripe customer ID.',
       },
     },
     {
-      name: 'stripeSubscriptionId',
+      name: 'paypalSubscriptionId',
       type: 'text',
       admin: {
         readOnly: true,
         description:
-          'Set by `checkout.session.completed`; cleared by `customer.subscription.deleted`.',
+          'Set at checkout creation (before approval) and confirmed by BILLING.SUBSCRIPTION.ACTIVATED. Cleared by CANCELLED/EXPIRED.',
       },
     },
     {
-      name: 'stripeSubscriptionStatus',
+      name: 'paypalSubscriptionStatus',
       type: 'select',
       options: [
-        { label: 'Active', value: 'active' },
-        { label: 'Past due', value: 'past_due' },
-        { label: 'Canceled', value: 'canceled' },
+        { label: 'Active', value: 'ACTIVE' },
+        { label: 'Suspended (payment failed)', value: 'SUSPENDED' },
+        { label: 'Cancelled', value: 'CANCELLED' },
       ],
       admin: {
         readOnly: true,
         description:
-          'Mirrored from Stripe webhooks. Null when no subscription has ever been created.',
+          'Mirrored from PayPal webhooks. Null when no subscription has ever been activated.',
       },
     },
 

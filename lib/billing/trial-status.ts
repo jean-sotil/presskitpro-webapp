@@ -2,7 +2,7 @@
  * Pure derivation of trial state from a Users mirror row + current time.
  *
  * The Users row is the source of truth for the trial timer (`trialEndsAt`)
- * and the subscription mirror (`stripeSubscriptionStatus`); Stripe never
+ * and the subscription mirror (`paypalSubscriptionStatus`); PayPal never
  * knows about the trial. Callers: dashboard banner, public route gate,
  * cron pause logic.
  */
@@ -18,24 +18,23 @@ export type TrialUser = {
   // same trial-status logic so a stray legacy row doesn't break.
   plan?: 'trial' | 'pro' | 'agency' | 'free' | string | null;
   trialEndsAt?: string | Date | null;
-  stripeSubscriptionStatus?: 'active' | 'past_due' | 'canceled' | null;
+  paypalSubscriptionStatus?: 'ACTIVE' | 'SUSPENDED' | 'CANCELLED' | null;
 };
 
 export function getTrialStatus(args: { user: TrialUser; now: Date }): TrialStatus {
   const { user, now } = args;
 
-  // An `active` or `past_due` subscription supersedes the trial timer.
-  // `past_due` is intentionally treated as paid: Stripe is mid-retry and
-  // will fire `subscription.deleted` on terminal failure — the cron must
-  // not pause until then.
-  if (user.stripeSubscriptionStatus === 'active' || user.stripeSubscriptionStatus === 'past_due') {
+  // An `ACTIVE` or `SUSPENDED` subscription supersedes the trial timer.
+  // `SUSPENDED` is intentionally treated as paid: PayPal is mid-retry and
+  // will fire an event on terminal failure — the cron must not pause until then.
+  if (user.paypalSubscriptionStatus === 'ACTIVE' || user.paypalSubscriptionStatus === 'SUSPENDED') {
     return { kind: 'paid', daysRemaining: null };
   }
 
-  // Once Stripe reports `canceled`, the user is back on the free tier and
+  // Once PayPal reports `CANCELLED`, the user is back on the free tier and
   // the trial does not resume (even if `trialEndsAt` is still in the
   // future). The cron pauses these on its next run.
-  if (user.stripeSubscriptionStatus === 'canceled') {
+  if (user.paypalSubscriptionStatus === 'CANCELLED') {
     return { kind: 'expired', daysRemaining: 0 };
   }
 

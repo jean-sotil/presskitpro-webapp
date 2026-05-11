@@ -67,11 +67,11 @@ export default async function DashboardPage() {
                   typeof userDoc.trialEndsAt === 'string'
                     ? userDoc.trialEndsAt
                     : ((userDoc.trialEndsAt as Date | null) ?? null),
-                stripeSubscriptionStatus:
-                  (userDoc.stripeSubscriptionStatus as
-                    | 'active'
-                    | 'past_due'
-                    | 'canceled'
+                paypalSubscriptionStatus:
+                  (userDoc.paypalSubscriptionStatus as
+                    | 'ACTIVE'
+                    | 'SUSPENDED'
+                    | 'CANCELLED'
                     | null
                     | undefined) ?? null,
               }}

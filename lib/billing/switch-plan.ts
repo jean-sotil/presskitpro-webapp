@@ -1,39 +1,21 @@
-import type Stripe from 'stripe';
-
+import type { PayPalClient } from './paypal-client';
 import { getPlan } from '../pricing/plans';
-
-/**
- * Plan-switch (upgrade/downgrade with proration) — task-31.
- *
- * Pure DI on Stripe + Payload deps so unit tests don't touch the live
- * Stripe SDK. The route layer at `app/api/billing/switch-plan/route.ts`
- * wires the live `stripe-client` and Payload Local API.
- *
- * Stripe's `proration_behavior: 'create_prorations'` is the right knob
- * for AC #1: monthly → annual issues a prorated invoice immediately;
- * annual → monthly issues a credit applied to the next bill.
- */
 
 export type SwitchPlanKey = 'pro-monthly' | 'pro-annual' | 'agency-monthly' | 'agency-annual';
 
 export type SwitchPlanDeps = {
   findUser(id: number | string): Promise<{
     id: number | string;
-    stripeSubscriptionId: string | null;
+    paypalSubscriptionId: string | null;
   } | null>;
-  stripe: Pick<Stripe, 'subscriptions'>;
+  paypal: PayPalClient;
 };
 
 export type SwitchPlanResult =
   | { ok: true; subscriptionId: string; status: string }
   | {
       ok: false;
-      reason:
-        | 'unknown-plan'
-        | 'not-configured'
-        | 'no-subscription'
-        | 'user-not-found'
-        | 'stripe-error';
+      reason: 'unknown-plan' | 'not-configured' | 'no-subscription' | 'user-not-found' | 'paypal-error';
       message: string;
     };
 
@@ -42,19 +24,19 @@ export async function switchPlan(args: {
   planKey: SwitchPlanKey;
   deps: SwitchPlanDeps;
 }): Promise<SwitchPlanResult> {
-  const priceId = resolvePriceForKey(args.planKey);
-  if (priceId === 'unknown') {
+  const planId = resolvePlanIdForKey(args.planKey);
+  if (planId === 'unknown') {
     return {
       ok: false,
       reason: 'unknown-plan',
       message: `Unknown plan key: ${String(args.planKey)}`,
     };
   }
-  if (!priceId) {
+  if (!planId) {
     return {
       ok: false,
       reason: 'not-configured',
-      message: `Stripe Price ID env not set for ${args.planKey}`,
+      message: `PayPal Plan ID env not set for ${args.planKey}`,
     };
   }
 
@@ -66,64 +48,59 @@ export async function switchPlan(args: {
       message: `User ${String(args.userId)} not found`,
     };
   }
-  if (!user.stripeSubscriptionId) {
+  if (!user.paypalSubscriptionId) {
     return {
       ok: false,
       reason: 'no-subscription',
-      message: 'User has no active Stripe subscription to switch.',
+      message: 'User has no active PayPal subscription to switch.',
     };
   }
 
   try {
-    const subscription = await args.deps.stripe.subscriptions.retrieve(user.stripeSubscriptionId);
-    const itemId = readFirstItemId(subscription);
-    if (!itemId) {
+    const response = await args.deps.paypal.patch(
+      `/v1/billing/subscriptions/${user.paypalSubscriptionId}/revise`,
+      { plan_id: planId },
+    );
+
+    if (!response.ok) {
       return {
         ok: false,
-        reason: 'stripe-error',
-        message: 'Subscription has no line items',
+        reason: 'paypal-error',
+        message: `PayPal error: ${response.status} ${await response.text()}`,
       };
     }
-    const updated = await args.deps.stripe.subscriptions.update(user.stripeSubscriptionId, {
-      items: [{ id: itemId, price: priceId }],
-      proration_behavior: 'create_prorations',
-    });
+
+    const body = (await response.json()) as { id?: string; status?: string };
     return {
       ok: true,
-      subscriptionId: String((updated as { id?: string }).id ?? user.stripeSubscriptionId),
-      status: String((updated as { status?: string }).status ?? 'active'),
+      subscriptionId: String(body.id ?? user.paypalSubscriptionId),
+      status: String(body.status ?? 'ACTIVE'),
     };
   } catch (err) {
     return {
       ok: false,
-      reason: 'stripe-error',
-      message: err instanceof Error ? err.message : 'Unknown Stripe error',
+      reason: 'paypal-error',
+      message: err instanceof Error ? err.message : 'Unknown PayPal error',
     };
   }
 }
 
-function readFirstItemId(sub: unknown): string | null {
-  const items = (sub as { items?: { data?: Array<{ id?: string }> } }).items;
-  const id = items?.data?.[0]?.id;
-  return typeof id === 'string' && id.length > 0 ? id : null;
-}
-
-function resolvePriceForKey(key: SwitchPlanKey): string | 'unknown' | null {
+function resolvePlanIdForKey(key: SwitchPlanKey): string | 'unknown' | null {
   switch (key) {
     case 'pro-monthly': {
-      const env = getPlan('pro')?.stripePriceIdEnv;
+      const env = getPlan('pro')?.paypalPlanIdEnv;
       return env ? process.env[env] || null : null;
     }
     case 'pro-annual': {
-      const env = getPlan('pro')?.stripePriceIdAnnualEnv;
+      const env = getPlan('pro')?.paypalPlanIdAnnualEnv;
       return env ? process.env[env] || null : null;
     }
     case 'agency-monthly': {
-      const env = getPlan('agency')?.stripePriceIdEnv;
-      return (env ? process.env[env] : null) ?? process.env.STRIPE_PRICE_ID_AGENCY ?? null;
+      const env = getPlan('agency')?.paypalPlanIdEnv;
+      return env ? process.env[env] || null : null;
     }
     case 'agency-annual': {
-      const env = getPlan('agency')?.stripePriceIdAnnualEnv;
+      const env = getPlan('agency')?.paypalPlanIdAnnualEnv;
       return env ? process.env[env] || null : null;
     }
     default:

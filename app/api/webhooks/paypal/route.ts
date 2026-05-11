@@ -1,56 +1,75 @@
 import { NextResponse } from 'next/server';
 
-import { handleStripeWebhook } from '@/lib/billing/handle-stripe-webhook';
-import { stripeClient } from '@/lib/billing/stripe-client';
+import { getPayPalClientOrThrow } from '@/lib/billing/paypal-client';
+import { handlePayPalWebhook } from '@/lib/billing/handle-paypal-webhook';
+import { verifyPayPalWebhook } from '@/lib/billing/verify-paypal-webhook';
 import { payload } from '@/lib/payload';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
-  const stripe = stripeClient();
-  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+  const webhookId = process.env.PAYPAL_WEBHOOK_ID;
 
-  if (!stripe || !secret) {
-    // Refuse to process webhooks without verification — silently 5xx so
-    // Stripe retries, surfacing a misconfig in their dashboard.
+  if (!webhookId) {
     return NextResponse.json({ error: 'webhook not configured' }, { status: 500 });
   }
 
-  const signature = req.headers.get('stripe-signature');
-  if (!signature) {
-    return NextResponse.json({ error: 'missing signature' }, { status: 400 });
+  const transmissionId = req.headers.get('paypal-transmission-id');
+  const transmissionTime = req.headers.get('paypal-transmission-time');
+  const certUrl = req.headers.get('paypal-cert-url');
+  const authAlgo = req.headers.get('paypal-auth-algo');
+  const transmissionSig = req.headers.get('paypal-transmission-sig');
+
+  if (!transmissionId || !transmissionTime || !certUrl || !authAlgo || !transmissionSig) {
+    return NextResponse.json({ error: 'missing signature headers' }, { status: 400 });
   }
 
-  // Need the raw body for signature verification — do NOT call req.json()
-  // first. `text()` returns the bytes Stripe signed.
   const rawBody = await req.text();
+
+  const paypal = getPayPalClientOrThrow();
+
+  const isValid = await verifyPayPalWebhook({
+    headers: {
+      transmissionId,
+      transmissionTime,
+      certUrl,
+      authAlgo,
+      transmissionSig,
+    },
+    rawBody,
+    webhookId,
+    paypal,
+  });
+
+  if (!isValid) {
+    return NextResponse.json({ error: 'invalid signature' }, { status: 400 });
+  }
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(rawBody, signature, secret);
+    event = JSON.parse(rawBody) as {
+      id: string;
+      event_type: string;
+      resource: Record<string, unknown>;
+      [key: string]: unknown;
+    };
   } catch (err) {
-    return NextResponse.json(
-      {
-        error: 'invalid signature',
-        detail: err instanceof Error ? err.message : 'unknown',
-      },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: 'invalid json' }, { status: 400 });
   }
 
   const p = await payload();
 
-  const result = await handleStripeWebhook({
+  const result = await handlePayPalWebhook({
     event: {
       id: event.id,
-      type: event.type,
-      data: { object: event.data.object as unknown as Record<string, unknown> },
+      event_type: event.event_type,
+      resource: event.resource as Record<string, unknown>,
     },
     deps: {
       isEventProcessed: async (eventId) => {
         const found = await p.find({
-          collection: 'stripe-webhook-events',
+          collection: 'paypal-webhook-events',
           where: { eventId: { equals: eventId } },
           limit: 1,
           depth: 0,
@@ -61,7 +80,7 @@ export async function POST(req: Request) {
       markEventProcessed: async (eventId, eventType) => {
         try {
           await p.create({
-            collection: 'stripe-webhook-events',
+            collection: 'paypal-webhook-events',
             data: {
               eventId,
               eventType,
@@ -70,15 +89,14 @@ export async function POST(req: Request) {
             overrideAccess: true,
           });
         } catch {
-          // Race with a concurrent retry: the unique constraint on
-          // `eventId` swallowed it. Treat as success — the other request
-          // will (or already did) finish the work.
+          // Race with concurrent retry — unique constraint swallowed it.
+          // Treat as success.
         }
       },
-      findUserByCustomerId: async (customerId) => {
+      findUserBySubscriptionId: async (subscriptionId) => {
         const found = await p.find({
           collection: 'users',
-          where: { stripeCustomerId: { equals: customerId } },
+          where: { paypalSubscriptionId: { equals: subscriptionId } },
           limit: 1,
           depth: 0,
           overrideAccess: true,
@@ -116,7 +134,7 @@ export async function POST(req: Request) {
       },
       log: (entry) => {
         // eslint-disable-next-line no-console
-        console.log('[stripe-webhook]', entry);
+        console.log('[paypal-webhook]', entry);
       },
     },
   });

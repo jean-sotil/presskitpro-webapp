@@ -42,7 +42,7 @@ export function CheckoutCard({ planId, planLabel, priceCopy }: Props) {
       <p className="mt-3 text-lg text-text-muted">{priceCopy}</p>
 
       <ul className="mt-8 space-y-3 text-sm text-text-muted">
-        <li>• Pagamento seguro via Stripe Checkout.</li>
+        <li>• Pagamento seguro via PayPal.</li>
         <li>• Cobrança a partir de hoje — sem dias adicionais de teste.</li>
         <li>• Cancele a qualquer momento direto pelo painel.</li>
       </ul>

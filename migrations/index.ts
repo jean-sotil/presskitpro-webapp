@@ -11,6 +11,7 @@ import * as migration_20260506_095315_task_23_stripe_billing from './20260506_09
 import * as migration_20260508_053258_task_35_themes_preset_id from './20260508_053258_task_35_themes_preset_id';
 import * as migration_20260508_203914_task_35_festival_orange_preset from './20260508_203914_task_35_festival_orange_preset';
 import * as migration_20260508_175156_task_35_electric_fire_techno_preset from './20260508_175156_task_35_electric_fire_techno_preset';
+import * as migration_20260511_000001_paypal_billing from './20260511_000001_paypal_billing';
 
 export const migrations = [
   {
@@ -77,5 +78,10 @@ export const migrations = [
     up: migration_20260508_175156_task_35_electric_fire_techno_preset.up,
     down: migration_20260508_175156_task_35_electric_fire_techno_preset.down,
     name: '20260508_175156_task_35_electric_fire_techno_preset',
+  },
+  {
+    up: migration_20260511_000001_paypal_billing.up,
+    down: migration_20260511_000001_paypal_billing.down,
+    name: '20260511_000001_paypal_billing',
   },
 ];

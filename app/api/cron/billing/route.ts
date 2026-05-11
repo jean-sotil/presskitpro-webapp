@@ -43,9 +43,9 @@ export async function POST(req: Request) {
               { trialEndsAt: { less_than: cutoffIso } },
               {
                 or: [
-                  { stripeSubscriptionStatus: { equals: 'canceled' } },
-                  { stripeSubscriptionStatus: { exists: false } },
-                  { stripeSubscriptionStatus: { equals: null } },
+                  { paypalSubscriptionStatus: { equals: 'CANCELLED' } },
+                  { paypalSubscriptionStatus: { exists: false } },
+                  { paypalSubscriptionStatus: { equals: null } },
                 ],
               },
             ],
@@ -75,8 +75,8 @@ export async function POST(req: Request) {
               { plan: { in: ['trial', 'free'] } },
               {
                 or: [
-                  { stripeSubscriptionStatus: { exists: false } },
-                  { stripeSubscriptionStatus: { equals: null } },
+                  { paypalSubscriptionStatus: { exists: false } },
+                  { paypalSubscriptionStatus: { equals: null } },
                 ],
               },
             ],

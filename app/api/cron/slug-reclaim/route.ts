@@ -70,7 +70,7 @@ export async function POST(req: Request) {
           doc as {
             owner?:
               | number
-              | { id?: number; email?: string; stripeSubscriptionStatus?: string | null };
+              | { id?: number; email?: string; paypalSubscriptionStatus?: string | null };
           }
         ).owner;
         const ownerEmail =
@@ -80,7 +80,7 @@ export async function POST(req: Request) {
         if (!ownerEmail) continue;
         const subStatus =
           typeof owner === 'object' && owner !== null
-            ? ((owner as { stripeSubscriptionStatus?: string | null }).stripeSubscriptionStatus ??
+            ? ((owner as { paypalSubscriptionStatus?: string | null }).paypalSubscriptionStatus ??
               null)
             : null;
         out.push({
@@ -96,7 +96,7 @@ export async function POST(req: Request) {
           // perf cost is measured.
           lastSignInAt: null,
           lastEventAt: null,
-          hasActiveSubscription: subStatus === 'active' || subStatus === 'past_due',
+          hasActiveSubscription: subStatus === 'ACTIVE' || subStatus === 'SUSPENDED',
           slugReclaimWarningAt: parseDate(
             (doc as { slugReclaimWarningAt?: string }).slugReclaimWarningAt,
           ),

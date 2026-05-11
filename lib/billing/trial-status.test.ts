@@ -9,7 +9,7 @@ const day = (offset: number) =>
 describe('getTrialStatus', () => {
   it('returns `pre-trial` when trialEndsAt is unset (no profile created yet)', () => {
     const result = getTrialStatus({
-      user: { plan: 'free', trialEndsAt: null, stripeSubscriptionStatus: null },
+      user: { plan: 'free', trialEndsAt: null, paypalSubscriptionStatus: null },
       now: NOW,
     });
     expect(result.kind).toBe('pre-trial');
@@ -21,7 +21,7 @@ describe('getTrialStatus', () => {
       user: {
         plan: 'free',
         trialEndsAt: day(5),
-        stripeSubscriptionStatus: null,
+        paypalSubscriptionStatus: null,
       },
       now: NOW,
     });
@@ -34,7 +34,7 @@ describe('getTrialStatus', () => {
       user: {
         plan: 'free',
         trialEndsAt: new Date(NOW.getTime() + 12 * 60 * 60 * 1000).toISOString(),
-        stripeSubscriptionStatus: null,
+        paypalSubscriptionStatus: null,
       },
       now: NOW,
     });
@@ -46,7 +46,7 @@ describe('getTrialStatus', () => {
       user: {
         plan: 'free',
         trialEndsAt: day(-1),
-        stripeSubscriptionStatus: null,
+        paypalSubscriptionStatus: null,
       },
       now: NOW,
     });
@@ -59,33 +59,33 @@ describe('getTrialStatus', () => {
       user: {
         plan: 'pro',
         trialEndsAt: day(-30),
-        stripeSubscriptionStatus: 'active',
+        paypalSubscriptionStatus: 'ACTIVE',
       },
       now: NOW,
     });
     expect(result.kind).toBe('paid');
   });
 
-  it('treats `past_due` as still paid (the cron should not pause yet — Stripe is retrying)', () => {
+  it('treats `SUSPENDED` as still paid (the cron should not pause yet — PayPal is retrying)', () => {
     const result = getTrialStatus({
       user: {
         plan: 'pro',
         trialEndsAt: day(-30),
-        stripeSubscriptionStatus: 'past_due',
+        paypalSubscriptionStatus: 'SUSPENDED',
       },
       now: NOW,
     });
     expect(result.kind).toBe('paid');
   });
 
-  it('treats `canceled` as expired even when trialEndsAt is still in the future', () => {
-    // Edge case: user converted then canceled mid-trial. Once Stripe says
-    // canceled, we don't bring back the trial timer.
+  it('treats `CANCELLED` as expired even when trialEndsAt is still in the future', () => {
+    // Edge case: user converted then cancelled mid-trial. Once PayPal says
+    // CANCELLED, we don't bring back the trial timer.
     const result = getTrialStatus({
       user: {
         plan: 'free',
         trialEndsAt: day(5),
-        stripeSubscriptionStatus: 'canceled',
+        paypalSubscriptionStatus: 'CANCELLED',
       },
       now: NOW,
     });
