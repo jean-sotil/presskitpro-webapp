@@ -103,25 +103,28 @@ export function BlocksTab({
               type="button"
               onClick={() => onSelect(isOpen ? null : key)}
               className={cn(
-                'w-full px-3.5 h-[60px] flex items-center gap-3 cursor-pointer transition-colors text-left',
-                'hover:bg-border/50',
+                'w-full px-3.5 h-[60px] flex items-center gap-3 cursor-pointer transition-all duration-300 text-left',
+                isOpen ? 'bg-[#161616]' : 'hover:bg-[#111]',
               )}
             >
               <div className={cn(
-                "flex h-8 w-8 shrink-0 items-center justify-center transition-colors",
-                isOpen ? "text-accent" : "text-text-muted"
+                "flex h-8 w-8 shrink-0 items-center justify-center transition-all duration-300 rounded",
+                isOpen ? "text-accent bg-accent/10" : "text-text-muted group-hover:text-white"
               )}>
                  <Icon size={18} />
               </div>
 
               <div className="flex flex-1 flex-col overflow-hidden">
                 <span className={cn(
-                  "truncate text-[13px] font-medium uppercase tracking-tight",
-                  isOpen ? "text-accent" : "text-text"
+                  "truncate text-[13px] font-bold uppercase tracking-tight transition-colors",
+                  isOpen ? "text-accent" : "text-white"
                 )}>
                   {displayName}
                 </span>
-                <span className="truncate text-[11px] text-text-muted">
+                <span className={cn(
+                  "truncate text-[11px] transition-colors",
+                  isOpen ? "text-accent/60" : "text-text-muted group-hover:text-[#888]"
+                )}>
                   {meta.subtitle}
                 </span>
               </div>
@@ -130,19 +133,20 @@ export function BlocksTab({
                 <ChevronDown
                   size={14}
                   className={cn(
-                    'transition-transform duration-140 ease-in-out',
-                    isOpen && 'rotate-180'
+                    'transition-transform duration-300 ease-in-out',
+                    isOpen && 'rotate-180 text-accent'
                   )}
                 />
                 <div 
                   aria-hidden="true"
                   className={cn(
-                    'transition-opacity cursor-grab active:cursor-grabbing p-1 -m-1',
-                    'group-hover:opacity-100 opacity-0'
+                    'transition-all duration-300 cursor-grab active:cursor-grabbing p-1 -m-1 rounded hover:bg-white/10',
+                    'opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0',
+                    isOpen && 'opacity-100 translate-x-0'
                   )}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <GripVertical size={14} />
+                  <GripVertical size={14} className={isOpen ? "text-accent" : ""} />
                 </div>
               </div>
             </button>

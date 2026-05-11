@@ -204,8 +204,10 @@ export function ThemeTab({ bundle, onMutate }: ThemeTabProps) {
                     type="button"
                     onClick={() => onMutate('theme', { galleryLayout: layout.id })}
                     className={cn(
-                      "flex h-[52px] w-full items-center justify-center rounded border border-border bg-surface transition-all",
-                      theme.galleryLayout === layout.id ? "border-accent" : "hover:border-border/60"
+                      "flex h-[52px] w-full items-center justify-center rounded-lg border border-border bg-surface transition-all duration-300",
+                      theme.galleryLayout === layout.id 
+                        ? "border-accent bg-accent/5" 
+                        : "hover:border-border/60 hover:-translate-y-0.5 hover:shadow-lg"
                     )}
                   >
                     <GalleryWireframe id={layout.id} active={theme.galleryLayout === layout.id} />

@@ -376,10 +376,10 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     <div className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-bg">
       {/* Desktop Layout */}
       <div className="hidden flex-1 min-h-0 md:flex md:overflow-hidden">
-        <div className="flex h-full w-[300px] shrink-0 flex-col min-h-0">
+        <div className="flex h-full w-[384px] shrink-0 flex-col min-h-0 border-r border-border shadow-[4px_0_24px_rgba(0,0,0,0.4)] z-20">
           {editPaneEl}
         </div>
-        <div className="flex-1 h-full min-w-0 overflow-y-auto bg-black/20 p-8 pb-32">
+        <div className="flex-1 h-full min-w-0 overflow-y-auto bg-[#050505] p-8 pb-32">
            <div className="mx-auto max-w-[1000px]">
              {previewPaneEl}
            </div>
@@ -442,13 +442,16 @@ function TabButton({
       aria-selected={active}
       onClick={onClick}
       className={cn(
-        "flex flex-1 items-center justify-center px-3 py-2 text-xs font-medium uppercase tracking-wider transition-all",
+        "relative flex flex-1 items-center justify-center px-3 py-2 text-[11px] font-bold uppercase tracking-widest transition-all duration-300",
         active 
-          ? "border-b-2 border-accent text-accent" 
-          : "text-text-muted hover:text-text"
+          ? "text-accent" 
+          : "text-text-muted hover:text-text hover:bg-white/5"
       )}
     >
       {label}
+      {active && (
+         <span className="absolute bottom-0 left-0 w-full h-[2px] bg-accent shadow-[0_0_8px_rgba(255,77,0,0.5)]" />
+      )}
     </button>
   );
 }
