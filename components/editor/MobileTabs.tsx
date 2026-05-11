@@ -69,13 +69,13 @@ export function MobileTabs({
   }
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <div
         role="tablist"
         aria-label="Editor / preview"
         onKeyDown={onKey}
         tabIndex={-1}
-        className="flex border-b border-border"
+        className="flex border-b border-border bg-surface"
       >
         {TABS.map(({ key, label }) => {
           const selected = key === active;
@@ -106,6 +106,7 @@ export function MobileTabs({
           id={`mobile-panel-${key}`}
           aria-labelledby={`mobile-tab-${key}`}
           hidden={key !== active}
+          className="flex-1 min-h-0"
         >
           {panes[key]}
         </div>

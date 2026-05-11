@@ -6,20 +6,47 @@ import type { EditorBundle } from '@/lib/editor/bundle';
 import type { SectionKey } from '@/lib/editor/section-order';
 import type { MutationScope } from '@/app/dashboard/profile/[id]/EditorClient';
 import { SECTIONS } from '@/lib/editor/sections';
+import { EditorPane } from './EditorPane';
+import { 
+  UserCircle, 
+  Music, 
+  Camera, 
+  Briefcase, 
+  Link as LinkIcon, 
+  Mail, 
+  Download, 
+  LayoutGrid,
+  ChevronDown, 
+  GripVertical 
+} from 'lucide-react';
 
 export interface BlocksTabProps {
-  active: SectionKey;
+  active: SectionKey | null;
   order: SectionKey[];
   bundle: EditorBundle;
-  onSelect: (key: SectionKey) => void;
+  supabaseUserId: string;
+  onSelect: (key: SectionKey | null) => void;
   onReorder: (next: SectionKey[]) => void;
   onMutate: (scope: MutationScope, patch: Record<string, unknown>) => void;
 }
+
+const SECTION_META: Record<SectionKey, { icon: any; subtitle: string }> = {
+  hero: { icon: UserCircle, subtitle: 'Bio & Identificação' },
+  about: { icon: UserCircle, subtitle: 'Sobre o artista' },
+  services: { icon: Briefcase, subtitle: 'Catálogo de serviços' },
+  photoGallery: { icon: Camera, subtitle: 'Fotos e registros' },
+  socialLinks: { icon: LinkIcon, subtitle: 'Redes sociais' },
+  contact: { icon: Mail, subtitle: 'Contato terminal' },
+  pressKitLink: { icon: Download, subtitle: 'Download presskit' },
+  featuredTrack: { icon: Music, subtitle: 'Sets e mixes' },
+  instagramFeed: { icon: LayoutGrid, subtitle: 'Feed social' },
+};
 
 export function BlocksTab({
   active,
   order,
   bundle,
+  supabaseUserId,
   onSelect,
   onReorder,
   onMutate,
@@ -49,11 +76,13 @@ export function BlocksTab({
   };
 
   return (
-    <div className="flex flex-col gap-2 px-3 pb-4">
+    <div className="flex flex-col gap-2 px-3 pb-4 pt-4">
       {order.map((key) => {
         const section = SECTIONS[key];
         const isOpen = active === key;
         const displayName = section.label || key;
+        const meta = SECTION_META[key] || { icon: LayoutGrid, subtitle: 'Seção de conteúdo' };
+        const Icon = meta.icon;
 
         return (
           <div
@@ -63,63 +92,76 @@ export function BlocksTab({
             onDragOver={handleDragOver}
             onDrop={() => handleDrop(key)}
             className={cn(
-              'group border overflow-hidden transition-all rounded',
+              'group border overflow-hidden transition-all rounded-lg',
               'bg-surface border-border',
-              isOpen && 'border-l-2 border-l-accent',
+              isOpen ? 'border-l-2 border-l-accent shadow-sm' : 'border-l-2 border-l-transparent',
               draggedKey === key && 'opacity-60',
             )}
           >
             <button
-              onClick={() => onSelect(key)}
+              type="button"
+              onClick={() => onSelect(isOpen ? null : key)}
               className={cn(
-                'w-full px-3.5 h-11 flex items-center justify-between cursor-pointer transition-colors',
-                'text-xs uppercase tracking-wider font-display font-medium',
-                isOpen ? 'text-accent' : 'text-text',
-                'hover:bg-border',
+                'w-full px-3.5 h-[60px] flex items-center gap-3 cursor-pointer transition-colors text-left',
+                'hover:bg-border/50',
               )}
             >
-              <span>{displayName}</span>
+              <div className={cn(
+                "flex h-8 w-8 shrink-0 items-center justify-center transition-colors",
+                isOpen ? "text-accent" : "text-text-muted"
+              )}>
+                 <Icon size={18} />
+              </div>
+
+              <div className="flex flex-1 flex-col overflow-hidden">
+                <span className={cn(
+                  "truncate text-[13px] font-medium uppercase tracking-tight",
+                  isOpen ? "text-accent" : "text-text"
+                )}>
+                  {displayName}
+                </span>
+                <span className="truncate text-[11px] text-text-muted">
+                  {meta.subtitle}
+                </span>
+              </div>
+
               <div className="flex items-center gap-2 text-text-muted">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  style={{
-                    transform: isOpen ? 'rotate(180deg)' : 'rotate(0)',
-                    transition: 'transform 140ms ease',
-                  }}
+                <ChevronDown
+                  size={14}
+                  className={cn(
+                    'transition-transform duration-140 ease-in-out',
+                    isOpen && 'rotate-180'
+                  )}
+                />
+                <div 
+                  className={cn(
+                    'transition-opacity cursor-grab active:cursor-grabbing p-1 -m-1',
+                    'group-hover:opacity-100 opacity-0'
+                  )}
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className={cn('transition-opacity', 'group-hover:opacity-100 opacity-0')}
-                >
-                  <circle cx="5" cy="8" r="1"></circle>
-                  <circle cx="5" cy="14" r="1"></circle>
-                  <circle cx="5" cy="20" r="1"></circle>
-                  <circle cx="12" cy="8" r="1"></circle>
-                  <circle cx="12" cy="14" r="1"></circle>
-                  <circle cx="12" cy="20" r="1"></circle>
-                </svg>
+                  <GripVertical size={14} />
+                </div>
               </div>
             </button>
 
-            {isOpen && (
-              <div className="border-t border-border px-3.5 py-4">
-                <p className="text-xs text-text-muted italic">
-                  Content for {displayName} would render here
-                </p>
+            <div className={cn(
+              "grid transition-[grid-template-rows] duration-200 ease-in-out motion-reduce:transition-none",
+              isOpen ? "grid-rows-[1fr] border-t border-border" : "grid-rows-[0fr]"
+            )}>
+              <div className="overflow-hidden">
+                <div className="px-3.5 py-4">
+                  {isOpen && (
+                    <EditorPane
+                      active={key}
+                      bundle={bundle}
+                      supabaseUserId={supabaseUserId}
+                      onMutate={onMutate}
+                    />
+                  )}
+                </div>
               </div>
-            )}
+            </div>
           </div>
         );
       })}

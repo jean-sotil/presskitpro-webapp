@@ -7,21 +7,18 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/Button';
-import { EditorPane } from '@/components/editor/EditorPane';
 import { MobileTabs, type MobileTab } from '@/components/editor/MobileTabs';
 import { PreviewPane } from '@/components/editor/PreviewPane';
 import { PublishDialog } from '@/components/editor/PublishDialog';
 import { SaveStatus, type SaveStatusState } from '@/components/editor/SaveStatus';
-import { SectionRail } from '@/components/editor/SectionRail';
 import { ThemeTab } from '@/components/editor/ThemeTab';
 import { BlocksTab } from '@/components/editor/BlocksTab';
+import { PresetsTab } from './PresetsTab';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { createAutosave } from '@/lib/editor/autosave';
 import { DEFAULT_SECTION_ORDER, mergeOrder, type SectionKey } from '@/lib/editor/section-order';
 import { sectionLabels } from '@/lib/editor/sections';
-
-import { DesignTab } from './DesignTab';
 import { 
   ArrowLeft, 
   ChevronLeft, 
@@ -77,7 +74,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     return mergeOrder(persisted ?? [...DEFAULT_SECTION_ORDER]);
   }, [bundle.theme]);
   
-  const [active, setActive] = useState<SectionKey>(sectionOrder[0]!);
+  const [active, setActive] = useState<SectionKey | null>(sectionOrder[0]!);
   const [editorTab, setEditorTab] = useState<'sections' | 'theme' | 'design'>('sections');
   const [mobileTab, setMobileTab] = useState<MobileTab>('edit');
   
@@ -341,16 +338,19 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
   );
 
   const editPaneEl = (
-    <div className="flex flex-col h-screen md:h-full border-r border-border bg-surface">
+    <div className="flex flex-col h-full border-r border-border bg-surface">
       {topBar}
       {tabStrip}
       
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 min-h-0 overflow-y-auto">
         {editorTab === 'sections' ? (
           <BlocksTab
             active={active}
             order={sectionOrder}
             bundle={bundle}
+            supabaseUserId={
+              (bundle.profile.owner as unknown as { supabaseUserId?: string })?.supabaseUserId ?? ''
+            }
             onSelect={setActive}
             onReorder={(next) => {
               applyMutation('theme', {
@@ -360,11 +360,9 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
             onMutate={applyMutation}
           />
         ) : editorTab === 'theme' ? (
-          <div className="p-6">
-            <ThemeTab bundle={bundle} onMutate={applyMutation} />
-          </div>
+          <ThemeTab bundle={bundle} onMutate={applyMutation} />
         ) : (
-          <DesignTab
+          <PresetsTab
             profileId={Number(bundle.profile.id)}
             profileSlug={String(bundle.profile.slug ?? '')}
             activePresetId={(bundle.theme as { presetId?: string | null } | null)?.presetId ?? null}
@@ -379,15 +377,21 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
   const previewPaneEl = <PreviewPane bundle={bundle} />;
 
   return (
-    <>
-      <div className="hidden md:grid md:grid-cols-[24rem_1fr] md:gap-8 md:px-12 md:py-8 h-screen overflow-hidden bg-bg">
-        {editPaneEl}
-        <div className="h-full overflow-y-auto">
-          {previewPaneEl}
+    <div className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-bg">
+      {/* Desktop Layout */}
+      <div className="hidden h-full md:flex md:overflow-hidden">
+        <div className="w-[300px] h-full shrink-0">
+          {editPaneEl}
+        </div>
+        <div className="h-full flex-1 min-w-0 overflow-y-auto bg-black/20 p-8 pb-32">
+           <div className="mx-auto max-w-[1000px]">
+             {previewPaneEl}
+           </div>
         </div>
       </div>
       
-      <div className="md:hidden h-screen overflow-hidden">
+      {/* Mobile Layout */}
+      <div className="h-full overflow-hidden md:hidden">
         <MobileTabs 
           active={mobileTab} 
           onChange={setMobileTab}
@@ -422,7 +426,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
           </button>
         </div>
       ) : null}
-    </>
+    </div>
   );
 }
 
