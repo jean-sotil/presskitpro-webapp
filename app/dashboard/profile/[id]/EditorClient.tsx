@@ -379,11 +379,11 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
   return (
     <div className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-bg">
       {/* Desktop Layout */}
-      <div className="hidden h-full md:flex md:overflow-hidden">
-        <div className="w-[300px] h-full shrink-0">
+      <div className="hidden flex-1 min-h-0 md:flex md:overflow-hidden">
+        <div className="flex h-full w-[300px] shrink-0 flex-col min-h-0">
           {editPaneEl}
         </div>
-        <div className="h-full flex-1 min-w-0 overflow-y-auto bg-black/20 p-8 pb-32">
+        <div className="flex-1 h-full min-w-0 overflow-y-auto bg-black/20 p-8 pb-32">
            <div className="mx-auto max-w-[1000px]">
              {previewPaneEl}
            </div>
@@ -391,7 +391,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
       </div>
       
       {/* Mobile Layout */}
-      <div className="h-full overflow-hidden md:hidden">
+      <div className="flex-1 min-h-0 overflow-hidden md:hidden">
         <MobileTabs 
           active={mobileTab} 
           onChange={setMobileTab}
