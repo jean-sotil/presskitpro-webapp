@@ -21,16 +21,17 @@ test.describe('Theme tab full ladder @full', () => {
     const profileId = process.env.EDITOR_E2E_PROFILE_ID!;
     await page.goto(`/dashboard/profile/${profileId}`);
 
-    await page.getByRole('tab', { name: /tema/i }).click();
-    await expect(page.getByRole('heading', { name: /cores, tipografia e layout/i })).toBeVisible();
+    await page.getByRole('tab', { name: /THEME/i }).click();
+    await expect(page.getByRole('heading', { name: /Colors/i })).toBeVisible();
 
-    await page.getByRole('button', { name: /^paper white$/i }).click();
-    await page.getByRole('button', { name: /^cobalt$/i }).click();
-    await page.getByRole('button', { name: /^magazine$/i }).click();
-    await page.getByRole('button', { name: /uniform grid/i }).click();
+    await page.getByTitle(/^Paper White$/i).click();
+    await page.getByTitle(/^Cobalt$/i).click();
+    await page.getByRole('button', { name: /Magazine/i }).click();
+    await page.getByRole('button', { name: /^Grid$/i }).click();
 
-    // The contrast panel always shows ratios for both pairs.
-    await expect(page.getByText(/text \/ bg/i)).toBeVisible();
-    await expect(page.getByText(/accent \/ bg/i)).toBeVisible();
+    // The contrast panel shows a status message.
+    await expect(
+      page.getByText(/AA contrast passed/i).or(page.getByText(/Contrast too low/i))
+    ).toBeVisible();
   });
 });

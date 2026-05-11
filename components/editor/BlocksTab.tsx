@@ -17,10 +17,11 @@ import {
   Download, 
   LayoutGrid,
   ChevronDown, 
-  GripVertical 
-} from 'lucide-react';
+  GripVertical,
+  type LucideIcon
+  } from 'lucide-react';
 
-export interface BlocksTabProps {
+  export interface BlocksTabProps {
   active: SectionKey | null;
   order: SectionKey[];
   bundle: EditorBundle;
@@ -28,9 +29,9 @@ export interface BlocksTabProps {
   onSelect: (key: SectionKey | null) => void;
   onReorder: (next: SectionKey[]) => void;
   onMutate: (scope: MutationScope, patch: Record<string, unknown>) => void;
-}
+  }
 
-const SECTION_META: Record<SectionKey, { icon: any; subtitle: string }> = {
+  const SECTION_META: Record<SectionKey, { icon: LucideIcon; subtitle: string }> = {
   hero: { icon: UserCircle, subtitle: 'Bio & Identificação' },
   about: { icon: UserCircle, subtitle: 'Sobre o artista' },
   services: { icon: Briefcase, subtitle: 'Catálogo de serviços' },
@@ -134,6 +135,7 @@ export function BlocksTab({
                   )}
                 />
                 <div 
+                  aria-hidden="true"
                   className={cn(
                     'transition-opacity cursor-grab active:cursor-grabbing p-1 -m-1',
                     'group-hover:opacity-100 opacity-0'

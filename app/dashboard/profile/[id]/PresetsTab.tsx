@@ -1,7 +1,6 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
@@ -19,7 +18,6 @@ export function PresetsTab({
   profileSlug: string;
   activePresetId: string | null;
 }) {
-  const t = useTranslations('editor.design');
   const router = useRouter();
   const qc = useQueryClient();
   const [pending, startTransition] = useTransition();

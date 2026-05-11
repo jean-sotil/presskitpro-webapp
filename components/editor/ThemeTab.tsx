@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils/cn';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import type { MutationScope } from '@/app/dashboard/profile/[id]/EditorClient';
 import { accentPresets, bgPresets, fontPairs, type FontPairId } from '@/lib/design/tokens';
-import { deriveThemeTokens, type DerivedTokens } from '@/lib/design/derive-theme-tokens';
+import { deriveThemeTokens } from '@/lib/design/derive-theme-tokens';
 import { validateThemeContrast } from '@/lib/design/validate-theme-contrast';
 import { fontPairCssVars } from '@/lib/design/font-pair-css-vars';
 
@@ -65,9 +65,9 @@ export function ThemeTab({ bundle, onMutate }: ThemeTabProps) {
         <div className="space-y-6">
           {/* Background */}
           <div>
-            <label className="mb-2 block text-[10px] uppercase text-text-muted/60">
+            <div className="mb-2 block text-[10px] uppercase text-text-muted/60">
               Background
-            </label>
+            </div>
             <div className="flex flex-wrap items-start gap-3">
               {bgPresets.map((p) => (
                 <div key={p.id} className="flex flex-col items-center gap-1.5">
@@ -95,9 +95,9 @@ export function ThemeTab({ bundle, onMutate }: ThemeTabProps) {
 
           {/* Accent */}
           <div>
-            <label className="mb-2 block text-[10px] uppercase text-text-muted/60">
+            <div className="mb-2 block text-[10px] uppercase text-text-muted/60">
               Accent
-            </label>
+            </div>
             <div className="grid grid-cols-6 gap-2">
               {accentPresets.map((p) => (
                 <button
@@ -169,7 +169,7 @@ export function ThemeTab({ bundle, onMutate }: ThemeTabProps) {
         <div className="space-y-5">
           {/* Hero Style */}
           <div>
-            <label className="mb-2 block text-[11px] text-text-muted">Hero Style</label>
+            <div className="mb-2 block text-[11px] text-text-muted">Hero Style</div>
             <div className="flex gap-3">
               {HERO_STYLES.map((style) => (
                 <div key={style.id} className="flex flex-1 flex-col items-center gap-1.5">
@@ -196,7 +196,7 @@ export function ThemeTab({ bundle, onMutate }: ThemeTabProps) {
 
           {/* Gallery Layout */}
           <div>
-            <label className="mb-2 block text-[11px] text-text-muted">Gallery Layout</label>
+            <div className="mb-2 block text-[11px] text-text-muted">Gallery Layout</div>
             <div className="flex gap-3">
               {GALLERY_LAYOUTS.map((layout) => (
                 <div key={layout.id} className="flex flex-1 flex-col items-center gap-1.5">

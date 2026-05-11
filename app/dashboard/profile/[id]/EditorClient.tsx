@@ -18,7 +18,6 @@ import { PresetsTab } from './PresetsTab';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { createAutosave } from '@/lib/editor/autosave';
 import { DEFAULT_SECTION_ORDER, mergeOrder, type SectionKey } from '@/lib/editor/section-order';
-import { sectionLabels } from '@/lib/editor/sections';
 import { 
   ArrowLeft, 
   ChevronLeft, 
@@ -79,7 +78,6 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
   const [mobileTab, setMobileTab] = useState<MobileTab>('edit');
   
   const tTabs = useTranslations('editor.tabs');
-  const tDesign = useTranslations('editor.design');
 
   const [saveState, setSaveState] = useState<SaveStatusState>({
     kind: 'idle',
@@ -235,8 +233,6 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
       }
     },
   });
-
-  const labels = sectionLabels();
 
   // ----- Task 36 Phase 1: Sticky Shell ----------------------------------
   
