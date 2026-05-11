@@ -8,12 +8,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/Button';
 import { EditorPane } from '@/components/editor/EditorPane';
-import { MobileTabs } from '@/components/editor/MobileTabs';
+import { MobileTabs, type MobileTab } from '@/components/editor/MobileTabs';
 import { PreviewPane } from '@/components/editor/PreviewPane';
 import { PublishDialog } from '@/components/editor/PublishDialog';
 import { SaveStatus, type SaveStatusState } from '@/components/editor/SaveStatus';
 import { SectionRail } from '@/components/editor/SectionRail';
 import { ThemeTab } from '@/components/editor/ThemeTab';
+import { BlocksTab } from '@/components/editor/BlocksTab';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { createAutosave } from '@/lib/editor/autosave';
@@ -21,6 +22,13 @@ import { DEFAULT_SECTION_ORDER, mergeOrder, type SectionKey } from '@/lib/editor
 import { sectionLabels } from '@/lib/editor/sections';
 
 import { DesignTab } from './DesignTab';
+import { 
+  ArrowLeft, 
+  ChevronLeft, 
+  ChevronRight, 
+  Loader2 
+} from 'lucide-react';
+import { cn } from '@/lib/utils/cn';
 
 const AUTOSAVE_MS = 5_000;
 
@@ -68,10 +76,13 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
     );
     return mergeOrder(persisted ?? [...DEFAULT_SECTION_ORDER]);
   }, [bundle.theme]);
+  
   const [active, setActive] = useState<SectionKey>(sectionOrder[0]!);
   const [editorTab, setEditorTab] = useState<'sections' | 'theme' | 'design'>('sections');
-  const tDesign = useTranslations('editor.design');
+  const [mobileTab, setMobileTab] = useState<MobileTab>('edit');
+  
   const tTabs = useTranslations('editor.tabs');
+  const tDesign = useTranslations('editor.design');
 
   const [saveState, setSaveState] = useState<SaveStatusState>({
     kind: 'idle',
@@ -123,8 +134,6 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
         throw new Error(body.error ?? `status ${failed.status}`);
       }
       setSaveState({ kind: 'idle', lastSavedAt: Date.now() });
-      // Invalidate to pull canonical server state into the cache (cheap;
-      // bundle endpoint is < 100ms typical).
       qc.invalidateQueries({ queryKey });
     } catch (err) {
       qc.invalidateQueries({ queryKey });
@@ -162,11 +171,6 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
   }, []);
 
   // ----- Optimistic + dirty-buffer update -------------------------------
-  /**
-   * The single mutation entry point used by every EditCard. Updates the
-   * TanStack cache for instant preview re-render, appends to the right
-   * dirty buffer, and schedules the autosave.
-   */
   function applyMutation(scope: MutationScope, patch: Record<string, unknown>) {
     qc.setQueryData<EditorBundle>(queryKey, (prev) => {
       if (!prev) return prev;
@@ -181,8 +185,6 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
         const baseTheme = prev.theme ?? { id: -1, profile: prev.profile.id };
         return { ...prev, theme: { ...baseTheme, ...patch } };
       }
-      // socialLinks: a sibling array on the bundle, not a child collection.
-      // The patch shape is `{ links: [...] }`; mirror it onto bundle.socialLinks.
       const incoming = (patch.links as EditorBundle['socialLinks'] | undefined) ?? [];
       return { ...prev, socialLinks: incoming };
     });
@@ -239,108 +241,138 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
 
   const labels = sectionLabels();
 
-  const headerBar = (
-    <header className="flex flex-wrap items-center justify-between gap-4 border-b border-border bg-bg px-6 py-4 md:px-12">
-      <div className="flex items-center gap-6">
+  // ----- Task 36 Phase 1: Sticky Shell ----------------------------------
+  
+  const topBar = (
+    <header className="sticky top-0 z-10 flex h-12 items-center justify-between border-b border-border bg-surface px-6 md:px-12 py-4">
+      <div className="flex items-center gap-2">
         <Link
           href="/dashboard"
-          className="text-xs uppercase tracking-wider text-text-muted hover:text-text"
+          className="flex items-center gap-1.5 text-xs text-text-muted hover:text-text transition-colors"
         >
-          ← Painel
+          <ArrowLeft className="h-3 w-3" />
+          Dashboard
         </Link>
-        <p className="font-display text-sm uppercase tracking-wider">
-          presskit.pro/{bundle.profile.slug}
-        </p>
+        <span className="text-text-muted">/</span>
+        <span className="text-xs font-medium text-text">
+          {bundle.profile.slug}
+        </span>
       </div>
+      
       <div className="flex items-center gap-4">
-        <SaveStatus state={saveState} />
-        {bundle.profile.status === 'published' ? (
-          <Button variant="ghost" type="button" onClick={() => setDialogIntent('unpublish')}>
-            Despublicar
-          </Button>
-        ) : (
-          <Button type="button" onClick={() => setDialogIntent('publish')}>
-            Publicar
-          </Button>
-        )}
+        <div className={cn(
+          "hidden sm:block px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-bold",
+          bundle.profile.status === 'published' ? "bg-green-600/20 text-green-600" : "bg-yellow-600/20 text-yellow-600"
+        )}>
+          {bundle.profile.status === 'published' ? 'Published' : 'Draft'}
+        </div>
+
+        <Button
+          type="button"
+          onClick={() => setDialogIntent(bundle.profile.status === 'published' ? 'unpublish' : 'publish')}
+          disabled={publish.isPending}
+          className={cn(
+            "h-8 rounded-md px-4 text-xs font-medium transition-colors",
+            "bg-accent text-accent-contrast",
+            "hover:opacity-90",
+            "disabled:opacity-50"
+          )}
+        >
+          {publish.isPending ? (
+            <Loader2 className="h-3 w-3 animate-spin" />
+          ) : bundle.profile.status === 'published' ? (
+            'Despublicar'
+          ) : (
+            'Publicar'
+          )}
+        </Button>
       </div>
     </header>
   );
 
   const tabStrip = (
-    <div role="tablist" className="flex border-b border-border" aria-label={tTabs('ariaLabel')}>
-      <button
-        type="button"
-        role="tab"
-        aria-selected={editorTab === 'sections'}
+    <div 
+      role="tablist" 
+      className="sticky top-[48px] z-10 flex h-10 border-b border-border bg-bg"
+      aria-label={tTabs('ariaLabel')}
+    >
+      <TabButton
+        active={editorTab === 'sections'}
         onClick={() => setEditorTab('sections')}
-        className={`flex-1 border-b-2 px-3 py-2 text-xs uppercase tracking-wider ${
-          editorTab === 'sections'
-            ? 'border-accent text-text'
-            : 'border-transparent text-text-muted'
-        }`}
-      >
-        {tTabs('sections')}
-      </button>
-      <button
-        type="button"
-        role="tab"
-        aria-selected={editorTab === 'theme'}
+        label="SECTIONS"
+      />
+      <TabButton
+        active={editorTab === 'theme'}
         onClick={() => setEditorTab('theme')}
-        className={`flex-1 border-b-2 px-3 py-2 text-xs uppercase tracking-wider ${
-          editorTab === 'theme' ? 'border-accent text-text' : 'border-transparent text-text-muted'
-        }`}
-      >
-        {tTabs('theme')}
-      </button>
-      <button
-        type="button"
-        role="tab"
-        aria-selected={editorTab === 'design'}
+        label="THEME"
+      />
+      <TabButton
+        active={editorTab === 'design'}
         onClick={() => setEditorTab('design')}
-        className={`flex-1 border-b-2 px-3 py-2 text-xs uppercase tracking-wider ${
-          editorTab === 'design' ? 'border-accent text-text' : 'border-transparent text-text-muted'
-        }`}
-      >
-        {tDesign('tabLabel')}
-      </button>
+        label="PRESETS"
+      />
     </div>
   );
 
+  const bottomBar = (
+    <footer className="sticky bottom-0 z-10 flex h-16 items-center justify-between border-t border-border bg-surface px-4 py-3 md:px-6">
+      <div className="flex items-center gap-4">
+        <SaveStatus state={saveState} />
+      </div>
+      
+      <button
+        type="button"
+        onClick={() => setMobileTab(mobileTab === 'edit' ? 'preview' : 'edit')}
+        className="flex items-center gap-1.5 text-xs text-text-muted hover:text-text transition-colors md:hidden"
+      >
+        {mobileTab === 'edit' ? (
+          <>
+            <ChevronLeft className="h-3 w-3" />
+            Preview
+          </>
+        ) : (
+          <>
+            Editor
+            <ChevronRight className="h-3 w-3" />
+          </>
+        )}
+      </button>
+    </footer>
+  );
+
   const editPaneEl = (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col h-screen md:h-full border-r border-border bg-surface">
+      {topBar}
       {tabStrip}
-      {editorTab === 'sections' ? (
-        <>
-          <SectionRail
-            order={sectionOrder}
+      
+      <div className="flex-1 overflow-y-auto">
+        {editorTab === 'sections' ? (
+          <BlocksTab
             active={active}
-            labels={labels}
+            order={sectionOrder}
+            bundle={bundle}
             onSelect={setActive}
             onReorder={(next) => {
               applyMutation('theme', {
                 sectionOrder: next.map((key) => ({ key })),
               });
             }}
-          />
-          <EditorPane
-            active={active}
-            bundle={bundle}
-            supabaseUserId={
-              (bundle.profile.owner as unknown as { supabaseUserId?: string })?.supabaseUserId ?? ''
-            }
             onMutate={applyMutation}
           />
-        </>
-      ) : editorTab === 'theme' ? (
-        <ThemeTab bundle={bundle} onMutate={applyMutation} />
-      ) : (
-        <DesignTab
-          profileId={Number(bundle.profile.id)}
-          profileSlug={String(bundle.profile.slug ?? '')}
-          activePresetId={(bundle.theme as { presetId?: string | null } | null)?.presetId ?? null}
-        />
-      )}
+        ) : editorTab === 'theme' ? (
+          <div className="p-6">
+            <ThemeTab bundle={bundle} onMutate={applyMutation} />
+          </div>
+        ) : (
+          <DesignTab
+            profileId={Number(bundle.profile.id)}
+            profileSlug={String(bundle.profile.slug ?? '')}
+            activePresetId={(bundle.theme as { presetId?: string | null } | null)?.presetId ?? null}
+          />
+        )}
+      </div>
+
+      {bottomBar}
     </div>
   );
 
@@ -348,14 +380,21 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
 
   return (
     <>
-      {headerBar}
-      <div className="hidden md:grid md:grid-cols-[24rem_1fr] md:gap-8 md:px-12 md:py-8">
+      <div className="hidden md:grid md:grid-cols-[24rem_1fr] md:gap-8 md:px-12 md:py-8 h-screen overflow-hidden bg-bg">
         {editPaneEl}
-        {previewPaneEl}
+        <div className="h-full overflow-y-auto">
+          {previewPaneEl}
+        </div>
       </div>
-      <div className="md:hidden">
-        <MobileTabs panes={{ edit: editPaneEl, preview: previewPaneEl }} />
+      
+      <div className="md:hidden h-screen overflow-hidden">
+        <MobileTabs 
+          active={mobileTab} 
+          onChange={setMobileTab}
+          panes={{ edit: editPaneEl, preview: previewPaneEl }} 
+        />
       </div>
+
       <PublishDialog
         open={dialogIntent !== null}
         intent={dialogIntent ?? 'publish'}
@@ -367,21 +406,49 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
           setPublishError(null);
         }}
       />
+      
       {publishError ? (
         <div
           role="alert"
-          className="fixed bottom-4 right-4 z-50 max-w-sm border border-border bg-bg p-3 text-sm text-text shadow"
+          className="fixed bottom-20 right-4 z-50 max-w-sm border border-border bg-bg p-3 text-sm text-text shadow-xl"
         >
           {publishError}
           <button
             type="button"
             onClick={() => setPublishError(null)}
-            className="ml-2 text-text-muted underline"
+            className="ml-2 text-accent underline"
           >
             Fechar
           </button>
         </div>
       ) : null}
     </>
+  );
+}
+
+function TabButton({ 
+  active, 
+  onClick, 
+  label 
+}: { 
+  active: boolean; 
+  onClick: () => void; 
+  label: string 
+}) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={active}
+      onClick={onClick}
+      className={cn(
+        "flex flex-1 items-center justify-center px-3 py-2 text-xs font-medium uppercase tracking-wider transition-all",
+        active 
+          ? "border-b-2 border-accent text-accent" 
+          : "text-text-muted hover:text-text"
+      )}
+    >
+      {label}
+    </button>
   );
 }
