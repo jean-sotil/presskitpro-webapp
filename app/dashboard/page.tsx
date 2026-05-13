@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 
 import { TrialBanner } from '@/components/dashboard/TrialBanner';
 import { Section } from '@/components/ui/Section';
@@ -11,6 +12,7 @@ import { isComplete, type OnboardingProgress } from '@/lib/onboarding/state';
 import { supabaseServer } from '@/lib/supabase/server';
 
 export default async function DashboardPage() {
+  const t = await getTranslations('dashboard.home');
   const supabase = await supabaseServer();
   const {
     data: { user },
@@ -56,7 +58,7 @@ export default async function DashboardPage() {
     <main id="main">
       <Section>
         <SectionMarker number={1} label="DASHBOARD" />
-        <h1 className="mt-4 font-display text-5xl uppercase tracking-tight">Olá, {user.email}</h1>
+        <h1 className="mt-4 font-display text-5xl uppercase tracking-tight">{t('greeting', { email: user.email })}</h1>
 
         {userDoc ? (
           <div className="mt-8">
@@ -81,9 +83,9 @@ export default async function DashboardPage() {
 
         {profilesResult.docs.length === 0 ? (
           <p className="mt-6 max-w-prose text-text-muted">
-            Você ainda não tem perfis.{' '}
+            {t('noProfiles')}{' '}
             <Link href="/onboarding" className="underline">
-              Comece o onboarding →
+              {t('startOnboarding')}
             </Link>
           </p>
         ) : (
@@ -112,9 +114,9 @@ export default async function DashboardPage() {
                     {isActive ? (
                       <span
                         className="inline-flex items-center border border-accent px-2 py-0.5 text-[0.65rem] uppercase tracking-widest text-accent"
-                        aria-label="Perfil ativo"
+                        aria-label={t('activeProfile')}
                       >
-                        ● Ativo
+                        ● {t('activeProfile')}
                       </span>
                     ) : null}
                   </div>
@@ -125,7 +127,7 @@ export default async function DashboardPage() {
                     href={`/dashboard/profile/${profile.id}`}
                     className="mt-6 inline-flex h-10 items-center border border-border bg-transparent px-5 text-xs uppercase tracking-wider text-text hover:bg-bg focus-visible:outline-offset-2"
                   >
-                    Abrir editor
+                    {t('openEditor')}
                   </Link>
                 </li>
               );
@@ -138,14 +140,14 @@ export default async function DashboardPage() {
             href="/dashboard/analytics"
             className="font-display text-xs uppercase tracking-widest text-text underline underline-offset-4 hover:text-text-muted"
           >
-            Analytics →
+            {t('analytics')}
           </Link>
           <form action="/auth/logout" method="post">
             <button
               type="submit"
               className="text-xs uppercase tracking-wider text-text-muted underline underline-offset-4 hover:text-text"
             >
-              Sair
+              {t('logout')}
             </button>
           </form>
         </div>

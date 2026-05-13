@@ -473,6 +473,15 @@
       "editor": "Editor",
       "analytics": "Analíticas",
       "settings": "Configurações"
+    },
+    "home": {
+      "greeting": "Olá, {email}",
+      "noProfiles": "Você ainda não tem perfis.",
+      "startOnboarding": "Comece o onboarding →",
+      "openEditor": "Abrir editor",
+      "logout": "Sair",
+      "analytics": "Analytics →",
+      "activeProfile": "Ativo"
     }
   }
 }

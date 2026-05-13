@@ -474,6 +474,15 @@
       "editor": "Editor",
       "analytics": "Analytics",
       "settings": "Settings"
+    },
+    "home": {
+      "greeting": "Hello, {email}",
+      "noProfiles": "You don't have any profiles yet.",
+      "startOnboarding": "Start onboarding →",
+      "openEditor": "Open editor",
+      "logout": "Logout",
+      "analytics": "Analytics →",
+      "activeProfile": "Active"
     }
   }
 }
