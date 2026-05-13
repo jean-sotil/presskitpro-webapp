@@ -91,23 +91,47 @@ function resolvePayPalPlanId(planKey: CheckoutPlanKey): string | null {
     case 'pro-monthly': {
       const plan = getPlan('pro');
       if (!plan?.paypalPlanIdEnv) return null;
-      return process.env[plan.paypalPlanIdEnv] ?? null;
+      const planId = process.env[plan.paypalPlanIdEnv] ?? null;
+      console.log('[PayPal Plan Resolution]', {
+        planKey,
+        envVar: plan.paypalPlanIdEnv,
+        resolvedId: planId?.substring(0, 10) + '...',
+      });
+      return planId;
     }
     case 'pro-annual': {
       const plan = getPlan('pro');
       if (!plan?.paypalPlanIdAnnualEnv) return null;
-      return process.env[plan.paypalPlanIdAnnualEnv] ?? null;
+      const planId = process.env[plan.paypalPlanIdAnnualEnv] ?? null;
+      console.log('[PayPal Plan Resolution]', {
+        planKey,
+        envVar: plan.paypalPlanIdAnnualEnv,
+        resolvedId: planId?.substring(0, 10) + '...',
+      });
+      return planId;
     }
     case 'agency':
     case 'agency-monthly': {
       const plan = getPlan('agency');
       if (!plan?.paypalPlanIdEnv) return null;
-      return process.env[plan.paypalPlanIdEnv] ?? null;
+      const planId = process.env[plan.paypalPlanIdEnv] ?? null;
+      console.log('[PayPal Plan Resolution]', {
+        planKey,
+        envVar: plan.paypalPlanIdEnv,
+        resolvedId: planId?.substring(0, 10) + '...',
+      });
+      return planId;
     }
     case 'agency-annual': {
       const plan = getPlan('agency');
       if (!plan?.paypalPlanIdAnnualEnv) return null;
-      return process.env[plan.paypalPlanIdAnnualEnv] ?? null;
+      const planId = process.env[plan.paypalPlanIdAnnualEnv] ?? null;
+      console.log('[PayPal Plan Resolution]', {
+        planKey,
+        envVar: plan.paypalPlanIdAnnualEnv,
+        resolvedId: planId?.substring(0, 10) + '...',
+      });
+      return planId;
     }
     default:
       return null;

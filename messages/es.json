@@ -483,6 +483,19 @@
       "logout": "Cerrar sesión",
       "analytics": "Analíticas →",
       "activeProfile": "Activo"
+    },
+    "trialBanner": {
+      "active": {
+        "label": "Período de prueba",
+        "messageActive": "Tienes {days} días gratis. Suscríbete ahora para mantener tu URL y contenido activos.",
+        "messageUrgent": "Quedan {days} día{plural}. Mejora tu plan antes de que tu press kit se pause.",
+        "cta": "Continuar al pago"
+      },
+      "expired": {
+        "label": "Período de prueba terminado",
+        "message": "Tu press kit está pausado. Reactiva tu suscripción para volver en línea — tu enlace se mantiene reservado.",
+        "cta": "Reactivar ahora"
+      }
     }
   }
 }

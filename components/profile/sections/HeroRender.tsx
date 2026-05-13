@@ -58,10 +58,10 @@ export function HeroRender({ bundle, preset }: { bundle: EditorBundle; preset?: 
   const logoMedia = profile.logo as PortraitMedia | null | undefined;
   const portraitUrl = mediaUrl(portraitMedia ?? null);
   const logoUrl = mediaUrl(logoMedia ?? null);
-  const portraitWidth = (portraitMedia?.width ?? 1200) || 1200;
-  const portraitHeight = (portraitMedia?.height ?? 1600) || 1600;
-  const logoWidth = (logoMedia?.width ?? 480) || 480;
-  const logoHeight = (logoMedia?.height ?? 160) || 160;
+  const portraitWidth = (portraitMedia?.width ?? 1024) || 1024;
+  const portraitHeight = (portraitMedia?.height ?? 1365) || 1365;
+  const logoWidth = (logoMedia?.width ?? 400) || 400;
+  const logoHeight = (logoMedia?.height ?? 133) || 133;
 
   const displayName = profile.slug.replace(/-/g, ' ');
 
@@ -139,7 +139,7 @@ export function HeroRender({ bundle, preset }: { bundle: EditorBundle; preset?: 
           width={portraitWidth}
           height={portraitHeight}
           priority
-          sizes="100vw"
+          sizes="(max-width: 1920px) 100vw, 1920px"
           className="h-[70vh] w-full object-cover"
         />
       ) : null}

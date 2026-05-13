@@ -14,12 +14,14 @@ async function getAccessToken(): Promise<string> {
     return cachedToken.token;
   }
 
-  const clientId = process.env.PAYPAL_CLIENT_ID;
-  const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
+  const clientId = process.env.PAYPAL_CLIENT_ID?.trim();
+  const clientSecret = process.env.PAYPAL_CLIENT_SECRET?.trim();
   const apiBase = process.env.PAYPAL_API_BASE || 'https://api-m.sandbox.paypal.com';
 
   if (!clientId || !clientSecret) {
-    throw new Error('PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET are required');
+    throw new Error(
+      `PayPal credentials not configured. PAYPAL_CLIENT_ID: ${clientId ? 'set' : 'missing'}, PAYPAL_CLIENT_SECRET: ${clientSecret ? 'set' : 'missing'}`
+    );
   }
 
   const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
@@ -33,7 +35,14 @@ async function getAccessToken(): Promise<string> {
   });
 
   if (!response.ok) {
-    throw new Error(`PayPal OAuth failed: ${response.status} ${await response.text()}`);
+    const errorText = await response.text();
+    console.error('[PayPal OAuth Debug]', {
+      status: response.status,
+      apiBase,
+      clientIdLength: clientId?.length,
+      error: errorText,
+    });
+    throw new Error(`PayPal OAuth failed: ${response.status} ${errorText}`);
   }
 
   const data = (await response.json()) as { access_token: string; expires_in: number };

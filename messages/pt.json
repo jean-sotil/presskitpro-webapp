@@ -482,6 +482,19 @@
       "logout": "Sair",
       "analytics": "Analytics →",
       "activeProfile": "Ativo"
+    },
+    "trialBanner": {
+      "active": {
+        "label": "Período de teste",
+        "messageActive": "Você tem {days} dias gratuitos. Convertendo agora, sua URL e seu conteúdo permanecem ativos.",
+        "messageUrgent": "Restam {days} dia{plural}. Garanta seu plano antes que o press kit pause.",
+        "cta": "Continuar para o checkout"
+      },
+      "expired": {
+        "label": "Período de teste encerrado",
+        "message": "Seu press kit foi pausado automaticamente. Reative a assinatura para voltar ao ar — o link público continua reservado.",
+        "cta": "Reativar agora"
+      }
     }
   }
 }

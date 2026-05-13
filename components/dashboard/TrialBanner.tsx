@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import { getTrialStatus, type TrialUser } from '@/lib/billing/trial-status';
 
@@ -13,6 +16,7 @@ import { getTrialStatus, type TrialUser } from '@/lib/billing/trial-status';
  *   - paid    : hidden.
  */
 export function TrialBanner({ user }: { user: TrialUser }) {
+  const t = useTranslations('dashboard.trialBanner');
   const status = getTrialStatus({ user, now: new Date() });
 
   if (status.kind === 'paid' || status.kind === 'pre-trial') return null;
@@ -20,16 +24,13 @@ export function TrialBanner({ user }: { user: TrialUser }) {
   if (status.kind === 'expired') {
     return (
       <aside role="status" className="border border-border bg-bg p-6 text-text">
-        <p className="font-display text-xs uppercase tracking-widest">Período de teste encerrado</p>
-        <p className="mt-3 max-w-prose text-base">
-          Seu press kit foi pausado automaticamente. Reative a assinatura para voltar ao ar — o link
-          público continua reservado.
-        </p>
+        <p className="font-display text-xs uppercase tracking-widest">{t('expired.label')}</p>
+        <p className="mt-3 max-w-prose text-base">{t('expired.message')}</p>
         <Link
           href="/checkout/pro-monthly"
           className="mt-6 inline-flex h-11 items-center bg-text px-5 font-display text-xs uppercase tracking-widest text-bg"
         >
-          Reativar agora
+          {t('expired.cta')}
         </Link>
       </aside>
     );
@@ -42,18 +43,21 @@ export function TrialBanner({ user }: { user: TrialUser }) {
       className={`border p-6 ${urgent ? 'border-border bg-bg' : 'border-border bg-surface'}`}
     >
       <p className="font-display text-xs uppercase tracking-widest text-text-muted">
-        Período de teste
+        {t('active.label')}
       </p>
       <p className="mt-3 max-w-prose text-base text-text">
         {urgent
-          ? `Restam ${status.daysRemaining} dia${status.daysRemaining === 1 ? '' : 's'}. Garanta seu plano antes que o press kit pause.`
-          : `Você tem ${status.daysRemaining} dias gratuitos. Convertendo agora, sua URL e seu conteúdo permanecem ativos.`}
+          ? t('active.messageUrgent', {
+              days: status.daysRemaining,
+              plural: status.daysRemaining === 1 ? '' : 's',
+            })
+          : t('active.messageActive', { days: status.daysRemaining })}
       </p>
       <Link
         href="/checkout/pro-monthly"
         className={`mt-6 inline-flex h-11 items-center px-5 font-display text-xs uppercase tracking-widest ${urgent ? 'bg-text text-bg' : 'border border-border text-text hover:bg-bg'}`}
       >
-        Continuar para o checkout
+        {t('active.cta')}
       </Link>
     </aside>
   );

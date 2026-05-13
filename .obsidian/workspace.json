@@ -182,6 +182,7 @@
   },
   "active": "ef44747c2cad8fc5",
   "lastOpenFiles": [
+    "README.md",
     "docs/runbooks/paypal-billing-setup.md",
     "bun.lock",
     "node_modules/supabase/bin/supabase",
@@ -217,7 +218,6 @@
     "node_modules/body-parser/node_modules/qs/LICENSE.md",
     "node_modules/body-parser/node_modules/qs/README.md",
     "node_modules/body-parser/node_modules/qs/CHANGELOG.md",
-    "node_modules/body-parser/node_modules/debug/README.md",
     "node_modules/playwright-core/lib/vite/traceViewer/playwright-logo.svg",
     "node_modules/playwright-core/lib/vite/recorder/playwright-logo.svg",
     "node_modules/playwright-core/lib/tools/dashboard/appIcon.png",
