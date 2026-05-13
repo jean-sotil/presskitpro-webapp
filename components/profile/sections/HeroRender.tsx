@@ -139,7 +139,7 @@ export function HeroRender({ bundle, preset }: { bundle: EditorBundle; preset?: 
           width={portraitWidth}
           height={portraitHeight}
           priority
-          sizes="(max-width: 1920px) 100vw, 1920px"
+          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 90vw, 1024px"
           className="h-[70vh] w-full object-cover"
         />
       ) : null}
