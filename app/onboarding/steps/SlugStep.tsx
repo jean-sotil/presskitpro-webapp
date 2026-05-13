@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/Button';
 import { advanceStep } from '../actions';
@@ -24,6 +25,8 @@ export interface SlugStepProps {
 
 export function SlugStep({ initialSlug, debounceMs = 300 }: SlugStepProps) {
   const router = useRouter();
+  const t = useTranslations('onboarding.slug');
+  const tCommon = useTranslations('onboarding.common');
   const [slug, setSlug] = useState(initialSlug ?? '');
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
   const [submitting, startTransition] = useTransition();
@@ -86,7 +89,7 @@ export function SlugStep({ initialSlug, debounceMs = 300 }: SlugStepProps) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       <label htmlFor="slug" className="text-sm uppercase tracking-wider text-text-muted">
-        URL pública
+        {t('label')}
       </label>
       <div className="flex items-center border border-border bg-surface focus-within:border-accent">
         <span aria-hidden="true" className="px-3 text-sm text-text-muted">
@@ -105,44 +108,30 @@ export function SlugStep({ initialSlug, debounceMs = 300 }: SlugStepProps) {
         />
       </div>
       <p id="slug-hint" role="status" aria-live="polite" className="min-h-[1.25rem] text-sm">
-        {status.kind === 'idle' && 'Letras minúsculas, números e hífens. 2 a 30 caracteres.'}
-        {status.kind === 'checking' && 'Verificando...'}
-        {status.kind === 'available' && <span className="text-accent">Disponível ✓</span>}
+        {status.kind === 'idle' && t('hint')}
+        {status.kind === 'checking' && t('checking')}
+        {status.kind === 'available' && <span className="text-accent">{t('available')}</span>}
         {status.kind === 'unavailable' && (
-          <span className="text-text-muted">{labelFor(status.reason)}</span>
+          <span className="text-text-muted">{labelFor(status.reason, t)}</span>
         )}
         {status.kind === 'error' && (
           <span className="text-text-muted">
             {process.env.NODE_ENV === 'production'
-              ? 'Erro de rede. Tenta de novo.'
+              ? t('errors.network')
               : `Erro: ${status.message}`}
           </span>
         )}
       </p>
       <div className="mt-4">
         <Button type="submit" disabled={!isReady}>
-          {submitting ? 'Salvando...' : 'Continuar'}
+          {submitting ? tCommon('saving') : tCommon('continue')}
         </Button>
       </div>
     </form>
   );
 }
 
-function labelFor(reason: string): string {
-  switch (reason) {
-    case 'too-short':
-      return 'Muito curto (mínimo 2 caracteres).';
-    case 'too-long':
-      return 'Muito longo (máximo 30 caracteres).';
-    case 'invalid-chars':
-      return 'Use apenas letras minúsculas, números e hífens.';
-    case 'reserved':
-      return 'Esta URL é reservada.';
-    case 'profane':
-      return 'Esta URL não é permitida.';
-    case 'taken':
-      return 'Esta URL já está em uso.';
-    default:
-      return 'Indisponível.';
-  }
+function labelFor(reason: string, t: (key: string) => string): string {
+  const key = `errors.${reason}` as const;
+  return t(key) || t('errors.unavailable');
 }

@@ -220,14 +220,32 @@
     "tagline": "Press kits, do jeito certo.",
     "navLabel": "Rodapé",
     "nav": {
-      "privacy": { "label": "Privacidade", "href": "/privacy" },
-      "terms": { "label": "Termos", "href": "/terms" },
-      "status": { "label": "Status", "href": "https://status.presskit.pro" },
-      "contact": { "label": "Contato", "href": "mailto:contato@presskit.pro" }
+      "privacy": {
+        "label": "Privacidade",
+        "href": "/privacy"
+      },
+      "terms": {
+        "label": "Termos",
+        "href": "/terms"
+      },
+      "status": {
+        "label": "Status",
+        "href": "https://status.presskit.pro"
+      },
+      "contact": {
+        "label": "Contato",
+        "href": "mailto:contato@presskit.pro"
+      }
     },
     "social": {
-      "instagram": { "label": "Instagram", "href": "https://www.instagram.com/presskitpro" },
-      "twitter": { "label": "Twitter / X", "href": "https://x.com/presskitpro" }
+      "instagram": {
+        "label": "Instagram",
+        "href": "https://www.instagram.com/presskitpro"
+      },
+      "twitter": {
+        "label": "Twitter / X",
+        "href": "https://x.com/presskitpro"
+      }
     },
     "lang": {
       "label": "Idioma",
@@ -260,7 +278,10 @@
         "heading": "Seus direitos (LGPD)",
         "body": "Você pode acessar, corrigir, exportar ou apagar seus dados a qualquer momento. As ferramentas de exportação e exclusão self-serve estão na próxima versão (task-33). Até lá, escreva para contato@presskit.pro."
       },
-      { "heading": "Contato", "body": "Dúvidas sobre esta política: contato@presskit.pro." }
+      {
+        "heading": "Contato",
+        "body": "Dúvidas sobre esta política: contato@presskit.pro."
+      }
     ]
   },
   "terms": {
@@ -294,7 +315,10 @@
         "heading": "Foro e legislação",
         "body": "Estes termos são regidos pelas leis da República Federativa do Brasil. Fica eleito o foro da comarca de São Paulo - SP para dirimir eventuais conflitos."
       },
-      { "heading": "Contato", "body": "Dúvidas sobre estes termos: contato@presskit.pro." }
+      {
+        "heading": "Contato",
+        "body": "Dúvidas sobre estes termos: contato@presskit.pro."
+      }
     ]
   },
   "seo": {
@@ -390,6 +414,65 @@
       "pendingCta": "Aplicando…",
       "applyHint": "Os tokens de cor/tipografia serão sobrescritos. Você precisará revalidar o contraste antes de publicar de novo.",
       "errorMessage": "Não foi possível aplicar o preset. Tente novamente."
+    }
+  },
+  "onboarding": {
+    "common": {
+      "navLabel": "Navegação do cadastro",
+      "step": "Passo {step} de 5",
+      "continue": "Continuar",
+      "saving": "Salvando...",
+      "back": "Voltar",
+      "skip": "Pular"
+    },
+    "slug": {
+      "label": "URL pública",
+      "hint": "Letras minúsculas, números e hífens. 2 a 30 caracteres.",
+      "checking": "Verificando...",
+      "available": "Disponível ✓",
+      "errors": {
+        "tooShort": "Muito curto (mínimo 2 caracteres).",
+        "tooLong": "Muito longo (máximo 30 caracteres).",
+        "invalidChars": "Use apenas letras minúsculas, números e hífens.",
+        "reserved": "Esta URL é reservada.",
+        "profane": "Esta URL não é permitida.",
+        "taken": "Esta URL já está em uso.",
+        "unavailable": "Indisponível.",
+        "network": "Erro de rede. Tenta de novo."
+      }
+    },
+    "tagline": {
+      "label": "Tagline",
+      "placeholder": "ex: DJ & Producer | Tribal House"
+    },
+    "services": {
+      "label": "Serviços",
+      "hint": "Separe por vírgula",
+      "examples": "ex: DJ Set, Produção, Trilha Sonora"
+    },
+    "media": {
+      "portrait": "Foto de perfil",
+      "logo": "Logo"
+    },
+    "social": {
+      "label": "Redes sociais",
+      "placeholder": "Cole o link do seu perfil"
+    }
+  },
+  "dashboard": {
+    "common": {
+      "loading": "Carregando...",
+      "save": "Salvar",
+      "cancel": "Cancelar",
+      "delete": "Deletar",
+      "edit": "Editar"
+    },
+    "nav": {
+      "ariaLabel": "Navegação",
+      "home": "Início",
+      "editor": "Editor",
+      "analytics": "Analíticas",
+      "settings": "Configurações"
     }
   }
 }

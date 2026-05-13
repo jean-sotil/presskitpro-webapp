@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { headers, cookies } from 'next/headers';
 
 import {
   advanceStepImpl,
@@ -23,13 +24,22 @@ import { getDefaultPreset } from '@/lib/presets';
 import { reserveSlug, releaseSlug } from '@/lib/slug/operations';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { supabaseServer } from '@/lib/supabase/server';
+import { toPayloadLocale, negotiateLocale, LOCALE_COOKIE_NAME } from '@/lib/i18n/locale';
 
 /**
  * Wires the live Supabase + Payload clients into the testable
  * `actions-impl` core. The shim is intentionally thin — every branch and
  * error path is unit-tested at the impl layer.
  */
-function buildDeps(): WizardDeps {
+async function buildDeps(): Promise<WizardDeps> {
+  const cookieStore = await cookies();
+  const headerStore = await headers();
+  const locale = negotiateLocale({
+    cookie: cookieStore.get(LOCALE_COOKIE_NAME)?.value,
+    acceptLanguage: headerStore.get('accept-language'),
+  });
+  const payloadLocale = toPayloadLocale(locale);
+
   return {
     async getSupabaseUser() {
       const sb = await supabaseServer();
@@ -104,8 +114,8 @@ function buildDeps(): WizardDeps {
           owner: args.ownerId as number,
           slug: args.slug,
           status: 'draft',
-          defaultLocale: 'pt-BR',
-          localesAvailable: ['pt-BR'],
+          defaultLocale: payloadLocale,
+          localesAvailable: [payloadLocale],
           ...(args.portraitId ? { portrait: args.portraitId } : {}),
           ...(args.logoId ? { logo: args.logoId } : {}),
         },
@@ -113,7 +123,7 @@ function buildDeps(): WizardDeps {
       try {
         await p.create({
           collection: 'profile-content',
-          locale: 'pt-BR',
+          locale: payloadLocale,
           data: {
             profile: profile.id,
             tagline: args.taglinePtBR,
@@ -176,11 +186,11 @@ export async function advanceStep(
     socialUrl?: string;
   },
 ): Promise<AdvanceResult> {
-  return advanceStepImpl(buildDeps(), { step, data });
+  return advanceStepImpl(await buildDeps(), { step, data });
 }
 
 export async function completeWizard(): Promise<CompleteResult> {
-  const result = await completeWizardImpl(buildDeps());
+  const result = await completeWizardImpl(await buildDeps());
   if (result.ok) {
     // Warm the freshly-created profile's public route (it's still draft,
     // but the dashboard editor renders the same RSC tree under a flag).
@@ -190,5 +200,5 @@ export async function completeWizard(): Promise<CompleteResult> {
 }
 
 export async function cancelWizard(): Promise<CancelResult> {
-  return cancelWizardImpl(buildDeps());
+  return cancelWizardImpl(await buildDeps());
 }

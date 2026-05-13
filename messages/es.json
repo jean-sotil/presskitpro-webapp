@@ -221,14 +221,32 @@
     "tagline": "Press kits, bien hechos.",
     "navLabel": "Pie de página",
     "nav": {
-      "privacy": { "label": "Privacidad", "href": "/privacy" },
-      "terms": { "label": "Términos", "href": "/terms" },
-      "status": { "label": "Estado", "href": "https://status.presskit.pro" },
-      "contact": { "label": "Contacto", "href": "mailto:contato@presskit.pro" }
+      "privacy": {
+        "label": "Privacidad",
+        "href": "/privacy"
+      },
+      "terms": {
+        "label": "Términos",
+        "href": "/terms"
+      },
+      "status": {
+        "label": "Estado",
+        "href": "https://status.presskit.pro"
+      },
+      "contact": {
+        "label": "Contacto",
+        "href": "mailto:contato@presskit.pro"
+      }
     },
     "social": {
-      "instagram": { "label": "Instagram", "href": "https://www.instagram.com/presskitpro" },
-      "twitter": { "label": "Twitter / X", "href": "https://x.com/presskitpro" }
+      "instagram": {
+        "label": "Instagram",
+        "href": "https://www.instagram.com/presskitpro"
+      },
+      "twitter": {
+        "label": "Twitter / X",
+        "href": "https://x.com/presskitpro"
+      }
     },
     "lang": {
       "label": "Idioma",
@@ -261,7 +279,10 @@
         "heading": "Tus derechos (LGPD)",
         "body": "Puedes acceder, corregir, exportar o eliminar tus datos en cualquier momento. Las herramientas self-serve de exportación y eliminación llegan en la próxima versión (task-33). Mientras tanto, escribe a contato@presskit.pro."
       },
-      { "heading": "Contacto", "body": "Preguntas sobre esta política: contato@presskit.pro." }
+      {
+        "heading": "Contacto",
+        "body": "Preguntas sobre esta política: contato@presskit.pro."
+      }
     ]
   },
   "terms": {
@@ -295,7 +316,10 @@
         "heading": "Foro y legislación",
         "body": "Estos términos se rigen por las leyes de la República Federativa de Brasil. Se elige el foro de São Paulo - SP para resolver eventuales conflictos."
       },
-      { "heading": "Contacto", "body": "Preguntas sobre estos términos: contato@presskit.pro." }
+      {
+        "heading": "Contacto",
+        "body": "Preguntas sobre estos términos: contato@presskit.pro."
+      }
     ]
   },
   "seo": {
@@ -391,6 +415,65 @@
       "pendingCta": "Aplicando…",
       "applyHint": "Los tokens de color y tipografía se sobrescribirán. Necesitarás revalidar el contraste antes de publicar de nuevo.",
       "errorMessage": "No se pudo aplicar el preset. Inténtalo de nuevo."
+    }
+  },
+  "onboarding": {
+    "common": {
+      "navLabel": "Navegación de incorporación",
+      "step": "Paso {step} de 5",
+      "continue": "Continuar",
+      "saving": "Guardando...",
+      "back": "Atrás",
+      "skip": "Saltar"
+    },
+    "slug": {
+      "label": "URL pública",
+      "hint": "Letras minúsculas, números y guiones. 2 a 30 caracteres.",
+      "checking": "Verificando...",
+      "available": "Disponible ✓",
+      "errors": {
+        "tooShort": "Demasiado corto (mínimo 2 caracteres).",
+        "tooLong": "Demasiado largo (máximo 30 caracteres).",
+        "invalidChars": "Use solo letras minúsculas, números y guiones.",
+        "reserved": "Esta URL está reservada.",
+        "profane": "Esta URL no está permitida.",
+        "taken": "Esta URL ya está en uso.",
+        "unavailable": "No disponible.",
+        "network": "Error de red. Intenta de nuevo."
+      }
+    },
+    "tagline": {
+      "label": "Eslogan",
+      "placeholder": "ej: DJ & Productor | Tribal House"
+    },
+    "services": {
+      "label": "Servicios",
+      "hint": "Separados por coma",
+      "examples": "ej: DJ Set, Producción, Banda Sonora"
+    },
+    "media": {
+      "portrait": "Foto de perfil",
+      "logo": "Logo"
+    },
+    "social": {
+      "label": "Redes sociales",
+      "placeholder": "Pega el enlace de tu perfil"
+    }
+  },
+  "dashboard": {
+    "common": {
+      "loading": "Cargando...",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "edit": "Editar"
+    },
+    "nav": {
+      "ariaLabel": "Navegación",
+      "home": "Inicio",
+      "editor": "Editor",
+      "analytics": "Analíticas",
+      "settings": "Configuración"
     }
   }
 }

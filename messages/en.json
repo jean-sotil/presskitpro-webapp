@@ -221,14 +221,32 @@
     "tagline": "Press kits, done right.",
     "navLabel": "Footer",
     "nav": {
-      "privacy": { "label": "Privacy", "href": "/privacy" },
-      "terms": { "label": "Terms", "href": "/terms" },
-      "status": { "label": "Status", "href": "https://status.presskit.pro" },
-      "contact": { "label": "Contact", "href": "mailto:contato@presskit.pro" }
+      "privacy": {
+        "label": "Privacy",
+        "href": "/privacy"
+      },
+      "terms": {
+        "label": "Terms",
+        "href": "/terms"
+      },
+      "status": {
+        "label": "Status",
+        "href": "https://status.presskit.pro"
+      },
+      "contact": {
+        "label": "Contact",
+        "href": "mailto:contato@presskit.pro"
+      }
     },
     "social": {
-      "instagram": { "label": "Instagram", "href": "https://www.instagram.com/presskitpro" },
-      "twitter": { "label": "Twitter / X", "href": "https://x.com/presskitpro" }
+      "instagram": {
+        "label": "Instagram",
+        "href": "https://www.instagram.com/presskitpro"
+      },
+      "twitter": {
+        "label": "Twitter / X",
+        "href": "https://x.com/presskitpro"
+      }
     },
     "lang": {
       "label": "Language",
@@ -261,7 +279,10 @@
         "heading": "Your rights (LGPD)",
         "body": "You can access, correct, export, or delete your data at any time. Self-serve export and deletion ship in the next version (task-33). Until then, write to contato@presskit.pro."
       },
-      { "heading": "Contact", "body": "Questions about this policy: contato@presskit.pro." }
+      {
+        "heading": "Contact",
+        "body": "Questions about this policy: contato@presskit.pro."
+      }
     ]
   },
   "terms": {
@@ -295,7 +316,10 @@
         "heading": "Governing law and venue",
         "body": "These terms are governed by the laws of the Federative Republic of Brazil. The courts of São Paulo - SP are the agreed venue for any disputes."
       },
-      { "heading": "Contact", "body": "Questions about these terms: contato@presskit.pro." }
+      {
+        "heading": "Contact",
+        "body": "Questions about these terms: contato@presskit.pro."
+      }
     ]
   },
   "seo": {
@@ -391,6 +415,65 @@
       "pendingCta": "Applying…",
       "applyHint": "Color and font tokens will be overwritten. You'll need to revalidate contrast before publishing again.",
       "errorMessage": "Could not apply the preset. Please try again."
+    }
+  },
+  "onboarding": {
+    "common": {
+      "navLabel": "Onboarding navigation",
+      "step": "Step {step} of 5",
+      "continue": "Continue",
+      "saving": "Saving...",
+      "back": "Back",
+      "skip": "Skip"
+    },
+    "slug": {
+      "label": "Public URL",
+      "hint": "Lowercase letters, numbers and hyphens. 2 to 30 characters.",
+      "checking": "Checking...",
+      "available": "Available ✓",
+      "errors": {
+        "tooShort": "Too short (minimum 2 characters).",
+        "tooLong": "Too long (maximum 30 characters).",
+        "invalidChars": "Use only lowercase letters, numbers and hyphens.",
+        "reserved": "This URL is reserved.",
+        "profane": "This URL is not allowed.",
+        "taken": "This URL is already taken.",
+        "unavailable": "Unavailable.",
+        "network": "Network error. Try again."
+      }
+    },
+    "tagline": {
+      "label": "Tagline",
+      "placeholder": "eg: DJ & Producer | Tribal House"
+    },
+    "services": {
+      "label": "Services",
+      "hint": "Separate by comma",
+      "examples": "eg: DJ Set, Production, Soundtrack"
+    },
+    "media": {
+      "portrait": "Profile photo",
+      "logo": "Logo"
+    },
+    "social": {
+      "label": "Social networks",
+      "placeholder": "Paste your profile link"
+    }
+  },
+  "dashboard": {
+    "common": {
+      "loading": "Loading...",
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit"
+    },
+    "nav": {
+      "ariaLabel": "Navigation",
+      "home": "Home",
+      "editor": "Editor",
+      "analytics": "Analytics",
+      "settings": "Settings"
     }
   }
 }

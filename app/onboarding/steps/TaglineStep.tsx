@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/Button';
 import { advanceStep } from '../actions';
@@ -10,6 +11,8 @@ const MAX = 140;
 
 export function TaglineStep({ initial }: { initial?: string }) {
   const router = useRouter();
+  const t = useTranslations('onboarding.tagline');
+  const tCommon = useTranslations('onboarding.common');
   const [value, setValue] = useState(initial ?? '');
   const [error, setError] = useState<string | null>(null);
   const [submitting, startTransition] = useTransition();
@@ -35,24 +38,25 @@ export function TaglineStep({ initial }: { initial?: string }) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">
       <label htmlFor="tagline" className="text-sm uppercase tracking-wider text-text-muted">
-        Sua tagline em PT-BR
+        {t('label')}
       </label>
       <input
         id="tagline"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         maxLength={MAX}
-        className="h-12 border border-border bg-surface px-3 text-base outline-none focus:border-accent"
+        placeholder={t('placeholder')}
+        className="h-12 border border-border bg-surface px-3 text-base outline-none focus:border-accent placeholder:text-text-muted/60"
         aria-describedby="tagline-counter"
         aria-invalid={Boolean(error)}
       />
       <p id="tagline-counter" className="text-xs text-text-muted" aria-live="polite">
-        {remaining} caracteres restantes
+        {remaining} {remaining === 1 ? 'character' : 'characters'}
         {error ? ` · ${error}` : ''}
       </p>
       <div className="mt-4">
         <Button type="submit" disabled={!canSubmit}>
-          {submitting ? 'Salvando...' : 'Continuar'}
+          {submitting ? tCommon('saving') : tCommon('continue')}
         </Button>
       </div>
     </form>
