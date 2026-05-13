@@ -1,11 +1,16 @@
 'use client';
 
+import { useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 
 import { PlatformIcon } from '../PlatformIcon';
 import { TrackedSocialLink } from '../TrackedSocialLink';
+
+gsap.registerPlugin(useGSAP);
 
 type LinkRow = {
   id: number | string;
@@ -37,13 +42,66 @@ type LinkRow = {
 export function SocialLinks_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.social');
   const tPlatforms = useTranslations('profile.social.platforms');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const linksRef = useRef<HTMLUListElement>(null);
+
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
   if (!raw.length) return null;
   const links = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   const profileSlug = bundle.profile.slug;
 
+  useGSAP(
+    () => {
+      const items = linksRef.current?.querySelectorAll('li');
+      if (!items) return;
+
+      const tl = gsap.timeline();
+
+      tl.fromTo(
+        items,
+        { opacity: 0, x: -20 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.4,
+          stagger: 0.06,
+          ease: 'power3.out'
+        }
+      );
+
+      const handlers = new Map();
+      items.forEach((item) => {
+        const link = item.querySelector('a');
+        if (!link) return;
+
+        const onHover = () => {
+          gsap.to(link, { x: 4, duration: 0.2, ease: 'power2.out' });
+        };
+
+        const onHoverOut = () => {
+          gsap.to(link, { x: 0, duration: 0.2, ease: 'power2.out' });
+        };
+
+        link.addEventListener('mouseenter', onHover);
+        link.addEventListener('mouseleave', onHoverOut);
+        handlers.set(link, { onHover, onHoverOut });
+      });
+
+      return () => {
+        handlers.forEach(({ onHover, onHoverOut }, link) => {
+          link.removeEventListener('mouseenter', onHover);
+          link.removeEventListener('mouseleave', onHoverOut);
+        });
+      };
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <section className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
+    <section
+      ref={containerRef}
+      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
+    >
       <div className="mx-auto max-w-3xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           03 — {t('label')}
@@ -54,7 +112,7 @@ export function SocialLinks_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }
         >
           {t('label')}
         </h2>
-        <ul className="mt-12 flex flex-wrap gap-3">
+        <ul ref={linksRef} className="mt-12 flex flex-wrap gap-3">
           {links.map((link) => {
             const href = hrefFor(link);
             let label: string;

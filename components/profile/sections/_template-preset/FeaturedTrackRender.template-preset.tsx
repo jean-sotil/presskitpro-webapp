@@ -1,10 +1,15 @@
 'use client';
 
+import { useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 
 import { LazyIframe } from '../LazyIframe';
+
+gsap.registerPlugin(useGSAP);
 
 /**
  * [PRESET-NAME] featured track section template
@@ -28,14 +33,56 @@ import { LazyIframe } from '../LazyIframe';
  */
 export function FeaturedTrack_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.featuredTrack');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const embedRef = useRef<HTMLDivElement>(null);
+
   const track = bundle.featuredTrack as { url?: string; oembedHtml?: string | null } | null;
   const url = track?.url ?? null;
   const oembedHtml = track?.oembedHtml ?? null;
 
+  useGSAP(
+    () => {
+      const tl = gsap.timeline();
+      const p = containerRef.current?.querySelector('p');
+      const h2 = containerRef.current?.querySelector('h2');
+
+      if (p) {
+        tl.fromTo(
+          p,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.6, ease: 'power3.out' }
+        );
+      }
+
+      if (h2) {
+        tl.fromTo(
+          h2,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
+          '-=0.3'
+        );
+      }
+
+      if (embedRef.current) {
+        tl.fromTo(
+          embedRef.current,
+          { opacity: 0, scale: 0.95 },
+          { opacity: 1, scale: 1, duration: 0.8, ease: 'back.out' },
+          '-=0.3'
+        );
+      }
+    },
+    { scope: containerRef }
+  );
+
   if (!url) return null;
 
   return (
-    <section id="faixa" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
+    <section
+      ref={containerRef}
+      id="faixa"
+      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
+    >
       <div className="mx-auto max-w-3xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           07 — {t('heading')}
@@ -46,7 +93,7 @@ export function FeaturedTrack_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle
         >
           {t('label')}
         </h2>
-        <div className="mt-12 overflow-hidden border border-border bg-surface p-1">
+        <div ref={embedRef} className="mt-12 overflow-hidden border border-border bg-surface p-1">
           {oembedHtml ? (
             <LazyIframe html={oembedHtml} />
           ) : (

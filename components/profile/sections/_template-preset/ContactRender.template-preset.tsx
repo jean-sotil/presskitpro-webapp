@@ -1,11 +1,16 @@
 'use client';
 
+import { useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 
 import { ContactForm } from '../ContactForm';
 import { TrackedContactCta } from '../TrackedContactCta';
+
+gsap.registerPlugin(useGSAP);
 
 type ProfileWithContact = EditorBundle['profile'] & {
   contactWhatsapp?: string;
@@ -36,6 +41,10 @@ type ProfileWithContact = EditorBundle['profile'] & {
  */
 export function Contact_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.contact');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const ctasRef = useRef<HTMLUListElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+
   const profile = bundle.profile as ProfileWithContact;
   const whatsapp = profile.contactWhatsapp?.trim() ?? '';
   const email = profile.contactEmail?.trim() ?? '';
@@ -43,10 +52,45 @@ export function Contact_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   const profileId = Number(profile.id);
   const profileSlug = profile.slug;
 
+  useGSAP(
+    (context, contextSafe) => {
+      const tl = gsap.timeline();
+
+      if (ctasRef.current) {
+        const items = ctasRef.current.querySelectorAll('li');
+        tl.fromTo(
+          items,
+          { opacity: 0, scale: 0.95 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.5,
+            stagger: 0.1,
+            ease: 'back.out'
+          }
+        );
+      }
+
+      if (formRef.current) {
+        tl.fromTo(
+          formRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
+          '-=0.2'
+        );
+      }
+    },
+    { scope: containerRef }
+  );
+
   if (!whatsapp && !email && !formEnabled) return null;
 
   return (
-    <section id="contato" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
+    <section
+      ref={containerRef}
+      id="contato"
+      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
+    >
       <div className="mx-auto max-w-3xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           05 — {t('label')}
@@ -58,7 +102,7 @@ export function Contact_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
           {t('label')}
         </h2>
         {whatsapp || email ? (
-          <ul className="mt-12 flex flex-wrap gap-3">
+          <ul ref={ctasRef} className="mt-12 flex flex-wrap gap-3">
             {whatsapp ? (
               <li>
                 <TrackedContactCta
@@ -86,7 +130,7 @@ export function Contact_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
           </ul>
         ) : null}
         {formEnabled && profileId > 0 ? (
-          <div className="mt-10 max-w-xl">
+          <div ref={formRef} className="mt-10 max-w-xl">
             <ContactForm profileId={profileId} />
           </div>
         ) : null}

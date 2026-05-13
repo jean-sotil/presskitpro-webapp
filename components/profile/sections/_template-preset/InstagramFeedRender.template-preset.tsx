@@ -1,6 +1,14 @@
+'use client';
+
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+
 import type { EditorBundle } from '@/lib/editor/bundle';
 
 import { LazyEmbed } from '../LazyEmbed';
+
+gsap.registerPlugin(useGSAP);
 
 type InstagramPostRow = {
   id: number | string;
@@ -30,13 +38,39 @@ type InstagramPostRow = {
  *     hooks (`useTranslations` etc.) are added
  */
 export function InstagramFeed_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const feedRef = useRef<HTMLUListElement>(null);
+
   const raw = (bundle.instagramPosts ?? []) as unknown as InstagramPostRow[];
   const posts = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
+
+  useGSAP(
+    () => {
+      const posts = feedRef.current?.querySelectorAll('li');
+      if (!posts) return;
+
+      gsap.fromTo(
+        posts,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: 'power3.out'
+        }
+      );
+    },
+    { scope: containerRef }
+  );
 
   if (posts.length === 0) return null;
 
   return (
-    <section className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
+    <section
+      ref={containerRef}
+      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
+    >
       <div className="mx-auto max-w-6xl">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           06 — Instagram
@@ -47,7 +81,7 @@ export function InstagramFeed_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle
         >
           Instagram
         </h2>
-        <ul className="mt-12 grid gap-5 sm:grid-cols-2 md:grid-cols-3">
+        <ul ref={feedRef} className="mt-12 grid gap-5 sm:grid-cols-2 md:grid-cols-3">
           {posts.map((post) =>
             post.oembedHtml ? (
               <li key={String(post.id)} className="border border-border bg-surface">

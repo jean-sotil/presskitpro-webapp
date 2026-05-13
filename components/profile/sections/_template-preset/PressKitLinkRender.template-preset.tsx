@@ -1,11 +1,16 @@
 'use client';
 
+import { useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import type { PressKitProvider } from '@/lib/payload/hooks/derive-press-kit-provider';
 
 import { TrackedPressKitAnchor } from '../TrackedPressKitAnchor';
+
+gsap.registerPlugin(useGSAP);
 
 /**
  * [PRESET-NAME] press kit link section template
@@ -31,6 +36,10 @@ import { TrackedPressKitAnchor } from '../TrackedPressKitAnchor';
 export function PressKitLink_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.pressKit');
   const tProviders = useTranslations('profile.pressKit.providers');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLParagraphElement>(null);
+  const badgeRef = useRef<HTMLParagraphElement>(null);
+
   const url = (bundle.profile.pressKitUrl as string | undefined) ?? null;
   if (!url) return null;
   const health = (bundle.profile.pressKitHealthStatus ?? 'unknown') as
@@ -43,9 +52,56 @@ export function PressKitLink_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle 
   const slug = String(bundle.profile.slug ?? '');
   const badge = providerBadge(tProviders, provider);
 
+  useGSAP(
+    () => {
+      const tl = gsap.timeline();
+      const p = containerRef.current?.querySelector('p:first-of-type');
+      const h2 = containerRef.current?.querySelector('h2');
+
+      if (p) {
+        tl.fromTo(
+          p,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.6, ease: 'power3.out' }
+        );
+      }
+
+      if (h2) {
+        tl.fromTo(
+          h2,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
+          '-=0.3'
+        );
+      }
+
+      if (ctaRef.current) {
+        tl.fromTo(
+          ctaRef.current,
+          { opacity: 0, scale: 0.9 },
+          { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out' },
+          '-=0.3'
+        );
+      }
+
+      if (badgeRef.current) {
+        tl.fromTo(
+          badgeRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.5, ease: 'power3.out' },
+          '-=0.2'
+        );
+      }
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <section id="press-kit" className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32">
-      <div className="mx-auto max-w-2xl text-center">
+    <section
+      id="press-kit"
+      className="border-b border-border bg-bg px-6 py-20 md:px-12 md:py-32"
+    >
+      <div ref={containerRef} className="mx-auto max-w-2xl text-center">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           07 — {t('label')}
         </p>
@@ -55,7 +111,7 @@ export function PressKitLink_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle 
         >
           {t('heading')}
         </h2>
-        <p className="mt-12">
+        <p ref={ctaRef} className="mt-12">
           <TrackedPressKitAnchor
             href={url}
             provider={provider}
@@ -66,7 +122,10 @@ export function PressKitLink_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle 
           </TrackedPressKitAnchor>
         </p>
         {badge ? (
-          <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
+          <p
+            ref={badgeRef}
+            className="mt-4 font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted"
+          >
             {badge}
           </p>
         ) : null}

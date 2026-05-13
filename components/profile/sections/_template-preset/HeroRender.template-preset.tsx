@@ -1,9 +1,14 @@
 'use client';
 
+import { useRef } from 'react';
 import Image from 'next/image';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
+
+gsap.registerPlugin(useGSAP);
 
 type PortraitMedia = {
   bucket: string;
@@ -32,6 +37,10 @@ type PortraitMedia = {
  */
 export function Hero_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   const { profile, content } = bundle;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const taglineRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLAnchorElement>(null);
 
   const portraitMedia = profile.portrait as PortraitMedia | null | undefined;
   const portraitUrl = mediaUrl(portraitMedia ?? null);
@@ -44,8 +53,60 @@ export function Hero_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
 
   const displayName = profile.slug.replace(/-/g, ' ');
 
+  useGSAP(
+    (context) => {
+      const tl = gsap.timeline();
+
+      if (titleRef.current) {
+        tl.fromTo(
+          titleRef.current,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+        );
+      }
+
+      if (taglineRef.current) {
+        tl.fromTo(
+          taglineRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
+          '-=0.4'
+        );
+      }
+
+      if (ctaRef.current) {
+        tl.fromTo(
+          ctaRef.current,
+          { opacity: 0, scale: 0.95 },
+          { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out' },
+          '-=0.3'
+        );
+
+        const onHoverCta = () => {
+          gsap.to(ctaRef.current, { scale: 1.05, duration: 0.3, ease: 'power2.out' });
+        };
+
+        const onHoverCtaOut = () => {
+          gsap.to(ctaRef.current, { scale: 1, duration: 0.3, ease: 'power2.out' });
+        };
+
+        ctaRef.current.addEventListener('mouseenter', onHoverCta);
+        ctaRef.current.addEventListener('mouseleave', onHoverCtaOut);
+
+        return () => {
+          ctaRef.current?.removeEventListener('mouseenter', onHoverCta);
+          ctaRef.current?.removeEventListener('mouseleave', onHoverCtaOut);
+        };
+      }
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <header className="relative isolate overflow-hidden border-b border-border bg-bg">
+    <header
+      ref={containerRef}
+      className="relative isolate overflow-hidden border-b border-border bg-bg"
+    >
       <div className="relative min-h-[640px] md:min-h-[100vh]">
         {/* Background/portrait layer */}
         {portraitUrl ? (
@@ -64,12 +125,20 @@ export function Hero_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
 
         {/* Content overlay */}
         <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 py-20 md:px-12 md:py-32">
-          <h1 className="text-center font-display uppercase leading-none tracking-tight text-text">
+          <h1
+            ref={titleRef}
+            className="text-center font-display uppercase leading-none tracking-tight text-text"
+          >
             {displayName}
           </h1>
-          {tagline ? <p className="mt-4 max-w-prose text-center text-text">{tagline}</p> : null}
+          {tagline ? (
+            <p ref={taglineRef} className="mt-4 max-w-prose text-center text-text">
+              {tagline}
+            </p>
+          ) : null}
           {ctaLabel && ctaUrl ? (
             <a
+              ref={ctaRef}
               href={ctaUrl}
               className="mt-6 border border-text px-6 py-3 text-sm uppercase tracking-wider hover:bg-text hover:text-bg"
             >
