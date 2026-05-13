@@ -42,12 +42,18 @@ export async function startCheckout(planId: string): Promise<CheckoutActionResul
     limit: 1,
     depth: 0,
   });
-  const userDoc = userResult.docs[0];
+  let userDoc = userResult.docs[0];
   if (!userDoc) {
-    return {
-      ok: false,
-      message: 'Sua conta ainda está sendo provisionada. Tente novamente em alguns segundos.',
-    };
+    userDoc = await p.create({
+      collection: 'users',
+      data: {
+        supabaseUserId: authUser.id,
+        email: authUser.email,
+        displayName: authUser.user_metadata?.full_name || null,
+        role: 'user',
+        plan: 'trial',
+      },
+    });
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';

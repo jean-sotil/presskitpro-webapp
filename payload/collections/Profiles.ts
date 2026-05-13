@@ -36,7 +36,10 @@ const profileAfterChange: CollectionAfterChangeHook = async ({
     );
   }
   if (operation === 'create' && doc?.owner !== undefined && doc?.owner !== null) {
-    await handleStartTrialTimer(
+    // Fire-and-forget the trial timer to avoid lock contention. The update
+    // is safe to lose (it's idempotent — if it fails, the next profile
+    // creation will retry) and doesn't need to block profile creation.
+    handleStartTrialTimer(
       { operation, doc: { owner: doc.owner } },
       {
         now: () => new Date(),
@@ -66,7 +69,9 @@ const profileAfterChange: CollectionAfterChangeHook = async ({
           });
         },
       },
-    );
+    ).catch((err) => {
+      console.error(`[Profiles.afterChange] Failed to set trial timer for user ${doc?.owner}:`, err);
+    });
   }
   handleProfileRevalidate({
     operation,

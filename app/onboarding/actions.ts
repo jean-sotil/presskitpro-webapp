@@ -46,8 +46,22 @@ function buildDeps(): WizardDeps {
         limit: 1,
         depth: 0,
       });
-      const doc = result.docs[0];
-      if (!doc) return null;
+      let doc = result.docs[0];
+      if (!doc) {
+        const sb = await supabaseServer();
+        const { data } = await sb.auth.getUser();
+        if (!data.user?.email) return null;
+        doc = await p.create({
+          collection: 'users',
+          data: {
+            supabaseUserId,
+            email: data.user.email,
+            displayName: data.user.user_metadata?.full_name || null,
+            role: 'user',
+            plan: 'trial',
+          },
+        });
+      }
       return {
         id: doc.id,
         supabaseUserId: doc.supabaseUserId,

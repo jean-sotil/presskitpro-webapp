@@ -54,7 +54,7 @@ export async function POST(req: Request) {
       resource: Record<string, unknown>;
       [key: string]: unknown;
     };
-  } catch (err) {
+  } catch {
     return NextResponse.json({ error: 'invalid json' }, { status: 400 });
   }
 
