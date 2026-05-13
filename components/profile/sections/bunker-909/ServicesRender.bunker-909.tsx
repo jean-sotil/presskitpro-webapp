@@ -1,19 +1,89 @@
 'use client';
 
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+
 import type { EditorBundle } from '@/lib/editor/bundle';
+
+gsap.registerPlugin(useGSAP);
 
 /**
  * Bunker 909 Services
  * Industrial cards with heavy borders and structural grid feel.
  */
 export function ServicesBunker909({ bundle }: { bundle: EditorBundle }) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLUListElement>(null);
+
   const services =
     (bundle.content?.services as Array<{ title: string; description?: string }> | undefined) ?? [];
+
+  useGSAP(
+    () => {
+      const cards = gridRef.current?.querySelectorAll('li');
+      if (!cards) return;
+
+      const tl = gsap.timeline();
+
+      // Staggered grid activation with industrial feel
+      tl.fromTo(
+        cards,
+        { opacity: 0, scale: 0.85, y: 40 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'power3.out'
+        }
+      );
+
+      // Add hover effects to cards
+      const handlers = new Map();
+      cards.forEach((card) => {
+        const corner = card.querySelector('[class*="absolute bottom-0"]');
+
+        const onHover = () => {
+          gsap.to(card, { borderColor: '#ff5c00', duration: 0.3, ease: 'power2.out' });
+          if (corner) {
+            gsap.to(corner, { backgroundColor: '#ff5c00', duration: 0.3, ease: 'power2.out' });
+          }
+          gsap.to(card, { scale: 1.02, duration: 0.3, ease: 'power2.out' });
+        };
+
+        const onHoverOut = () => {
+          gsap.to(card, { borderColor: '#1a1a1a', duration: 0.3, ease: 'power2.out' });
+          if (corner) {
+            gsap.to(corner, { backgroundColor: '#1a1a1a', duration: 0.3, ease: 'power2.out' });
+          }
+          gsap.to(card, { scale: 1, duration: 0.3, ease: 'power2.out' });
+        };
+
+        card.addEventListener('mouseenter', onHover);
+        card.addEventListener('mouseleave', onHoverOut);
+        handlers.set(card, { onHover, onHoverOut });
+      });
+
+      return () => {
+        handlers.forEach(({ onHover, onHoverOut }, card) => {
+          card.removeEventListener('mouseenter', onHover);
+          card.removeEventListener('mouseleave', onHoverOut);
+        });
+      };
+    },
+    { scope: sectionRef }
+  );
 
   if (services.length === 0) return null;
 
   return (
-    <section id="servicos" className="relative border-b-4 border-[#1a1a1a] bg-black px-6 py-20 font-mono text-gray-400 md:px-12 md:py-32">
+    <section
+      ref={sectionRef}
+      id="servicos"
+      className="relative border-b-4 border-[#1a1a1a] bg-black px-6 py-20 font-mono text-gray-400 md:px-12 md:py-32"
+    >
       <div className="mx-auto max-w-6xl">
         <div className="mb-16 flex items-center gap-6">
           <h2 className="font-display text-5xl uppercase tracking-tighter text-white md:text-7xl">
@@ -22,7 +92,7 @@ export function ServicesBunker909({ bundle }: { bundle: EditorBundle }) {
           <div className="h-1 flex-1 bg-[repeating-linear-gradient(90deg,#1a1a1a,#1a1a1a_4px,transparent_4px,transparent_8px)]" />
         </div>
 
-        <ul className="grid gap-6 md:grid-cols-2">
+        <ul ref={gridRef} className="grid gap-6 md:grid-cols-2">
           {services.map((s, i) => (
             <li key={`${s.title}-${i}`} className="group relative border-4 border-[#1a1a1a] bg-[#050505] p-8 transition-all hover:border-[#ff5c00]">
               <div className="absolute top-4 right-4 text-[10px] font-bold text-[#333]">

@@ -1,22 +1,71 @@
 'use client';
 
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+
 import { RichTextRender } from '@/components/profile/rich-text/RichTextRender';
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { isEmptyLexicalState } from '@/lib/editor/rich-text/is-empty';
+
+gsap.registerPlugin(useGSAP);
 
 /**
  * Bunker 909 About
  * Heavy brutalist layout with technical annotations and structural frames.
  */
 export function AboutBunker909({ bundle }: { bundle: EditorBundle }) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const markerRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const tagline = (bundle.content?.tagline as string | undefined) ?? null;
   const bio = (bundle.content?.bio as never) ?? null;
   const hasBio = !isEmptyLexicalState(bio);
+
+  useGSAP(
+    () => {
+      const tl = gsap.timeline();
+
+      // System marker pulses in
+      if (markerRef.current) {
+        tl.fromTo(
+          markerRef.current,
+          { opacity: 0, scale: 0.5 },
+          { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out' },
+          0
+        );
+      }
+
+      // Heading cascades in with technical feel
+      if (headingRef.current) {
+        tl.fromTo(
+          headingRef.current,
+          { opacity: 0, x: -60 },
+          { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out' },
+          0.1
+        );
+      }
+
+      // Content fades and slides in
+      if (contentRef.current) {
+        tl.fromTo(
+          contentRef.current,
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+          0.4
+        );
+      }
+    },
+    { scope: sectionRef }
+  );
 
   if (!tagline && !hasBio) return null;
 
   return (
     <section
+      ref={sectionRef}
       id="sobre"
       className="relative border-b-4 border-[#1a1a1a] bg-[#050505] px-6 py-20 font-mono text-gray-400 md:px-12 md:py-32"
     >
@@ -25,14 +74,14 @@ export function AboutBunker909({ bundle }: { bundle: EditorBundle }) {
           {/* Section ID and Structural Marker */}
           <div className="lg:col-span-5">
             <div className="sticky top-12">
-              <div className="mb-8 flex items-center gap-4">
+              <div ref={markerRef} className="mb-8 flex items-center gap-4">
                 <div className="h-3 w-3 bg-[#ff5c00]" />
                 <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#ff5c00]">
                   SYSTEM_REPORT // 01
                 </p>
               </div>
 
-              <h2 className="font-display text-6xl uppercase leading-[0.85] tracking-tighter text-white md:text-8xl">
+              <h2 ref={headingRef} className="font-display text-6xl uppercase leading-[0.85] tracking-tighter text-white md:text-8xl">
                 INTEL<br />
                 <span className="text-[#ff5c00]">ARCHIVE</span>
               </h2>
@@ -48,7 +97,7 @@ export function AboutBunker909({ bundle }: { bundle: EditorBundle }) {
           </div>
 
           {/* Main Bio Content */}
-          <div className="lg:col-span-7">
+          <div ref={contentRef} className="lg:col-span-7">
             <div className="relative border-4 border-[#1a1a1a] bg-black p-8 md:p-12 lg:p-16">
               {/* Corner Accents */}
               <div className="absolute -left-1 -top-1 h-8 w-8 border-l-4 border-t-4 border-[#ff5c00]" />
