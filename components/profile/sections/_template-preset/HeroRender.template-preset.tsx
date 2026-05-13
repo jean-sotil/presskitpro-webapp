@@ -35,8 +35,8 @@ export function Hero_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
 
   const portraitMedia = profile.portrait as PortraitMedia | null | undefined;
   const portraitUrl = mediaUrl(portraitMedia ?? null);
-  const portraitWidth = (portraitMedia?.width ?? 1200) || 1200;
-  const portraitHeight = (portraitMedia?.height ?? 1600) || 1600;
+  const portraitWidth = (portraitMedia?.width ?? 1024) || 1024;
+  const portraitHeight = (portraitMedia?.height ?? 1365) || 1365;
 
   const tagline = (content?.tagline as string | undefined) ?? null;
   const ctaLabel = (content?.ctaLabel as string | undefined) ?? null;
@@ -55,7 +55,7 @@ export function Hero_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
             width={portraitWidth}
             height={portraitHeight}
             priority
-            sizes="100vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 90vw, 1024px"
             className="absolute inset-0 h-full w-full object-cover"
           />
         ) : (

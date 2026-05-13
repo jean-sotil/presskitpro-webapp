@@ -35,8 +35,8 @@ export function HeroEditorialNightlifeV1({ bundle }: { bundle: EditorBundle }) {
   const logoMedia = profile.logo as LogoMedia | null | undefined;
   const portraitUrl = mediaUrl(portraitMedia ?? null);
   const logoUrl = mediaUrl(logoMedia ?? null);
-  const portraitWidth = (portraitMedia?.width ?? 1200) || 1200;
-  const portraitHeight = (portraitMedia?.height ?? 1600) || 1600;
+  const portraitWidth = (portraitMedia?.width ?? 1024) || 1024;
+  const portraitHeight = (portraitMedia?.height ?? 1365) || 1365;
   const logoWidth = (logoMedia?.width ?? 480) || 480;
   const logoHeight = (logoMedia?.height ?? 160) || 160;
 
@@ -51,7 +51,7 @@ export function HeroEditorialNightlifeV1({ bundle }: { bundle: EditorBundle }) {
           width={portraitWidth}
           height={portraitHeight}
           priority
-          sizes="100vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 90vw, 1024px"
           className="h-[70vh] w-full object-cover"
         />
       ) : null}

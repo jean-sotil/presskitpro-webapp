@@ -37,8 +37,8 @@ export function HeroFestivalClubOrange({ bundle }: { bundle: EditorBundle }) {
 
   const portraitMedia = profile.portrait as PortraitMedia | null | undefined;
   const portraitUrl = mediaUrl(portraitMedia ?? null);
-  const portraitWidth = (portraitMedia?.width ?? 1200) || 1200;
-  const portraitHeight = (portraitMedia?.height ?? 1600) || 1600;
+  const portraitWidth = (portraitMedia?.width ?? 1024) || 1024;
+  const portraitHeight = (portraitMedia?.height ?? 1365) || 1365;
 
   const displayName = profile.slug.replace(/-/g, ' ');
   const heroLabel = 'MEDIAKIT';
@@ -75,7 +75,7 @@ export function HeroFestivalClubOrange({ bundle }: { bundle: EditorBundle }) {
             width={portraitWidth}
             height={portraitHeight}
             priority
-            sizes="100vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 90vw, 1024px"
             className="block h-full w-full object-cover object-top opacity-90 transition-opacity duration-300 hover:opacity-100"
             // Three CSS techniques stacked for a "fake transparency"
             // that works on arbitrary uploads — no transparent PNG

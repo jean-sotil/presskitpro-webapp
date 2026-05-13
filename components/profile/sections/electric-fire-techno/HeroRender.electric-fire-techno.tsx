@@ -56,7 +56,7 @@ export function HeroElectricFireTechno({ bundle }: { bundle: EditorBundle }) {
             width={portraitWidth}
             height={portraitHeight}
             priority
-            sizes="100vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 90vw, 1024px"
             className="absolute inset-0 h-full w-full object-cover object-[center_18%]"
             data-fire-hero-portrait
           />
