@@ -1,9 +1,16 @@
 'use client';
 
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
 
 import { GalleryLightbox, type LightboxItem } from '../GalleryLightbox';
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 type GalleryEntry = {
   id: number;
@@ -20,6 +27,7 @@ type GalleryEntry = {
  * Desaturated grid with cold signal hover effects and technical metadata.
  */
 export function PhotoGalleryNuclearWinter({ bundle }: { bundle: EditorBundle }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const raw = bundle.profile.gallery as Array<GalleryEntry | number> | undefined;
   const entries = Array.isArray(raw)
     ? raw.filter(
@@ -42,12 +50,62 @@ export function PhotoGalleryNuclearWinter({ bundle }: { bundle: EditorBundle }) 
     ];
   });
 
+  useGSAP(
+    () => {
+      const scroller = document.querySelector('[data-preview-scroller]') || window;
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          scroller: scroller,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+        defaults: { ease: 'power4.out' },
+      });
+
+      // 1. Header Reveal
+      tl.fromTo(
+        '[data-header] > *',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.2 }
+      );
+
+      // 2. Gallery Tiles Staggered Reveal
+      tl.fromTo(
+        '[data-gallery-wrapper] li',
+        { opacity: 0, scale: 0.9, y: 20 },
+        { 
+          opacity: 1, 
+          scale: 1, 
+          y: 0, 
+          duration: 0.8, 
+          stagger: {
+            amount: 0.8,
+            grid: 'auto',
+            from: 'start'
+          },
+          ease: 'back.out(1.2)'
+        },
+        '-=0.4'
+      );
+
+      // 3. Footer Reveal
+      tl.fromTo(
+        '[data-footer] > *',
+        { opacity: 0 },
+        { opacity: 1, duration: 0.8, stagger: 0.2 },
+        '-=0.6'
+      );
+    },
+    { scope: containerRef }
+  );
+
   if (items.length === 0) return null;
 
   return (
-    <section id="galeria" className="relative border-b border-[#e0eaff]/5 bg-black px-8 py-24 font-mono text-gray-400 md:px-16 md:py-40">
+    <section id="galeria" ref={containerRef} className="relative border-b border-[#e0eaff]/5 bg-black px-8 py-24 font-mono text-gray-400 md:px-16 md:py-40">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-20 flex flex-col justify-between gap-12 md:flex-row md:items-end" data-reveal>
+        <div className="mb-20 flex flex-col justify-between gap-12 md:flex-row md:items-end" data-header>
           <div>
             <div className="mb-6 flex items-center gap-4">
               <div className="h-4 w-4 bg-[#e0eaff]/20 border border-[#e0eaff]/40" />
@@ -66,7 +124,7 @@ export function PhotoGalleryNuclearWinter({ bundle }: { bundle: EditorBundle }) 
           </div>
         </div>
 
-        <div data-reveal>
+        <div data-gallery-wrapper>
           <GalleryLightbox 
             items={items}
             gridClassName="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
@@ -75,7 +133,7 @@ export function PhotoGalleryNuclearWinter({ bundle }: { bundle: EditorBundle }) 
         </div>
 
         {/* Technical Footer */}
-        <div className="mt-20 flex items-center justify-between border-t border-[#e0eaff]/5 pt-10" data-reveal>
+        <div className="mt-20 flex items-center justify-between border-t border-[#e0eaff]/5 pt-10" data-footer>
            <span className="text-[9px] tracking-[0.4em] text-[#222] uppercase">ARCHIVE_SECURE // SIG_VALID // 2026</span>
            <div className="flex gap-3 opacity-10">
               {[...Array(6)].map((_, i) => (

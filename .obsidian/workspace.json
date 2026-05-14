@@ -182,6 +182,8 @@
   },
   "active": "ef44747c2cad8fc5",
   "lastOpenFiles": [
+    "GSAP_ANIMATIONS_GUIDE.md",
+    "node_modules/@gsap",
     "components/OptimizedImage.tsx",
     "README.md",
     "docs/runbooks/paypal-billing-setup.md",
@@ -193,8 +195,6 @@
     "node_modules/@formatjs/ecma402-abstract/node_modules/@formatjs/intl-localematcher/lib/abstract/types.js",
     "node_modules/@formatjs/ecma402-abstract/node_modules/@formatjs/intl-localematcher/lib/abstract/types.d.ts",
     "node_modules/@formatjs/ecma402-abstract/node_modules/@formatjs/intl-localematcher/lib/abstract/regions.generated.js",
-    "node_modules/@formatjs/ecma402-abstract/node_modules/@formatjs/intl-localematcher/lib/abstract/regions.generated.d.ts",
-    "node_modules/@formatjs/ecma402-abstract/node_modules/@formatjs/intl-localematcher/lib/abstract/languageMatching.js",
     "node_modules/@formatjs/ecma402-abstract/node_modules/@formatjs/intl-localematcher/README.md",
     "node_modules/@formatjs/ecma402-abstract/node_modules/@formatjs/intl-localematcher/LICENSE.md",
     "node_modules/rolldown/node_modules/@rolldown/pluginutils/README.md",

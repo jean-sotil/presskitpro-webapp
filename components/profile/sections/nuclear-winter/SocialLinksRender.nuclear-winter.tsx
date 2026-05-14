@@ -35,10 +35,13 @@ export function SocialLinksNuclearWinter({ bundle }: { bundle: EditorBundle }) {
 
   useGSAP(
     () => {
+      const scroller = document.querySelector('[data-preview-scroller]') || window;
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
-          start: 'top 80%',
+          scroller: scroller,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
         },
         defaults: { ease: 'power4.out' },
       });

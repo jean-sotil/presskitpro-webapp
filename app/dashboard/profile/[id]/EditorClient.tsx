@@ -379,7 +379,7 @@ export function EditorClient({ initialBundle }: { initialBundle: EditorBundle })
         <div className="flex h-full w-[384px] shrink-0 flex-col min-h-0 border-r border-border shadow-[4px_0_24px_rgba(0,0,0,0.4)] z-20">
           {editPaneEl}
         </div>
-        <div className="flex-1 h-full min-w-0 overflow-y-auto bg-[#050505] p-8 pb-32">
+        <div className="flex-1 h-full min-w-0 overflow-y-auto bg-[#050505] p-8 pb-32" data-preview-scroller>
            <div className="mx-auto max-w-[1000px]">
              {previewPaneEl}
            </div>
