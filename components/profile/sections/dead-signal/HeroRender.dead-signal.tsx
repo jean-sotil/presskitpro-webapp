@@ -1,9 +1,14 @@
 'use client';
 
+import { useRef } from 'react';
 import Image from 'next/image';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
+
+gsap.registerPlugin(useGSAP);
 
 type PortraitMedia = {
   bucket: string;
@@ -25,6 +30,7 @@ type PortraitMedia = {
  */
 export function HeroDeadSignal({ bundle }: { bundle: EditorBundle }) {
   const { profile, content } = bundle;
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const portraitMedia = profile.portrait as PortraitMedia | null | undefined;
   const portraitUrl = mediaUrl(portraitMedia ?? null);
@@ -37,8 +43,74 @@ export function HeroDeadSignal({ bundle }: { bundle: EditorBundle }) {
 
   const displayName = profile.slug.replace(/-/g, ' ');
 
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+
+      // 1. Portrait Entrance (Heavily jittery/failing)
+      tl.fromTo(
+        '[data-portrait-layer]',
+        { opacity: 0, scale: 1.1, filter: 'brightness(2) contrast(2) blur(20px)' },
+        { opacity: 1, scale: 1, filter: 'brightness(0.75) contrast(1.2) blur(0px)', duration: 1.5, ease: 'expo.inOut' }
+      );
+
+      // 2. Status Indicator Persistent Flickering
+      gsap.to('[data-status-indicator]', {
+        opacity: () => Math.random() * 0.5 + 0.2,
+        duration: () => Math.random() * 0.4 + 0.1,
+        repeat: -1,
+        yoyo: true,
+      });
+
+      // 3. Glitchy Title Reveal
+      const titleLayers = ['[data-main-title]', '[data-glitch-1]', '[data-glitch-2]'];
+      tl.fromTo(
+        titleLayers,
+        { opacity: 0, y: 50 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.8, 
+          stagger: 0.05,
+          onComplete: () => {
+            // Random glitch jumps for aberration layers
+            gsap.to(['[data-glitch-1]', '[data-glitch-2]'], {
+              x: () => (Math.random() - 0.5) * 10,
+              y: () => (Math.random() - 0.5) * 5,
+              opacity: () => Math.random() * 0.8,
+              duration: 0.1,
+              repeat: -1,
+              repeatRefresh: true,
+              repeatDelay: () => Math.random() * 2,
+            });
+          }
+        },
+        '-=0.5'
+      );
+
+      // 4. Tagline & CTA Digital Reveal
+      tl.fromTo(
+        ['[data-tagline-container]', '[data-cta-button]'],
+        { opacity: 0, x: -30, filter: 'blur(10px)' },
+        { opacity: 1, x: 0, filter: 'blur(0px)', duration: 1, stagger: 0.3 },
+        '-=0.4'
+      );
+
+      // 5. Ambient Grain Pulse
+      gsap.to('[data-grain-overlay]', {
+        opacity: () => Math.random() * 0.1 + 0.1,
+        duration: 0.2,
+        repeat: -1,
+      });
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <header className="relative isolate overflow-hidden bg-black/80 font-mono backdrop-blur-md selection:bg-red-500/30">
+    <header 
+      ref={containerRef}
+      className="relative isolate overflow-hidden bg-black/80 font-mono backdrop-blur-md selection:bg-red-500/30"
+    >
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -85,7 +157,7 @@ export function HeroDeadSignal({ bundle }: { bundle: EditorBundle }) {
       <div className="relative min-h-[640px] md:min-h-[100vh]">
         {/* Background/portrait layer - Heavily processed */}
         {portraitUrl ? (
-          <div className="absolute inset-0 z-0 bg-black">
+          <div className="absolute inset-0 z-0 bg-black" data-portrait-layer>
             <Image
               src={portraitUrl}
               alt={portraitMedia?.alt ?? ''}
@@ -123,6 +195,7 @@ export function HeroDeadSignal({ bundle }: { bundle: EditorBundle }) {
           className="animate-noise pointer-events-none absolute -inset-[200%] z-10 opacity-[0.15] mix-blend-screen"
           style={{ backgroundImage: 'url(/grain.png)', backgroundSize: '256px' }}
           aria-hidden="true"
+          data-grain-overlay
         />
 
         {/* Vignette for cinematic focus */}
@@ -138,7 +211,10 @@ export function HeroDeadSignal({ bundle }: { bundle: EditorBundle }) {
         {/* Content overlay */}
         <div className="relative z-20 flex h-full flex-col items-center justify-center px-6 py-20 md:px-12 md:py-32">
           {/* Status Indicator */}
-          <div className="absolute left-8 top-8 flex items-center gap-3 font-mono text-xs tracking-widest text-red-500 md:left-12 md:top-12">
+          <div 
+            className="absolute left-8 top-8 flex items-center gap-3 font-mono text-xs tracking-widest text-red-500 md:left-12 md:top-12"
+            data-status-indicator
+          >
             <span className="h-2 w-2 animate-ping rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
             <span className="opacity-80 drop-shadow-[0_0_5px_rgba(239,68,68,0.5)]">
               REC // NO_SIGNAL
@@ -150,24 +226,32 @@ export function HeroDeadSignal({ bundle }: { bundle: EditorBundle }) {
             <h1
               className="glitch-layer-1 absolute -left-[3px] top-[2px] z-0 text-center font-display text-6xl uppercase leading-[0.9] tracking-tighter text-cyan-400 opacity-80 mix-blend-screen md:text-8xl lg:text-9xl"
               aria-hidden="true"
+              data-glitch-1
             >
               {displayName}
             </h1>
             <h1
               className="glitch-layer-2 absolute -right-[3px] -top-[2px] z-0 text-center font-display text-6xl uppercase leading-[0.9] tracking-tighter text-red-500 opacity-80 mix-blend-screen md:text-8xl lg:text-9xl"
               aria-hidden="true"
+              data-glitch-2
             >
               {displayName}
             </h1>
 
             {/* Main Text */}
-            <h1 className="relative z-10 text-center font-display text-6xl uppercase leading-[0.9] tracking-tighter text-gray-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] md:text-8xl lg:text-9xl">
+            <h1 
+              className="relative z-10 text-center font-display text-6xl uppercase leading-[0.9] tracking-tighter text-gray-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] md:text-8xl lg:text-9xl"
+              data-main-title
+            >
               {displayName}
             </h1>
           </div>
 
           {tagline ? (
-            <div className="mt-8 border-l border-red-500/50 pl-6 backdrop-blur-sm md:mt-12">
+            <div 
+              className="mt-8 border-l border-red-500/50 pl-6 backdrop-blur-sm md:mt-12"
+              data-tagline-container
+            >
               <p className="max-w-prose text-left font-mono text-sm tracking-widest text-gray-400 drop-shadow-[0_0_2px_rgba(255,255,255,0.2)] md:text-base">
                 {tagline}
               </p>
@@ -177,6 +261,7 @@ export function HeroDeadSignal({ bundle }: { bundle: EditorBundle }) {
           {ctaLabel && ctaUrl ? (
             <a
               href={ctaUrl}
+              data-cta-button
               className="group/cta relative mt-16 overflow-hidden border border-white/20 bg-black/40 px-8 py-4 font-mono text-xs uppercase tracking-[0.3em] text-white backdrop-blur-md transition-all hover:border-red-500/80 hover:bg-red-500/10 hover:text-red-400 hover:shadow-[0_0_20px_rgba(239,68,68,0.3)] md:text-sm"
             >
               <span className="relative z-10 flex items-center gap-3">
