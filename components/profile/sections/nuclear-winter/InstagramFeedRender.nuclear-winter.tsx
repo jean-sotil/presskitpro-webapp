@@ -75,7 +75,7 @@ export function InstagramFeedNuclearWinter({ bundle }: { bundle: EditorBundle })
         </div>
 
         <ul className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post, i) => (
+          {posts.map((post) => (
             <li key={String(post.id)} className="group relative" data-instagram-post>
               <div className="fractured-border bg-black/40 p-3 transition-all group-hover:bg-[#e0eaff]/5">
                 <div className="relative overflow-hidden grayscale contrast-[1.3] transition-all duration-[1500ms] group-hover:grayscale-0 group-hover:contrast-100">

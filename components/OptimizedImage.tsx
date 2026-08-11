@@ -1,6 +1,6 @@
 'use client';
 
-import Image, { ImageProps } from 'next/image';
+import Image, { type ImageProps } from 'next/image';
 import { useState } from 'react';
 
 export function OptimizedImage(props: ImageProps) {
@@ -10,7 +10,7 @@ export function OptimizedImage(props: ImageProps) {
     return (
       <img
         src={props.src as string}
-        alt={props.alt}
+        alt={props.alt ?? ''}
         width={props.width}
         height={props.height}
         style={{
@@ -25,6 +25,7 @@ export function OptimizedImage(props: ImageProps) {
   return (
     <Image
       {...props}
+      alt={props.alt}
       onError={() => setHasError(true)}
     />
   );

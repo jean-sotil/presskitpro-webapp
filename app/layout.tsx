@@ -105,10 +105,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }}
         />
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <header className="flex justify-end border-b border-border px-6 py-2 md:px-12">
+            <LocaleToggle />
+          </header>
           <Providers>
-            <header className="flex justify-end border-b border-border px-6 py-2 md:px-12">
-              <LocaleToggle />
-            </header>
             {children}
           </Providers>
           <CookieConsentBanner />

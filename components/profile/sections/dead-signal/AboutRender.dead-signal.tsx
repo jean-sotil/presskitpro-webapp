@@ -64,7 +64,7 @@ export function AboutDeadSignal({ bundle }: { bundle: EditorBundle }) {
               duration: 0.1,
               repeat: -1,
               repeatRefresh: true,
-              repeatDelay: () => Math.random() * 3,
+              repeatDelay: Math.random() * 3,
             });
           }
         },

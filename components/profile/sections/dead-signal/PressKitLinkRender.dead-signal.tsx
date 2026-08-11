@@ -24,13 +24,11 @@ export function PressKitLinkDeadSignal({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile.pressKit');
   const tProviders = useTranslations('profile.pressKit.providers');
   const url = (bundle.profile.pressKitUrl as string | undefined) ?? null;
-  if (!url) return null;
   const health = (bundle.profile.pressKitHealthStatus ?? 'unknown') as
     | 'unknown'
     | 'healthy'
     | 'warning'
     | 'broken';
-  if (health === 'broken') return null;
   const provider = (bundle.profile.pressKitProvider ?? 'unknown') as PressKitProvider;
   const slug = String(bundle.profile.slug ?? '');
   const badge = providerBadge(tProviders, provider);
@@ -80,8 +78,11 @@ export function PressKitLinkDeadSignal({ bundle }: { bundle: EditorBundle }) {
         ease: 'sine.inOut',
       });
     },
-    { scope: containerRef }
+    { scope: containerRef, dependencies: [url, health] }
   );
+
+  if (!url) return null;
+  if (health === 'broken') return null;
 
   return (
     <section

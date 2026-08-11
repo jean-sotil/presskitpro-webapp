@@ -28,7 +28,6 @@ export function SocialLinksNuclearWinter({ bundle }: { bundle: EditorBundle }) {
   const tPlatforms = useTranslations('profile.social.platforms');
 
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
-  if (!raw.length) return null;
 
   const links = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   const profileSlug = bundle.profile.slug;
@@ -89,8 +88,10 @@ export function SocialLinksNuclearWinter({ bundle }: { bundle: EditorBundle }) {
         });
       });
     },
-    { scope: containerRef }
+    { scope: containerRef, dependencies: [raw.length] }
   );
+
+  if (!raw.length) return null;
 
   return (
     <section ref={containerRef} className="relative border-b border-[#e0eaff]/5 bg-black px-8 py-24 font-mono md:px-16 md:py-40">

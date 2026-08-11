@@ -81,7 +81,7 @@ export function HeroDeadSignal({ bundle }: { bundle: EditorBundle }) {
               duration: 0.1,
               repeat: -1,
               repeatRefresh: true,
-              repeatDelay: () => Math.random() * 2,
+              repeatDelay: Math.random() * 2,
             });
           }
         },

@@ -54,7 +54,7 @@ export function Hero_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   const displayName = profile.slug.replace(/-/g, ' ');
 
   useGSAP(
-    (context) => {
+    () => {
       const tl = gsap.timeline();
 
       if (titleRef.current) {

@@ -53,7 +53,7 @@ export function Contact_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }) {
   const profileSlug = profile.slug;
 
   useGSAP(
-    (context, contextSafe) => {
+    () => {
       const tl = gsap.timeline();
 
       if (ctasRef.current) {

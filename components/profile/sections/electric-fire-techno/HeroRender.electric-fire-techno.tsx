@@ -1,10 +1,15 @@
 'use client';
 
+import { useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 import type { EditorBundle } from '@/lib/editor/bundle';
 import { mediaUrl } from '@/lib/media/url';
+
+gsap.registerPlugin(useGSAP);
 
 type ImageMedia = {
   bucket: string;
@@ -19,15 +24,6 @@ type ImageMedia = {
  * chromatic-aberration drop-shadow, gold→amber→fire gradient artist
  * title overlaid at the bottom, decorative cyan lightning bolts and
  * radial fire-edge glows. Per docs/presets/MediakitPRO_template_3.json.
- *
- * Why no `<img>` triple-stack for the chromatic aberration: drop-shadow
- * with red+cyan offsets gives the same RGB-split look at 1× the bytes
- * (next/image already serves WebP/AVIF). Only "almost real" — but close
- * enough at viewing distance and 1/3 the LCP cost.
- *
- * Lightning + fire edges are inline SVG / pseudo-element friendly so a
- * profile that lacks a portrait still feels alive: the gradient title +
- * lightning + fire chrome carry the section even with no Image at all.
  */
 export function HeroElectricFireTechno({ bundle }: { bundle: EditorBundle }) {
   const t = useTranslations('profile');
@@ -43,8 +39,79 @@ export function HeroElectricFireTechno({ bundle }: { bundle: EditorBundle }) {
 
   const displayName = profile.slug.replace(/-/g, ' ');
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const tl = gsap.timeline();
+
+      // 1. Portrait entrance
+      tl.fromTo(
+        '[data-fire-hero-portrait]',
+        { opacity: 0, scale: 1.1 },
+        { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out' }
+      );
+
+      // 2. Metadata entrance
+      tl.fromTo(
+        '[data-fire-metadata]',
+        { opacity: 0, x: 20 },
+        { opacity: 0.6, x: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out' },
+        '-=0.8'
+      );
+
+      // 3. Lightning bolts "strike" entrance
+      tl.fromTo(
+        '[data-fire-lightning]',
+        { opacity: 0, scale: 0, rotation: 45 },
+        {
+          opacity: 1,
+          scale: 1,
+          rotation: (i, el) => {
+            const currentRotation = gsap.getProperty(el, 'rotation') as number;
+            return currentRotation;
+          },
+          duration: 0.4,
+          stagger: 0.1,
+          ease: 'back.out(1.7)',
+        },
+        '-=0.4'
+      );
+
+      // 4. Title staggered reveal
+      tl.fromTo(
+        '[data-fire-hero-title]',
+        { opacity: 0, y: 30, skewX: -5 },
+        { opacity: 1, y: 0, skewX: 0, duration: 0.8, ease: 'power4.out' },
+        '-=0.2'
+      );
+
+      // 5. CTA entrance
+      if (ctaUrl) {
+        tl.fromTo(
+          '[data-fire-cta]',
+          { opacity: 0, scale: 0.9 },
+          { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(2)' },
+          '-=0.4'
+        );
+      }
+
+      // Continuous flickering for lightning
+      gsap.to('[data-fire-lightning]', {
+        opacity: 0.4,
+        repeat: -1,
+        yoyo: true,
+        duration: 0.1,
+        repeatDelay: Math.random() * 2,
+        ease: 'rough({ template: none.out, strength: 2, points: 20, taper: none, randomize: true, clamp:  false})',
+      });
+    },
+    { scope: containerRef }
+  );
+
   return (
     <header
+      ref={containerRef}
       data-fire-hero
       className="relative isolate overflow-hidden border-b border-border bg-bg"
     >
@@ -66,37 +133,46 @@ export function HeroElectricFireTechno({ bundle }: { bundle: EditorBundle }) {
             className="absolute inset-0 bg-gradient-to-b from-surface to-bg"
           />
         )}
-        {/* Bottom dark overlay so the gradient title remains legible
-            even on a bright portrait. */}
+        {/* Bottom dark overlay */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-bg via-bg/70 to-transparent"
         />
-        <LightningBolt className="pointer-events-none absolute right-[8%] top-[12%] h-20 w-20 rotate-[-12deg] md:h-28 md:w-28" />
         <LightningBolt
+          data-fire-lightning
+          className="pointer-events-none absolute right-[8%] top-[12%] h-20 w-20 rotate-[-12deg] md:h-28 md:w-28"
+        />
+        <LightningBolt
+          data-fire-lightning
           variant="small"
           className="pointer-events-none absolute left-[10%] top-[22%] h-10 w-10 rotate-[18deg] opacity-80"
         />
         <LightningBolt
+          data-fire-lightning
           variant="small"
           className="pointer-events-none absolute bottom-[40%] right-[18%] h-8 w-8 rotate-[-26deg] opacity-70"
         />
-        {/* Sci-fi corner metadata strings — purely decorative. */}
+        {/* Sci-fi corner metadata strings */}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute right-4 top-4 font-mono text-[9px] uppercase tracking-[0.2em] text-text-muted opacity-60"
+          data-fire-metadata
+          className="pointer-events-none absolute right-4 top-4 font-mono text-[9px] uppercase tracking-[0.25em] text-text-muted opacity-60"
         >
           0xFF4500 · 09090F
         </span>
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute bottom-4 right-4 font-mono text-[9px] uppercase tracking-[0.2em] text-text-muted opacity-50"
+          data-fire-metadata
+          className="pointer-events-none absolute bottom-4 right-4 font-mono text-[9px] uppercase tracking-[0.25em] text-text-muted opacity-50"
         >
           {`LAT 23°33'S · LON 46°38'W`}
         </span>
-        {/* Title overlay: lifted via z-index above the dark gradient. */}
+        {/* Title overlay */}
         <div className="absolute inset-x-0 bottom-0 z-10 px-6 pb-12 md:px-12 md:pb-20">
-          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
+          <p
+            data-fire-metadata
+            className="font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted"
+          >
             presskit.pro/{profile.slug}
           </p>
           <h1
@@ -128,9 +204,11 @@ export function HeroElectricFireTechno({ bundle }: { bundle: EditorBundle }) {
 function LightningBolt({
   className,
   variant = 'large',
+  ...props
 }: {
   className?: string;
   variant?: 'large' | 'small';
+  [key: string]: unknown;
 }) {
   return (
     <svg
@@ -138,6 +216,7 @@ function LightningBolt({
       fill="currentColor"
       aria-hidden="true"
       className={className}
+      {...props}
       style={{
         color: variant === 'large' ? '#00BFFF' : '#FFD700',
         filter: `drop-shadow(0 0 ${variant === 'large' ? '12px' : '8px'} currentColor)`,

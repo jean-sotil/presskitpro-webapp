@@ -46,7 +46,6 @@ export function SocialLinks_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }
   const linksRef = useRef<HTMLUListElement>(null);
 
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
-  if (!raw.length) return null;
   const links = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   const profileSlug = bundle.profile.slug;
 
@@ -94,8 +93,10 @@ export function SocialLinks_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle }
         });
       };
     },
-    { scope: containerRef }
+    { scope: containerRef, dependencies: [raw.length] }
   );
+
+  if (!raw.length) return null;
 
   return (
     <section

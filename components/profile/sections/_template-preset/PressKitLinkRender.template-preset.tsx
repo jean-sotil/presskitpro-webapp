@@ -41,13 +41,11 @@ export function PressKitLink_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle 
   const badgeRef = useRef<HTMLParagraphElement>(null);
 
   const url = (bundle.profile.pressKitUrl as string | undefined) ?? null;
-  if (!url) return null;
   const health = (bundle.profile.pressKitHealthStatus ?? 'unknown') as
     | 'unknown'
     | 'healthy'
     | 'warning'
     | 'broken';
-  if (health === 'broken') return null;
   const provider = (bundle.profile.pressKitProvider ?? 'unknown') as PressKitProvider;
   const slug = String(bundle.profile.slug ?? '');
   const badge = providerBadge(tProviders, provider);
@@ -93,8 +91,11 @@ export function PressKitLink_TEMPLATE_PRESET({ bundle }: { bundle: EditorBundle 
         );
       }
     },
-    { scope: containerRef }
+    { scope: containerRef, dependencies: [url, health] }
   );
+
+  if (!url) return null;
+  if (health === 'broken') return null;
 
   return (
     <section

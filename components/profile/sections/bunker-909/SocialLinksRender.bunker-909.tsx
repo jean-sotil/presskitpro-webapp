@@ -30,7 +30,6 @@ export function SocialLinksBunker909({ bundle }: { bundle: EditorBundle }) {
   const gridRef = useRef<HTMLUListElement>(null);
 
   const raw = (bundle.socialLinks ?? []) as unknown as LinkRow[];
-  if (!raw.length) return null;
 
   const links = [...raw].sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
   const profileSlug = bundle.profile.slug;
@@ -101,8 +100,10 @@ export function SocialLinksBunker909({ bundle }: { bundle: EditorBundle }) {
         });
       };
     },
-    { scope: sectionRef }
+    { scope: sectionRef, dependencies: [raw.length] }
   );
+
+  if (!raw.length) return null;
 
   return (
     <section ref={sectionRef} className="relative border-b-4 border-[#1a1a1a] bg-black px-6 py-20 font-mono md:px-12 md:py-32">
